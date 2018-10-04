@@ -1,0 +1,635 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 61
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -530159753, guid: 68c7e4565cde54155bb78d8e935f1dd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cacheType: 3
+  lastUpdatedAtString: 2018-10-04T18:58:57.950+09:00
+  initializedAtString: 2018-10-04T18:52:29.083+09:00
+  log:
+  - commitID: 8ac672bb5a3558ecfeabf4253ddbfe30b5b2cdcb
+    mergeA: 
+    mergeB: 
+    authorName: kanekona
+    authorEmail: amausakonata1932@gmail.com
+    commitEmail: amausakonata1932@gmail.com
+    commitName: kanekona
+    summary: add Unity Project
+    description: add Unity Project
+    timeString: 2018-10-04T18:57:40.000+09:00
+    commitTimeString: 2018-10-04T18:57:40.000+09:00
+    changes:
+    - path: SilverGirlStrike\Assets\Plugins.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins.meta
+      projectPath: Assets\Plugins.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub.meta
+      projectPath: Assets\Plugins\GitHub.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor.meta
+      projectPath: Assets\Plugins\GitHub\Editor.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\AsyncBridge.Net35.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\AsyncBridge.Net35.dll
+      projectPath: Assets\Plugins\GitHub\Editor\AsyncBridge.Net35.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\AsyncBridge.Net35.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\AsyncBridge.Net35.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\AsyncBridge.Net35.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\ExtensionLoader.cs
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\ExtensionLoader.cs
+      projectPath: Assets\Plugins\GitHub\Editor\ExtensionLoader.cs
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\ExtensionLoader.cs.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\ExtensionLoader.cs.meta
+      projectPath: Assets\Plugins\GitHub\Editor\ExtensionLoader.cs.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll.mdb
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll.mdb
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll.mdb
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll.mdb.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll.mdb.meta
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll.mdb.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.dll
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Api.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.dll.mdb
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.dll.mdb
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Api.dll.mdb
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.dll.mdb.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.dll.mdb.meta
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Api.dll.mdb.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Api.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Api.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Logging.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Logging.dll
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Logging.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Logging.dll.mdb
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Logging.dll.mdb
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Logging.dll.mdb
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Logging.dll.mdb.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Logging.dll.mdb.meta
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Logging.dll.mdb.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Logging.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Logging.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Logging.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll.mdb
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll.mdb
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll.mdb
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll.mdb.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll.mdb.meta
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll.mdb.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.dll
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Unity.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.dll.mdb
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.dll.mdb
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Unity.dll.mdb
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.dll.mdb.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.dll.mdb.meta
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Unity.dll.mdb.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\GitHub.Unity.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\GitHub.Unity.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\ICSharpCode.SharpZipLib.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\ICSharpCode.SharpZipLib.dll
+      projectPath: Assets\Plugins\GitHub\Editor\ICSharpCode.SharpZipLib.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\ICSharpCode.SharpZipLib.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\ICSharpCode.SharpZipLib.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\ICSharpCode.SharpZipLib.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\Mono.Posix.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\Mono.Posix.dll
+      projectPath: Assets\Plugins\GitHub\Editor\Mono.Posix.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\Mono.Posix.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\Mono.Posix.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\Mono.Posix.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\QuickGuide.pdf
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\QuickGuide.pdf
+      projectPath: Assets\Plugins\GitHub\Editor\QuickGuide.pdf
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\QuickGuide.pdf.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\QuickGuide.pdf.meta
+      projectPath: Assets\Plugins\GitHub\Editor\QuickGuide.pdf.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\ReadOnlyCollectionsInterfaces.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\ReadOnlyCollectionsInterfaces.dll
+      projectPath: Assets\Plugins\GitHub\Editor\ReadOnlyCollectionsInterfaces.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\ReadOnlyCollectionsInterfaces.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\ReadOnlyCollectionsInterfaces.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\ReadOnlyCollectionsInterfaces.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\System.Threading.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\System.Threading.dll
+      projectPath: Assets\Plugins\GitHub\Editor\System.Threading.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\System.Threading.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\System.Threading.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\System.Threading.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\big-logo@2x.png
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\big-logo@2x.png
+      projectPath: Assets\Plugins\GitHub\Editor\big-logo@2x.png
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\big-logo@2x.png.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\big-logo@2x.png.meta
+      projectPath: Assets\Plugins\GitHub\Editor\big-logo@2x.png.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\credits.txt
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\credits.txt
+      projectPath: Assets\Plugins\GitHub\Editor\credits.txt
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\credits.txt.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\credits.txt.meta
+      projectPath: Assets\Plugins\GitHub\Editor\credits.txt.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\eula.txt
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\eula.txt
+      projectPath: Assets\Plugins\GitHub\Editor\eula.txt
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\eula.txt.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\eula.txt.meta
+      projectPath: Assets\Plugins\GitHub\Editor\eula.txt.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\libsfw.bundle
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\libsfw.bundle
+      projectPath: Assets\Plugins\GitHub\Editor\libsfw.bundle
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\libsfw.bundle.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\libsfw.bundle.meta
+      projectPath: Assets\Plugins\GitHub\Editor\libsfw.bundle.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\libsfw.so
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\libsfw.so
+      projectPath: Assets\Plugins\GitHub\Editor\libsfw.so
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\libsfw.so.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\libsfw.so.meta
+      projectPath: Assets\Plugins\GitHub\Editor\libsfw.so.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\sfw.net.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\sfw.net.dll
+      projectPath: Assets\Plugins\GitHub\Editor\sfw.net.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\sfw.net.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\sfw.net.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\sfw.net.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\x64.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\x64.meta
+      projectPath: Assets\Plugins\GitHub\Editor\x64.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\x64\pthreadVC2.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\x64\pthreadVC2.dll
+      projectPath: Assets\Plugins\GitHub\Editor\x64\pthreadVC2.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\x64\pthreadVC2.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\x64\pthreadVC2.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\x64\pthreadVC2.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\x64\sfw_x64.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\x64\sfw_x64.dll
+      projectPath: Assets\Plugins\GitHub\Editor\x64\sfw_x64.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\x64\sfw_x64.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\x64\sfw_x64.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\x64\sfw_x64.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\x86.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\x86.meta
+      projectPath: Assets\Plugins\GitHub\Editor\x86.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\x86\pthreadVC2.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\x86\pthreadVC2.dll
+      projectPath: Assets\Plugins\GitHub\Editor\x86\pthreadVC2.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\x86\pthreadVC2.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\x86\pthreadVC2.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\x86\pthreadVC2.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\x86\sfw_x86.dll
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\x86\sfw_x86.dll
+      projectPath: Assets\Plugins\GitHub\Editor\x86\sfw_x86.dll
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Plugins\GitHub\Editor\x86\sfw_x86.dll.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Plugins\GitHub\Editor\x86\sfw_x86.dll.meta
+      projectPath: Assets\Plugins\GitHub\Editor\x86\sfw_x86.dll.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Scenes.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Scenes.meta
+      projectPath: Assets\Scenes.meta
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Scenes\SampleScene.unity
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Scenes\SampleScene.unity
+      projectPath: Assets\Scenes\SampleScene.unity
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: SilverGirlStrike\Assets\Scenes\SampleScene.unity.meta
+      fullPath: D:\git\git_MagicalAssociation\SilverGirlStrike\Assets\Scenes\SampleScene.unity.meta
+      projectPath: Assets\Scenes\SampleScene.unity.meta
+      originalPath: 
+      status: 4
+      staged: 0
+  - commitID: 9563e45bf474f2c6ca7d439d4ccda0179b32ff9f
+    mergeA: 
+    mergeB: 
+    authorName: kanekona
+    authorEmail: amausakonata1932@gmail.com
+    commitEmail: amausakonata1932@gmail.com
+    commitName: kanekona
+    summary: "\u30EA\u30DD\u30B8\u30C8\u30EA\u7121\u8996\u30EA\u30B9\u30C8"
+    description: "\u30EA\u30DD\u30B8\u30C8\u30EA\u7121\u8996\u30EA\u30B9\u30C8"
+    timeString: 2018-10-04T18:49:57.000+09:00
+    commitTimeString: 2018-10-04T18:49:57.000+09:00
+    changes:
+    - path: .gitignore
+      fullPath: D:\git\git_MagicalAssociation\.gitignore
+      projectPath: ..\.gitignore
+      originalPath: 
+      status: 4
+      staged: 0
+  - commitID: 51a240bb1456ee7bdbf661bd397b7f4aba64ae9f
+    mergeA: 
+    mergeB: 
+    authorName: kanekona
+    authorEmail: amausakonata1932@gmail.com
+    commitEmail: amausakonata1932@gmail.com
+    commitName: kanekona
+    summary: "\u30D5\u30A9\u30EB\u30C0\u5206\u3051\u3001\u66F8\u985E\u66F4\u65B0"
+    description: "\u30D5\u30A9\u30EB\u30C0\u5206\u3051\u3001\u66F8\u985E\u66F4\u65B0"
+    timeString: 2018-10-04T12:18:35.000+09:00
+    commitTimeString: 2018-10-04T12:18:35.000+09:00
+    changes:
+    - path: "\u30BF\u30B9\u30AF\u8868\\\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u30BF\u30B9\u30AF\u8868\\\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      projectPath: "..\\\u30BF\u30B9\u30AF\u8868\\\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      originalPath: "\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      status: 6
+      staged: 0
+    - path: "\u4ED5\u69D8\u66F8\u985E\\Event\u4ED5\u69D8\u66F8.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u4ED5\u69D8\u66F8\u985E\\Event\u4ED5\u69D8\u66F8.docx"
+      projectPath: "..\\\u4ED5\u69D8\u66F8\u985E\\Event\u4ED5\u69D8\u66F8.docx"
+      originalPath: "Event\u4ED5\u69D8\u66F8.docx"
+      status: 6
+      staged: 0
+    - path: "\u4ED5\u69D8\u66F8\u985E\\flowchart.png"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u4ED5\u69D8\u66F8\u985E\\flowchart.png"
+      projectPath: "..\\\u4ED5\u69D8\u66F8\u985E\\flowchart.png"
+      originalPath: flowchart.png
+      status: 6
+      staged: 0
+    - path: "\u4ED5\u69D8\u66F8\u985E\\\u30B3\u30FC\u30C7\u30A3\u30F3\u30B0\u30EB\u30FC\u30EB.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u4ED5\u69D8\u66F8\u985E\\\u30B3\u30FC\u30C7\u30A3\u30F3\u30B0\u30EB\u30FC\u30EB.docx"
+      projectPath: "..\\\u4ED5\u69D8\u66F8\u985E\\\u30B3\u30FC\u30C7\u30A3\u30F3\u30B0\u30EB\u30FC\u30EB.docx"
+      originalPath: "\u30B3\u30FC\u30C7\u30A3\u30F3\u30B0\u30EB\u30FC\u30EB.docx"
+      status: 6
+      staged: 0
+    - path: "\u4ED5\u69D8\u66F8\u985E\\\u4ED5\u69D8\u66F8.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u4ED5\u69D8\u66F8\u985E\\\u4ED5\u69D8\u66F8.docx"
+      projectPath: "..\\\u4ED5\u69D8\u66F8\u985E\\\u4ED5\u69D8\u66F8.docx"
+      originalPath: "\u4ED5\u69D8\u66F8.docx"
+      status: 6
+      staged: 0
+    - path: "\u4F01\u753B\u66F8\u985E\\\u4F01\u753B\u66F8.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u4F01\u753B\u66F8\u985E\\\u4F01\u753B\u66F8.docx"
+      projectPath: "..\\\u4F01\u753B\u66F8\u985E\\\u4F01\u753B\u66F8.docx"
+      originalPath: "\u4F01\u753B\u66F8.docx"
+      status: 6
+      staged: 0
+  - commitID: b5f8f2e373413dceb7c0bb70b79db93bbb96c366
+    mergeA: 
+    mergeB: 
+    authorName: kanekona
+    authorEmail: amausakonata1932@gmail.com
+    commitEmail: amausakonata1932@gmail.com
+    commitName: kanekona
+    summary: "Event\u306E\u4ED5\u69D8\u66F8\u3092\u3042\u3052\u308B"
+    description: "Event\u306E\u4ED5\u69D8\u66F8\u3092\u3042\u3052\u308B"
+    timeString: 2018-10-04T10:40:44.000+09:00
+    commitTimeString: 2018-10-04T10:40:44.000+09:00
+    changes:
+    - path: "Event\u4ED5\u69D8\u66F8.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\Event\u4ED5\u69D8\u66F8.docx"
+      projectPath: "..\\Event\u4ED5\u69D8\u66F8.docx"
+      originalPath: 
+      status: 4
+      staged: 0
+  - commitID: f3c047a2d6c44882ccb1dc9675d84795b797c077
+    mergeA: 
+    mergeB: 
+    authorName: kanekona
+    authorEmail: amausakonata1932@gmail.com
+    commitEmail: amausakonata1932@gmail.com
+    commitName: kanekona
+    summary: "\u30D5\u30ED\u30FC\u30C1\u30E3\u30FC\u30C8\u56F3"
+    description: "\u30D5\u30ED\u30FC\u30C1\u30E3\u30FC\u30C8\u56F3"
+    timeString: 2018-10-04T10:32:24.000+09:00
+    commitTimeString: 2018-10-04T10:32:24.000+09:00
+    changes:
+    - path: flowchart.png
+      fullPath: D:\git\git_MagicalAssociation\flowchart.png
+      projectPath: ..\flowchart.png
+      originalPath: 
+      status: 4
+      staged: 0
+  - commitID: 28aad0e1ee3eda429476c16d7cd7e73a97bf61a7
+    mergeA: 
+    mergeB: 
+    authorName: kanekona
+    authorEmail: amausakonata1932@gmail.com
+    commitEmail: amausakonata1932@gmail.com
+    commitName: kanekona
+    summary: "\u4ED5\u4E8B\u8868\u66F4\u65B0"
+    description: "\u4ED5\u4E8B\u8868\u66F4\u65B0"
+    timeString: 2018-10-04T10:13:11.000+09:00
+    commitTimeString: 2018-10-04T10:13:11.000+09:00
+    changes:
+    - path: "\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      projectPath: "..\\\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: "\u4ED5\u69D8\u66F8.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u4ED5\u69D8\u66F8.docx"
+      projectPath: "..\\\u4ED5\u69D8\u66F8.docx"
+      originalPath: 
+      status: 3
+      staged: 0
+  - commitID: e3b8a651ff023eb2a697812c0c8f7212ffdbe333
+    mergeA: 
+    mergeB: 
+    authorName: kanekona
+    authorEmail: amausakonata1932@gmail.com
+    commitEmail: amausakonata1932@gmail.com
+    commitName: kanekona
+    summary: "\u66F8\u985E\u66F4\u65B0"
+    description: "\u66F8\u985E\u66F4\u65B0"
+    timeString: 2018-10-03T22:14:40.000+09:00
+    commitTimeString: 2018-10-03T22:14:40.000+09:00
+    changes:
+    - path: "\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      projectPath: "..\\\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: "\u4ED5\u69D8\u66F8.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u4ED5\u69D8\u66F8.docx"
+      projectPath: "..\\\u4ED5\u69D8\u66F8.docx"
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: "\u4F01\u753B\u66F8.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u4F01\u753B\u66F8.docx"
+      projectPath: "..\\\u4F01\u753B\u66F8.docx"
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: "\u9B54\u5C0E\u5354\u4F1A.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u9B54\u5C0E\u5354\u4F1A.docx"
+      projectPath: "..\\\u9B54\u5C0E\u5354\u4F1A.docx"
+      originalPath: 
+      status: 3
+      staged: 0
+  - commitID: 5c8ff6d0e36df82d4c7ee685d5c53b94e3b6ea7f
+    mergeA: 
+    mergeB: 
+    authorName: kanekona
+    authorEmail: amausakonata1932@gmail.com
+    commitEmail: amausakonata1932@gmail.com
+    commitName: kanekona
+    summary: "\u30BF\u30B9\u30AF\u8868"
+    description: "\u30BF\u30B9\u30AF\u8868"
+    timeString: 2018-10-02T23:46:19.000+09:00
+    commitTimeString: 2018-10-02T23:46:19.000+09:00
+    changes:
+    - path: "\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      projectPath: "..\\\u30BF\u30B9\u30AF\u8868_2018_10_02.xlsx"
+      originalPath: 
+      status: 4
+      staged: 0
+  - commitID: 0489de39c557bcc47261ed5ef10a2394114c1531
+    mergeA: 
+    mergeB: 
+    authorName: kanekona
+    authorEmail: amausakonata1932@gmail.com
+    commitEmail: amausakonata1932@gmail.com
+    commitName: kanekona
+    summary: "\u5404\u7A2E\u66F8\u985E"
+    description: "\u5404\u7A2E\u66F8\u985E"
+    timeString: 2018-10-02T19:03:51.000+09:00
+    commitTimeString: 2018-10-02T19:03:51.000+09:00
+    changes:
+    - path: "\u30B3\u30FC\u30C7\u30A3\u30F3\u30B0\u30EB\u30FC\u30EB.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u30B3\u30FC\u30C7\u30A3\u30F3\u30B0\u30EB\u30FC\u30EB.docx"
+      projectPath: "..\\\u30B3\u30FC\u30C7\u30A3\u30F3\u30B0\u30EB\u30FC\u30EB.docx"
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: "\u4F01\u753B\u66F8.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u4F01\u753B\u66F8.docx"
+      projectPath: "..\\\u4F01\u753B\u66F8.docx"
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: "\u5352\u696D\u5236\u4F5C\u4F01\u753B.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u5352\u696D\u5236\u4F5C\u4F01\u753B.docx"
+      projectPath: "..\\\u5352\u696D\u5236\u4F5C\u4F01\u753B.docx"
+      originalPath: 
+      status: 4
+      staged: 0
+    - path: "\u9B54\u5C0E\u5354\u4F1A.docx"
+      fullPath: "D:\\git\\git_MagicalAssociation\\\u9B54\u5C0E\u5354\u4F1A.docx"
+      projectPath: "..\\\u9B54\u5C0E\u5354\u4F1A.docx"
+      originalPath: 
+      status: 4
+      staged: 0
+  - commitID: 858e41de8dc9927ce2849c2f3b469ddcafcdb5c4
+    mergeA: 
+    mergeB: 
+    authorName: kanekona
+    authorEmail: amausakonata1932@gmail.com
+    commitEmail: amausakonata1932@gmail.com
+    commitName: kanekona
+    summary: Initialize
+    description: Initialize
+    timeString: 2018-10-02T18:50:57.000+09:00
+    commitTimeString: 2018-10-02T18:50:57.000+09:00
+    changes:
+    - path: ReadMe.md
+      fullPath: D:\git\git_MagicalAssociation\ReadMe.md
+      projectPath: ..\ReadMe.md
+      originalPath: 
+      status: 4
+      staged: 0
