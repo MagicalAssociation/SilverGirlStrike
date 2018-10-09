@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 /**
  * file     SystemInput.cs
  * brief    ゲーム用にInputシステムを梱包したもの
@@ -9,7 +8,8 @@ using UnityEngine;
  * date     2018/10/05
  * Tagで指定して入力状況を取得できる
 */
-public class SystemInput {
+public class SystemInput
+{
     /**
      * enum Tag
      * 取得したいTag名
@@ -30,22 +30,30 @@ public class SystemInput {
         //! トランスアサルト
         TRANS_ASSAULT,
         //! アイテム１
-        ITEM_1,
+        ITEM_L,
         //! アイテム２
-        ITEM_2,
+        ITEM_R,
         //! アイテム３
-        ITEM_3,
+        ITEM_D,
         //! アイテム４
-        ITEM_4,
+        ITEM_U,
         //! ポーズ
         PAUSE,
+        //! 左スティック上
+        LSTICK_UP,
+        //! 左スティック下
+        LSTICK_DOWN,
+        //! 左スティック右
+        LSTICK_RIGHT,
+        //! 左スティック左
+        LSTICK_LEFT,
         //! Tag数
         TAG_NUM
     }
     /**
      * brief    入力対応stringと強制入力制限を行うclass
      */
-    class InputData
+    private class InputData
     {
         //! InputManagerName
         string name;
@@ -53,7 +61,7 @@ public class SystemInput {
         bool enableStop;
         /**
          * brief    constructor
-         * param    string name 対応させたいInputManagerの使用する名前
+         * param[in]    string name 対応させたいInputManagerの使用する名前
          */
         public InputData(string name)
         {
@@ -63,15 +71,15 @@ public class SystemInput {
         /**
          * brief    constructor
          */
-         public InputData()
+        public InputData()
         {
             this.name = "";
             this.enableStop = false;
         }
         /**
          * brief    入力停止設定
-         * param    bool flag trueにすると入力を強制的にfalseを返すようにする
-         */ 
+         * param[in]    bool flag trueにすると入力を強制的にfalseを返すようにする
+         */
         public void SetEnableStop(bool flag)
         {
             this.enableStop = flag;
@@ -80,7 +88,7 @@ public class SystemInput {
          * brief    入力停止状態を取得
          * return   bool 入力停止設定
          */
-         public bool GetEnableStop()
+        public bool GetEnableStop()
         {
             return this.enableStop;
         }
@@ -88,13 +96,13 @@ public class SystemInput {
          * brief    登録されているInputNameを取得する
          * return   string InputName
          */
-         public string GetName()
+        public string GetName()
         {
             return this.name;
         }
         /**
         * brief    Nameを登録する
-        * param    string name
+        * param[in]    string name
         */
         public void SetName(string name)
         {
@@ -103,7 +111,9 @@ public class SystemInput {
     }
 
     //! 入力データを入れておく箱
-    InputData[] inputData = new InputData[11];
+    private InputData[] inputData = new InputData[(int)Tag.TAG_NUM];
+    //! Axisの反応角度の指定
+    float axis_Power;
     /**
      * constructor
      */
@@ -115,78 +125,84 @@ public class SystemInput {
         this.inputData[(int)Tag.JUMP] = new InputData("A");
         this.inputData[(int)Tag.WIRE] = new InputData("Y");
         this.inputData[(int)Tag.TRANS_ASSAULT] = new InputData("L1");
-        this.inputData[(int)Tag.ITEM_1] = new InputData("U");
-        this.inputData[(int)Tag.ITEM_2] = new InputData("L");
-        this.inputData[(int)Tag.ITEM_3] = new InputData("R");
-        this.inputData[(int)Tag.ITEM_4] = new InputData("D");
+        this.inputData[(int)Tag.ITEM_L] = new InputData("L");
+        this.inputData[(int)Tag.ITEM_R] = new InputData("R");
+        this.inputData[(int)Tag.ITEM_D] = new InputData("D");
+        this.inputData[(int)Tag.ITEM_U] = new InputData("U");
         this.inputData[(int)Tag.PAUSE] = new InputData("START");
-        //this.inputData[(int)Tag.DECISION].SetName("B");
-        //this.inputData[(int)Tag.CANCEL].SetName("A");
-        //this.inputData[(int)Tag.ATTACK].SetName("X");
-        //this.inputData[(int)Tag.JUMP].SetName("A");
-        //this.inputData[(int)Tag.WIRE].SetName("Y");
-        //this.inputData[(int)Tag.TRANS_ASSAULT].SetName("L1");
-        //this.inputData[(int)Tag.ITEM_1].SetName("U");
-        //this.inputData[(int)Tag.ITEM_2].SetName("L");
-        //this.inputData[(int)Tag.ITEM_3].SetName("R");
-        //this.inputData[(int)Tag.ITEM_4].SetName("D");
-        //this.inputData[(int)Tag.PAUSE].SetName("START");
+        this.inputData[(int)Tag.LSTICK_DOWN] = new InputData("RStickY");
+        this.inputData[(int)Tag.LSTICK_UP] = new InputData("RStickY");
+        this.inputData[(int)Tag.LSTICK_RIGHT] = new InputData("RStickX");
+        this.inputData[(int)Tag.LSTICK_LEFT] = new InputData("RStickX");
+        this.axis_Power = 1.0f;
     }
     /**
      * brief    登録タグのON入力を取得
-     * param    SystemInput.Tag tag 登録タグ
+     * param[in]    SystemInput.Tag tag 登録タグ
      * return   bool 入力ON状態
      */
     public bool On(SystemInput.Tag tag)
     {
-        if(this.inputData[(int)tag].GetEnableStop())
+        // アイテムの場合だけ判定を変える
+        switch (tag)
         {
-            return false;
+            case Tag.ITEM_D:
+            case Tag.ITEM_U:
+            case Tag.ITEM_L:
+            case Tag.ITEM_R:
+                {
+                    return !this.inputData[(int)tag].GetEnableStop() && Input.GetButton(this.inputData[(int)tag].GetName());
+                }
         }
-        return Input.GetButton(this.inputData[(int)tag].GetName());
+
+        return !this.inputData[(int)tag].GetEnableStop() && Input.GetButton(this.inputData[(int)tag].GetName());
     }
     /**
     * brief    登録タグのDOWN入力を取得
-    * param    SystemInput.Tag tag 登録タグ
+    * param[in]    SystemInput.Tag tag 登録タグ
     * return   bool 入力DOWN状態
     */
     public bool Down(SystemInput.Tag tag)
     {
-        if (this.inputData[(int)tag].GetEnableStop())
-        {
-            return false;
-        }
-        return Input.GetButtonDown(this.inputData[(int)tag].GetName());
+        return !this.inputData[(int)tag].GetEnableStop() && Input.GetButtonDown(this.inputData[(int)tag].GetName());
     }
     /**
     * brief    登録タグのUP入力を取得
-    * param    SystemInput.Tag tag 登録タグ
+    * param[in]    SystemInput.Tag tag 登録タグ
     * return   bool 入力UP状態
     */
     public bool Up(SystemInput.Tag tag)
     {
-        if (this.inputData[(int)tag].GetEnableStop())
-        {
-            return false;
-        }
-        return Input.GetButtonUp(this.inputData[(int)tag].GetName());
+        return !this.inputData[(int)tag].GetEnableStop() && Input.GetButtonUp(this.inputData[(int)tag].GetName());
     }
     /**
      * brief    強制入力制御設定
-     * param    SystemInput.Tag tag 変更するタグ
-     * param    bool flag 入力を止める場合true
+     * param[in]    SystemInput.Tag tag 変更するタグ
+     * param[in]    bool flag 入力を止める場合true
      */
-     public void SetEnableStop(SystemInput.Tag tag,bool flag)
+    public void SetEnableStop(SystemInput.Tag tag, bool flag)
     {
         this.inputData[(int)tag].SetEnableStop(flag);
     }
     /**
     * brief    強制入力制御を取得
-    * param    SystemInput.Tag tag 取得したいタグ
+    * param[in]     SystemInput.Tag tag 取得したいタグ
     * return   bool 入力制御 
     */
     public bool GetEnableStop(SystemInput.Tag tag)
     {
         return this.inputData[(int)tag].GetEnableStop();
     }
+    /**
+     * brief    スティックの入力値をboolにして返す
+     * param[in]    SystemInput.Tag tag 取得したいタグ
+     * return   bool 判定値
+     */
+     private bool GetAxis(SystemInput.Tag tag)
+    {
+        return Input.GetAxis(this.inputData[(int)tag].GetName()) >= this.axis_Power ? true : false;
+    }
+    /**
+     * brief    スティックの
+     */
 }
