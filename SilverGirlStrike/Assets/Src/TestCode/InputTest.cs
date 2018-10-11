@@ -6,7 +6,6 @@ public class InputTest : MonoBehaviour {
    
 	// Use this for initialization
 	void Start () {
-        M_System.input.SetEnableStop(SystemInput.Tag.CANCEL, true);
 	}
 	
 	// Update is called once per frame
