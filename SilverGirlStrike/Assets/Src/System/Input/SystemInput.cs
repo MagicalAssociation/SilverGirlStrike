@@ -150,6 +150,10 @@ public class SystemInput
             case Tag.ITEM_U:
             case Tag.ITEM_L:
             case Tag.ITEM_R:
+            case Tag.LSTICK_DOWN:
+            case Tag.LSTICK_UP:
+            case Tag.LSTICK_LEFT:
+            case Tag.LSTICK_RIGHT:
                 {
                     return !this.inputData[(int)tag].GetEnableStop() && Input.GetButton(this.inputData[(int)tag].GetName());
                 }
