@@ -59,6 +59,12 @@ public class SystemInput
         string name;
         //! InputStop
         bool enableStop;
+        //! down判定を入れておく変数
+        bool input_Down;
+        //! up判定を入れておく変数
+        bool input_Up;
+        //! on判定を入れておく変数
+        bool input_On;
         /**
          * brief    constructor
          * param[in]    string name 対応させたいInputManagerの使用する名前
@@ -67,6 +73,7 @@ public class SystemInput
         {
             this.name = name;
             this.enableStop = false;
+            this.Reset();
         }
         /**
          * brief    constructor
@@ -75,6 +82,7 @@ public class SystemInput
         {
             this.name = "";
             this.enableStop = false;
+            this.Reset();
         }
         /**
          * brief    入力停止設定
@@ -108,6 +116,52 @@ public class SystemInput
         {
             this.name = name;
         }
+        /**
+         * brief    入力状況の更新
+         * param[in]    float power 判定させる強さ[0.1~1.0]で指定する
+         * ※注意※　スティック以外はUnityのInputに機能があるので省いています。
+         * ここで更新するのはスティック関係のみです！
+         */
+        public void Update(float power)
+        {
+            bool flag = Input.GetAxis(this.name) >= power;
+            this.input_Down = !this.input_On && flag;
+            this.input_Up = this.input_On && !flag;
+            this.input_On = flag;
+        }
+        /**
+         * brief    on判定取得
+         * return   bool true InputON
+         */
+         public bool GetOn()
+        {
+            return this.input_On;
+        }
+        /**
+         * brief    up判定取得
+         * return   bool true InputUP
+         */
+        public bool GetUp()
+        {
+            return this.input_Up;
+        }
+        /**
+         * brief    down判定取得
+         * return   bool true InputDOWN
+         */
+        public bool GetDown()
+        {
+            return this.input_Down;
+        }
+        /**
+         * brief    入力状況のリセット
+         */
+        private void Reset()
+        {
+            this.input_Down = false;
+            this.input_Up = false;
+            this.input_On = false;
+        }
     }
 
     //! 入力データを入れておく箱
@@ -137,29 +191,39 @@ public class SystemInput
         this.axis_Power = 1.0f;
     }
     /**
+     * brief    更新処理
+     * 入力状況の更新
+     * M_System以外で呼ばないこと！
+     */
+     public void Update()
+    {
+        for(int i = 0;i < (int)Tag.TAG_NUM;++i)
+        {
+            switch ((Tag)i)
+            {
+                case Tag.ITEM_D:
+                case Tag.ITEM_U:
+                case Tag.ITEM_L:
+                case Tag.ITEM_R:
+                case Tag.LSTICK_DOWN:
+                case Tag.LSTICK_UP:
+                case Tag.LSTICK_LEFT:
+                case Tag.LSTICK_RIGHT:
+                    this.inputData[i].Update(this.axis_Power);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    /**
      * brief    登録タグのON入力を取得
      * param[in]    SystemInput.Tag tag 登録タグ
      * return   bool 入力ON状態
      */
     public bool On(SystemInput.Tag tag)
     {
-        // アイテムの場合だけ判定を変える
-        switch (tag)
-        {
-            case Tag.ITEM_D:
-            case Tag.ITEM_U:
-            case Tag.ITEM_L:
-            case Tag.ITEM_R:
-            case Tag.LSTICK_DOWN:
-            case Tag.LSTICK_UP:
-            case Tag.LSTICK_LEFT:
-            case Tag.LSTICK_RIGHT:
-                {
-                    return !this.inputData[(int)tag].GetEnableStop() && Input.GetButton(this.inputData[(int)tag].GetName());
-                }
-        }
-
-        return !this.inputData[(int)tag].GetEnableStop() && Input.GetButton(this.inputData[(int)tag].GetName());
+        return !this.inputData[(int)tag].GetEnableStop() && (Input.GetButton(this.inputData[(int)tag].GetName()) || this.inputData[(int)tag].GetOn());
     }
     /**
     * brief    登録タグのDOWN入力を取得
@@ -168,7 +232,7 @@ public class SystemInput
     */
     public bool Down(SystemInput.Tag tag)
     {
-        return !this.inputData[(int)tag].GetEnableStop() && Input.GetButtonDown(this.inputData[(int)tag].GetName());
+        return !this.inputData[(int)tag].GetEnableStop() && (Input.GetButtonDown(this.inputData[(int)tag].GetName()) || this.inputData[(int)tag].GetDown());
     }
     /**
     * brief    登録タグのUP入力を取得
@@ -177,7 +241,7 @@ public class SystemInput
     */
     public bool Up(SystemInput.Tag tag)
     {
-        return !this.inputData[(int)tag].GetEnableStop() && Input.GetButtonUp(this.inputData[(int)tag].GetName());
+        return !this.inputData[(int)tag].GetEnableStop() && (Input.GetButtonUp(this.inputData[(int)tag].GetName()) || this.inputData[(int)tag].GetUp());
     }
     /**
      * brief    強制入力制御設定
@@ -202,11 +266,24 @@ public class SystemInput
      * param[in]    SystemInput.Tag tag 取得したいタグ
      * return   bool 判定値
      */
-     private bool GetAxis(SystemInput.Tag tag)
+    private bool GetAxisOn(SystemInput.Tag tag)
     {
         return Input.GetAxis(this.inputData[(int)tag].GetName()) >= this.axis_Power ? true : false;
     }
     /**
-     * brief    スティックの
+     * brief    スティックの判定させる押し倒しの強さを指定する
+     * param[in]    float power 判定させる強さ[0.1~1.0]で指定する
      */
+    public void SetAxisPower(float power)
+    {
+        this.axis_Power = power;
+    }
+    /**
+     * brief    スティックの判定させる押し倒しの強さを取得する
+     * return   判定の強さ
+     */
+     public float GetAxisPower()
+    {
+        return this.axis_Power;
+    }
 }

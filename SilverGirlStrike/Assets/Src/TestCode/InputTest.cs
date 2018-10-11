@@ -11,21 +11,5 @@ public class InputTest : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-       if(M_System.input.Down(SystemInput.Tag.DECISION))
-        {
-            Debug.Log("DECISION:DOWN");
-        }
-        if (M_System.input.Down(SystemInput.Tag.CANCEL))
-        {
-            Debug.Log("CANCEL:DOWN");
-        }
-        if (M_System.input.Down(SystemInput.Tag.JUMP))
-        {
-            Debug.Log("JUMP:DOWN");
-        }
-        if (M_System.input.Down(SystemInput.Tag.ITEM_D))
-        {
-            Debug.Log("ITEM_D:DOWN");
-        }
     }
 }

@@ -20,4 +20,9 @@ public class M_System : MonoBehaviour
     {
         M_System.input = new SystemInput();
     }
+
+    private void Update()
+    {
+        M_System.input.Update();
+    }
 }
