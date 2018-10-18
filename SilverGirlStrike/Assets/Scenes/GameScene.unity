@@ -205,8 +205,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 55564764}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.821, y: -2.28, z: 0}
-  m_LocalScale: {x: 6.940895, y: 1.5195303, z: 1}
+  m_LocalPosition: {x: -1.358, y: -2.28, z: 0}
+  m_LocalScale: {x: 8.676119, y: 1.5195303, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -229,7 +229,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &272668938
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1021,6 +1021,18 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1927960257088862, guid: 4ce2a7905cea00a41be62aa34945433a, type: 2}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576147030143784, guid: 4ce2a7905cea00a41be62aa34945433a, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576147030143784, guid: 4ce2a7905cea00a41be62aa34945433a, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576147030143784, guid: 4ce2a7905cea00a41be62aa34945433a, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
@@ -1059,6 +1071,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.3, y: 1.1}
   m_EdgeRadius: 0
+--- !u!114 &1709615928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1709615923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286a6affc126729428590a074597fc14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  move: {x: 0, y: 0}
+  GRAVITY: 0.03
+  FINSPEED: 0.03
+  JUMPPOWER: 1
+  footHit: 0
+  jumpCnt: 0
+  moveDirection: {x: 0, y: 0, z: 0}
+  MAXJUMPCOUNT: 1
 --- !u!50 &1709615929
 Rigidbody2D:
   serializedVersion: 4
@@ -1070,7 +1101,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.33
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
