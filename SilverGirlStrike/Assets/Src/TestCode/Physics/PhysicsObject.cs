@@ -18,19 +18,23 @@ public class PhysicsObject : MonoBehaviour
     //! 現在のジャンプ可能回数
     public int jumpCnt;
     //! 移動ベクトル
-    public Vector3 moveDirection;
+    public Vector2 moveDirection;
     //! 最大ジャンプ数
     public int MAXJUMPCOUNT = 1;
+
+    private Vector2 hitobjectNormalize;
     void Start()
     {
         //全値の初期化
         this.move = new Vector2();
-        this.moveDirection = Vector3.zero;
+        this.moveDirection = Vector2.zero;
+        this.hitobjectNormalize = Vector2.zero;
         this.footHit = false;
         this.jumpCnt = 0;
     }
+    
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //足元判定(ジャンプ回数を復活させる)
         if(this.FootCheck())
@@ -64,13 +68,14 @@ public class PhysicsObject : MonoBehaviour
         {
             //右移動の処理
             this.move.x = Mathf.Max(this.move.x - this.FINSPEED, 0.0f);
-            this.moveDirection = Vector3.right;
+            this.moveDirection = Vector2.right;
         }
         else
         {
             //左移動の処理
             this.move.x = Mathf.Min(this.move.x + this.FINSPEED, 0.0f);
-            this.moveDirection = Vector3.left;
+            this.move.x *= -1.0f;
+            this.moveDirection = Vector2.left;
         }
         if (this.move.y > 0.0f || !this.footHit)
         {
@@ -100,10 +105,7 @@ public class PhysicsObject : MonoBehaviour
         Collider2D hitobject;
         this.FootCheck(out hitobject);
 
-        //確認用線描画
-        Debug.DrawRay(this.transform.position - new Vector3(0.0f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.03f), Color.red, 0.03f);
-        Debug.DrawRay(this.transform.position - new Vector3(0.3f / 2.0f * -1.0f - 0.01f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.03f), Color.blue, 0.03f);
-        Debug.DrawRay(this.transform.position - new Vector3(0.3f / 2.0f + 0.01f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.03f), Color.green, 0.03f);
+        this.FootHitBaseDraw();
 
         //縦移動の移動処理
         RaycastHit2D hit = Physics2D.Raycast(this.transform.position - new Vector3(0.0f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, this.move.y), this.move.y, (int)M_System.LayerName.GROUND);
@@ -120,37 +122,38 @@ public class PhysicsObject : MonoBehaviour
         //坂道なら移動ベクトルを変更する
         //相手のオブジェクトの角度を取得
 
-        
 
+        //わからないから坂と平面で処理完全に分ける
 
-        //横移動の移動処理
-        hit = Physics2D.Raycast(this.transform.position, new Vector2(this.move.x, 0.0f), this.move.x, (int)M_System.LayerName.GROUND);
-        if (hit.collider != null)
+        if (hitobject && this.move.y == 0.0f)
         {
-            this.move.x = 0.0f;
+            //
+            //ここに坂道の判定とそのベクトルの変化を書く
+            //壁ずりベクトル = 進行ベクトル-Dot(進行ベクトル,法線ベクトルnormal) * 法線ベクトルnormal
+            //
+
+            Vector2 dir = this.moveDirection - Vector2.Dot(this.moveDirection, this.hitobjectNormalize) * hitobjectNormalize;
+            hit = Physics2D.Raycast(this.transform.position, new Vector2(this.move.x * dir.x, this.move.x * dir.y), this.move.x, (int)M_System.LayerName.GROUND);
+
+            //ここのxとyに壁ずりベクトルをかければいけるはず
+            this.GetComponent<Rigidbody2D>().velocity = new Vector2(this.move.x * 5.0f * dir.x, this.move.x * 5.0f * dir.y);
+            Debug.Log(new Vector2(this.move.x * 5.0f * dir.x, this.move.x * 5.0f * dir.y));
         }
         else
         {
-            //空中の時は縦の移動処理がすでにあるので処理をifで分ける
-            if (hitobject && this.move.y == 0.0f)
-            {
-                //
-                //ここに坂道の判定とそのベクトルの変化を書く
-                //壁ずりベクトル = 進行ベクトル-Dot(進行ベクトル,法線ベクトルnormal) * 法線ベクトルnormal
-                //
-                Vector3 dir = this.moveDirection - Vector3.Dot(this.moveDirection, hitobject.transform.eulerAngles.normalized) * hitobject.transform.eulerAngles.normalized;
-                Debug.Log(dir);
-
-                //ここのxとyに壁ずりベクトルをかければいけるはず
-                this.GetComponent<Rigidbody2D>().velocity = new Vector2(this.move.x * 5.0f, this.move.x * 5.0f * dir.y);
-            }
-            else
-            {
-                //こっちは問題ない
-                this.GetComponent<Rigidbody2D>().velocity = new Vector2(this.move.x * 5.0f, this.GetComponent<Rigidbody2D>().velocity.y);
-            }
+            hit = Physics2D.Raycast(this.transform.position, new Vector2(this.move.x, 0.0f), this.move.x, (int)M_System.LayerName.GROUND);
+            
+            //こっちは問題ない
+            this.GetComponent<Rigidbody2D>().velocity = new Vector2(this.move.x * 5.0f * this.moveDirection.x, this.GetComponent<Rigidbody2D>().velocity.y);
+            Debug.Log(new Vector2(this.move.x * 5.0f * this.moveDirection.x, this.GetComponent<Rigidbody2D>().velocity.y));
         }
-
+        //hit = Physics2D.Raycast(this.transform.position, new Vector2(this.move.x, 0.0f), this.move.x, (int)M_System.LayerName.GROUND);
+        //if (hit.collider != null)
+        //{
+        //    this.move.x = 0.0f;
+        //}
+        ////こっちは問題ない
+        //this.GetComponent<Rigidbody2D>().velocity = new Vector2(this.move.x * 5.0f, this.GetComponent<Rigidbody2D>().velocity.y);
     }
     /*
      * 足元の判定
@@ -158,10 +161,10 @@ public class PhysicsObject : MonoBehaviour
     bool FootCheck(out Collider2D hit2D)
     {
         //足元の判定をする
-        RaycastHit2D foothitcheck = Physics2D.Raycast(this.transform.position - new Vector3(0.0f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.03f), 0.03f, (int)M_System.LayerName.GROUND);
-        RaycastHit2D foothitcheck1 = Physics2D.Raycast(this.transform.position - new Vector3(0.3f / 2.0f * -1.0f - 0.01f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.03f), 0.03f, (int)M_System.LayerName.GROUND);
-        RaycastHit2D foothitcheck2 = Physics2D.Raycast(this.transform.position - new Vector3(0.3f / 2.0f + 0.01f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.03f), 0.03f, (int)M_System.LayerName.GROUND);
-
+        RaycastHit2D foothitcheck = Physics2D.Raycast(this.transform.position - new Vector3(0.0f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.5f), 0.03f, (int)M_System.LayerName.GROUND);
+        RaycastHit2D foothitcheck1 = Physics2D.Raycast(this.transform.position - new Vector3(0.3f / 2.0f * -1.0f - 0.01f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.06f), 0.03f, (int)M_System.LayerName.GROUND);
+        RaycastHit2D foothitcheck2 = Physics2D.Raycast(this.transform.position - new Vector3(0.3f / 2.0f + 0.01f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.06f), 0.03f, (int)M_System.LayerName.GROUND);
+        
         if (foothitcheck.collider != null ||
             foothitcheck1.collider != null ||
             foothitcheck2.collider != null)
@@ -171,14 +174,17 @@ public class PhysicsObject : MonoBehaviour
             if (foothitcheck.collider)
             {
                 hit2D = foothitcheck.collider;
+                this.hitobjectNormalize = foothitcheck.normal;
             }
             else if (foothitcheck1.collider)
             {
                 hit2D = foothitcheck1.collider;
+                this.hitobjectNormalize = foothitcheck1.normal;
             }
             else
             {
                 hit2D = foothitcheck2.collider;
+                this.hitobjectNormalize = foothitcheck2.normal;
             }
         }
         else
@@ -193,7 +199,7 @@ public class PhysicsObject : MonoBehaviour
     bool FootCheck()
     {
         //足元の判定をする
-        RaycastHit2D foothitcheck = Physics2D.Raycast(this.transform.position - new Vector3(0.0f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.03f), 0.03f, (int)M_System.LayerName.GROUND);
+        RaycastHit2D foothitcheck = Physics2D.Raycast(this.transform.position - new Vector3(0.0f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.5f), 0.03f, (int)M_System.LayerName.GROUND);
         RaycastHit2D foothitcheck1 = Physics2D.Raycast(this.transform.position - new Vector3(0.3f / 2.0f * -1.0f - 0.01f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.03f), 0.03f, (int)M_System.LayerName.GROUND);
         RaycastHit2D foothitcheck2 = Physics2D.Raycast(this.transform.position - new Vector3(0.3f / 2.0f + 0.01f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.03f), 0.03f, (int)M_System.LayerName.GROUND);
 
@@ -209,5 +215,12 @@ public class PhysicsObject : MonoBehaviour
             this.footHit = false;
             return false;
         }
+    }
+    void FootHitBaseDraw()
+    {
+        //確認用線描画
+        Debug.DrawRay(this.transform.position - new Vector3(0.0f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.06f), Color.red, 0.03f);
+        Debug.DrawRay(this.transform.position - new Vector3(0.3f / 2.0f * -1.0f - 0.01f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.06f), Color.blue, 0.03f);
+        Debug.DrawRay(this.transform.position - new Vector3(0.3f / 2.0f + 0.01f, 1.1f / 2.0f, 0.0f), new Vector2(0.0f, -0.06f), Color.green, 0.03f);
     }
 }

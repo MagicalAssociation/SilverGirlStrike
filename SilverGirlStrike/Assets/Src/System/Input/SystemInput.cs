@@ -15,7 +15,7 @@ public class SystemInput
      * 取得したいTag名
      * 入力状態の取得時に引数として使用する
      */
-    public enum Tag : int
+    public enum Tag //: int
     {
         //! 決定
         DECISION,
