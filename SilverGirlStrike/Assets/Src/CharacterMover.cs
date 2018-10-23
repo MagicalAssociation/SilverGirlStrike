@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerMove : MonoBehaviour {
-    public foot foot;
-
-
-
+public class CharacterMover : MonoBehaviour {
+    
     Rigidbody2D rigid;
     BoxCollider2D boxCollider2D;
     float fallVelocity;
@@ -31,16 +28,16 @@ public class playerMove : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        //ここが主要な部分
-        float axis = Input.GetAxis("RStickX") * 5.0f;
+        ////ここが主要な部分
+        //float axis = Input.GetAxis("RStickX") * 5.0f;
 
-        if (M_System.input.Down(SystemInput.Tag.JUMP)){
-            //ジャンプ時にジャンプ力を渡す
-            Jump(3.0f);
-        }
+        //if (M_System.input.Down(SystemInput.Tag.JUMP)){
+        //    //ジャンプ時にジャンプ力を渡す
+        //    Jump(3.0f);
+        //}
 
-        //横移動力、重力、接地フラグを渡す
-        UpdateVelocity(axis, 0.3f, this.foot.isFoot);
+        ////横移動力、重力、接地フラグを渡す
+        //UpdateVelocity(axis, 0.3f, this.foot.isFoot);
     }
 
 
