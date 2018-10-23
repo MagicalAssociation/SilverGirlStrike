@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     public float jumpPower;
     public int maxJumpNumber;
     public int nowJumpNumber;
+    public int timeCnt;
+    public Vector2 axis;
    public enum State
    {
         ATTACK1,
@@ -25,27 +27,42 @@ public class Player : MonoBehaviour
         TRANS_ASSAULT,
         JUMP_TRANS_ASSAULT,
     }
+    public enum Direction
+    {
+        LEFT,
+        RIGHT,
+    }
     public State state;
+    public State preState;
+    public Direction direction;
+
+    public float prePos;
+
 	// Use this for initialization
 	void Start () {
         this.mover = GetComponent<CharacterMover>();
         this.maxJumpNumber = 1;
         this.nowJumpNumber = 0;
         this.jumpPower = 9.5f;
+        this.timeCnt = 0;
+        this.direction = Direction.RIGHT;
+        this.state = State.NORMAL;
+        this.preState = State.NORMAL;
+        this.axis = new Vector2();
+        this.prePos = this.transform.localPosition.y;
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        
-        if(M_System.input.Down(SystemInput.Tag.JUMP) && this.maxJumpNumber > this.nowJumpNumber)
+	void Update ()
+    {
+        Mode();
+        if(this.state != this.preState)
         {
-            this.mover.Jump(this.jumpPower);
-            this.nowJumpNumber++;
+            this.preState = this.state;
+            this.timeCnt = 0;
         }
-        float axis = Input.GetAxis("RStickX") * 5.0f;
-
-        //横移動力、重力、接地フラグを渡す
-        mover.UpdateVelocity(axis, 0.3f, this.foot.isFoot);
+        Move();
+        this.timeCnt++;
     }
 
     void Mode()
@@ -54,19 +71,96 @@ public class Player : MonoBehaviour
         {
             case State.NORMAL:
                 {
-                    if (!this.foot.isFoot)
+                    if (!this.foot.CheckHit())
                     {
                         this.state = State.FALL;
                     }
-                    if(Input.GetAxis("RStickX") != 0.0f)
+
+                    axis.x = Input.GetAxis("RStickX") * 5.0f;
+                    if (axis.x != 0.0f)
                     {
                         this.state = State.WALK;
+                    }
+                    if (M_System.input.Down(SystemInput.Tag.JUMP) && this.maxJumpNumber > this.nowJumpNumber)
+                    {
+                        this.nowJumpNumber++;
+                        this.state = State.JUMP;
                     }
                 }
                 break;
             case State.WALK:
                 {
+                    axis.x = Input.GetAxis("RStickX") * 5.0f;
+                    if (axis.x == 0.0f)
+                    {
+                        this.state = State.NORMAL;
+                    }
+                    if (M_System.input.Down(SystemInput.Tag.JUMP) && this.maxJumpNumber > this.nowJumpNumber)
+                    {
+                        this.nowJumpNumber++;
+                        this.state = State.JUMP;
+                    }
+                }
+                break;
+            case State.JUMP:
+                {
+                    //頭がオブジェクトに当たった時落ちる行動にモード変更
 
+
+                    if(this.prePos  > this.transform.localPosition.y)
+                    {
+                        this.state = State.FALL;
+                    }
+                    this.prePos = this.transform.localPosition.y;
+                }
+                break;
+            case State.FALL:
+                {
+                    if(this.foot.CheckHit())
+                    {
+                        this.state = State.NORMAL;
+                        this.nowJumpNumber = 0;
+                    }
+                    if (M_System.input.Down(SystemInput.Tag.JUMP) && this.maxJumpNumber > this.nowJumpNumber)
+                    {
+                        this.nowJumpNumber++;
+                        this.state = State.JUMP;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    void Move()
+    {
+        switch(this.state)
+        {
+            case State.NORMAL:
+                {
+
+                }
+                break;
+            case State.JUMP:
+                {
+                    if(this.timeCnt == 0)
+                    {
+                        this.mover.Jump(this.jumpPower);
+                    }
+                    axis.x = Input.GetAxis("RStickX") * 5.0f;
+                    mover.UpdateVelocity(axis.x, 0.3f, this.foot.CheckHit());
+                }
+                break;
+            case State.FALL:
+                {
+                    axis.x = Input.GetAxis("RStickX") * 5.0f;
+                    mover.UpdateVelocity(axis.x, 0.3f, this.foot.CheckHit());
+                }
+                break;
+            case State.WALK:
+                {
+                    mover.UpdateVelocity(axis.x, 0.3f, this.foot.CheckHit());
                 }
                 break;
             default:

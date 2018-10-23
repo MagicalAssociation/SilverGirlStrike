@@ -37,7 +37,7 @@ public class CharacterMover : MonoBehaviour {
         //}
 
         ////横移動力、重力、接地フラグを渡す
-        //UpdateVelocity(axis, 0.3f, this.foot.isFoot);
+        //UpdateVelocity(axis, 0.3f, this.foot.CheckHit());
     }
 
 

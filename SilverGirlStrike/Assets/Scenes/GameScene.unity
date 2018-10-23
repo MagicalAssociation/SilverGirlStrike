@@ -1361,9 +1361,9 @@ GameObject:
   - component: {fileID: 1677851907}
   - component: {fileID: 1677851908}
   - component: {fileID: 1677851909}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GameObject
-  m_TagString: Ground
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1393,6 +1393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFoot: 0
+  collider: {fileID: 0}
 --- !u!61 &1677851908
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1484,6 +1485,12 @@ MonoBehaviour:
   jumpPower: 9.5
   maxJumpNumber: 0
   nowJumpNumber: 0
+  timeCnt: 0
+  axis: {x: 0, y: 0}
+  state: 0
+  preState: 0
+  direction: 0
+  prePos: 0
 --- !u!4 &1709615928 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4576147030143784, guid: 4ce2a7905cea00a41be62aa34945433a,
