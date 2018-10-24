@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterMover : MonoBehaviour {
-    
+public class playerMove : MonoBehaviour {
+    public foot foot;
+
+
+
     Rigidbody2D rigid;
     BoxCollider2D boxCollider2D;
     float fallVelocity;
@@ -15,6 +18,9 @@ public class CharacterMover : MonoBehaviour {
 
     Collider2D[] result;
 
+    //重力の影響を受けない場合に設定
+    bool acvtiveGravity;
+
 
     // Use this for initialization
     void Start () {
@@ -24,37 +30,43 @@ public class CharacterMover : MonoBehaviour {
         resultArray = new RaycastHit2D[10];
         this.result = new Collider2D[10];
         this.boxCollider2D = GetComponent<BoxCollider2D>();
+
+        this.acvtiveGravity = false;
     }
 
     // Update is called once per frame
     void Update () {
-        ////ここが主要な部分
-        //float axis = Input.GetAxis("RStickX") * 5.0f;
+        //ここが主要な部分
+        float axis = Input.GetAxis("RStickX") * 5.0f;
 
-        //if (M_System.input.Down(SystemInput.Tag.JUMP)){
-        //    //ジャンプ時にジャンプ力を渡す
-        //    Jump(3.0f);
-        //}
+        if (M_System.input.Down(SystemInput.Tag.JUMP)){
+            //ジャンプ時にジャンプ力を渡す
+            Jump(3.0f);
+        }
 
-        ////横移動力、重力、接地フラグを渡す
-        //UpdateVelocity(axis, 0.3f, this.foot.CheckHit());
+        //横移動力、重力、接地フラグを渡す
+        UpdateVelocity(axis, -Input.GetAxis("RStickY") * 5.0f, 0.3f, true);
     }
 
 
-    //横移動をセットし、物理挙動に速度を設定
-    public void UpdateVelocity(float movePowerX, float gravity, bool onGround)
+    //横移動をセットし、物理挙動に速度を設定、縦移動は落下速度に影響を及ぼさないので、それをやりたい場合はJump()にて落下速度を設定するといい
+    public void UpdateVelocity(float movePowerX, float movePowerY, float gravity, bool onGround)
     {
-        //接地時は落下速度リセット
-        if (onGround)
+        if (this.acvtiveGravity)
         {
-            if (this.fallVelocity < 0.0f)
+            //接地時は落下速度リセット
+            if (onGround)
             {
-                this.fallVelocity = 0.0f;
+                if (this.fallVelocity < 0.0f)
+                {
+                    this.fallVelocity = 0.0f;
+                }
             }
+            //落下
+            this.fallVelocity -= gravity;
         }
-        //落下
-        this.fallVelocity -= gravity;
 
+        //ボックスコリジョンから四角形の頂点を取得、レイの発生に使う
         Vector2 bl = (Vector2)this.transform.position;
         bl += boxCollider2D.offset + Vector2.left * boxCollider2D.size.x * 0.5f + Vector2.down * boxCollider2D.size.y * 0.5f;
         Vector2 br = (Vector2)this.transform.position;
@@ -86,7 +98,7 @@ public class CharacterMover : MonoBehaviour {
             velocityX *= movePowerX / velocityX.x;
         }
 
-        this.rigid.velocity = new Vector2(0.0f, this.fallVelocity) + velocityX;
+        this.rigid.velocity = new Vector2(0.0f, this.fallVelocity + movePowerY) + velocityX;
 
         ChangeFriction();
     }
@@ -95,6 +107,12 @@ public class CharacterMover : MonoBehaviour {
     public void Jump(float jumpPower)
     {
           this.fallVelocity = jumpPower;
+    }
+    //重力設定
+    public void SetActiveGravity(bool active)
+    {
+        this.fallVelocity = 0.0f;
+        this.acvtiveGravity = active;
     }
 
     void ChangeFriction()
@@ -125,7 +143,6 @@ public class CharacterMover : MonoBehaviour {
             }
         }
     }
-
 
     void ChangeNormal(float moveVectorX, Vector2 frontFoot, Vector2 backFoot)
     {
