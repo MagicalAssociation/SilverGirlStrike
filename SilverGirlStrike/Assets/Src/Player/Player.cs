@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public CharacterMover mover;
-    public foot foot;
+    public Foot foot;
     public float jumpPower;
     public int maxJumpNumber;
     public int nowJumpNumber;
@@ -62,6 +62,7 @@ public class Player : MonoBehaviour
             this.timeCnt = 0;
         }
         Move();
+        Debug.Log("State:" + this.state + "|Cnt:" + this.timeCnt);
         this.timeCnt++;
     }
 
