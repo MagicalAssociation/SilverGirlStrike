@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerMove : MonoBehaviour {
-    public foot foot;
+public class CharacterMover : MonoBehaviour {
+    public Foot foot;
 
 
 
@@ -31,29 +31,48 @@ public class playerMove : MonoBehaviour {
         this.result = new Collider2D[10];
         this.boxCollider2D = GetComponent<BoxCollider2D>();
 
-        this.acvtiveGravity = false;
+        this.acvtiveGravity = true;
     }
 
     // Update is called once per frame
     void Update () {
-        //ここが主要な部分
-        float axis = Input.GetAxis("RStickX") * 5.0f;
+        ////ここが主要な部分
+        //float axis = Input.GetAxis("RStickX") * 5.0f;
 
-        if (M_System.input.Down(SystemInput.Tag.JUMP)){
-            //ジャンプ時にジャンプ力を渡す
-            Jump(3.0f);
-        }
+        //if (M_System.input.Down(SystemInput.Tag.JUMP)){
+        //    //ジャンプ時にジャンプ力を渡す
+        //    Jump(3.0f);
+        //}
 
-        //横移動力、重力、接地フラグを渡す
-        UpdateVelocity(axis, -Input.GetAxis("RStickY") * 5.0f, 0.3f, true);
+        ////横移動力、重力、接地フラグを渡す
+        //UpdateVelocity(axis, -Input.GetAxis("RStickY") * 5.0f, 0.3f, true);
     }
 
+    /**
+     * @brief   現在の落下速度を取得する
+     * @return float 落下速度
+     */ 
+
+    public float GetFallVelocity()
+    {
+        return this.fallVelocity;
+    }
+    /**
+     * @brief   現在落ちているかを返す
+     * @return bool 落ちているならtrue
+     */ 
+    public bool IsFall()
+    {
+        return this.fallVelocity < 0.0f;
+    }
 
     //横移動をセットし、物理挙動に速度を設定、縦移動は落下速度に影響を及ぼさないので、それをやりたい場合はJump()にて落下速度を設定するといい
     public void UpdateVelocity(float movePowerX, float movePowerY, float gravity, bool onGround)
     {
         if (this.acvtiveGravity)
         {
+            //落下
+            this.fallVelocity -= gravity;
             //接地時は落下速度リセット
             if (onGround)
             {
@@ -62,8 +81,6 @@ public class playerMove : MonoBehaviour {
                     this.fallVelocity = 0.0f;
                 }
             }
-            //落下
-            this.fallVelocity -= gravity;
         }
 
         //ボックスコリジョンから四角形の頂点を取得、レイの発生に使う

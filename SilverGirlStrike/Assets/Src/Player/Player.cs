@@ -62,7 +62,7 @@ public class Player : MonoBehaviour
             this.timeCnt = 0;
         }
         Move();
-        Debug.Log("State:" + this.state + "|Cnt:" + this.timeCnt);
+        //Debug.Log("State:" + this.state + "|Cnt:" + this.timeCnt + "Fall:" + this.mover.GetFallVelocity());
         this.timeCnt++;
     }
 
@@ -150,18 +150,18 @@ public class Player : MonoBehaviour
                         this.mover.Jump(this.jumpPower);
                     }
                     axis.x = Input.GetAxis("RStickX") * 5.0f;
-                    mover.UpdateVelocity(axis.x, 0.3f, this.foot.CheckHit());
+                    mover.UpdateVelocity(axis.x, 0.0f,0.3f, this.foot.CheckHit());
                 }
                 break;
             case State.FALL:
                 {
                     axis.x = Input.GetAxis("RStickX") * 5.0f;
-                    mover.UpdateVelocity(axis.x, 0.3f, this.foot.CheckHit());
+                    mover.UpdateVelocity(axis.x, 0.0f, 0.3f, this.foot.CheckHit());
                 }
                 break;
             case State.WALK:
                 {
-                    mover.UpdateVelocity(axis.x, 0.3f, this.foot.CheckHit());
+                    mover.UpdateVelocity(axis.x, 0.0f, 0.3f, this.foot.CheckHit());
                 }
                 break;
             default:
