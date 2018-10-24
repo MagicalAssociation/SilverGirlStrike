@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
     public int nowJumpNumber;
     public int timeCnt;
     public Vector2 axis;
+    public float gravity;
+    public int hp;
+    public AnchorSelector anchor;
    public enum State
    {
         ATTACK1,
@@ -36,8 +39,6 @@ public class Player : MonoBehaviour
     public State preState;
     public Direction direction;
 
-    public float prePos;
-
 	// Use this for initialization
 	void Start () {
         this.mover = GetComponent<CharacterMover>();
@@ -49,7 +50,8 @@ public class Player : MonoBehaviour
         this.state = State.NORMAL;
         this.preState = State.NORMAL;
         this.axis = new Vector2();
-        this.prePos = this.transform.localPosition.y;
+        this.hp = 10;
+        this.anchor = GetComponent<AnchorSelector>();
 	}
 	
 	// Update is called once per frame
@@ -62,10 +64,11 @@ public class Player : MonoBehaviour
             this.timeCnt = 0;
         }
         Move();
-        //Debug.Log("State:" + this.state + "|Cnt:" + this.timeCnt + "Fall:" + this.mover.GetFallVelocity());
         this.timeCnt++;
     }
-
+    /**
+     * @brief   Stateの変更をメインに行う
+     */
     void Mode()
     {
         switch(this.state)
@@ -108,11 +111,10 @@ public class Player : MonoBehaviour
                     //頭がオブジェクトに当たった時落ちる行動にモード変更
 
 
-                    if(this.prePos  > this.transform.localPosition.y)
+                    if(this.mover.IsFall())
                     {
                         this.state = State.FALL;
                     }
-                    this.prePos = this.transform.localPosition.y;
                 }
                 break;
             case State.FALL:
@@ -129,18 +131,47 @@ public class Player : MonoBehaviour
                     }
                 }
                 break;
+            case State.WIRE:
+                {
+                    //アンカーとの距離が近くなったらここでFallに移行する
+                    this.state = State.FALL;
+                }
+                break;
+            case State.ATTACK1:
+                {
+
+                }
+                break;
+            case State.ATTACK2:
+                {
+
+                }
+                break;
+            case State.ATTACK3:
+                {
+
+                }
+                break;
+            case State.TRANS_ASSAULT:
+                {
+
+                }
+                break;
             default:
                 break;
         }
     }
-
+    /**
+     * @brief   Stateに合わせて移動を行う
+     */ 
     void Move()
     {
         switch(this.state)
         {
             case State.NORMAL:
                 {
-
+                    //慣性を消すために書いてある
+                    mover.UpdateVelocity(0.0f, 0.0f, 0.3f, this.foot.CheckHit());
                 }
                 break;
             case State.JUMP:
@@ -162,6 +193,31 @@ public class Player : MonoBehaviour
             case State.WALK:
                 {
                     mover.UpdateVelocity(axis.x, 0.0f, 0.3f, this.foot.CheckHit());
+                }
+                break;
+            case State.WIRE:
+                {
+                    
+                }
+                break;
+            case State.ATTACK1:
+                {
+
+                }
+                break;
+            case State.ATTACK2:
+                {
+
+                }
+                break;
+            case State.ATTACK3:
+                {
+
+                }
+                break;
+            case State.TRANS_ASSAULT:
+                {
+
                 }
                 break;
             default:

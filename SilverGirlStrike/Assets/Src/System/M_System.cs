@@ -19,6 +19,7 @@ public class M_System : MonoBehaviour
         PLAYER = 1 << 8,
         ENEMY = 1 << 9,
         GROUND = 1 << 10,
+        ANCHOR = 1 << 11,
     }
 
     /**

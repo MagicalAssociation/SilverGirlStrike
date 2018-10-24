@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterMover : MonoBehaviour {
-    public Foot foot;
-
-
 
     Rigidbody2D rigid;
     BoxCollider2D boxCollider2D;
@@ -36,16 +33,6 @@ public class CharacterMover : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        ////ここが主要な部分
-        //float axis = Input.GetAxis("RStickX") * 5.0f;
-
-        //if (M_System.input.Down(SystemInput.Tag.JUMP)){
-        //    //ジャンプ時にジャンプ力を渡す
-        //    Jump(3.0f);
-        //}
-
-        ////横移動力、重力、接地フラグを渡す
-        //UpdateVelocity(axis, -Input.GetAxis("RStickY") * 5.0f, 0.3f, true);
     }
 
     /**

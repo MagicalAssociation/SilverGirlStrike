@@ -1417,7 +1417,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.26049277, y: 0.22249246}
+  m_Size: {x: 0.29, y: 0.22249246}
   m_EdgeRadius: 0
 --- !u!50 &1677851909
 Rigidbody2D:
@@ -1487,10 +1487,12 @@ MonoBehaviour:
   nowJumpNumber: 0
   timeCnt: 0
   axis: {x: 0, y: 0}
+  gravity: 0
+  hp: 0
+  anchor: {fileID: 0}
   state: 0
   preState: 0
   direction: 0
-  prePos: 0
 --- !u!4 &1709615928 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4576147030143784, guid: 4ce2a7905cea00a41be62aa34945433a,
