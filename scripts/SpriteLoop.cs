@@ -17,6 +17,7 @@ public class SpriteLoop : MonoBehaviour
     public PixelPerfectCamera viewCamera;
     public Rect screenRect;
     float pixelPerUnit;
+    public int spritePos;
 
     //コピーされたものはこの変数がtrueになる
     public bool copyFrag;
@@ -34,6 +35,7 @@ public class SpriteLoop : MonoBehaviour
     void Start()
     {
         this.prevCameraPos = this.cameraPos.position;
+
 
         Initialize();
 
@@ -54,6 +56,8 @@ public class SpriteLoop : MonoBehaviour
     //少なくともカメラの移動後、という要件を満たせばLateUpdate()でなくてもいい
     void LateUpdate()
     {
+        float moveDistance = this.spriteSize.x * this.spritePos;
+
         Vector3 moveVector = this.cameraPos.position - this.prevCameraPos;
         this.transform.position += moveVector * speed;
         this.prevCameraPos = this.cameraPos.position;
@@ -61,19 +65,16 @@ public class SpriteLoop : MonoBehaviour
         //Debug.Log(this.prevCameraPos);
 
 
-#if UNITY_EDITOR
-
+        //カメラからの相対位置に変換し、Unityの長さ単位に変換
         var spritex = ((transform.position - this.cameraPos.position) * this.pixelPerUnit + this.spriteSize / 2).x;
-        if (spritex < this.screenRect.x)
+        if (spritex < this.screenRect.x - moveDistance)
         {
             FixL();
         }
-        if ((transform.position.x - this.cameraPos.position.x) * this.pixelPerUnit > this.screenRect.x + this.screenRect.width * this.spriteCount)
+        if ((transform.position.x - this.cameraPos.position.x) * this.pixelPerUnit > (this.screenRect.x + this.screenRect.width * this.spriteCount - moveDistance))
         {
             FixR();
         }
-        //Debug.Log(transform.position * this.pixelPerUnit);
-#endif
     }
 
     void FixL()
@@ -96,6 +97,7 @@ public class SpriteLoop : MonoBehaviour
         this.pixelPerUnit = GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
         this.spriteSize = GetComponent<SpriteRenderer>().size * this.pixelPerUnit;
 
+        //左上を原点としたカメラ矩形
         this.screenRect.x = -this.viewCamera.refResolutionX * 0.5f;
         this.screenRect.y = this.viewCamera.refResolutionY * 0.5f;
         this.screenRect.width = this.viewCamera.refResolutionX;
