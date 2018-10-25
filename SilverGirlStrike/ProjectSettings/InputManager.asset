@@ -66,7 +66,7 @@ InputManager:
     sensitivity: 0
     snap: 0
     invert: 0
-    type: 1
+    type: 0
     axis: 0
     joyNum: 0
   - serializedVersion: 3
@@ -247,15 +247,15 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: RStickX
-    descriptiveName: RStickX
-    descriptiveNegativeName: RStickX
+    descriptiveName: 
+    descriptiveNegativeName: 
     negativeButton: a
     positiveButton: d
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 15
-    dead: 0
-    sensitivity: 15
+    gravity: 0
+    dead: 0.19
+    sensitivity: 1
     snap: 0
     invert: 0
     type: 2
@@ -269,9 +269,9 @@ InputManager:
     positiveButton: s
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 15
-    dead: 0
-    sensitivity: 15
+    gravity: 0
+    dead: 0.19
+    sensitivity: 1
     snap: 0
     invert: 0
     type: 2
@@ -279,15 +279,15 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: RStickX
-    descriptiveName: RStickX
-    descriptiveNegativeName: RStickX
+    descriptiveName: 0
+    descriptiveNegativeName: 0
     negativeButton: a
     positiveButton: d
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 15
-    dead: 0
-    sensitivity: 15
+    gravity: 0
+    dead: 0.19
+    sensitivity: 1
     snap: 0
     invert: 0
     type: 0
@@ -301,9 +301,9 @@ InputManager:
     positiveButton: s
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 15
-    dead: 0
-    sensitivity: 15
+    gravity: 0
+    dead: 0.19
+    sensitivity: 1
     snap: 0
     invert: 0
     type: 0

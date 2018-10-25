@@ -29,7 +29,7 @@ public class CircleDitection : MonoBehaviour {
 
     public Collider2D[] FindAnchor()
     {
-        int mask = 1 << 9;
+        int mask = (int)M_System.LayerName.ANCHOR;
         this.hitList = Physics2D.OverlapCircleAll(this.transform.position, radius, mask);
 
         return this.hitList;
