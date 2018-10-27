@@ -53,6 +53,18 @@ public class CharacterMover : MonoBehaviour {
         return this.fallVelocity < 0.0f;
     }
 
+    //（未実装）横移動とか縦移動をもっとスムーズに扱える関数
+    public void MoveHorizontal(float movePower, bool onGround)
+    {
+
+    }
+    //（未実装）横移動とか縦移動をもっとスムーズに扱える関数
+    public void MoveVartical(float movePower, float gravity)
+    {
+
+    }
+
+
     //横移動をセットし、物理挙動に速度を設定、縦移動は落下速度に影響を及ぼさないので、それをやりたい場合はJump()にて落下速度を設定するといい
     public void UpdateVelocity(float movePowerX, float movePowerY, float gravity, bool onGround)
     {
@@ -88,8 +100,8 @@ public class CharacterMover : MonoBehaviour {
             ChangeNormal(movePowerX, bl, br);
         }
 
-
-        if (this.fallVelocity > 0.0f)
+        //空中にいるときは、法線を使用しない
+        if (this.fallVelocity > 0.0f || !this.acvtiveGravity)
         {
             this.normal = Vector2.zero;
         }
@@ -102,7 +114,14 @@ public class CharacterMover : MonoBehaviour {
             velocityX *= movePowerX / velocityX.x;
         }
 
-        this.rigid.velocity = new Vector2(0.0f, this.fallVelocity + movePowerY) + velocityX;
+        if (this.acvtiveGravity)
+        {
+            this.rigid.velocity = new Vector2(0.0f, this.fallVelocity + movePowerY) + velocityX;
+        }
+        else
+        {
+            this.rigid.velocity = new Vector2(0.0f, movePowerY) + velocityX;
+        }
 
         //泊っているときはずり落ち防止で摩擦を十分につける
         if (this.rigid.velocity.x == 0 && onGround)
@@ -121,9 +140,12 @@ public class CharacterMover : MonoBehaviour {
           this.fallVelocity = jumpPower;
     }
     //重力設定
-    public void SetActiveGravity(bool active)
+    public void SetActiveGravity(bool active, bool isKeepFallVelocity)
     {
-        this.fallVelocity = 0.0f;
+        if (!isKeepFallVelocity)
+        {
+            this.fallVelocity = 0.0f;
+        }
         this.acvtiveGravity = active;
     }
 

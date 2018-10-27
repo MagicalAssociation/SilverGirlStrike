@@ -5,36 +5,35 @@ using UnityEngine;
 public class Foot : MonoBehaviour{
     public bool isFoot;
 
-    public BoxCollider2D collider;
+    public BoxCollider2D boxColloder;
     // Use this for initialization
     private void Start()
     {
-        this.collider = GetComponent<BoxCollider2D>();
+        this.boxColloder = GetComponent<BoxCollider2D>();
     }
 
     private void Update()
     {
-        this.isFoot = (Physics2D.OverlapBox(
-            collider.transform.position + new Vector3(collider.offset.x, collider.offset.y, 0),
-            new Vector3(collider.size.x, collider.size.y, 0),
-            this.collider.transform.eulerAngles.z,
-            (int)M_System.LayerName.GROUND) == null) ? false : true;
     }
 
     public bool CheckHit()
     {
-        return (Physics2D.OverlapBox(
-            collider.transform.position + new Vector3(collider.offset.x, collider.offset.y, 0),
-            new Vector3(collider.size.x, collider.size.y, 0),
-            this.collider.transform.eulerAngles.z,
+        isFoot = (Physics2D.OverlapBox(
+            boxColloder.transform.position + new Vector3(boxColloder.offset.x, boxColloder.offset.y, 0),
+            new Vector2(boxColloder.size.x, boxColloder.size.y) * 0.5f,
+            this.boxColloder.transform.eulerAngles.z,
             (int)M_System.LayerName.GROUND) == null) ? false : true;
+        return this.isFoot;
     }
 
     public void LineDraw()
     {
-        Debug.DrawLine(
-           collider.transform.position + new Vector3(collider.offset.x, collider.offset.y, 0) + new Vector3(collider.size.x / 2.0f, collider.size.y / 2.0f, 0),
-           collider.transform.position + new Vector3(collider.offset.x, collider.offset.y, 0) - new Vector3(collider.size.x / 2.0f, collider.size.y / 2.0f, 0)
-           );
+        Vector2 bl = (Vector2)this.transform.position;
+        bl += boxColloder.offset + Vector2.left * boxColloder.size.x * 0.5f + Vector2.down * boxColloder.size.y * 0.5f;
+        Vector2 tr = (Vector2)this.transform.position;
+        tr += boxColloder.offset + Vector2.right * boxColloder.size.x * 0.5f + Vector2.up * boxColloder.size.y * 0.5f;
+
+        Debug.DrawRay(bl, tr - bl, Color.green);
+
     }
 }

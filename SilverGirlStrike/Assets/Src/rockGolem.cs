@@ -168,7 +168,7 @@ public class rockGolem : MonoBehaviour {
     // Use this for initialization
     void Start () {
         this.mover = GetComponent<CharacterMover>();
-        this.mover.SetActiveGravity(false);
+        this.mover.SetActiveGravity(false, false);
         this.state = new StateParam(State.Normal);
         this.zyouge = 0.0f;
 	}

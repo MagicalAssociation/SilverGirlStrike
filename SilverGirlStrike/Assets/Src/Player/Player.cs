@@ -2,23 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//編集履歴
+//わからん　金子（作成）
+//2018/10/27　板倉　コメントなど追加、余計なpublicをできるだけ減らしてみた
+
+//プレイヤーの移動・行動・ステート管理処理
 public class Player : MonoBehaviour
 {
     public CharacterMover mover;
     public Foot foot;
+
+
+    //アンカーの値
+    public float anchorMaxMoveSpeed;
+    public float anchorMoveAcceleration;
+    public AnchorSelector anchor;
+    GameObject anchorObject;
+    Vector2 targetDirection;
+
+    //移動関連のパラメータ値
+    public float playerMoveSpeed;
+    public float gravity;
+    //ジャンプ関連
     public float jumpPower;
     public int maxJumpNumber;
     public int nowJumpNumber;
-    public float maxSpeed;
-    public float nowSpeed;
-    public int timeCnt;
-    public Vector2 axis;
-    public float gravity;
+
     public int hp;
-    public AnchorSelector anchor;
-    public GameObject anchorObject;
-    public BoxCollider2D boxCollider;
-    public Vector2 targetDistance;
+
+    float anchorCurrentMoveSpeed;
+    int timeCnt;
+    Vector2 axis;
+    BoxCollider2D boxCollider;
+
+
+    Vector2 moveVector;
+
    public enum State
    {
         ATTACK1,
@@ -49,13 +69,11 @@ public class Player : MonoBehaviour
         this.mover = GetComponent<CharacterMover>();
         this.maxJumpNumber = 1;
         this.nowJumpNumber = 0;
-        this.jumpPower = 12.0f;
         this.timeCnt = 0;
         this.direction = Direction.RIGHT;
         this.state = State.NORMAL;
         this.preState = State.NORMAL;
         this.axis = new Vector2();
-        this.hp = 10;
         this.anchor = GetComponent<AnchorSelector>();
         this.anchorObject = null;
         this.boxCollider = GetComponent<BoxCollider2D>();
@@ -65,6 +83,8 @@ public class Player : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+
+        this.moveVector = Vector2.zero;
         Mode();
         if(this.state != this.preState)
         {
@@ -77,6 +97,9 @@ public class Player : MonoBehaviour
         this.preState = this.state;
         Vector2 dire = new Vector2(Input.GetAxis("RStickX"), Input.GetAxis("RStickY") * -1);
         Debug.DrawRay(this.transform.position, new Vector3(dire.x, dire.y), Color.green, 0);
+
+        mover.UpdateVelocity(this.moveVector.x, this.moveVector.y, this.gravity, this.foot.CheckHit());
+
     }
     /**
      * @brief   Stateの変更をメインに行う
@@ -88,7 +111,6 @@ public class Player : MonoBehaviour
             case State.NORMAL:
                 {
 
-                    this.mover.SetActiveGravity(true);
                     if (!this.foot.CheckHit())
                     {
                         this.state = State.FALL;
@@ -98,7 +120,7 @@ public class Player : MonoBehaviour
                         this.nowJumpNumber = 0;
                     }
 
-                    axis.x = Input.GetAxis("RStickX") * 5.0f;
+                    axis.x = Input.GetAxis("RStickX") * playerMoveSpeed;
                     if (axis.x != 0.0f)
                     {
                         this.state = State.WALK;
@@ -116,7 +138,7 @@ public class Player : MonoBehaviour
                 break;
             case State.WALK:
                 {
-                    axis.x = Input.GetAxis("RStickX") * 5.0f;
+                    axis.x = Input.GetAxis("RStickX") * playerMoveSpeed;
                     if (axis.x == 0.0f)
                     {
                         this.state = State.NORMAL;
@@ -150,6 +172,7 @@ public class Player : MonoBehaviour
                 {
                     if(this.foot.CheckHit())
                     {
+                        //接地したときにジャンプ回数を回復
                         this.state = State.NORMAL;
                         this.nowJumpNumber = 0;
                     }
@@ -166,11 +189,14 @@ public class Player : MonoBehaviour
                 break;
             case State.WIRE:
                 {
-                    //アンカーとの距離が近くなったらここでFallに移行する
-                    if(Physics2D.OverlapCircle(this.transform.position,this.boxCollider.size.x / 2.0f,(int)M_System.LayerName.ANCHOR) != null)
+                    //進行方向と、現在のアンカーへ向かうベクトルを比較し、後ろにあったらJUMPに移行
+                    float dot = Vector2.Dot(this.targetDirection, this.anchorObject.transform.position - this.transform.position);
+
+                    if (this.anchorObject != null && dot < 0.0f)
                     {
-                        this.mover.Jump(this.jumpPower * 0.5f);
-                        this.mover.SetActiveGravity(true);
+                        //移行時、少しだけ滞空時間を延ばすためにジャンプのような挙動を行う
+                        this.mover.SetActiveGravity(true, true);
+                        this.mover.Jump(this.targetDirection.y * this.anchorCurrentMoveSpeed * 0.5f);
                         this.state = State.JUMP;
                         this.anchorObject = null;
                     }
@@ -209,8 +235,8 @@ public class Player : MonoBehaviour
         {
             case State.NORMAL:
                 {
-                    //慣性を消すために書いてある
-                    mover.UpdateVelocity(0.0f, 0.0f, 0.5f, this.foot.CheckHit());
+                    //待機モーション中は、速度ゼロにしたいのでこう書く
+                    this.moveVector = new Vector2(0.0f, 0.0f);
                 }
                 break;
             case State.JUMP:
@@ -219,23 +245,24 @@ public class Player : MonoBehaviour
                     {
                         this.mover.Jump(this.jumpPower);
                     }
-                    axis.x = Input.GetAxis("RStickX") * 5.0f;
-                    mover.UpdateVelocity(axis.x, 0.0f,0.5f, this.foot.CheckHit());
+                    axis.x = Input.GetAxis("RStickX") * playerMoveSpeed;
+                    this.moveVector = new Vector2(axis.x, 0.0f);
                 }
                 break;
             case State.FALL:
                 {
-                    axis.x = Input.GetAxis("RStickX") * 5.0f;
-                    mover.UpdateVelocity(axis.x, 0.0f, 0.5f, this.foot.CheckHit());
+                    axis.x = Input.GetAxis("RStickX") * playerMoveSpeed;
+                    this.moveVector = new Vector2(axis.x, 0.0f);
                 }
                 break;
             case State.WALK:
                 {
-                    mover.UpdateVelocity(axis.x, 0.0f, 0.5f, this.foot.CheckHit());
+                    this.moveVector = new Vector2(axis.x, 0.0f);
                 }
                 break;
             case State.WIRE:
                 {
+                    //ステートの初期化処理
                     if (this.timeCnt == 0)
                     {
                         Vector2 dire = new Vector2(Input.GetAxis("RStickX"), Input.GetAxis("RStickY") * -1);
@@ -244,33 +271,46 @@ public class Player : MonoBehaviour
                         {
                             dire = new Vector2(1, 0);
                         }
-                        // Vector2 dire = new Vector2(1, 0);
-                        //Debug.DrawLine(this.transform.position, new Vector2(dire.x + this.transform.position.x, dire.y + this.transform.position.y));
+
+                        //アンカーを見つけて、そこへ向かう
                         Debug.DrawRay(this.transform.position, new Vector3(dire.x, dire.y), Color.green, 1);
-                        this.mover.SetActiveGravity(false);
+                        this.mover.SetActiveGravity(false, true);
                         this.anchor.FindAnchor(this.transform.position, new Vector2(this.transform.position.x + dire.x, this.transform.position.y + dire.y), out this.anchorObject);
 
                         Debug.Log(this.anchorObject);
+                        //アンカーがなかったらステートをNORMALに戻す
                         if (this.anchorObject == null)
                         {
+                            this.mover.SetActiveGravity(true, true);
                             this.state = State.NORMAL;
                         }
                         else
                         {
-                            this.targetDistance = new Vector2(this.anchorObject.transform.localPosition.x - this.transform.localPosition.x, this.anchorObject.transform.localPosition.y - this.transform.localPosition.y);
-                            this.nowSpeed = 0.0f;
+                            //現在地から目標のアンカーへ向かうベクトル
+                            this.targetDirection = new Vector2(this.anchorObject.transform.localPosition.x - this.transform.localPosition.x, this.anchorObject.transform.localPosition.y - this.transform.localPosition.y);
+                            this.targetDirection.Normalize();
+                            this.anchorCurrentMoveSpeed = 0.0f;
                         }
                     }
+                    //アンカーが見つかっている場合にのみ処理を行う
                     if (this.anchorObject != null)
                     {
-                        
-                        Vector2 v = targetDistance * this.nowSpeed;
-                        mover.UpdateVelocity(v.x, v.y, 0.0f, this.foot.CheckHit());
-                        if (this.maxSpeed > this.nowSpeed)
+                        //アンカーに向かっての移動
+                        this.moveVector = targetDirection * this.anchorCurrentMoveSpeed;
+
+
+                        //最高値まで加速
+                        if (this.anchorMaxMoveSpeed > this.anchorCurrentMoveSpeed)
                         {
-                            this.nowSpeed += 1.2f;
+                            this.anchorCurrentMoveSpeed += anchorMoveAcceleration;
+                            if(this.anchorMaxMoveSpeed > this.anchorCurrentMoveSpeed)
+                            {
+                                //最大値にクランプ
+                                this.anchorCurrentMoveSpeed = this.anchorMaxMoveSpeed;
+                            }
                         }
                     }
+                    //いつまでたってもステートが変化しない場合は時間で強制的に変化させる
                     if(this.timeCnt > 500)
                     {
                         this.state = State.NORMAL;

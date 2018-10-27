@@ -27,6 +27,7 @@ public class M_System : MonoBehaviour
      */
     private void Awake()
     {
+        Application.targetFrameRate = 60; //60FPSに設定
         M_System.input = new SystemInput();
     }
 
