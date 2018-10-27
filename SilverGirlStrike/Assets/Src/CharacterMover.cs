@@ -104,7 +104,15 @@ public class CharacterMover : MonoBehaviour {
 
         this.rigid.velocity = new Vector2(0.0f, this.fallVelocity + movePowerY) + velocityX;
 
-        ChangeFriction();
+        //泊っているときはずり落ち防止で摩擦を十分につける
+        if (this.rigid.velocity.x == 0 && onGround)
+        {
+            ChangeFriction(true);
+        }
+        else
+        {
+            ChangeFriction(false);
+        }
     }
 
     //ジャンプ（縦移動力を設定）
@@ -119,10 +127,9 @@ public class CharacterMover : MonoBehaviour {
         this.acvtiveGravity = active;
     }
 
-    void ChangeFriction()
-    {
-        //泊っているときはずり落ち防止で摩擦を十分につける
-        if (this.rigid.velocity.x == 0)
+    void ChangeFriction(bool isStop)
+    {       //泊っているときはずり落ち防止で摩擦を十分につける
+        if (isStop)
         {
             if (this.rigid.sharedMaterial.friction != 1000)
             {
@@ -146,6 +153,8 @@ public class CharacterMover : MonoBehaviour {
                 result[i].enabled = true;
             }
         }
+
+ 
     }
 
     void ChangeNormal(float moveVectorX, Vector2 frontFoot, Vector2 backFoot)

@@ -12,6 +12,15 @@ public class Foot : MonoBehaviour{
         this.collider = GetComponent<BoxCollider2D>();
     }
 
+    private void Update()
+    {
+        this.isFoot = (Physics2D.OverlapBox(
+            collider.transform.position + new Vector3(collider.offset.x, collider.offset.y, 0),
+            new Vector3(collider.size.x, collider.size.y, 0),
+            this.collider.transform.eulerAngles.z,
+            (int)M_System.LayerName.GROUND) == null) ? false : true;
+    }
+
     public bool CheckHit()
     {
         return (Physics2D.OverlapBox(
