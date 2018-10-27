@@ -77,14 +77,12 @@ public class Player : MonoBehaviour
         this.anchor = GetComponent<AnchorSelector>();
         this.anchorObject = null;
         this.boxCollider = GetComponent<BoxCollider2D>();
-
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-
         this.moveVector = Vector2.zero;
+    }
+
+    // Update is called once per frame
+    void Update ()
+    {
         Mode();
         if(this.state != this.preState)
         {
@@ -97,10 +95,14 @@ public class Player : MonoBehaviour
         this.preState = this.state;
         Vector2 dire = new Vector2(Input.GetAxis("RStickX"), Input.GetAxis("RStickY") * -1);
         Debug.DrawRay(this.transform.position, new Vector3(dire.x, dire.y), Color.green, 0);
-
-        mover.UpdateVelocity(this.moveVector.x, this.moveVector.y, this.gravity, this.foot.CheckHit());
-
     }
+
+    private void FixedUpdate()
+    {
+        mover.UpdateVelocity(this.moveVector.x, this.moveVector.y, this.gravity, this.foot.CheckHit());
+        this.moveVector = Vector2.zero;
+    }
+
     /**
      * @brief   Stateの変更をメインに行う
      */
@@ -199,6 +201,9 @@ public class Player : MonoBehaviour
                         this.mover.Jump(this.targetDirection.y * this.anchorCurrentMoveSpeed * 0.5f);
                         this.state = State.JUMP;
                         this.anchorObject = null;
+
+
+                        this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
                     }
                 }
                 break;
@@ -226,6 +231,8 @@ public class Player : MonoBehaviour
                 break;
         }
     }
+
+
     /**
      * @brief   Stateに合わせて移動を行う
      */ 
@@ -247,17 +254,23 @@ public class Player : MonoBehaviour
                     }
                     axis.x = Input.GetAxis("RStickX") * playerMoveSpeed;
                     this.moveVector = new Vector2(axis.x, 0.0f);
+                    //移動方向にて向きを変える
+                    ChangeDirectionFromMoveX(axis.x);
                 }
                 break;
             case State.FALL:
                 {
                     axis.x = Input.GetAxis("RStickX") * playerMoveSpeed;
                     this.moveVector = new Vector2(axis.x, 0.0f);
+                    //移動方向にて向きを変える
+                    ChangeDirectionFromMoveX(axis.x);
                 }
                 break;
             case State.WALK:
                 {
                     this.moveVector = new Vector2(axis.x, 0.0f);
+                    //移動方向にて向きを変える
+                    ChangeDirectionFromMoveX(axis.x);
                 }
                 break;
             case State.WIRE:
@@ -290,10 +303,24 @@ public class Player : MonoBehaviour
                             this.targetDirection = new Vector2(this.anchorObject.transform.localPosition.x - this.transform.localPosition.x, this.anchorObject.transform.localPosition.y - this.transform.localPosition.y);
                             this.targetDirection.Normalize();
                             this.anchorCurrentMoveSpeed = 0.0f;
+
+
+                            //移動方向にて向きを変える
+                            ChangeDirectionFromMoveX(this.targetDirection.x);
+
+                            //頭をアンカーに向ける
+                            float angle = Vector2.Angle(new Vector2(0.0f, 1.0f), this.targetDirection);
+                            if(this.direction == Direction.RIGHT)
+                            {
+                                angle *= -1.0f;
+                            }
+
+                            this.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
                         }
                     }
                     //アンカーが見つかっている場合にのみ処理を行う
-                    if (this.anchorObject != null)
+                    if (this.anchorObject != null && this.timeCnt > 2)
                     {
                         //アンカーに向かっての移動
                         this.moveVector = targetDirection * this.anchorCurrentMoveSpeed;
@@ -341,4 +368,32 @@ public class Player : MonoBehaviour
                 break;
         }
     }
+
+
+    //移動の値から方向を振り分ける関数
+    void ChangeDirectionFromMoveX(float xMove)
+    {
+        if (xMove > 0.0f)
+        {
+            ChangeDirection(Direction.RIGHT);
+        }
+        else if (xMove < 0.0f)
+        {
+            ChangeDirection(Direction.LEFT);
+        }
+    }
+
+    //向き変更関数
+    void ChangeDirection(Direction direction)
+    {
+        if(this.direction != direction)
+        {
+            var scale = this.transform.localScale;
+            scale.x *= -1;
+            this.transform.localScale = scale;
+        }
+
+        this.direction = direction;
+    }
+
 }
