@@ -18,7 +18,7 @@ public class NewBehaviourScript : MonoBehaviour {
         nowTime += Time.deltaTime;
 
         //　経過時間を表示
-        Debug.Log(Time.deltaTime);
+        //Debug.Log(Time.deltaTime);
 
         //　10秒を超えたら0に戻す
         if (nowTime >= 10f)

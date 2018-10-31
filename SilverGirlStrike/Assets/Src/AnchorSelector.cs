@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AnchorSelector : MonoBehaviour {
+    public float maxAngle;
 
     CircleDitection ditector;
     Vector3 startPoint;
@@ -17,49 +18,47 @@ public class AnchorSelector : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //真横に直線作成
-        //this.startPoint = this.transform.position;
-        //this.goalPoint = this.startPoint + new Vector3(1.0f, 0.0f, 0.0f);
-
-        //if (this.targetAnchor != null)
-        //{
-        //    this.targetAnchor.gameObject.GetComponent<SpriteRenderer>().color = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-        //}
-
-        //FindAnchor(this.startPoint, this.goalPoint, out this.targetAnchor);
-
-        //Debug.Log(targetAnchor);
-
-        //if (this.targetAnchor != null)
-        //{
-        //    this.targetAnchor.gameObject.GetComponent<SpriteRenderer>().color = new Vector4(1.0f, 0.0f, 0.0f, 1.0f);
-        //}
     }
 
 
+    //アンカーを見つけ出す
     public void FindAnchor(Vector2 start, Vector2 goal, out GameObject result)
     {
         this.startPoint = start;
         this.goalPoint = goal;
         result = null;
-        float distance = Mathf.Infinity;
+        //アンカー選びにおける優先ポイント、低いほど優先する
+        float selectScore = Mathf.Infinity;
+
 
         var list = this.ditector.FindAnchor();
         for (int i = 0; i < list.Length; ++i)
         {
+            //距離
             float angle = Vector3.Angle((this.goalPoint - this.startPoint), (list[i].transform.position - this.startPoint));
-            if(angle > 35 || (list[i].transform.position - this.startPoint).magnitude < 1.0f)
+            float dis = lineToPointDistance(this.startPoint, this.goalPoint, list[i].transform.position, true);
+
+            //近すぎるもの、角度が一定以上のものを省く
+            if (angle > this.maxAngle || (list[i].transform.position - this.startPoint).magnitude < 1.0f)
             {
                 continue;
             }
+
+            //デバッグ用
             Debug.DrawRay(this.startPoint, (list[i].transform.position - this.startPoint), Color.yellow, 1);
             Debug.DrawRay(this.startPoint, (this.goalPoint - this.startPoint), Color.yellow, 1);
             Debug.Log("angle" + angle);
 
-            float dis = lineToPointDistance(this.startPoint, this.goalPoint, list[i].transform.position, true);
-            if (dis < distance && dis >= 0.0f)
+
+            float score = 0.0f;
+            //角度がついているほど得点が低くなる
+            score += angle;
+            //距離があるほど得点が低くなる
+            score += dis * 2;
+
+            if (score < selectScore)
             {
-                distance = dis;
+                selectScore = score;
                 result = list[i].gameObject;
             }
         }

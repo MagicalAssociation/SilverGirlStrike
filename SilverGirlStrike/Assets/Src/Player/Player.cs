@@ -6,6 +6,7 @@ using UnityEngine;
 //編集履歴
 //わからん　金子（作成）
 //2018/10/27　板倉　コメントなど追加、余計なpublicをできるだけ減らしてみた
+//2018/10/30 板倉　アニメーション追加、あとアンカーのヒットエフェクトを追加
 
 //プレイヤーの移動・行動・ステート管理処理
 public class Player : MonoBehaviour
@@ -15,6 +16,7 @@ public class Player : MonoBehaviour
 
 
     //アンカーの値
+    public GameObject anchorHitEffect;
     public float anchorMaxMoveSpeed;
     public float anchorMoveAcceleration;
     public AnchorSelector anchor;
@@ -38,6 +40,8 @@ public class Player : MonoBehaviour
 
 
     Vector2 moveVector;
+
+    Animator playerAnim;
 
    public enum State
    {
@@ -78,6 +82,8 @@ public class Player : MonoBehaviour
         this.anchorObject = null;
         this.boxCollider = GetComponent<BoxCollider2D>();
         this.moveVector = Vector2.zero;
+
+        this.playerAnim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -153,6 +159,10 @@ public class Player : MonoBehaviour
                     {
                         this.nowJumpNumber++;
                         this.state = State.JUMP;
+                    }
+                    if (this.mover.IsFall())
+                    {
+                        this.state = State.FALL;
                     }
                 }
                 break;
@@ -242,15 +252,31 @@ public class Player : MonoBehaviour
         {
             case State.NORMAL:
                 {
+                    //アニメ
+                    if (this.timeCnt == 0)
+                    {
+                        this.playerAnim.Play("Idle");
+                        if (this.preState == State.WALK)
+                        {
+                            this.playerAnim.Play("DashStop");
+                        }
+                    }
                     //待機モーション中は、速度ゼロにしたいのでこう書く
                     this.moveVector = new Vector2(0.0f, 0.0f);
                 }
                 break;
             case State.JUMP:
                 {
-                    if(this.timeCnt == 0 && this.preState != State.WIRE)
+                    if(this.timeCnt == 0)
                     {
-                        this.mover.Jump(this.jumpPower);
+                        this.playerAnim.Play("JumpUp");
+
+
+                        //ワイヤーからは独自ジャンプ処理があるのでここでは処理しない
+                        if (preState != State.WIRE)
+                        {
+                            this.mover.Jump(this.jumpPower);
+                        }
                     }
                     axis.x = Input.GetAxis("RStickX") * playerMoveSpeed;
                     this.moveVector = new Vector2(axis.x, 0.0f);
@@ -260,6 +286,11 @@ public class Player : MonoBehaviour
                 break;
             case State.FALL:
                 {
+                    if (this.timeCnt == 0)
+                    {
+                        this.playerAnim.Play("JumpDownStart");
+                    }
+
                     axis.x = Input.GetAxis("RStickX") * playerMoveSpeed;
                     this.moveVector = new Vector2(axis.x, 0.0f);
                     //移動方向にて向きを変える
@@ -268,6 +299,11 @@ public class Player : MonoBehaviour
                 break;
             case State.WALK:
                 {
+                    //アニメ
+                    if (this.timeCnt == 0)
+                    {
+                        this.playerAnim.Play("DashStart");
+                    }
                     this.moveVector = new Vector2(axis.x, 0.0f);
                     //移動方向にて向きを変える
                     ChangeDirectionFromMoveX(axis.x);
@@ -299,6 +335,11 @@ public class Player : MonoBehaviour
                         }
                         else
                         {
+                            this.playerAnim.Play("anchorShot");
+
+                            //ヒットエフェクト
+                            Instantiate(this.anchorHitEffect).transform.position = this.anchorObject.transform.position;
+
                             //現在地から目標のアンカーへ向かうベクトル
                             this.targetDirection = new Vector2(this.anchorObject.transform.localPosition.x - this.transform.localPosition.x, this.anchorObject.transform.localPosition.y - this.transform.localPosition.y);
                             this.targetDirection.Normalize();
