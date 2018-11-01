@@ -15,6 +15,8 @@ public class CharacterMover : MonoBehaviour {
 
     Collider2D[] result;
 
+    bool prevOnGround;
+
     //重力の影響を受けない場合に設定
     bool acvtiveGravity;
 
@@ -29,6 +31,7 @@ public class CharacterMover : MonoBehaviour {
         this.boxCollider2D = GetComponent<BoxCollider2D>();
 
         this.acvtiveGravity = true;
+        this.prevOnGround = false;
     }
 
     // Update is called once per frame
@@ -68,13 +71,17 @@ public class CharacterMover : MonoBehaviour {
     //横移動をセットし、物理挙動に速度を設定、縦移動は落下速度に影響を及ぼさないので、それをやりたい場合はJump()にて落下速度を設定するといい
     public void UpdateVelocity(float movePowerX, float movePowerY, float gravity, bool onGround)
     {
+
+        Debug.Log(this.prevOnGround);
+        Debug.Log(onGround);
         if (this.acvtiveGravity)
         {
             //落下
             this.fallVelocity -= gravity;
-            //接地時は落下速度リセット
-            if (onGround)
+            //接地しなくなった際には落下速度リセット
+            if (this.prevOnGround && !onGround)
             {
+                Debug.Log("aaaaaaaaaa");
                 if (this.fallVelocity < 0.0f)
                 {
                     this.fallVelocity = 0.0f;
@@ -132,6 +139,9 @@ public class CharacterMover : MonoBehaviour {
         {
             ChangeFriction(false);
         }
+
+        //接地情報を記録
+        this.prevOnGround = onGround;
     }
 
     //ジャンプ（縦移動力を設定）

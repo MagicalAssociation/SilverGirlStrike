@@ -22,7 +22,7 @@ public class ObjectChaser : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update () {
         //相対位置分だけずらして追尾
         this.transform.position += (this.chaseTarget.position + this.relativePosition - this.transform.position) * this.chasePower;
 	}

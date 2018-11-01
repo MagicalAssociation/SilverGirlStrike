@@ -44,6 +44,12 @@ public class AnchorSelector : MonoBehaviour {
                 continue;
             }
 
+            //レイを飛ばして、壁に激突していないかをチェック
+            if(Physics2D.Raycast(this.startPoint, (list[i].transform.position - this.startPoint).normalized, (list[i].transform.position - this.startPoint).magnitude, (int)M_System.LayerName.GROUND))
+            {
+                continue;
+            }
+
             //デバッグ用
             Debug.DrawRay(this.startPoint, (list[i].transform.position - this.startPoint), Color.yellow, 1);
             Debug.DrawRay(this.startPoint, (this.goalPoint - this.startPoint), Color.yellow, 1);
