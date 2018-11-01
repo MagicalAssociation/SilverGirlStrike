@@ -17,12 +17,22 @@ public class ObjectChaser : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        if(this.chaseTarget == null)
+        {
+            return;
+        }
+
         //ターゲットとの相対位置を取得
         this.relativePosition = this.transform.position - this.chaseTarget.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        if (this.chaseTarget == null)
+        {
+            return;
+        }
+
         //相対位置分だけずらして追尾
         this.transform.position += (this.chaseTarget.position + this.relativePosition - this.transform.position) * this.chasePower;
 	}

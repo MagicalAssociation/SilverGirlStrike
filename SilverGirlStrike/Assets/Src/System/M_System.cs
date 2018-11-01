@@ -11,6 +11,8 @@ using UnityEngine;
  */
 public class M_System : MonoBehaviour
 {
+    static bool frag = false;
+
     //! 入力を扱う公開変数
     static public SystemInput input;
 
@@ -27,6 +29,14 @@ public class M_System : MonoBehaviour
      */
     private void Awake()
     {
+        //初期化は一回だけ
+        if (frag)
+        {
+            return;
+        }
+
+        M_System.frag = true;
+
         //シーン移行でも消さない
         DontDestroyOnLoad(this);
         Application.targetFrameRate = 60; //60FPSに設定
@@ -38,14 +48,22 @@ public class M_System : MonoBehaviour
         Time.fixedDeltaTime = 1.0f / 60.0f;
         Time.maximumDeltaTime = 1.0f / 30.0f;
         QualitySettings.vSyncCount = 0;
+
+        Cursor.visible = false;
     }
 
     private void Start()
     {
-        Sound.PlayBGM("opStageBGM");
     }
 
     private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape)){
+            Application.Quit();
+        }
+    }
+
+    private void FixedUpdate()
     {
         M_System.input.Update();
     }

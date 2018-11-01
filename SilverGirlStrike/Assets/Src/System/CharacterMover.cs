@@ -72,8 +72,6 @@ public class CharacterMover : MonoBehaviour {
     public void UpdateVelocity(float movePowerX, float movePowerY, float gravity, bool onGround)
     {
 
-        Debug.Log(this.prevOnGround);
-        Debug.Log(onGround);
         if (this.acvtiveGravity)
         {
             //落下
@@ -81,7 +79,6 @@ public class CharacterMover : MonoBehaviour {
             //接地しなくなった際には落下速度リセット
             if (this.prevOnGround && !onGround)
             {
-                Debug.Log("aaaaaaaaaa");
                 if (this.fallVelocity < 0.0f)
                 {
                     this.fallVelocity = 0.0f;
