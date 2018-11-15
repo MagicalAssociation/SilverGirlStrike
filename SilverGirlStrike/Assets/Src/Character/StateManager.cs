@@ -1,0 +1,238 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+/**
+ * file     StateManager.cs
+ * brief    State関係
+ * author   Shou Kaneko
+ * date     2018/11/14
+*/
+
+
+
+
+/**
+ * brief     Stateを生成する際に継承する元の型
+ */
+public abstract class StateParameter
+{
+    //! 経過カウント
+    private int timeCnt;
+    /**
+     *  constructor
+     */
+    public StateParameter()
+    {
+        //タイムリセット
+        this.ResetTime();
+    }
+    /**
+     *  brief   更新処理
+     */
+    public abstract void Update();
+    /**
+     * brief    開始時
+     */
+    public abstract void Enter();
+    /**
+     * brief    終了時
+     */ 
+    public abstract void Exit();
+    /**
+     * brief    変更処理
+     * param[in] ref StateManager manager 管理クラスの情報
+     * return bool trueで変更処理を行う
+     * この処理内に条件を記述する
+     */ 
+    public abstract bool Transition(ref StateManager manager);
+    /**
+     * brief    経過カウントを取得
+     * return int 経過カウント
+     */ 
+    public int GetTime()
+    {
+        return this.timeCnt;
+    }
+    /**
+     * brief    経過カウントの上昇値を指定
+     * param[in]    int cnt 上昇値
+     */ 
+    public void TimeUp(int cnt)
+    {
+        this.timeCnt += cnt;
+    }
+    /**
+     * brief    経過カウントを初期化
+     */ 
+    public void ResetTime()
+    {
+        this.timeCnt = 0;
+    }
+}
+
+/**
+ * brief    State管理class
+ */ 
+public class StateManager
+{
+    //! 登録データ
+    Dictionary<int, StateParameter> pairs;
+    //! NextStateNumber
+    int nextState;
+    //! PreStateNumber
+    int preState;
+    //! NowStateNumber
+    int nowState;
+    /**
+     * constructor
+     */
+    public StateManager()
+    {
+        pairs = new Dictionary<int, StateParameter>();
+        this.nextState = -1;
+        this.preState = -1;
+        this.nowState = -1;
+    }
+    /**
+     * brief    Stateを登録する
+     * param[in] int stateNum StateNumber
+     * param[in] StatePatameter parameter StateData
+     */ 
+    public void SetParameter(int stateNum,StateParameter parameter)
+    {
+        pairs.Add(stateNum, parameter);
+    }
+    /**
+     * brief    Stateを強制変更する
+     * param[in] int stateNum StateNumber
+     */ 
+    public void ChengeState(int stateNum)
+    {
+        this.SetNextState(stateNum);
+        this.Transition();
+    }
+    /**
+     * brief    更新処理
+     */ 
+    public void Update()       
+    {
+        var tmp = this;
+        while(this.pairs[this.nowState].Transition(ref tmp))
+        {
+            this.Transition();
+        }
+        this.pairs[this.nowState].Update();
+    }
+    /**
+     * brief    State変更処理
+     */ 
+    void Transition()
+    {
+        this.preState = this.nowState;
+        this.pairs[this.preState].Exit();
+        this.nowState = this.nextState;
+        this.pairs[this.nowState].Enter();
+    }
+    /**
+     * brief    次Stateを指定する
+     */ 
+    public void SetNextState(int stateNum)
+    {
+        this.nextState = stateNum;
+    }
+}
+
+
+/*↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓サンプルSTATE処理↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓*/
+/**
+//!State1!//
+public class TestState : StateParameter
+{
+    GameObject gameObject;
+    public TestState(ref GameObject gameObject)
+    {
+        this.gameObject = gameObject;
+    }
+    public override void Update() 
+    {
+        this.TimeUp(1);
+        this.gameObject.transform.localScale += new Vector3(1, 0, 0);
+    }
+
+    public override void Enter()
+    {
+        this.ResetTime();
+    }
+    public override void Exit()
+    {
+
+    }
+    public override bool Transition(ref StateManager manager)
+    {
+        if (M_System.input.Down(SystemInput.Tag.ATTACK))
+        {
+            manager.nextState = 1;
+            M_System.input.SetEnableStop(SystemInput.Tag.ATTACK, true);
+            return true;
+        }
+        else
+        {
+            M_System.input.SetEnableStop(SystemInput.Tag.ATTACK, false);
+        }
+        return false;
+    }
+}
+//!State2!//
+public class TestState2 : StateParameter
+{
+    GameObject gameObject;
+    public TestState2(ref GameObject gameObject)
+    {
+        this.gameObject = gameObject;
+    }
+    public override void Update()
+    {
+        this.TimeUp(1);
+    }
+
+    public override void Enter()
+    {
+        this.ResetTime();
+    }
+    public override void Exit()
+    {
+
+    }
+    public override bool Transition(ref StateManager manager)
+    {
+        if (M_System.input.Down(SystemInput.Tag.ATTACK))
+        {
+            manager.nextState = 0;
+            M_System.input.SetEnableStop(SystemInput.Tag.ATTACK, true);
+            return true;
+        }
+        else
+        {
+            M_System.input.SetEnableStop(SystemInput.Tag.ATTACK, false);
+        }
+        return false;
+    }
+}
+//!適用例!//
+public class Object : MonoBehaviour {
+
+    StateManager manager;
+	// Use this for initialization
+	void Start () {
+        var a = this.gameObject;
+        this.manager = new StateManager();
+        this.manager.SetParameter(0, new TestState(ref a));
+        this.manager.SetParameter(1, new TestState2(ref a));
+	}
+	
+	// Update is called once per frame
+	void Update () {
+        this.manager.Update();
+	}
+}
+*/
