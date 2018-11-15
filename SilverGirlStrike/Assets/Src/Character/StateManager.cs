@@ -148,29 +148,51 @@ public class StateManager
 //!State1!//
 public class TestState : StateParameter
 {
+    //! 自分の元のオブジェクトの情報
     GameObject gameObject;
+    /**
+     * brief    constructor
+     * param[in] ref GameObject gameObject 元オブジェクト情報
+    /*
     public TestState(ref GameObject gameObject)
     {
         this.gameObject = gameObject;
     }
+    /**
+     * brief    更新処理
+     /* 
     public override void Update() 
     {
+        //経過カウントを１増やす
         this.TimeUp(1);
+        //親のScaleをいじる
         this.gameObject.transform.localScale += new Vector3(1, 0, 0);
     }
-
+    /**
+     * brief    開始処理
+     /* 
     public override void Enter()
     {
+        //経過カウントをリセットする
         this.ResetTime();
     }
+    /**
+     * brief    終了処理
+     /* 
     public override void Exit()
     {
 
     }
+    /**
+     * brief    変更処理
+     * param[in] ref StateManager manager 管理classの情報
+     /*
     public override bool Transition(ref StateManager manager)
     {
+        //Attackが押させたら次のStateへ移行
         if (M_System.input.Down(SystemInput.Tag.ATTACK))
         {
+            //次Stateを指定※現在は関数
             manager.nextState = 1;
             M_System.input.SetEnableStop(SystemInput.Tag.ATTACK, true);
             return true;
@@ -224,14 +246,18 @@ public class Object : MonoBehaviour {
     StateManager manager;
 	// Use this for initialization
 	void Start () {
+        //this.gameObjectを直接渡せないため一度別の場所へ置く
         var a = this.gameObject;
+        //Managerを生成
         this.manager = new StateManager();
+        //ManagerにStateを登録する
         this.manager.SetParameter(0, new TestState(ref a));
         this.manager.SetParameter(1, new TestState2(ref a));
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        //更新処理
         this.manager.Update();
 	}
 }
