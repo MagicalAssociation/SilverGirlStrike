@@ -65,6 +65,12 @@ public class SystemInput
         bool input_Up;
         //! on判定を入れておく変数
         bool input_On;
+        //! 強制入力判定
+        bool enableForced;
+        //! 軸の角度
+        float axis;
+        //! 強制判定の角度
+        float axisForced;
         /**
          * brief    constructor
          * param[in]    string name 対応させたいInputManagerの使用する名前
@@ -72,7 +78,6 @@ public class SystemInput
         public InputData(string name)
         {
             this.name = name;
-            this.enableStop = false;
             this.Reset();
         }
         /**
@@ -81,7 +86,6 @@ public class SystemInput
         public InputData()
         {
             this.name = "";
-            this.enableStop = false;
             this.Reset();
         }
         /**
@@ -124,7 +128,8 @@ public class SystemInput
          */
         public void Update(float power)
         {
-            bool flag = Input.GetAxis(this.name) >= power;
+            this.axis = Input.GetAxis(this.name);
+            bool flag = this.axis >= power;
             this.input_Down = !this.input_On && flag;
             this.input_Up = this.input_On && !flag;
             this.input_On = flag;
@@ -154,6 +159,14 @@ public class SystemInput
             return this.input_Down;
         }
         /**
+         * brief    倒してる角度を取得
+         * ボタン系は0か1を返す
+         */
+         public float GetAxis()
+        {
+            return this.axis;
+        }
+        /**
          * brief    入力状況のリセット
          */
         private void Reset()
@@ -161,6 +174,10 @@ public class SystemInput
             this.input_Down = false;
             this.input_Up = false;
             this.input_On = false;
+            this.enableStop = false;
+            this.enableForced = false;
+            this.axisForced = 0.0f;
+            this.axis = 0.0f;
         }
     }
 
@@ -177,7 +194,7 @@ public class SystemInput
         this.inputData[(int)Tag.CANCEL] = new InputData("A");
         this.inputData[(int)Tag.ATTACK] = new InputData("X");
         this.inputData[(int)Tag.JUMP] = new InputData("A");
-        this.inputData[(int)Tag.WIRE] = new InputData("Y");
+        this.inputData[(int)Tag.WIRE] = new InputData("R1");
         this.inputData[(int)Tag.TRANS_ASSAULT] = new InputData("L1");
         this.inputData[(int)Tag.ITEM_L] = new InputData("L");
         this.inputData[(int)Tag.ITEM_R] = new InputData("R");

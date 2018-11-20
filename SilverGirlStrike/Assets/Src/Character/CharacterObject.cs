@@ -145,11 +145,19 @@ public class HitPoint
 /**
  * brief    キャラの基底クラス
  */ 
-public class CharacterObject : MonoBehaviour {
+public abstract class CharacterObject : MonoBehaviour {
+    /**
+     * brief    パラメータをまとめておくclass
+     */ 
     public class CharaData
     {
+        //! HPデータ
         public HitPoint hitPoint;
+        //! Stateデータ
         public StateManager manager;
+        /**
+         * brief    constructor
+         */ 
         public CharaData()
         {
             hitPoint = new HitPoint();
@@ -157,36 +165,54 @@ public class CharacterObject : MonoBehaviour {
         }
        
     }
-
+    //! パラメータデータ
     CharaData data;
+    /**
+     * brief    constructor
+     */ 
     public CharacterObject()
     {
         data = new CharaData();
     }
-  
-    public virtual void UpdateCharacter()
-    {
+    /**
+     * brief    更新処理
+     */
 
-    }
-    public virtual void Damage()
-    {
-
-    }
-    public virtual void ApplyDamage()
-    {
-
-    }
-    public virtual void MoveCharacter()
-    {
-
-    }
+    public abstract void UpdateCharacter();
+    /**
+     * brief    ダメージが発生する処理
+     */
+    public abstract void Damage(AttackData data);
+    /**
+     * brief    ダメージを適用する処理
+     */
+    public abstract void ApplyDamage();
+    /**
+     * brief    移動系処理
+     */
+    public abstract void MoveCharacter();
+    /**
+     * brief    パラメータデータを取得する
+     * return CharaData データ
+     */ 
     public CharaData GetData()
     {
         return this.data;
     }
+    /**
+     * brief    Stateを登録する
+     * param[in] int stateNum ステートナンバー
+     * param[in] StateParameter parameter ステートデータ
+     */ 
     public void AddState(int stateNum,StateParameter parameter)
     {
         this.data.manager.SetParameter(stateNum, parameter);
     }
-
+    /**
+     * brief    Stateの更新処理
+     */
+     public void UpdateState()
+    {
+        this.data.manager.Update();
+    }
 }

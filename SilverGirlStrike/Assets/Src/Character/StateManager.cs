@@ -149,12 +149,12 @@ public class StateManager
 public class TestState : StateParameter
 {
     //! 自分の元のオブジェクトの情報
-    GameObject gameObject;
+    CharacterObject gameObject;
     /**
      * brief    constructor
      * param[in] ref GameObject gameObject 元オブジェクト情報
     /*
-    public TestState(ref GameObject gameObject)
+    public TestState(ref CharacterObject gameObject)
     {
         this.gameObject = gameObject;
     }
@@ -207,8 +207,8 @@ public class TestState : StateParameter
 //!State2!//
 public class TestState2 : StateParameter
 {
-    GameObject gameObject;
-    public TestState2(ref GameObject gameObject)
+    CharacterObject gameObject;
+    public TestState2(ref CharacterObject gameObject)
     {
         this.gameObject = gameObject;
     }
@@ -241,13 +241,13 @@ public class TestState2 : StateParameter
     }
 }
 //!適用例!//
-public class Object : MonoBehaviour {
+public class Object : CharacterObject {
 
     StateManager manager;
 	// Use this for initialization
 	void Start () {
         //this.gameObjectを直接渡せないため一度別の場所へ置く
-        var a = this.gameObject;
+        var a = this;
         //Managerを生成
         this.manager = new StateManager();
         //ManagerにStateを登録する
