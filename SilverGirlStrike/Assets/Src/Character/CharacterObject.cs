@@ -38,19 +38,36 @@ public class HitPoint
  */
  public class AttackData
 {
+    /**
+     * enum Attaribute
+     * brief    攻撃属性
+     */ 
     public enum Attaribute
     {
         NON,
     }
+    /** 
+     * enum ReactionType
+     * brief    攻撃時のリアクション
+     */ 
     public enum ReactionType
     {
         NON,
     }
+    //! 攻撃力
     int power;
+    //! 攻撃の向き
     Vector2 direction;
+    //! 攻撃データを持つ主のデータ
     CharacterObject characterObject;
+    //! 攻撃属性
     Attaribute attaribute;
+    //! 攻撃リアクション
     ReactionType reaction;
+    /**
+     * brief    constructor
+     * param[in] ref CharacterObject character 攻撃データの主のデータ
+     */ 
     public AttackData(ref CharacterObject character)
     {
         this.attaribute = Attaribute.NON;
@@ -58,54 +75,95 @@ public class HitPoint
         this.characterObject = character;
         direction = new Vector2();
     }
+    /**
+     * brief    攻撃力を設定する
+     * param[in] int power 攻撃力値
+     */ 
     public void SetAttackPower(int power)
     {
         this.power = power;
     }
+    /**
+     * brief    攻撃力を取得する
+     * return int 攻撃力値
+     */ 
     public int GetAttackPower()
     {
         return this.power;
     }
+    /**
+     * brief    属性を登録する
+     * param[in] Attaribute attaribute 攻撃属性
+     */ 
     public void SetAttribute(Attaribute attaribute)
     {
         this.attaribute = attaribute;
     }
+    /**
+     * brief    属性を取得する
+     * return Attaribute 攻撃属性
+     */ 
     public Attaribute GetAttaribute()
     {
         return this.attaribute;
     }
+    /**
+     * brief    リアクションを登録する
+     * param[in] ReactionType reaction リアクション
+     */ 
     public void SetReaction(ReactionType reaction)
     {
         this.reaction = reaction;
     }
+    /**
+     * brief    リアクションを取得する
+     * return ReactionType リアクション
+     */
     public ReactionType GetReaction()
     {
         return this.reaction;
     }
+    /**
+     * brief    攻撃の向きを設定する
+     * param[in] Vector2 vector 攻撃の向き
+     */ 
     public void SetDirection(Vector2 vector)
     {
         this.direction = vector;
     }
+    /**
+     * brief    攻撃の向きを取得する
+     * return Vector2 攻撃の向き
+     */ 
     public Vector2 GetDirection()
     {
         return this.direction;
     }
 }
+
+
 /**
  * brief    キャラの基底クラス
  */ 
 public class CharacterObject : MonoBehaviour {
-    HitPoint hitPoint;
-    StateManager manager;
+    public class CharaData
+    {
+        public HitPoint hitPoint;
+        public StateManager manager;
+        public CharaData()
+        {
+            hitPoint = new HitPoint();
+            manager = new StateManager();
+        }
+       
+    }
+
+    CharaData data;
     public CharacterObject()
     {
-        hitPoint = new HitPoint();
-        manager = new StateManager();
+        data = new CharaData();
     }
-    public HitPoint GetHitPoint()
-    {
-        return this.hitPoint;
-    }
+  
     public virtual void UpdateCharacter()
     {
 
@@ -122,13 +180,13 @@ public class CharacterObject : MonoBehaviour {
     {
 
     }
-    public StateManager GetStateManager()
+    public CharaData GetData()
     {
-        return this.manager;
+        return this.data;
     }
     public void AddState(int stateNum,StateParameter parameter)
     {
-        this.manager.SetParameter(stateNum, parameter);
+        this.data.manager.SetParameter(stateNum, parameter);
     }
 
 }
