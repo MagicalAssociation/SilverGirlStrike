@@ -1,9 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
+//編集履歴
+//2018/11/21 板倉　：　CharacterObjectにChangeState()を行う手段がなかったのでメソッドを追加
+
+
+
 /**
  * brief    HP関連を管理するclass
- */ 
+ */
 public class HitPoint
 {
     //! 最大HP
@@ -145,19 +152,12 @@ public class HitPoint
 /**
  * brief    キャラの基底クラス
  */ 
-public abstract class CharacterObject : MonoBehaviour {
-    /**
-     * brief    パラメータをまとめておくclass
-     */ 
+public abstract class CharacterObject : MonoBehaviour
+{
     public class CharaData
     {
-        //! HPデータ
         public HitPoint hitPoint;
-        //! Stateデータ
         public StateManager manager;
-        /**
-         * brief    constructor
-         */ 
         public CharaData()
         {
             hitPoint = new HitPoint();
@@ -165,54 +165,33 @@ public abstract class CharacterObject : MonoBehaviour {
         }
        
     }
-    //! パラメータデータ
+
     CharaData data;
-    /**
-     * brief    constructor
-     */ 
     public CharacterObject()
     {
         data = new CharaData();
     }
-    /**
-     * brief    更新処理
-     */
 
     public abstract void UpdateCharacter();
-    /**
-     * brief    ダメージが発生する処理
-     */
-    public abstract void Damage(AttackData data);
-    /**
-     * brief    ダメージを適用する処理
-     */
+    public abstract void Damage(AttackData attackData);
     public abstract void ApplyDamage();
-    /**
-     * brief    移動系処理
-     */
     public abstract void MoveCharacter();
-    /**
-     * brief    パラメータデータを取得する
-     * return CharaData データ
-     */ 
     public CharaData GetData()
     {
         return this.data;
     }
-    /**
-     * brief    Stateを登録する
-     * param[in] int stateNum ステートナンバー
-     * param[in] StateParameter parameter ステートデータ
-     */ 
-    public void AddState(int stateNum,StateParameter parameter)
-    {
-        this.data.manager.SetParameter(stateNum, parameter);
-    }
-    /**
-     * brief    Stateの更新処理
-     */
-     public void UpdateState()
+
+    public void UpdateState()
     {
         this.data.manager.Update();
     }
+    public void AddState(int stateNum, StateParameter parameter)
+    {
+        this.data.manager.SetParameter(stateNum, parameter);
+    }
+    public void ChangeState(int stateNum)
+    {
+        this.data.manager.ChengeState(stateNum);
+    }
+
 }

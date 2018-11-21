@@ -8,6 +8,8 @@ using UnityEngine;
  * date     2018/11/14
 */
 
+    //編集履歴
+    //2018/11/21 板倉　：　やっぱりステートの無限ループを防止するようなチェックを導入
 
 
 
@@ -117,8 +119,16 @@ public class StateManager
     public void Update()       
     {
         var tmp = this;
+        //変化のおおもとを記録
+        int tmpPrevState = this.nowState;
+        //変化が収まるか、元の場所に戻る一歩手前で遷移終了
         while(this.pairs[this.nowState].Transition(ref tmp))
         {
+            //出戻りを防止
+            if(tmpPrevState == this.nextState)
+            {
+                break;
+            }
             this.Transition();
         }
         this.pairs[this.nowState].Update();
@@ -129,6 +139,14 @@ public class StateManager
     void Transition()
     {
         this.preState = this.nowState;
+
+        //初期ステートが-1であることへの対応
+        if(this.preState == -1)
+        {
+            this.nowState = this.nextState;
+            return;
+        }
+
         this.pairs[this.preState].Exit();
         this.nowState = this.nextState;
         this.pairs[this.nowState].Enter();
@@ -149,12 +167,12 @@ public class StateManager
 public class TestState : StateParameter
 {
     //! 自分の元のオブジェクトの情報
-    CharacterObject gameObject;
+    GameObject gameObject;
     /**
      * brief    constructor
      * param[in] ref GameObject gameObject 元オブジェクト情報
     /*
-    public TestState(ref CharacterObject gameObject)
+    public TestState(ref GameObject gameObject)
     {
         this.gameObject = gameObject;
     }
@@ -207,8 +225,8 @@ public class TestState : StateParameter
 //!State2!//
 public class TestState2 : StateParameter
 {
-    CharacterObject gameObject;
-    public TestState2(ref CharacterObject gameObject)
+    GameObject gameObject;
+    public TestState2(ref GameObject gameObject)
     {
         this.gameObject = gameObject;
     }
@@ -241,13 +259,13 @@ public class TestState2 : StateParameter
     }
 }
 //!適用例!//
-public class Object : CharacterObject {
+public class Object : MonoBehaviour {
 
     StateManager manager;
 	// Use this for initialization
 	void Start () {
         //this.gameObjectを直接渡せないため一度別の場所へ置く
-        var a = this;
+        var a = this.gameObject;
         //Managerを生成
         this.manager = new StateManager();
         //ManagerにStateを登録する
