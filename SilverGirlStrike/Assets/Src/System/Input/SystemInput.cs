@@ -121,18 +121,31 @@ public class SystemInput
             this.name = name;
         }
         /**
-         * brief    入力状況の更新
+         * brief    スティック系入力状況の更新
          * param[in]    float power 判定させる強さ[0.1~1.0]で指定する
          * ※注意※　スティック以外はUnityのInputに機能があるので省いています。
          * ここで更新するのはスティック関係のみです！
          */
-        public void Update(float power)
+        public void AxisUpdate(float power)
         {
-            this.axis = Input.GetAxis(this.name);
+            //this.axis = Input.GetAxis(this.name) != 0.0f ? Input.GetAxis(this.name) : this.axis;
+            this.axis = Input.GetAxis(this.name) != 0.0f ? Input.GetAxis(this.name) : this.axis;
+            if(this.GetForced())
+            {
+                this.axis = this.GetAxisForced();
+            }
             bool flag = this.axis >= power;
             this.input_Down = !this.input_On && flag;
             this.input_Up = this.input_On && !flag;
             this.input_On = flag;
+        }
+        /**
+         * brief    ボタン系入力状況の更新
+         */
+         public void ButtonUpdate()
+        {
+            bool flag = Input.GetButton(this.name) || this.GetForced();
+            this.axis = flag ? 1.0f : 0.0f;
         }
         /**
          * brief    on判定取得
@@ -140,7 +153,7 @@ public class SystemInput
          */
          public bool GetOn()
         {
-            return this.input_On;
+            return this.input_On || Input.GetButton(this.name) || this.GetForced();
         }
         /**
          * brief    up判定取得
@@ -148,7 +161,7 @@ public class SystemInput
          */
         public bool GetUp()
         {
-            return this.input_Up;
+            return this.input_Up || Input.GetButtonUp(this.name) || this.GetForced();
         }
         /**
          * brief    down判定取得
@@ -156,7 +169,7 @@ public class SystemInput
          */
         public bool GetDown()
         {
-            return this.input_Down;
+            return this.input_Down || Input.GetButtonDown(this.name) || this.GetForced();
         }
         /**
          * brief    倒してる角度を取得
@@ -165,6 +178,38 @@ public class SystemInput
          public float GetAxis()
         {
             return this.axis;
+        }
+        /**
+         * brief    強制判定設定
+         * param[in]    bool flag 判定設定
+         */
+         public void SetForced(bool flag)
+        {
+            this.enableForced = flag;
+        }
+        /**
+         * brief    強制判定取得
+         * return bool 判定
+         */
+         public bool GetForced()
+        {
+            return this.enableForced;
+        }
+        /**
+         * brief    強制判定の時に得るAxis値の設定
+         * param[in]    float axis 軸角度
+         */
+         public void SetAxisForced(float axis)
+        {
+            this.axisForced = axis;
+        }
+        /**
+         * brief    強制判定Axis値を取得する
+         * return float Axis値
+         */
+         public float GetAxisForced()
+        {
+            return this.axisForced;
         }
         /**
          * brief    入力状況のリセット
@@ -216,6 +261,8 @@ public class SystemInput
     {
         for(int i = 0;i < (int)Tag.TAG_NUM;++i)
         {
+
+            this.inputData[i].ButtonUpdate();
             switch ((Tag)i)
             {
                 case Tag.ITEM_D:
@@ -226,7 +273,7 @@ public class SystemInput
                 case Tag.LSTICK_UP:
                 case Tag.LSTICK_LEFT:
                 case Tag.LSTICK_RIGHT:
-                    this.inputData[i].Update(this.axis_Power);
+                    this.inputData[i].AxisUpdate(this.axis_Power);
                     break;
                 default:
                     break;
@@ -240,7 +287,8 @@ public class SystemInput
      */
     public bool On(SystemInput.Tag tag)
     {
-        return !this.inputData[(int)tag].GetEnableStop() && (Input.GetButton(this.inputData[(int)tag].GetName()) || this.inputData[(int)tag].GetOn());
+        //return !this.inputData[(int)tag].GetEnableStop() && (Input.GetButton(this.inputData[(int)tag].GetName()) || this.inputData[(int)tag].GetOn());
+        return !this.inputData[(int)tag].GetEnableStop() && this.inputData[(int)tag].GetOn();
     }
     /**
     * brief    登録タグのDOWN入力を取得
@@ -249,7 +297,8 @@ public class SystemInput
     */
     public bool Down(SystemInput.Tag tag)
     {
-        return !this.inputData[(int)tag].GetEnableStop() && (Input.GetButtonDown(this.inputData[(int)tag].GetName()) || this.inputData[(int)tag].GetDown());
+        //return !this.inputData[(int)tag].GetEnableStop() && (Input.GetButtonDown(this.inputData[(int)tag].GetName()) || this.inputData[(int)tag].GetDown());
+        return !this.inputData[(int)tag].GetEnableStop() && this.inputData[(int)tag].GetDown();
     }
     /**
     * brief    登録タグのUP入力を取得
@@ -258,7 +307,17 @@ public class SystemInput
     */
     public bool Up(SystemInput.Tag tag)
     {
-        return !this.inputData[(int)tag].GetEnableStop() && (Input.GetButtonUp(this.inputData[(int)tag].GetName()) || this.inputData[(int)tag].GetUp());
+        //return !this.inputData[(int)tag].GetEnableStop() && (Input.GetButtonUp(this.inputData[(int)tag].GetName()) || this.inputData[(int)tag].GetUp());
+        return !this.inputData[(int)tag].GetEnableStop() && this.inputData[(int)tag].GetUp();
+    }
+    /**
+     * brief    登録タグの軸角度を取得
+     * param[in]    SystemInput.Tag tag 登録タグ
+     * reeturn  float 現状角度
+     */
+     public float Axis(SystemInput.Tag tag)
+    {
+        return this.inputData[(int)tag].GetEnableStop() ? 0.0f : this.inputData[(int)tag].GetAxis();
     }
     /**
      * brief    強制入力制御設定
@@ -302,5 +361,41 @@ public class SystemInput
      public float GetAxisPower()
     {
         return this.axis_Power;
+    }
+    /**
+     * brief    強制判定設定
+     * param[in]    SystemInput.Tag tag 指定タグ
+     * param[in]    bool flag 強制判定する場合true
+     */
+     public void SetForced(SystemInput.Tag tag,bool flag)
+    {
+        this.inputData[(int)tag].SetForced(flag);
+    }
+    /**
+     * brief    強制判定取得
+     * param[in]    SystemInput.Tag tag 指定タグ
+     * return   bool 強制判定設定
+     */
+    public bool GetForced(SystemInput.Tag tag)
+    {
+        return this.inputData[(int)tag].GetForced();
+    }
+    /**
+     * brief    強制判定時Axisの値の設定
+     * param[in]    SystemInput.Tag tag 指定タグ
+     * param[in]    float axis 軸値
+     */
+     public void SetAxisForced(SystemInput.Tag tag,float axis)
+    {
+        this.inputData[(int)tag].SetAxisForced(axis);
+    }
+    /**
+     * brief    強制判定時Axisの値の取得
+     * param[in]    SystemInput.Tag tag 指定タグ
+     * return   float Axis値
+     */
+     public float GetAxisForced(SystemInput.Tag tag)
+    {
+        return this.inputData[(int)tag].GetAxisForced();
     }
 }
