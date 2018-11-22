@@ -35,11 +35,11 @@ public abstract class StateParameter
     /**
      * brief    開始時
      */
-    public abstract void Enter();
+    public abstract void Enter(ref StateManager manager);
     /**
      * brief    終了時
      */ 
-    public abstract void Exit();
+    public abstract void Exit(ref StateManager manager);
     /**
      * brief    変更処理
      * param[in] ref StateManager manager 管理クラスの情報
@@ -116,7 +116,7 @@ public class StateManager
     /**
      * brief    更新処理
      */ 
-    public void Update()       
+    public void Update()
     {
         var tmp = this;
         //変化のおおもとを記録
@@ -138,18 +138,21 @@ public class StateManager
      */ 
     void Transition()
     {
-        this.preState = this.nowState;
-
+        var tmp = this;
         //初期ステートが-1であることへの対応
-        if(this.preState == -1)
+        //現在のステートが-1の場合NextをいれてEnterだけを呼ぶ
+        if (this.nowState == -1)
         {
             this.nowState = this.nextState;
-            return;
         }
-
-        this.pairs[this.preState].Exit();
-        this.nowState = this.nextState;
-        this.pairs[this.nowState].Enter();
+        else
+        {
+            //現在の終了関数を呼んで、State値を移動する
+            this.pairs[this.nowState].Exit(ref tmp);
+            this.preState = this.nowState;
+            this.nowState = this.nextState;
+        }
+        this.pairs[this.nowState].Enter(ref tmp);
     }
     /**
      * brief    次Stateを指定する
@@ -157,6 +160,30 @@ public class StateManager
     public void SetNextState(int stateNum)
     {
         this.nextState = stateNum;
+    }
+    /**
+     * brief    preStateのNumber取得
+     * return int PreStateNumber
+     */ 
+     public int GetPreStateNum()
+    {
+        return this.preState;
+    }
+    /**
+     * brief    nowStateのNumber取得
+     * return int NowStateNumber
+     */
+    public int GetNowStateNum()
+    {
+        return this.nowState;
+    }
+    /**
+     * brief    NextStateのNumber取得
+     * return int NextStateNumber
+     */
+    public int GetNextStateNum()
+    {
+        return this.nextState;
     }
 }
 
