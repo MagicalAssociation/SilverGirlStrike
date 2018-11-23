@@ -7,7 +7,7 @@ using UnityEngine;
 //2018/11/14 板倉：クラス本体を実装
 
 
-namespace Event
+namespace TextEvent
 {
     class TextParser
     {

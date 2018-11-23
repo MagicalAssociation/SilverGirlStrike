@@ -7,7 +7,7 @@ public class test : MonoBehaviour
     //メンバ変数
     public string filePath;
     Dictionary<string, int> termFunctions;
-    Event.EventUnit manager;
+    TextEvent.EventUnit manager;
     // Use this for initialization
     void Start()
     {
@@ -25,9 +25,9 @@ public class test : MonoBehaviour
     void test3()
     {
         //専用クラスを用いた実際の判定処理のテスト
-        Event.EventPerser eventReader = new Event.EventPerser(filePath);
+        TextEvent.EventPerser eventReader = new TextEvent.EventPerser(filePath);
         var text = eventReader.GetEventText();
-        this.manager = new Event.EventUnit(text);
+        this.manager = new TextEvent.EventUnit(text);
 
     }
 
@@ -35,7 +35,7 @@ public class test : MonoBehaviour
     void test2()
     {
         //読み込みからの、条件判定テスト(条件文は仮)
-        Event.EventPerser eventReader = new Event.EventPerser(filePath);
+        TextEvent.EventPerser eventReader = new TextEvent.EventPerser(filePath);
         var text = eventReader.GetEventText();
 
         bool result = false;
@@ -74,7 +74,7 @@ public class test : MonoBehaviour
     void test1()
     {
         //読み込みからの全表示テスト
-        Event.EventPerser eventReader = new Event.EventPerser(filePath);
+        TextEvent.EventPerser eventReader = new TextEvent.EventPerser(filePath);
         var text = eventReader.GetEventText();
 
         foreach (var v in text.actionText)

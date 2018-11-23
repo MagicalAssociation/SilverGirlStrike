@@ -39,7 +39,8 @@ namespace Fuchan
         public class InspectorParam
         {
             public float gravity;
-            public float speed;
+            public float playerMoveSpeed;
+            public float playerDashSpeed;
             public float anchorDashSpeed;
             public float anchorMoveAcceleration;
             public float jumpPower;
@@ -66,6 +67,9 @@ namespace Fuchan
 
             //アンカーショットターゲット
             public GameObject anchorTarget;
+
+            //ダッシュ比率
+            public float dashRatio;
         }
 
         public InspectorParam inspectorParam;
@@ -79,12 +83,16 @@ namespace Fuchan
             this.param.direction = Direction.RIGHT;
             this.param.currentDashSpead = 0.0f;
             this.param.anchorTarget = null;
+            this.param.dashRatio = 0.0f;
             //ステート追加
             AddState((int)State.IDLE, new IdleState(this));
             AddState((int)State.WALK, new WalkState(this));
             AddState((int)State.JUMP, new JumpState(this));
             AddState((int)State.FALL, new FallState(this));
             AddState((int)State.WIRE_DASH, new AnchorDashState(this));
+            AddState((int)State.ATTACK1, new Attack1State(this));
+            AddState((int)State.ATTACK2, new Attack2State(this));
+            AddState((int)State.ATTACK3, new Attack3State(this));
             ChangeState((int)State.IDLE);
         }
 
@@ -110,6 +118,12 @@ namespace Fuchan
 
         public override void UpdateCharacter()
         {
+            this.param.dashRatio += -0.02f;
+            if (this.param.dashRatio < 0.0f)
+            {
+                this.param.dashRatio = 0.0f;
+            }
+
             //接地判定
             CheckGround();
 
@@ -158,6 +172,10 @@ namespace Fuchan
             return param.inspectorParam;
         }
 
+        public float GetPlayerMoveSpeed()
+        {
+            return this.param.inspectorParam.playerMoveSpeed * (1.0f - this.param.param.dashRatio) + this.param.inspectorParam.playerDashSpeed * this.param.param.dashRatio;
+        }
 
         //ステート遷移時に使用する、アンカー判定
         public bool ShotAnchor()
@@ -205,12 +223,32 @@ namespace Fuchan
         }
 
         //入った時の関数
-        public override void Enter()
+        public override void Enter(ref StateManager manager)
         {
             GetInspectorParam().playerAnim.Play("Idle");
+            if(manager.GetPreStateNum() == (int)PlayerObject.State.FALL)
+            {
+                GetInspectorParam().playerAnim.Play("onGround");
+            }
+            if (manager.GetPreStateNum() == (int)PlayerObject.State.WALK)
+            {
+                GetInspectorParam().playerAnim.Play("DashStop");
+            }
+            if (manager.GetPreStateNum() == (int)PlayerObject.State.ATTACK1)
+            {
+                GetInspectorParam().playerAnim.Play("attackEnd");
+            }
+            if (manager.GetPreStateNum() == (int)PlayerObject.State.ATTACK2)
+            {
+                GetInspectorParam().playerAnim.Play("attackEnd");
+            }
+            if (manager.GetPreStateNum() == (int)PlayerObject.State.ATTACK3)
+            {
+                GetInspectorParam().playerAnim.Play("attackEnd");
+            }
         }
         //出た時の関数
-        public override void Exit()
+        public override void Exit(ref StateManager manager)
         {
 
         }
@@ -244,6 +282,12 @@ namespace Fuchan
                 manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
                 return true;
             }
+            //攻撃
+            if (M_System.input.Down(SystemInput.Tag.ATTACK))
+            {
+                manager.SetNextState((int)PlayerObject.State.ATTACK1);
+                return true;
+            }
 
 
             return false;
@@ -266,14 +310,14 @@ namespace Fuchan
         }
 
         //入った時の関数
-        public override void Enter()
+        public override void Enter(ref StateManager manager)
         {
             //アニメ
             GetInspectorParam().playerAnim.Play("DashStart");
 
         }
         //出た時の関数
-        public override void Exit()
+        public override void Exit(ref StateManager manager)
         {
 
         }
@@ -295,10 +339,22 @@ namespace Fuchan
                 manager.SetNextState((int)PlayerObject.State.JUMP);
                 return true;
             }
+            //落下
+            if (!GetParam().onGround)
+            {
+                manager.SetNextState((int)PlayerObject.State.FALL);
+                return true;
+            }
             //アンカーショット
             if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor())
             {
                 manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                return true;
+            }
+            //攻撃
+            if (M_System.input.Down(SystemInput.Tag.ATTACK))
+            {
+                manager.SetNextState((int)PlayerObject.State.ATTACK1);
                 return true;
             }
 
@@ -307,7 +363,7 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetInspectorParam().speed, 0.0f);
+            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
             //横移動
             GetParam().moveVector += vec;
             //移動方向にて向きを変える
@@ -326,16 +382,18 @@ namespace Fuchan
         }
 
         //入った時の関数
-        public override void Enter()
+        public override void Enter(ref StateManager manager)
         {
             Sound.PlaySE("jump");
             //アニメ
             GetInspectorParam().playerAnim.Play("JumpUp");
-            GetInspectorParam().mover.Jump(GetInspectorParam().jumpPower);
-
+            if (manager.GetPreStateNum() != (int)PlayerObject.State.WIRE_DASH)
+            {
+                GetInspectorParam().mover.Jump(GetInspectorParam().jumpPower);
+            }
         }
         //出た時の関数
-        public override void Exit()
+        public override void Exit(ref StateManager manager)
         {
 
         }
@@ -351,6 +409,18 @@ namespace Fuchan
                 manager.SetNextState((int)PlayerObject.State.FALL);
                 return true;
             }
+            //アンカーショット
+            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor())
+            {
+                manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                return true;
+            }
+            //攻撃
+            if (M_System.input.Down(SystemInput.Tag.ATTACK))
+            {
+                manager.SetNextState((int)PlayerObject.State.ATTACK1);
+                return true;
+            }
 
 
             return false;
@@ -358,7 +428,7 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetInspectorParam().speed, 0.0f);
+            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
             //横移動
             GetParam().moveVector += vec;
             //移動方向にて向きを変える
@@ -377,13 +447,13 @@ namespace Fuchan
         }
 
         //入った時の関数
-        public override void Enter()
+        public override void Enter(ref StateManager manager)
         {
             //アニメ
             GetInspectorParam().playerAnim.Play("JumpDownStart");
         }
         //出た時の関数
-        public override void Exit()
+        public override void Exit(ref StateManager manager)
         {
 
         }
@@ -399,14 +469,25 @@ namespace Fuchan
                 manager.SetNextState((int)PlayerObject.State.IDLE);
                 return true;
             }
-
+            //アンカーショット
+            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor())
+            {
+                manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                return true;
+            }
+            //攻撃
+            if (M_System.input.Down(SystemInput.Tag.ATTACK))
+            {
+                manager.SetNextState((int)PlayerObject.State.ATTACK1);
+                return true;
+            }
 
             return false;
         }
         //ステート処理
         public override void Update()
         {
-            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetInspectorParam().speed, 0.0f);
+            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
             //横移動
             GetParam().moveVector += vec;
             //移動方向にて向きを変える
@@ -428,7 +509,7 @@ namespace Fuchan
 
 
         //入った時の関数
-        public override void Enter()
+        public override void Enter(ref StateManager manager)
         {
             this.timeCnt = 0;
             //アンカーショットの処理を以下で行う
@@ -461,7 +542,7 @@ namespace Fuchan
             this.GetParam().myself.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
         //出た時の関数
-        public override void Exit()
+        public override void Exit(ref StateManager manager)
         {
 
         }
@@ -497,6 +578,9 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
+            //速度をダッシュ中のそれにする
+            this.GetParam().dashRatio = 1.0f;
+
             //アンカーが見つかっている場合にのみ処理を行う
             if (GetParam().anchorTarget != null && this.timeCnt > 2)
             {
@@ -520,6 +604,224 @@ namespace Fuchan
             ++this.timeCnt;
         }
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //攻撃一段目
+    public class Attack1State : BaseState
+    {
+        int timeCnt;
+
+
+        public Attack1State(PlayerObject param)
+            : base(param)
+
+        {
+        }
+
+        //入った時の関数
+        public override void Enter(ref StateManager manager)
+        {
+            //アニメ
+            if (GetParam().onGround)
+            {
+                GetInspectorParam().playerAnim.Play("SwordAttack1");
+            }
+            else
+            {
+                GetInspectorParam().playerAnim.Play("JumpSwordAttack1");
+                GetInspectorParam().mover.Jump(6.0f);
+            }
+
+            this.timeCnt = 0;
+        }
+        //出た時の関数
+        public override void Exit(ref StateManager manager)
+        {
+
+        }
+        //遷移を行う
+        public override bool Transition(ref StateManager manager)
+        {
+            if(this.timeCnt == 20)
+            {
+                if (GetParam().onGround)
+                {
+                    manager.SetNextState((int)PlayerObject.State.IDLE);
+                }
+                else
+                {
+                    manager.SetNextState((int)PlayerObject.State.FALL);
+                }
+                return true;
+            }
+            //攻撃
+            if (M_System.input.Down(SystemInput.Tag.ATTACK) && this.timeCnt > 0)
+            {
+                manager.SetNextState((int)PlayerObject.State.ATTACK2);
+                return true;
+            }
+            //アンカーショット
+            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor() && this.timeCnt > 5)
+                {
+                manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                return true;
+            }
+
+            return false;
+        }
+        //ステート処理
+        public override void Update()
+        {
+            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed() * 0.2f, 0.0f);
+            //横移動
+            GetParam().moveVector += vec;
+
+            ++this.timeCnt;
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //攻撃二段目
+    public class Attack2State : BaseState
+    {
+        int timeCnt;
+
+
+        public Attack2State(PlayerObject param)
+            : base(param)
+
+        {
+        }
+
+        //入った時の関数
+        public override void Enter(ref StateManager manager)
+        {
+            //アニメ
+            if (GetParam().onGround)
+            {
+                GetInspectorParam().playerAnim.Play("SwordAttack2");
+            }
+            else
+            {
+                GetInspectorParam().playerAnim.Play("JumpSwordAttack2");
+                GetInspectorParam().mover.Jump(6.0f);
+            }
+
+            this.timeCnt = 0;
+        }
+        //出た時の関数
+        public override void Exit(ref StateManager manager)
+        {
+
+        }
+        //遷移を行う
+        public override bool Transition(ref StateManager manager)
+        {
+            if (this.timeCnt == 20)
+            {
+                if (GetParam().onGround)
+                {
+                    manager.SetNextState((int)PlayerObject.State.IDLE);
+                }
+                else
+                {
+                    manager.SetNextState((int)PlayerObject.State.FALL);
+                }
+                return true;
+            }
+            //攻撃
+            if (M_System.input.Down(SystemInput.Tag.ATTACK) && this.timeCnt > 0)
+            {
+                manager.SetNextState((int)PlayerObject.State.ATTACK3);
+                return true;
+            }
+            //アンカーショット
+            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor() && this.timeCnt > 5)
+                {
+                manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                return true;
+            }
+
+            return false;
+        }
+        //ステート処理
+        public override void Update()
+        {
+            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed() * 0.2f, 0.0f);
+            //横移動
+            GetParam().moveVector += vec;
+
+            ++this.timeCnt;
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //攻撃三段目
+    public class Attack3State : BaseState
+    {
+        int timeCnt;
+
+
+        public Attack3State(PlayerObject param)
+            : base(param)
+
+        {
+        }
+
+        //入った時の関数
+        public override void Enter(ref StateManager manager)
+        {
+            //アニメ
+            if (GetParam().onGround)
+            {
+                GetInspectorParam().playerAnim.Play("SwordAttack3");
+            }
+            else
+            {
+                GetInspectorParam().playerAnim.Play("JumpSwordAttack3");
+                GetInspectorParam().mover.Jump(6.0f);
+            }
+
+            this.timeCnt = 0;
+        }
+        //出た時の関数
+        public override void Exit(ref StateManager manager)
+        {
+
+        }
+        //遷移を行う
+        public override bool Transition(ref StateManager manager)
+        {
+            if (this.timeCnt == 20)
+            {
+                if (GetParam().onGround)
+                {
+                    manager.SetNextState((int)PlayerObject.State.IDLE);
+                }
+                else
+                {
+                    manager.SetNextState((int)PlayerObject.State.FALL);
+                }
+                return true;
+            }
+            //アンカーショット
+            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor() && this.timeCnt > 5)
+            {
+                manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                return true;
+            }
+
+            return false;
+        }
+        //ステート処理
+        public override void Update()
+        {
+            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed() * 0.2f, 0.0f);
+            //横移動
+            GetParam().moveVector += vec;
+
+            ++this.timeCnt;
+        }
+    }
+
 
     //便利関数系
     public class Func

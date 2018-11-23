@@ -53,7 +53,8 @@ using System.Linq;
 /// </summary>
 
 
-namespace Event {
+namespace TextEvent
+{
     public class EventPerser
     {
         //イベント文の種類ごとにまとまったデータ
@@ -257,7 +258,7 @@ namespace Event {
                         //イベント追加
                         termEvent.eventName = actionEvent.eventName;
                         //引数の一つ目が必ず、「trueの時に条件を満たすか」「falseの時に条件を満たすか」を示す
-                        termEvent.requestedBoolean = Event.TextParser.ParseBoolean(actionEvent.args[0]);
+                        termEvent.requestedBoolean = TextEvent.TextParser.ParseBoolean(actionEvent.args[0]);
                         //引数をコピー（一つ目はスキップ）
                         termEvent.args = new string[actionEvent.args.Length - 1];
                         System.Array.Copy(actionEvent.args, 1, termEvent.args, 0, actionEvent.args.Length - 1);
