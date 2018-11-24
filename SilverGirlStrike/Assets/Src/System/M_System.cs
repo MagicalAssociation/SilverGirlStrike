@@ -22,6 +22,8 @@ public class M_System : MonoBehaviour
         ENEMY = 1 << 9,
         GROUND = 1 << 10,
         ANCHOR = 1 << 11,
+        ITEM = 1 << 12,
+        FOOT = 1 << 13,
     }
 
     /**

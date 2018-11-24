@@ -4,7 +4,7 @@ using UnityEngine;
 
 //編集履歴
 //2018/11/16 板倉：作成
-
+//2018/11/24 金子：CharacterManagerにダメージ処理をテスト設置
 
 
 //AddCharacterで追加 / DeleteCharacterで削除
@@ -60,6 +60,8 @@ public class CharacterManager : MonoBehaviour
         {
             characterData.character.UpdateCharacter();
             characterData.character.ApplyDamage();
+            //追加処理：ダメージ適用
+            characterData.character.GetData().hitPoint.DamageUpdate();
         }
     }
 

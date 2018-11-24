@@ -5,7 +5,7 @@ using UnityEngine;
 
 //編集履歴
 //2018/11/21 板倉　：　CharacterObjectにChangeState()を行う手段がなかったのでメソッドを追加
-
+//2018/11/24 金子　：　HitPointにダメージ処理や値修正処理を追記
 
 
 /**
@@ -24,12 +24,35 @@ public class HitPoint
     //! 連鎖
     int chain;
     /**
+     * constructor
+     */
+     public HitPoint()
+    {
+        this.maxHP = 10;
+        this.currentHP = 2;
+        this.damagePoint = 0;
+        this.invincible = 0;
+        this.chain = 0;
+    }
+    /**
      * brief    ダメージ処理
      */
      public void DamageUpdate()
     {
-        this.currentHP -= this.damagePoint;
+        //HPにダメージを与える
+        this.currentHP += this.damagePoint;
+        //ダメージポイントを初期化
         this.ResetDamagePoint();
+        //HPが最大値を超えた場合最大値に変更する
+        if(this.currentHP > this.maxHP)
+        {
+            this.currentHP = this.maxHP;
+        }
+        //HPが最低値以下になった時最低値にする
+        if(this.currentHP < 0)
+        {
+            this.currentHP = 0;
+        }
     }
     /**
      * 蓄積ダメージを初期化する
@@ -37,6 +60,38 @@ public class HitPoint
     public void ResetDamagePoint()
     {
         this.damagePoint = 0;
+    }
+    /**
+     * brief    ダメージポイントを蓄積する
+     * param[in] int damage ダメージ量
+     * マイナスを与えれば回復になる
+     */ 
+     public void Damage(int damage)
+    {
+        this.damagePoint -= damage;
+    }
+    /**
+     * brief    現在HPを取得する
+     * return int nowHitPoint
+     */
+     public int GetHP()
+    {
+        return this.currentHP;
+    }
+    /**
+     * brief    最大HPを取得する
+     * return int MaxHitPoint
+     */
+     public int GetMaxHP()
+    {
+        return this.maxHP;
+    }
+    /**
+     * brief    DebugLog
+     */
+     public void DebugLog()
+    {
+        Debug.Log(this.maxHP + ":" + this.currentHP + ":" + this.damagePoint + ":" + this.invincible + ":" + this.chain);
     }
 }
 
