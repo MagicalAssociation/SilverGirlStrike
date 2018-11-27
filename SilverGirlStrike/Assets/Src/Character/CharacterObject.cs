@@ -29,7 +29,19 @@ public class HitPoint
      public HitPoint()
     {
         this.maxHP = 10;
-        this.currentHP = 2;
+        this.currentHP = 10;
+        this.damagePoint = 0;
+        this.invincible = 0;
+        this.chain = 0;
+    }
+    /**
+     * brief    constructor
+     * param[in] int maxhp 最大HP
+     */
+     public HitPoint(int maxhp)
+    {
+        this.maxHP = maxhp;
+        this.currentHP = maxhp;
         this.damagePoint = 0;
         this.invincible = 0;
         this.chain = 0;
@@ -209,41 +221,92 @@ public class HitPoint
  */ 
 public abstract class CharacterObject : MonoBehaviour
 {
+    /**
+     * brief    CharacterParameterData
+     */ 
     public class CharaData
     {
+        //! HP関連
         public HitPoint hitPoint;
+        //! 状態管理
         public StateManager manager;
+        /**
+         * brief    constructor
+         */ 
         public CharaData()
         {
             hitPoint = new HitPoint();
             manager = new StateManager();
         }
-       
-    }
+        /**
+        * brief    constructor
+        * param[in] int maxHP HP最大値
+        */
+        public CharaData(int maxHP)
+        {
+            hitPoint = new HitPoint(maxHP);
+            manager = new StateManager();
+        }
 
+    }
+    //! CharacterData
     CharaData data;
+    /**
+     * brief    constructor
+     */ 
     public CharacterObject()
     {
         data = new CharaData();
     }
-
+    /**
+     * brief    constructor
+     * param[in] int maxHP 最大HP
+     */
+    public CharacterObject(int maxHP)
+    {
+        data = new CharaData(maxHP);
+    }
+    /**
+     * brief    更新処理
+     */
     public abstract void UpdateCharacter();
+    /**
+     * brief    ダメージ処理
+     */ 
     public abstract void Damage(AttackData attackData);
+    /**
+     * brief    ダメージを適用する
+     */ 
     public abstract void ApplyDamage();
+    /**
+     * brief    キャラクターの移動処理
+     */ 
     public abstract void MoveCharacter();
+    /**
+     * brief    データの取得
+     */ 
     public CharaData GetData()
     {
         return this.data;
     }
+    /**
+     * brief    Stateの更新処理
+     */ 
 
     public void UpdateState()
     {
         this.data.manager.Update();
     }
+    /**
+     * brief    Stateを登録する
+     */ 
     public void AddState(int stateNum, StateParameter parameter)
     {
         this.data.manager.SetParameter(stateNum, parameter);
     }
+    /**
+     * brief    Stateを変更する
+     */ 
     public void ChangeState(int stateNum)
     {
         this.data.manager.ChengeState(stateNum);

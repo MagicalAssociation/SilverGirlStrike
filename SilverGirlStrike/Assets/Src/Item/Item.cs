@@ -130,7 +130,12 @@ namespace SGS
         {
             if (this.collider)
             {
-                Collider2D hit = Physics2D.OverlapBox(this.collider.transform.position, this.collider.size,this.transform.eulerAngles.z, (int)M_System.LayerName.PLAYER);
+                Collider2D hit = Physics2D.OverlapBox(
+                    this.collider.transform.position, 
+                    this.collider.size,
+                    this.transform.eulerAngles.z, 
+                    (int)M_System.LayerName.PLAYER
+                    );
                 return hit;
             }
             return null;
