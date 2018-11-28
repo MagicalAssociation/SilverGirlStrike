@@ -12426,7 +12426,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.3}
+  m_Size: {x: 0.3, y: 0.6}
   m_EdgeRadius: 0
 --- !u!50 &1011351421
 Rigidbody2D:
@@ -12472,8 +12472,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: 0.8
   parameter:
-    attackObject: {fileID: 1497254292667722, guid: 802a5b32ce455ad4a839e8dac8dca76d,
-      type: 2}
+    attackObject: {fileID: 0}
+    mover: {fileID: 0}
+    foot: {fileID: 0}
+    animation: {fileID: 0}
+    direction: 0
 --- !u!212 &1011351424
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -14798,7 +14801,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1217188996}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.12001228, z: 0}
+  m_LocalPosition: {x: 0, y: -0.258, z: 0}
   m_LocalScale: {x: 0.83265996, y: 0.78195995, z: 1}
   m_Children: []
   m_Father: {fileID: 1011351419}

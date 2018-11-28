@@ -51,7 +51,7 @@ public class M_System : MonoBehaviour
         Time.maximumDeltaTime = 1.0f / 30.0f;
         QualitySettings.vSyncCount = 0;
 
-        Cursor.visible = false;
+        Cursor.visible = true;
     }
 
     private void Start()
