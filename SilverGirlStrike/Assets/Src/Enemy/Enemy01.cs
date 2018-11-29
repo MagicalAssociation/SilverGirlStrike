@@ -38,7 +38,7 @@ namespace Enemy
         public class Enemy01Parameter
         {
             //! 生成する攻撃オブジェクト
-            public MagicBullet attackObject;
+            public Bullet.MagicBullet attackObject;
             //! 移動用class
             public CharacterMover mover;
             //! 地面判定
@@ -76,7 +76,6 @@ namespace Enemy
         public override void UpdateCharacter()
         {
             this.UpdateState();
-            Debug.Log(GetData().manager.GetNextStateNum());
         }
         public override void Damage(AttackData data)
         {
@@ -135,7 +134,7 @@ namespace Enemy
                 return true;
             }
             //30count経過したら攻撃モーションへ移行
-            if(base.GetTime() > 30)
+            if(base.GetTime() > 200)
             {
                 manager.SetNextState((int)Enemy01.State.ATTACK);
                 return true;
@@ -153,7 +152,6 @@ namespace Enemy
      */
     public class AttackState : BaseState
     {
-        Vector2 direction;
         public AttackState(Enemy01 enemy) 
             : base(enemy)
         {
@@ -184,11 +182,11 @@ namespace Enemy
             if(base.GetTime() == 4)
             {
                 //攻撃生成
-                MagicBullet bullet = Object.Instantiate(base.enemy.GetParameter().attackObject, base.enemy.transform.position, Quaternion.identity) as MagicBullet;
+                Bullet.MagicBullet bullet = Object.Instantiate(base.enemy.GetParameter().attackObject, base.enemy.transform.position, Quaternion.identity) as Bullet.MagicBullet;
                 bullet.SetAttackData(new AttackData(base.enemy));
                 bullet.GetAttackData().power = 3;
                 Vector2 dire = new Vector2(1, 0);
-                if(this.enemy.GetParameter().direction == Enemy01.Direction.LEFT)
+                if (this.enemy.GetParameter().direction == Enemy01.Direction.LEFT)
                 {
                     dire.x *= -1.0f;
                 }
