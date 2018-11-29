@@ -25,12 +25,17 @@ public class CharacterManager : MonoBehaviour
     public GameObject characters;
     //管理するオブジェクト(走査用)
     List<CharacterData> objectList;
+    //登録予約、削除予約
+    List<CharacterObject> nextAdd;//インスタンスで
+    List<int> nextDelete;//IDで
     //管理するオブジェクト(アクセス用)
     Dictionary<string, CharacterData> objects;
 
-    private void Start()
+    private void Awake()
     {
         this.objectList = new List<CharacterData>();
+        this.nextAdd = new List<CharacterObject>();
+        this.nextDelete = new List<int>();
         this.objects = new Dictionary<string, CharacterData>();
 
         if (this.characters)
@@ -63,10 +68,29 @@ public class CharacterManager : MonoBehaviour
             //追加処理：ダメージ適用
             characterData.character.GetData().hitPoint.DamageUpdate();
         }
+        //予約されている登録処理を行う
+        foreach(var addCharacter in this.nextAdd)
+        {
+            AddCharacterDirect(addCharacter);
+        }
+        //予約されている削除処理を行う
+        foreach (var deleteCharacter in this.nextDelete)
+        {
+            DeleteCharacterDirect(deleteCharacter);
+        }
+
+        //リストを空に
+        this.nextAdd.Clear();
+        this.nextDelete.Clear();
     }
 
-    //キャラクター追加
+    //キャラクター追加予約
     public void AddCharacter(CharacterObject character)
+    {
+        this.nextAdd.Add(character);
+    }
+    //実際に生成
+    void AddCharacterDirect(CharacterObject character)
     {
         int id = GetUseableID();
         //空きがないので何もできない
@@ -75,29 +99,50 @@ public class CharacterManager : MonoBehaviour
             this.objectList.Add(null);
             id = this.objectList.Count - 1;
         }
-        //登録
+        //登録用データ作成
         CharacterData data = new CharacterData();
         data.character = character;
         data.id = id;
         data.name = character.gameObject.name;
+        //登録
         this.objectList[data.id] = data;
         this.objects[data.name] = data;
     }
 
-    //キャラを消去、リストからも外す
+    //キャラを消去予約
     public void DeleteCharacter(string characterName)
     {
+        this.nextDelete.Add(this.objects[characterName].id);
+    }
+    //キャラを消去、リストからも外す(名前版)
+    void DeleteCharacterDirect(string characterName)
+    {
         var obj = this.objects[characterName];
-
-        Object.Destroy(obj.character.gameObject);
-        this.objectList[obj.id] = null;
-        this.objects[obj.name] = null;
+        DeleteCharacterDirect(obj);
+    }
+    //キャラを消去、リストからも外す(ID版)
+    void DeleteCharacterDirect(int characterID)
+    {
+        var obj = this.objectList[characterID];
+        DeleteCharacterDirect(obj);
+    }
+    //キャラを消去、リストからも外す(CharacterData版)
+    void DeleteCharacterDirect(CharacterData data)
+    {
+        Object.Destroy(data.character.gameObject);
+        this.objectList[data.id] = null;
+        this.objects[data.name] = null;
     }
 
     //キャラクターへ直接アクセスする
     public CharacterObject.CharaData GetCharacterData(string characterName)
     {
         return this.objects[characterName].character.GetData();
+    }
+    //キャラクターへ直接アクセスする
+    public CharacterObject.CharaData GetCharacterData(int characterID)
+    {
+        return this.objectList[characterID].character.GetData();
     }
 
     //現在の空いているIDを検索、空きがない場合は-1を返す

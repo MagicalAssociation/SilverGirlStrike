@@ -2,39 +2,101 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MagicBullet : CharacterObject {
-    AttackData data;
-    public float movePower;
+namespace Bullet
+{
+    public class MagicBullet : CharacterObject
+    {
+        public enum State
+        {
+            NORMAL,
+        }
+        AttackData data;
+        public float movePower;
+        public CharacterManager manager;
+        private void Start()
+        {
+            manager.AddCharacter(this);
+            base.AddState((int)State.NORMAL, new NormalState(this));
+            base.ChangeState((int)State.NORMAL);
+            this.movePower = 0.3f;
+        }
+        /**
+         * brief    AttackData登録
+         * param[in] AttackData data 攻撃データ
+         */
+        public void SetAttackData(AttackData data)
+        {
+            this.data = data;
+        }
+        /**
+         * brief    AttackDataの取得
+         * return AttackData 攻撃データ
+         */
+        public AttackData GetAttackData()
+        {
+            return this.data;
+        }
+
+        public override void UpdateCharacter()
+        {
+            Debug.Log("aaaaa0");
+            manager.Update();
+        }
+
+        public override void Damage(AttackData attackData)
+        {
+        }
+
+        public override void ApplyDamage()
+        {
+        }
+
+        public override void MoveCharacter()
+        {
+            this.transform.position += new Vector3(this.data.direction.x * this.movePower, this.data.direction.y * this.movePower);
+        }
+    }
     /**
-     * brief    AttackData登録
-     * param[in] AttackData data 攻撃データ
-     */
-     public void SetAttackData(AttackData data)
+     * brief    元State
+     */ 
+    public abstract class BaseState : StateParameter
     {
-        this.data = data;
+        public MagicBullet bullet;
+        public BaseState(MagicBullet bullet)
+        {
+            this.bullet = bullet;
+        }
     }
     /**
-     * brief    AttackDataの取得
-     * return AttackData 攻撃データ
+     * brief    通常State
      */
-     public AttackData GetAttackData()
+    public class NormalState : BaseState
     {
-        return this.data;
-    }
+        public NormalState(MagicBullet bullet) 
+            : base(bullet)
+        {
+        }
 
-    public override void UpdateCharacter()
-    {
-    }
+        public override void Enter(ref StateManager manager)
+        {
+        }
 
-    public override void Damage(AttackData attackData)
-    {
-    }
+        public override void Exit(ref StateManager manager)
+        {
+        }
 
-    public override void ApplyDamage()
-    {
-    }
+        public override bool Transition(ref StateManager manager)
+        {
+            return false;
+        }
 
-    public override void MoveCharacter()
-    {
+        public override void Update()
+        {
+            base.TimeUp(1);
+            if(base.GetTime() > 10)
+            {
+                base.bullet.manager.DeleteCharacter(base.bullet.name);
+            }
+        }
     }
 }
