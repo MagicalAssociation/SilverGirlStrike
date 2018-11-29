@@ -47,6 +47,8 @@ namespace Enemy
             public Animation animation;
             //! 向き
             public Direction direction;
+            //! 登録用のCharacterManager
+            //public CharacterManager manager;
         }
         //! 重力
         public float gravity;
@@ -191,6 +193,7 @@ namespace Enemy
                     dire.x *= -1.0f;
                 }
                 bullet.GetAttackData().direction = dire;
+                //this.enemy.GetParameter().manager.AddCharacter(bullet);
             }
         }
     }

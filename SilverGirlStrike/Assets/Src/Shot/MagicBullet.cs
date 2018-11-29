@@ -39,8 +39,7 @@ namespace Bullet
 
         public override void UpdateCharacter()
         {
-            Debug.Log("aaaaa0");
-            manager.Update();
+            GetData().manager.Update();
         }
 
         public override void Damage(AttackData attackData)
