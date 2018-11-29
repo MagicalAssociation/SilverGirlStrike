@@ -2090,6 +2090,31 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &198144862
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 198144858}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.96, y: 0.96}
+    newSize: {x: 0.96, y: 0.96}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.81, y: 0.81}
+  m_EdgeRadius: 0
 --- !u!1 &201686107
 GameObject:
   m_ObjectHideFlags: 0
@@ -9538,6 +9563,14 @@ Prefab:
       propertyPath: manager
       value: 
       objectReference: {fileID: 725477933}
+    - target: {fileID: 1497254292667722, guid: 802a5b32ce455ad4a839e8dac8dca76d, type: 2}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 1497254292667722, guid: 802a5b32ce455ad4a839e8dac8dca76d, type: 2}
+      propertyPath: m_TagString
+      value: Bullet
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 802a5b32ce455ad4a839e8dac8dca76d, type: 2}
   m_IsPrefabAsset: 0
@@ -12590,6 +12623,14 @@ MonoBehaviour:
     foot: {fileID: 0}
     animation: {fileID: 0}
     direction: 0
+    radius: 5.5
+  data:
+    direction: {x: 1, y: 0}
+    power: 3
+    speed: 0.3
+    life: 30
+  target:
+  - {fileID: 1796243766}
 --- !u!212 &1011351424
 SpriteRenderer:
   m_ObjectHideFlags: 0

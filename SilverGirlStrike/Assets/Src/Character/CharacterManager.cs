@@ -53,8 +53,11 @@ public class CharacterManager : MonoBehaviour
         //全てのオブジェクトの更新を行う
         foreach (var characterData in this.objectList)
         {
-            //物理系に干渉する動作はFixedUpdate()でやる
-            characterData.character.MoveCharacter();
+            if (characterData != null)
+            {
+                //物理系に干渉する動作はFixedUpdate()でやる
+                characterData.character.MoveCharacter();
+            }
         }
     }
 
@@ -63,10 +66,13 @@ public class CharacterManager : MonoBehaviour
         //全てのオブジェクトの更新を行う
         foreach(var characterData in this.objectList)
         {
-            characterData.character.UpdateCharacter();
-            characterData.character.ApplyDamage();
-            //追加処理：ダメージ適用
-            characterData.character.GetData().hitPoint.DamageUpdate();
+            if (characterData != null)
+            {
+                characterData.character.UpdateCharacter();
+                characterData.character.ApplyDamage();
+                //追加処理：ダメージ適用
+                characterData.character.GetData().hitPoint.DamageUpdate();
+            }
         }
         //予約されている登録処理を行う
         foreach(var addCharacter in this.nextAdd)

@@ -11,14 +11,18 @@ namespace Bullet
             NORMAL,
         }
         AttackData data;
-        public float movePower;
+        //! 移動速度
+        public float moveSpeed;
+        //! 寿命
+        public int lifeCnt;
         public CharacterManager manager;
+        BoxCollider2D collider;
         private void Start()
         {
+            collider = GetComponent<BoxCollider2D>();
             manager.AddCharacter(this);
             base.AddState((int)State.NORMAL, new NormalState(this));
             base.ChangeState((int)State.NORMAL);
-            this.movePower = 0.3f;
         }
         /**
          * brief    AttackData登録
@@ -52,7 +56,31 @@ namespace Bullet
 
         public override void MoveCharacter()
         {
-            this.transform.position += new Vector3(this.data.direction.x * this.movePower, this.data.direction.y * this.movePower);
+            this.transform.position += new Vector3(this.data.direction.x * this.moveSpeed, this.data.direction.y * this.moveSpeed);
+        }
+        /**
+         * brief    自分を消す命令をManagerに行う処理
+         */
+        public void Delete()
+        {
+            manager.DeleteCharacter(this.name);
+        }
+        /**
+         * brief    当たり判定
+         */
+        public Collider2D HitCheck()
+        {
+            if (this.collider)
+            {
+                Collider2D hit = Physics2D.OverlapBox(
+                    this.collider.transform.position,
+                    this.collider.size,
+                    this.transform.eulerAngles.z,
+                    (int)M_System.LayerName.PLAYER
+                    );
+                return hit;
+            }
+            return null;
         }
     }
     /**
@@ -92,9 +120,22 @@ namespace Bullet
         public override void Update()
         {
             base.TimeUp(1);
-            if(base.GetTime() > 10)
+            //自分がプレイヤーと当たっていた時、プレイヤーにダメージを与え自分は消滅する
+            var hit = base.bullet.HitCheck();
+            if(hit)
             {
-                base.bullet.manager.DeleteCharacter(base.bullet.name);
+                if(hit.tag == "Player")
+                {
+                    hit.GetComponent<CharacterObject>().GetData().hitPoint.Damage(base.bullet.GetAttackData().power);
+                    base.bullet.Delete();
+                    return;
+                }
+            }
+            //時間による削除処理
+            if(base.GetTime() > base.bullet.lifeCnt)
+            {
+                base.bullet.Delete();
+                return;
             }
         }
     }

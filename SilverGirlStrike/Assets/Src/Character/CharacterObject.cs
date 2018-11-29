@@ -103,7 +103,7 @@ public class HitPoint
      */
      public void DebugLog()
     {
-        Debug.Log(this.maxHP + ":" + this.currentHP + ":" + this.damagePoint + ":" + this.invincible + ":" + this.chain);
+        Debug.Log("MapHP->" + this.maxHP + ":NowHP->" + this.currentHP + ":DP->" + this.damagePoint + ":Inv->" + this.invincible + ":Chain->" + this.chain);
     }
 }
 

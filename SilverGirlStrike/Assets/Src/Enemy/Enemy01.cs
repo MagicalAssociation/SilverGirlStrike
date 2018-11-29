@@ -47,13 +47,27 @@ namespace Enemy
             public Animation animation;
             //! 向き
             public Direction direction;
+            //! 攻撃開始範囲の半径
+            public float radius;
             //! 登録用のCharacterManager
             //public CharacterManager manager;
+        }
+        [System.Serializable]
+        public class BulletData
+        {
+            public Vector2 direction;
+            public int power;
+            public float speed;
+            public int life;
         }
         //! 重力
         public float gravity;
         //! Parameter
         public Enemy01Parameter parameter;
+        //! 生成するBulletのデータ
+        public BulletData data;
+        //! 攻撃するターゲット
+        public GameObject[] target;
         /**
          * brief    constructor
          */
@@ -96,6 +110,25 @@ namespace Enemy
         {
             return this.parameter;
         }
+        /**
+         * brief    攻撃するターゲットが近くにいるか返す
+         * return bool 近場にいればtrue
+         */
+         public bool TargetDistanceCheck()
+        {
+            for (int i = 0; i < target.Length; ++i)
+            {
+                if (
+                    (this.transform.position.x - this.target[i].transform.position.x) * (this.transform.position.x - this.target[i].transform.position.x) +
+                     (this.transform.position.y - this.target[i].transform.position.y) * (this.transform.position.y - this.target[i].transform.position.y) <=
+                     this.parameter.radius * this.parameter.radius
+                    )
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
     /**
      * brief    元となるState
@@ -136,7 +169,7 @@ namespace Enemy
                 return true;
             }
             //30count経過したら攻撃モーションへ移行
-            if(base.GetTime() > 200)
+            if(base.GetTime() > 30)
             {
                 manager.SetNextState((int)Enemy01.State.ATTACK);
                 return true;
@@ -184,17 +217,25 @@ namespace Enemy
             if(base.GetTime() == 4)
             {
                 //攻撃生成
-                Bullet.MagicBullet bullet = Object.Instantiate(base.enemy.GetParameter().attackObject, base.enemy.transform.position, Quaternion.identity) as Bullet.MagicBullet;
-                bullet.SetAttackData(new AttackData(base.enemy));
-                bullet.GetAttackData().power = 3;
-                Vector2 dire = new Vector2(1, 0);
-                if (this.enemy.GetParameter().direction == Enemy01.Direction.LEFT)
-                {
-                    dire.x *= -1.0f;
-                }
-                bullet.GetAttackData().direction = dire;
-                //this.enemy.GetParameter().manager.AddCharacter(bullet);
+                this.CreateBullet();
             }
+        }
+        /**
+         * brief    攻撃生成
+         */ 
+        private void CreateBullet()
+        {
+            Bullet.MagicBullet bullet = Object.Instantiate(base.enemy.GetParameter().attackObject, base.enemy.transform.position, Quaternion.identity) as Bullet.MagicBullet;
+            bullet.SetAttackData(new AttackData(base.enemy));
+            bullet.GetAttackData().power = base.enemy.data.power;
+            bullet.lifeCnt = base.enemy.data.life;
+            bullet.moveSpeed = base.enemy.data.speed;
+            Vector2 dire = base.enemy.data.direction;
+            if (this.enemy.GetParameter().direction == Enemy01.Direction.LEFT)
+            {
+                dire.x *= -1.0f;
+            }
+            bullet.GetAttackData().direction = dire;
         }
     }
     /**
