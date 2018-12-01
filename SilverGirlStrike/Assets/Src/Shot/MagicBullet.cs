@@ -10,6 +10,13 @@ namespace Bullet
         {
             NORMAL,
         }
+        public enum Mode
+        {
+            //! 直線に飛ぶやつ
+            LINE,
+            //! ターゲットに向かって飛ぶやつ
+            TARGET,
+        }
         AttackData data;
         //! 移動速度
         public float moveSpeed;
@@ -17,6 +24,9 @@ namespace Bullet
         public int lifeCnt;
         public CharacterManager manager;
         BoxCollider2D collider;
+        Vector2 move;
+        public Mode mode;
+        
         private void Start()
         {
             collider = GetComponent<BoxCollider2D>();
@@ -56,7 +66,7 @@ namespace Bullet
 
         public override void MoveCharacter()
         {
-            this.transform.position += new Vector3(this.data.direction.x * this.moveSpeed, this.data.direction.y * this.moveSpeed);
+            this.transform.position += new Vector3(move.x * this.moveSpeed, move.y * this.moveSpeed);
         }
         /**
          * brief    自分を消す命令をManagerに行う処理
@@ -82,6 +92,30 @@ namespace Bullet
             }
             return null;
         }
+        /**
+         * brief    攻撃を飛ばす方向を指定する
+         * param[in] float angle 角度
+         */
+         public void SetShotAngle(float angle)
+        {
+            this.mode = Mode.LINE;
+            move.x = Mathf.Cos(angle * (Mathf.PI / 180));
+            move.y = Mathf.Sin(angle * (Mathf.PI / 180));
+        }
+        /**
+         * brief    攻撃を飛ばす方向を指定オブジェクトにする
+         * param[in] GameObject target ターゲット
+         */
+        public void SetShotTarget(GameObject target)
+        {
+            this.mode = Mode.TARGET;
+            move = (target.transform.position - this.transform.position);
+            float di = Mathf.Atan2(move.y, move.x);
+            float rad = Mathf.Rad2Deg * di;
+            rad *= (Mathf.PI / 180);
+            move.x = Mathf.Cos(rad);
+            move.y = Mathf.Sin(rad);
+        }
     }
     /**
      * brief    元State
@@ -106,6 +140,7 @@ namespace Bullet
 
         public override void Enter(ref StateManager manager)
         {
+            this.ResetTime();
         }
 
         public override void Exit(ref StateManager manager)
@@ -126,8 +161,10 @@ namespace Bullet
             {
                 if(hit.tag == "Player")
                 {
-                    hit.GetComponent<CharacterObject>().GetData().hitPoint.Damage(base.bullet.GetAttackData().power);
+                    //hit.GetComponent<CharacterObject>().GetData().hitPoint.Damage(base.bullet.GetAttackData().power);
+                    hit.GetComponent<CharacterObject>().Damage(this.bullet.GetAttackData());
                     base.bullet.Delete();
+                    Debug.Log("PlayerHit");
                     return;
                 }
             }
@@ -135,6 +172,7 @@ namespace Bullet
             if(base.GetTime() > base.bullet.lifeCnt)
             {
                 base.bullet.Delete();
+                Debug.Log("寿命");
                 return;
             }
         }
