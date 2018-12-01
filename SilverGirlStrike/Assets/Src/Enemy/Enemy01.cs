@@ -11,6 +11,24 @@ using UnityEngine;
  * GameObject targetになにもいれないと固定方向に攻撃を飛ばします。
  * targetにオブジェクトを登録するとその方向に攻撃を飛ばします。
 */
+/**
+ * Inspectorの設定値の説明
+ * Gravity このCharacterの重さ
+ * Parameter.AttackObject 攻撃する際に出現させるGameObject
+ *      これ今MagicBulletしか入らない設計しているので今後の実装によっては変化させます
+ * Parameter.Radius このCharacterが攻撃を始める範囲
+ * Parameter.AttackInterval 攻撃の感覚を指定します。
+ * Parameter.Animation アニメーションデータ
+ * Parameter.Mover 自動で入るので放置で構いません
+ * Parameter.Foot このGameObjectの子にFoot.csこみのGameObjectをいれておいてください、入れるのは自動です
+ * Parameter.Direction 自動で入るので放置で
+ * BulletData.Angle 弾を飛ばす方向
+ * BulletData.power ダメージ値
+ * BulletData.Speed 弾の飛ぶ速度
+ * BulletData.Life 生存するカウント数
+ * BulletData.Target 指定オブジェクトの方向に攻撃を飛ばす、ここに何も入っていない時に指定角度で弾を飛ばします
+ * EnableGravity このCharacterに重力を適用するかです。外れている場合落下もせず、FallStateにもなりません。
+ */
 namespace Enemy01
 {
     /**
@@ -41,16 +59,18 @@ namespace Enemy01
         {
             //! 生成する攻撃オブジェクト
             public Bullet.MagicBullet attackObject;
+            //! 攻撃開始範囲の半径
+            public float radius;
+            //! 攻撃間隔
+            public int attackInterval;
+            //! Animation
+            public Animation animation;
             //! 移動用class
             public CharacterMover mover;
             //! 地面判定
             public Foot foot;
-            //! Animation
-            public Animation animation;
             //! 向き
             public Direction direction;
-            //! 攻撃開始範囲の半径
-            public float radius;
         }
         [System.Serializable]
         public class BulletData
@@ -85,9 +105,6 @@ namespace Enemy01
             base.AddState((int)State.ATTACK, new AttackState(this));
             base.AddState((int)State.FALL, new FallState(this));
             base.ChangeState((int)State.NORMAL);
-
-           // this.parameter = new Enemy01Parameter();
-           // this.parameter.direction = Direction.LEFT;
         }
         // Update is called once per frame
         private void Start()
@@ -170,10 +187,10 @@ namespace Enemy01
                 return true;
             }
             //30count経過したら攻撃モーションへ移行
-            if(base.GetTime() > 30 && base.enemy.TargetDistanceCheck() != null)
+            if(base.GetTime() > base.enemy.GetParameter().attackInterval && base.enemy.TargetDistanceCheck() != null)
             {
-                //manager.SetNextState((int)Enemy01.State.ATTACK);
-                //return true;
+                manager.SetNextState((int)Enemy01.State.ATTACK);
+                return true;
             }
             return false;
         }
