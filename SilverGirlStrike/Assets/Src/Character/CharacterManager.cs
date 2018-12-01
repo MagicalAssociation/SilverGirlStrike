@@ -5,6 +5,7 @@ using UnityEngine;
 //編集履歴
 //2018/11/16 板倉：作成
 //2018/11/24 金子：CharacterManagerにダメージ処理をテスト設置
+//2018/11/30 板倉：予約制を廃止。代わりに、ループの初めに更新が必要なオブジェクトをリストで収集する
 
 
 //AddCharacterで追加 / DeleteCharacterで削除
@@ -25,17 +26,16 @@ public class CharacterManager : MonoBehaviour
     public GameObject characters;
     //管理するオブジェクト(走査用)
     List<CharacterData> objectList;
-    //登録予約、削除予約
-    List<CharacterObject> nextAdd;//インスタンスで
-    List<int> nextDelete;//IDで
+    //更新処理を行うオブジェクトの収集結果を格納するリスト
+    List<CharacterData> activeCharacters;
+
     //管理するオブジェクト(アクセス用)
     Dictionary<string, CharacterData> objects;
 
     private void Awake()
     {
         this.objectList = new List<CharacterData>();
-        this.nextAdd = new List<CharacterObject>();
-        this.nextDelete = new List<int>();
+        this.activeCharacters = new List<CharacterData>();
         this.objects = new Dictionary<string, CharacterData>();
 
         if (this.characters)
@@ -50,8 +50,11 @@ public class CharacterManager : MonoBehaviour
 
     public void FixedUpdate()
     {
+        //更新する必要があるオブジェクトを収集
+        CollectCharacter();
+
         //全てのオブジェクトの更新を行う
-        foreach (var characterData in this.objectList)
+        foreach (var characterData in this.activeCharacters)
         {
             if (characterData != null)
             {
@@ -59,12 +62,17 @@ public class CharacterManager : MonoBehaviour
                 characterData.character.MoveCharacter();
             }
         }
+        //リストを空に
+        this.activeCharacters.Clear();
     }
 
     public void Update()
     {
+        //更新する必要があるオブジェクトを収集
+        CollectCharacter();
+
         //全てのオブジェクトの更新を行う
-        foreach(var characterData in this.objectList)
+        foreach (var characterData in this.activeCharacters)
         {
             if (characterData != null)
             {
@@ -74,29 +82,25 @@ public class CharacterManager : MonoBehaviour
                 characterData.character.GetData().hitPoint.DamageUpdate();
             }
         }
-        //予約されている登録処理を行う
-        foreach(var addCharacter in this.nextAdd)
-        {
-            AddCharacterDirect(addCharacter);
-        }
-        //予約されている削除処理を行う
-        foreach (var deleteCharacter in this.nextDelete)
-        {
-            DeleteCharacterDirect(deleteCharacter);
-        }
 
         //リストを空に
-        this.nextAdd.Clear();
-        this.nextDelete.Clear();
+        this.activeCharacters.Clear();
     }
 
-    //キャラクター追加予約
-    public void AddCharacter(CharacterObject character)
+    void CollectCharacter()
     {
-        this.nextAdd.Add(character);
+        //更新する必要があるオブジェクトを収集
+        foreach (var characterData in this.objectList)
+        {
+            if (characterData != null)
+            {
+                this.activeCharacters.Add(characterData);
+            }
+        }
     }
+
     //実際に生成
-    void AddCharacterDirect(CharacterObject character)
+    public int AddCharacter(CharacterObject character)
     {
         int id = GetUseableID();
         //空きがないので何もできない
@@ -113,21 +117,18 @@ public class CharacterManager : MonoBehaviour
         //登録
         this.objectList[data.id] = data;
         this.objects[data.name] = data;
+
+        return id;
     }
 
-    //キャラを消去予約
-    public void DeleteCharacter(string characterName)
-    {
-        this.nextDelete.Add(this.objects[characterName].id);
-    }
     //キャラを消去、リストからも外す(名前版)
-    void DeleteCharacterDirect(string characterName)
+    public void DeleteCharacter(string characterName)
     {
         var obj = this.objects[characterName];
         DeleteCharacterDirect(obj);
     }
     //キャラを消去、リストからも外す(ID版)
-    void DeleteCharacterDirect(int characterID)
+    public void DeleteCharacter(int characterID)
     {
         var obj = this.objectList[characterID];
         DeleteCharacterDirect(obj);

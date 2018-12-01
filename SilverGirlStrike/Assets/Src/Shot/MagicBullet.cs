@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//変更履歴
+//2018/11/30 板倉：削除処理をIDを用いたものに変更、そのために登録時のIDを取得している
+
 namespace Bullet
 {
     public class MagicBullet : CharacterObject
@@ -23,6 +27,8 @@ namespace Bullet
         //! 寿命
         public int lifeCnt;
         public CharacterManager manager;
+        //自分の登録番号
+        int myselfID;
         BoxCollider2D collider;
         Vector2 move;
         public Mode mode;
@@ -30,7 +36,7 @@ namespace Bullet
         private void Start()
         {
             collider = GetComponent<BoxCollider2D>();
-            manager.AddCharacter(this);
+            this.myselfID = manager.AddCharacter(this);
             base.AddState((int)State.NORMAL, new NormalState(this));
             base.ChangeState((int)State.NORMAL);
         }
@@ -73,7 +79,7 @@ namespace Bullet
          */
         public void Delete()
         {
-            manager.DeleteCharacter(this.name);
+            manager.DeleteCharacter(this.myselfID);
         }
         /**
          * brief    当たり判定
