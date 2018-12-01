@@ -153,10 +153,10 @@ public class CharacterMover : MonoBehaviour {
         {
             return;
         }
-        LayerMask a = new LayerMask();
-        a.value = (int)M_System.LayerName.GROUND;
+        LayerMask mask = new LayerMask();
+        mask.value = (int)M_System.LayerName.GROUND;
         ContactFilter2D filter = new ContactFilter2D();
-        filter.SetLayerMask(a);
+        filter.SetLayerMask(mask);
 
         Vector3 moveUnit = moveVector.normalized * 0.02f;
         while (Vector3.Dot(moveUnit, moveVector) > 0.0f)
@@ -188,35 +188,6 @@ public class CharacterMover : MonoBehaviour {
         this.acvtiveGravity = active;
     }
 
-    //void ChangeFriction(bool isStop)
-    //{       //泊っているときはずり落ち防止で摩擦を十分につける
-    //    if (isStop)
-    //    {
-    //        if (this.rigid.sharedMaterial.friction != 1000)
-    //        {
-    //            this.rigid.sharedMaterial.friction = 1000;
-    //            Collider2D[] result = new Collider2D[10];
-    //            int num = this.rigid.GetAttachedColliders(result);
-    //            for (int i = 0; i < num; ++i)
-    //            {
-    //                result[i].enabled = false;
-    //                result[i].enabled = true;
-    //            }
-    //        }
-    //    }
-    //    else if (this.rigid.sharedMaterial.friction != 0)
-    //    {
-    //        this.rigid.sharedMaterial.friction = 0;
-    //        int num = this.rigid.GetAttachedColliders(result);
-    //        for (int i = 0; i < num; ++i)
-    //        {
-    //            result[i].enabled = false;
-    //            result[i].enabled = true;
-    //        }
-    //    }
-
- 
-    //}
 
     void ChangeNormal(float moveVectorX, Vector2 frontFoot, Vector2 backFoot)
     {
