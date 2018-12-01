@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//変更履歴
+//2018/12/01 板倉：仕様変更。RigidBodyで動かすのをやめ、こっち側で制御しやすいCollisionのみの処理にした
+
 public class CharacterMover : MonoBehaviour {
 
-    Rigidbody2D rigid;
     BoxCollider2D boxCollider2D;
     float fallVelocity;
 
+    //地面の法線を格納
     Vector2 normal;
 
-
-    RaycastHit2D[] resultArray;
-
+    //ヒット結果を格納する配列
     Collider2D[] result;
 
     bool prevOnGround;
@@ -23,10 +25,8 @@ public class CharacterMover : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        this.rigid = this.GetComponent<Rigidbody2D>();
         this.fallVelocity = 0.0f;
 
-        resultArray = new RaycastHit2D[10];
         this.result = new Collider2D[10];
         this.boxCollider2D = GetComponent<BoxCollider2D>();
 
@@ -77,7 +77,7 @@ public class CharacterMover : MonoBehaviour {
             //落下
             this.fallVelocity -= gravity;
             //接地しなくなった際には落下速度リセット
-            if (this.prevOnGround && !onGround)
+            if (onGround)
             {
                 if (this.fallVelocity < 0.0f)
                 {
@@ -92,14 +92,16 @@ public class CharacterMover : MonoBehaviour {
         Vector2 br = (Vector2)this.transform.position;
         br += boxCollider2D.offset + Vector2.right * boxCollider2D.size.x * 0.5f + Vector2.down * boxCollider2D.size.y * 0.5f;
 
-        //向きによってレイの優先度変更
+        //向きによってレイの優先度変更(坂道の時に、より地面に近いほうを採用するため)
         if (movePowerX > 0)
         {
+            //右移動
             br += Vector2.up * 0.1f + new Vector2(movePowerX, 0.0f).normalized * 0.01f;
             ChangeNormal(movePowerX, br, bl);
         }
         else
         {
+            //左移動
             bl += Vector2.up * 0.1f + new Vector2(movePowerX, 0.0f).normalized * 0.01f;
             ChangeNormal(movePowerX, bl, br);
         }
@@ -118,27 +120,57 @@ public class CharacterMover : MonoBehaviour {
             velocityX *= movePowerX / velocityX.x;
         }
 
+        //重力が利いているかどうかで移動処理が変わる
+        Vector3 moveVectorX;
+        Vector3 moveVectorY;
         if (this.acvtiveGravity)
         {
-            this.rigid.velocity = new Vector2(0.0f, this.fallVelocity + movePowerY) + velocityX;
+            moveVectorX = velocityX;
+            moveVectorY = new Vector2(0.0f, this.fallVelocity + movePowerY);
         }
         else
         {
-            this.rigid.velocity = new Vector2(0.0f, movePowerY) + velocityX;
+            moveVectorX = velocityX;
+            moveVectorY = new Vector2(0.0f, movePowerY);
         }
 
-        //泊っているときはずり落ち防止で摩擦を十分につける
-        if (this.rigid.velocity.x == 0 && onGround)
-        {
-            ChangeFriction(true);
-        }
-        else
-        {
-            ChangeFriction(false);
-        }
+
+
+        //実際の移動処理(縦横それぞれ)
+        MoveCharacter((moveVectorX / 50.0f) * (Time.deltaTime * 60.0f));
+        MoveCharacter((moveVectorY / 50.0f) * (Time.deltaTime * 60.0f));
+
+        Debug.Log(moveVectorY);
 
         //接地情報を記録
         this.prevOnGround = onGround;
+    }
+
+    //少しづつ移動して判定
+    void MoveCharacter(Vector3 moveVector)
+    {
+        if(moveVector.magnitude < 0.001f)
+        {
+            return;
+        }
+        LayerMask a = new LayerMask();
+        a.value = (int)M_System.LayerName.GROUND;
+        ContactFilter2D filter = new ContactFilter2D();
+        filter.SetLayerMask(a);
+
+        Vector3 moveUnit = moveVector.normalized * 0.02f;
+        while (Vector3.Dot(moveUnit, moveVector) > 0.0f)
+        {
+            moveVector -= moveUnit;
+            this.transform.position += moveUnit;
+            if(Physics2D.OverlapCollider(this.boxCollider2D, filter, this.result) > 0)
+            {
+                this.transform.position -= moveUnit;
+                break;
+            }
+
+        }
+
     }
 
     //ジャンプ（縦移動力を設定）
@@ -156,35 +188,35 @@ public class CharacterMover : MonoBehaviour {
         this.acvtiveGravity = active;
     }
 
-    void ChangeFriction(bool isStop)
-    {       //泊っているときはずり落ち防止で摩擦を十分につける
-        if (isStop)
-        {
-            if (this.rigid.sharedMaterial.friction != 1000)
-            {
-                this.rigid.sharedMaterial.friction = 1000;
-                Collider2D[] result = new Collider2D[10];
-                int num = this.rigid.GetAttachedColliders(result);
-                for (int i = 0; i < num; ++i)
-                {
-                    result[i].enabled = false;
-                    result[i].enabled = true;
-                }
-            }
-        }
-        else if (this.rigid.sharedMaterial.friction != 0)
-        {
-            this.rigid.sharedMaterial.friction = 0;
-            int num = this.rigid.GetAttachedColliders(result);
-            for (int i = 0; i < num; ++i)
-            {
-                result[i].enabled = false;
-                result[i].enabled = true;
-            }
-        }
+    //void ChangeFriction(bool isStop)
+    //{       //泊っているときはずり落ち防止で摩擦を十分につける
+    //    if (isStop)
+    //    {
+    //        if (this.rigid.sharedMaterial.friction != 1000)
+    //        {
+    //            this.rigid.sharedMaterial.friction = 1000;
+    //            Collider2D[] result = new Collider2D[10];
+    //            int num = this.rigid.GetAttachedColliders(result);
+    //            for (int i = 0; i < num; ++i)
+    //            {
+    //                result[i].enabled = false;
+    //                result[i].enabled = true;
+    //            }
+    //        }
+    //    }
+    //    else if (this.rigid.sharedMaterial.friction != 0)
+    //    {
+    //        this.rigid.sharedMaterial.friction = 0;
+    //        int num = this.rigid.GetAttachedColliders(result);
+    //        for (int i = 0; i < num; ++i)
+    //        {
+    //            result[i].enabled = false;
+    //            result[i].enabled = true;
+    //        }
+    //    }
 
  
-    }
+    //}
 
     void ChangeNormal(float moveVectorX, Vector2 frontFoot, Vector2 backFoot)
     {
