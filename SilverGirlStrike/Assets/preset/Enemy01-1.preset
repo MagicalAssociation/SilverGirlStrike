@@ -5,7 +5,7 @@ Preset:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Enemy01
+  m_Name: Enemy01-1
   m_TargetType:
     m_NativeTypeID: 114
     m_ManagedTypePPtr: {fileID: 11500000, guid: ca5f6756e1b3f3e498e41c4d2f77a272,
@@ -37,6 +37,18 @@ Preset:
     value: 
     objectReference: {fileID: 0}
   - target: {fileID: 0}
+    propertyPath: parameter.radius
+    value: 5.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: parameter.attackInterval
+    value: 30
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: parameter.animation
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
     propertyPath: parameter.mover
     value: 
     objectReference: {fileID: 0}
@@ -45,24 +57,12 @@ Preset:
     value: 
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: parameter.animation
-    value: 
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
     propertyPath: parameter.direction
     value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: parameter.radius
-    value: 5.5
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: bulletData.direction.x
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: bulletData.direction.y
-    value: 0
+    propertyPath: bulletData.angle
+    value: 186
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: bulletData.power
@@ -70,17 +70,17 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: bulletData.speed
-    value: 3
+    value: 0.3
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: bulletData.life
     value: 30
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: target.Array.size
-    value: 1
+    propertyPath: bulletData.target
+    value: 
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: target.Array.data[0]
-    value: 
+    propertyPath: enableGravity
+    value: 1
     objectReference: {fileID: 0}

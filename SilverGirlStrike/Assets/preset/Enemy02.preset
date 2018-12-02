@@ -5,10 +5,10 @@ Preset:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Enemy01
+  m_Name: Enemy02
   m_TargetType:
     m_NativeTypeID: 114
-    m_ManagedTypePPtr: {fileID: 11500000, guid: ca5f6756e1b3f3e498e41c4d2f77a272,
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 2f5b2a9f6f58a4d4f971db0d8506a523,
       type: 3}
     m_ManagedTypeFallback: 
   m_Properties:
@@ -29,58 +29,50 @@ Preset:
     value: 
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: gravity
-    value: 0.8
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: parameter.attackObject
-    value: 
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: parameter.mover
-    value: 
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: parameter.foot
-    value: 
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
     propertyPath: parameter.animation
     value: 
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: parameter.direction
+    propertyPath: parameter.power
     value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: parameter.radius
-    value: 5.5
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: bulletData.direction.x
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: bulletData.direction.y
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: bulletData.power
+    propertyPath: moves.Array.size
     value: 3
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: bulletData.speed
-    value: 3
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: bulletData.life
-    value: 30
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: target.Array.size
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: target.Array.data[0]
+    propertyPath: moves.Array.data[0].targets
     value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: moves.Array.data[0].waitTime
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: moves.Array.data[0].moveTime
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: moves.Array.data[1].targets
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: moves.Array.data[1].waitTime
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: moves.Array.data[1].moveTime
+    value: 20
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: moves.Array.data[2].targets
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: moves.Array.data[2].waitTime
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: moves.Array.data[2].moveTime
+    value: 5
     objectReference: {fileID: 0}

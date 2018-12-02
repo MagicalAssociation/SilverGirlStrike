@@ -8,8 +8,28 @@ using UnityEngine;
  * date     2018/11/27
  * 状態
  *      立ち、攻撃、受け、やられ、落下
+ * GameObject targetになにもいれないと固定方向に攻撃を飛ばします。
+ * targetにオブジェクトを登録するとその方向に攻撃を飛ばします。
 */
-namespace Enemy
+/**
+ * Inspectorの設定値の説明
+ * Gravity このCharacterの重さ
+ * Parameter.AttackObject 攻撃する際に出現させるGameObject
+ *      これ今MagicBulletしか入らない設計しているので今後の実装によっては変化させます
+ * Parameter.Radius このCharacterが攻撃を始める範囲
+ * Parameter.AttackInterval 攻撃の感覚を指定します。
+ * Parameter.Animation アニメーションデータ
+ * Parameter.Mover 自動で入るので放置で構いません
+ * Parameter.Foot このGameObjectの子にFoot.csこみのGameObjectをいれておいてください、入れるのは自動です
+ * Parameter.Direction 自動で入るので放置で
+ * BulletData.Angle 弾を飛ばす方向
+ * BulletData.power ダメージ値
+ * BulletData.Speed 弾の飛ぶ速度
+ * BulletData.Life 生存するカウント数
+ * BulletData.Target 指定オブジェクトの方向に攻撃を飛ばす、ここに何も入っていない時に指定角度で弾を飛ばします
+ * EnableGravity このCharacterに重力を適用するかです。外れている場合落下もせず、FallStateにもなりません。
+ */
+namespace Enemy01
 {
     /**
      * brief    エネミー01
@@ -39,35 +59,41 @@ namespace Enemy
         {
             //! 生成する攻撃オブジェクト
             public Bullet.MagicBullet attackObject;
+            //! 攻撃開始範囲の半径
+            public float radius;
+            //! 攻撃間隔
+            public int attackInterval;
+            //! Animation
+            public Animation animation;
             //! 移動用class
             public CharacterMover mover;
             //! 地面判定
             public Foot foot;
-            //! Animation
-            public Animation animation;
             //! 向き
             public Direction direction;
-            //! 攻撃開始範囲の半径
-            public float radius;
-            //! 登録用のCharacterManager
-            //public CharacterManager manager;
         }
         [System.Serializable]
         public class BulletData
         {
-            public Vector2 direction;
+            [Range(0.0f,360.0f)]
+            public float angle;
             public int power;
             public float speed;
             public int life;
+            public GameObject target;
         }
         //! 重力
         public float gravity;
         //! Parameter
         public Enemy01Parameter parameter;
         //! 生成するBulletのデータ
-        public BulletData data;
-        //! 攻撃するターゲット
-        public GameObject[] target;
+        public BulletData bulletData;
+        //! 当たり判定
+        BoxCollider2D collider;
+        //! 攻撃範囲
+        CircleCollider2D circleCollider;
+        //! 重力の有効化設定
+        public bool enableGravity;
         /**
          * brief    constructor
          */
@@ -79,15 +105,14 @@ namespace Enemy
             base.AddState((int)State.ATTACK, new AttackState(this));
             base.AddState((int)State.FALL, new FallState(this));
             base.ChangeState((int)State.NORMAL);
-
-            this.parameter = new Enemy01Parameter();
-            this.parameter.direction = Direction.LEFT;
         }
         // Update is called once per frame
         private void Start()
         {
             parameter.mover = GetComponent<CharacterMover>();
-            parameter.foot = transform.GetComponentInChildren<Foot>();
+            parameter.foot = this.transform.GetComponentInChildren<Foot>();
+            this.collider = GetComponent<BoxCollider2D>();
+            this.circleCollider = GetComponent<CircleCollider2D>();
         }
         public override void UpdateCharacter()
         {
@@ -101,7 +126,7 @@ namespace Enemy
         }
         public override void MoveCharacter()
         {
-            parameter.mover.UpdateVelocity(0, 0, this.gravity, parameter.foot.CheckHit());
+            parameter.mover.UpdateVelocity(0, 0, this.enableGravity ? this.gravity : 0.0f, parameter.foot.CheckHit());
         }
         /**
          * brief    Enemy01専用のパラメータデータ取得
@@ -112,22 +137,15 @@ namespace Enemy
         }
         /**
          * brief    攻撃するターゲットが近くにいるか返す
-         * return bool 近場にいればtrue
+         * return Collider2D 円の判定
          */
-         public bool TargetDistanceCheck()
+         public Collider2D TargetDistanceCheck()
         {
-            for (int i = 0; i < target.Length; ++i)
-            {
-                if (
-                    (this.transform.position.x - this.target[i].transform.position.x) * (this.transform.position.x - this.target[i].transform.position.x) +
-                     (this.transform.position.y - this.target[i].transform.position.y) * (this.transform.position.y - this.target[i].transform.position.y) <=
-                     this.parameter.radius * this.parameter.radius
-                    )
-                {
-                    return true;
-                }
-            }
-            return false;
+            return Physics2D.OverlapCircle(
+                   this.circleCollider.transform.position,
+                   this.circleCollider.radius,
+                   (int)M_System.LayerName.PLAYER
+                   );
         }
     }
     /**
@@ -163,13 +181,13 @@ namespace Enemy
 
         public override bool Transition(ref StateManager manager)
         {
-            if(!enemy.GetParameter().foot.CheckHit())
+            if(!enemy.GetParameter().foot.CheckHit() && this.enemy.enableGravity)
             {
                 manager.SetNextState((int)Enemy01.State.FALL);
                 return true;
             }
             //30count経過したら攻撃モーションへ移行
-            if(base.GetTime() > 30)
+            if(base.GetTime() > base.enemy.GetParameter().attackInterval && base.enemy.TargetDistanceCheck() != null)
             {
                 manager.SetNextState((int)Enemy01.State.ATTACK);
                 return true;
@@ -227,15 +245,17 @@ namespace Enemy
         {
             Bullet.MagicBullet bullet = Object.Instantiate(base.enemy.GetParameter().attackObject, base.enemy.transform.position, Quaternion.identity) as Bullet.MagicBullet;
             bullet.SetAttackData(new AttackData(base.enemy));
-            bullet.GetAttackData().power = base.enemy.data.power;
-            bullet.lifeCnt = base.enemy.data.life;
-            bullet.moveSpeed = base.enemy.data.speed;
-            Vector2 dire = base.enemy.data.direction;
-            if (this.enemy.GetParameter().direction == Enemy01.Direction.LEFT)
+            bullet.GetAttackData().power = base.enemy.bulletData.power;
+            bullet.lifeCnt = base.enemy.bulletData.life;
+            bullet.moveSpeed = base.enemy.bulletData.speed;
+            if(this.enemy.bulletData.target != null)
             {
-                dire.x *= -1.0f;
+                bullet.SetShotTarget(this.enemy.bulletData.target);
             }
-            bullet.GetAttackData().direction = dire;
+            else
+            {
+                bullet.SetShotAngle(this.enemy.bulletData.angle);
+            }
         }
     }
     /**
