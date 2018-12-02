@@ -50,20 +50,7 @@ public class CharacterManager : MonoBehaviour
 
     public void FixedUpdate()
     {
-        //更新する必要があるオブジェクトを収集
-        CollectCharacter();
 
-        //全てのオブジェクトの更新を行う
-        foreach (var characterData in this.activeCharacters)
-        {
-            if (characterData != null)
-            {
-                //物理系に干渉する動作はFixedUpdate()でやる
-                characterData.character.MoveCharacter();
-            }
-        }
-        //リストを空に
-        this.activeCharacters.Clear();
     }
 
     public void Update()
@@ -74,13 +61,11 @@ public class CharacterManager : MonoBehaviour
         //全てのオブジェクトの更新を行う
         foreach (var characterData in this.activeCharacters)
         {
-            if (characterData != null)
-            {
-                characterData.character.UpdateCharacter();
-                characterData.character.ApplyDamage();
-                //追加処理：ダメージ適用
-                characterData.character.GetData().hitPoint.DamageUpdate();
-            }
+            characterData.character.UpdateCharacter();
+            characterData.character.ApplyDamage();
+            //追加処理：ダメージ適用
+            characterData.character.GetData().hitPoint.DamageUpdate();
+            characterData.character.MoveCharacter();
         }
 
         //リストを空に

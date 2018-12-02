@@ -34,6 +34,6 @@ public class ObjectChaser : MonoBehaviour {
         }
 
         //相対位置分だけずらして追尾
-        this.transform.position += (this.chaseTarget.position + this.relativePosition - this.transform.position) * this.chasePower;
+        this.transform.position += (this.chaseTarget.position + this.relativePosition - this.transform.position) * this.chasePower * (Time.deltaTime * 60.0f);
 	}
 }
