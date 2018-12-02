@@ -75,7 +75,7 @@ public class CharacterMover : MonoBehaviour {
         if (this.acvtiveGravity)
         {
             //落下
-            this.fallVelocity -= gravity;
+            this.fallVelocity -= gravity * (Time.deltaTime * 60.0f);
             //接地しなくなった際には落下速度リセット
             if (onGround)
             {
@@ -111,6 +111,12 @@ public class CharacterMover : MonoBehaviour {
         {
             this.normal = Vector2.zero;
         }
+        //法線の角度（坂道の傾き）によって坂扱いか壁扱いかを決める
+        if(Mathf.Abs(Vector3.Angle(Vector3.up, this.normal)) < 45.0f * Mathf.Deg2Rad)
+        {
+            this.normal = Vector2.zero;
+        }
+
 
         Vector2 velocityX = new Vector2(movePowerX, 0.0f);
         //かべずり
@@ -140,16 +146,16 @@ public class CharacterMover : MonoBehaviour {
         MoveCharacter((moveVectorX / 50.0f) * (Time.deltaTime * 60.0f));
         MoveCharacter((moveVectorY / 50.0f) * (Time.deltaTime * 60.0f));
 
-        Debug.Log(moveVectorY);
-
         //接地情報を記録
         this.prevOnGround = onGround;
+
+
     }
 
     //少しづつ移動して判定
     void MoveCharacter(Vector3 moveVector)
     {
-        if(moveVector.magnitude < 0.001f)
+        if (moveVector.magnitude < 0.001f)
         {
             return;
         }
@@ -158,17 +164,18 @@ public class CharacterMover : MonoBehaviour {
         ContactFilter2D filter = new ContactFilter2D();
         filter.SetLayerMask(mask);
 
-        Vector3 moveUnit = moveVector.normalized * 0.02f;
-        while (Vector3.Dot(moveUnit, moveVector) > 0.0f)
-        {
-            moveVector -= moveUnit;
-            this.transform.position += moveUnit;
-            if(Physics2D.OverlapCollider(this.boxCollider2D, filter, this.result) > 0)
-            {
-                this.transform.position -= moveUnit;
-                break;
-            }
+        Debug.Log(this.boxCollider2D.size);
 
+        //判定付きで移動
+        var hitResult = Physics2D.BoxCast(this.transform.position, this.boxCollider2D.size, 0.0f, moveVector.normalized, moveVector.magnitude, (int)M_System.LayerName.GROUND);
+        if (hitResult.collider != null)
+        {
+            float fraction = hitResult.fraction - 0.1f;
+            this.transform.position += moveVector * (fraction);
+        }
+        else
+        {
+            this.transform.position += moveVector;
         }
 
     }
