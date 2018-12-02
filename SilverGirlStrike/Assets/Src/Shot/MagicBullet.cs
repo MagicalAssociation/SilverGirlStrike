@@ -170,7 +170,6 @@ namespace Bullet
                     //hit.GetComponent<CharacterObject>().GetData().hitPoint.Damage(base.bullet.GetAttackData().power);
                     hit.GetComponent<CharacterObject>().Damage(this.bullet.GetAttackData());
                     base.bullet.Delete();
-                    Debug.Log("PlayerHit");
                     return;
                 }
             }
@@ -178,7 +177,6 @@ namespace Bullet
             if(base.GetTime() > base.bullet.lifeCnt)
             {
                 base.bullet.Delete();
-                Debug.Log("寿命");
                 return;
             }
         }

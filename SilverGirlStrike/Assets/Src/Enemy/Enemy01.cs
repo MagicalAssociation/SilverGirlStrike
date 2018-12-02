@@ -120,9 +120,15 @@ namespace Enemy01
         }
         public override void Damage(AttackData data)
         {
+            this.GetData().hitPoint.Damage(data.power);
         }
         public override void ApplyDamage()
         {
+            this.GetData().hitPoint.DamageUpdate();
+            if(this.GetData().hitPoint.GetHP() <= 0)
+            {
+                
+            }
         }
         public override void MoveCharacter()
         {

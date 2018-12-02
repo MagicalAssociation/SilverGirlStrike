@@ -16,15 +16,15 @@ using UnityEngine;
  * Moves.Target 移動先GameObject
  * Moves.WaitTime ↑へ移動する前に待機している時間
  * Moves.MoveTime ↑へ移動する時間を指定
- */ 
-namespace Enemy02
+ */
+namespace Enemy03
 {
-    public class Enemy02 : CharacterObject
+    public class Enemy03 : CharacterObject
     {
         /**
          * enum State
          */
-         public enum State
+        public enum State
         {
             //! 待機
             WAIT,
@@ -32,10 +32,10 @@ namespace Enemy02
             MOVE,
         }
         /**
-         * brief    エネミー02用パラメータデータ
+         * brief    エネミー03用パラメータデータ
          */
         [System.Serializable]
-        public class Enemy02Parameter
+        public class Enemy03Parameter
         {
             //! アニメーション用class
             public Animation animation;
@@ -43,47 +43,57 @@ namespace Enemy02
             public int power;
         }
         /**
-         * brief    移動用変数をまとめたclass
-         */ 
+         * brief    停止用データ
+         */
         [System.Serializable]
-        public class Moves
+        public class StopData
         {
-            //! 移動先ターゲット
-            public GameObject targets;
-            //! 待ち時間
             public int waitTime;
-            //! ターゲットまでの移動時間
-            public float moveTime;
+            public int stopTime;
+        }
+        /**
+         * brief    移動用変数をまとめたclass
+         */
+        [System.Serializable]
+        public class Move
+        {
+            //! 移動速度
+            public float speed;
+            //! 移動半径
+            public float radius;
+            //! 回転軸の移動倍率
+            public Vector2 magnification;
+            //! 停止時間とそのタイミング
+            public StopData[] stopDatas;
         }
         //! 固有パラメータデータ
-        public Enemy02Parameter parameter;
+        public Enemy03Parameter parameter;
         //! 移動用データの配列
-        public Moves[] moves;
-        //! 現在の移動データ番号
-        private int nowNum;
-        //! 位置情報 !移動はこの値を書き変え、そのままGameObjectに渡します! ※Easingを使って移動しようとしたらこの形が計算少なく済んだ
+        public Move move;
+        //! 移動の中心位置
+        private Vector2 originPos;
+        //! 現在位置
         private Vector2 pos;
         //! 攻撃データ
         private AttackData attackData;
         //! 自身のBoxの当たり判定
         private BoxCollider2D collider;
-        public Enemy02()
+        public Enemy03()
             //! life
-            :base(10)
+            : base(10)
         {
             //各ステートを登録&適用
             base.AddState((int)State.MOVE, new MoveState(this));
             base.AddState((int)State.WAIT, new WaitState(this));
-            base.ChangeState((int)State.WAIT);
-            this.pos = new Vector2();
-            this.nowNum = 0;
+            base.ChangeState((int)State.MOVE);
+            this.originPos = new Vector2();
             this.attackData = new AttackData(this);
         }
         private void Start()
         {
             //今の位置をいれておく
-            this.pos = this.transform.localPosition;
-            this.collider =  GetComponent<BoxCollider2D>();
+            this.originPos = this.transform.localPosition;
+            this.collider = GetComponent<BoxCollider2D>();
             this.attackData.power = this.parameter.power;
         }
 
@@ -92,7 +102,7 @@ namespace Enemy02
             this.UpdateState();
             //プレイヤーと当たったらダメージ処理
             Collider2D hit = this.Hit();
-            if(hit)
+            if (hit)
             {
                 hit.GetComponent<CharacterObject>().Damage(this.attackData);
             }
@@ -106,7 +116,7 @@ namespace Enemy02
         public override void ApplyDamage()
         {
             this.GetData().hitPoint.DamageUpdate();
-            if(this.GetData().hitPoint.GetHP() <= 0)
+            if (this.GetData().hitPoint.GetHP() <= 0)
             {
 
             }
@@ -118,40 +128,32 @@ namespace Enemy02
         }
         /**
          * brief    固有データを取得する
-         * return Enemy02Parameter ThisParameter
-         */ 
-        public Enemy02Parameter GetParameter()
+         * return Enemy03Parameter ThisParameter
+         */
+        public Enemy03Parameter GetParameter()
         {
             return this.parameter;
         }
         /**
-         * brief    現在の配列番号
-         * return int 配列番号
-         */ 
-        public int GetNowNum()
-        {
-            return this.nowNum;
-        }
-        /**
-         * brief    配列番号を指定
-         * param[in] int num 指定値
-         */ 
-        public void SetNowNum(int num)
-        {
-            this.nowNum = num;
-        }
-        /**
          * brief    位置を指定
          * param[in] Vector2 move 移動後位置
-         */ 
+         */
         public void SetPos(Vector2 move)
         {
             this.pos = move;
         }
         /**
+         * brief    原点を取得
+         * return Vector2 原点
+         */
+         public Vector2 GetOriginPos()
+        {
+            return this.originPos;
+        }
+        /**
          * brief    当たり判定
          * return Collider2D 当たったオブジェクト
-         */ 
+         */
         private Collider2D Hit()
         {
             return Physics2D.OverlapBox(
@@ -167,8 +169,8 @@ namespace Enemy02
      */
     public abstract class BaseState : StateParameter
     {
-        public Enemy02 enemy;
-        public BaseState(Enemy02 enemy)
+        public Enemy03 enemy;
+        public BaseState(Enemy03 enemy)
         {
             this.enemy = enemy;
         }
@@ -178,59 +180,32 @@ namespace Enemy02
      */
     public class MoveState : BaseState
     {
-        //! x座標Easing
-        Easing move_x;
-        //! y座標Easing
-        Easing move_y;
         //! 移動量とかターゲット位置とかの取得用
-        Enemy02.Moves moveData;
-        public MoveState(Enemy02 enemy) 
+        Enemy03.Move moveData;
+        public MoveState(Enemy03 enemy)
             : base(enemy)
         {
-            this.move_x = new Easing();
-            this.move_y = new Easing();
         }
 
         public override void Enter(ref StateManager manager)
         {
             //次自分が向かうMovesのデータを取得
-            this.moveData = base.enemy.moves[base.enemy.GetNowNum()];
-            //Easingを登録
-            move_x.Set(this.enemy.transform.position.x, this.moveData.targets.transform.position.x - this.enemy.transform.position.x);
-            move_y.Set(this.enemy.transform.position.y, this.moveData.targets.transform.position.y - this.enemy.transform.position.y);
         }
 
         public override void Exit(ref StateManager manager)
         {
-            //各値リセット
-            base.ResetTime();
-            this.move_x.ResetTime();
-            this.move_y.ResetTime();
-            //次の移動配列へ、配列の最後だったら0に戻す
-            base.enemy.SetNowNum(base.enemy.GetNowNum() + 1);
-            if (base.enemy.moves.Length <= base.enemy.GetNowNum())
-            {
-                base.enemy.SetNowNum(0);
-            }
         }
 
         public override bool Transition(ref StateManager manager)
         {
-            //移動が終わったらWAITへ移行
-            if (!this.move_x.IsPlay() && !this.move_y.IsPlay())
-            {
-                manager.SetNextState((int)Enemy02.State.WAIT);
-                return true;
-            }
             return false;
         }
 
         public override void Update()
         {
             base.TimeUp(1);
-            //移動値を登録
-            base.enemy.SetPos(new Vector2(this.move_x.linear.None(this.move_x.Time(this.moveData.moveTime), this.move_x.GetStartValue(), this.move_x.GetEndValue(), this.moveData.moveTime),
-                this.move_y.linear.None(this.move_y.Time(this.moveData.moveTime), this.move_y.GetStartValue(), this.move_y.GetEndValue(), this.moveData.moveTime)));
+            this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(base.GetTime() * this.enemy.move.speed) * this.enemy.move.radius * this.enemy.move.magnification.x),
+                this.enemy.GetOriginPos().y + (Mathf.Cos(base.GetTime() * this.enemy.move.speed) * this.enemy.move.radius) * this.enemy.move.magnification.y));
         }
     }
     /**
@@ -238,7 +213,7 @@ namespace Enemy02
      */
     public class WaitState : BaseState
     {
-        public WaitState(Enemy02 enemy) 
+        public WaitState(Enemy03 enemy)
             : base(enemy)
         {
         }
@@ -254,21 +229,13 @@ namespace Enemy02
 
         public override bool Transition(ref StateManager manager)
         {
-            if(base.enemy.moves.Length == 0)
-            {
-                return false;
-            }
-            if(base.enemy.moves[base.enemy.GetNowNum()].waitTime <= base.GetTime())
-            {
-               manager.SetNextState((int)Enemy02.State.MOVE);
-                return true;
-            }
             return false;
         }
 
         public override void Update()
         {
             base.TimeUp(1);
+
         }
     }
 }
