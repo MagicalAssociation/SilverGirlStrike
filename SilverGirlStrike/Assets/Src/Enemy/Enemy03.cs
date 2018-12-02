@@ -198,14 +198,23 @@ namespace Enemy03
 
         public override bool Transition(ref StateManager manager)
         {
+            if (Mathf.Sin((int)this.ToRadius(base.GetTime())) == 0 && Mathf.Cos((int)this.ToRadius(base.GetTime())) == 1) 
+            {
+                Debug.Log("aaa");
+            }
             return false;
         }
 
         public override void Update()
         {
             base.TimeUp(1);
-            this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(base.GetTime() * this.enemy.move.speed) * this.enemy.move.radius * this.enemy.move.magnification.x),
-                this.enemy.GetOriginPos().y + (Mathf.Cos(base.GetTime() * this.enemy.move.speed) * this.enemy.move.radius) * this.enemy.move.magnification.y));
+            this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) * this.enemy.move.radius * this.enemy.move.magnification.x),
+                this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) * this.enemy.move.radius) * this.enemy.move.magnification.y));
+            Debug.DrawRay(this.enemy.transform.localPosition, /*this.enemy.transform.localPosition*/new Vector3(1,0),Color.red,10.0f);
+        }
+        private float ToRadius(float angle)
+        {
+            return (angle * Mathf.PI) / 180.0f;
         }
     }
     /**
