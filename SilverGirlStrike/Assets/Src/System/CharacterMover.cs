@@ -164,18 +164,22 @@ public class CharacterMover : MonoBehaviour {
         ContactFilter2D filter = new ContactFilter2D();
         filter.SetLayerMask(mask);
 
-        Debug.Log(this.boxCollider2D.size);
+        //Debug.Log(this.boxCollider2D.size);
 
         //判定付きで移動
-        var hitResult = Physics2D.BoxCast(this.transform.position, this.boxCollider2D.size, 0.0f, moveVector.normalized, moveVector.magnitude, (int)M_System.LayerName.GROUND);
+        var a = new Vector2(this.transform.position.x, this.transform.position.y) + this.boxCollider2D.offset;
+        var hitResult = Physics2D.BoxCast(a, this.boxCollider2D.size, 0.0f, moveVector.normalized, moveVector.magnitude, (int)M_System.LayerName.GROUND);
         if (hitResult.collider != null)
         {
-            float fraction = hitResult.fraction - 0.1f;
+            float fraction = hitResult.fraction;
             this.transform.position += moveVector * (fraction);
+            Debug.Log("Fragtion:" + fraction.ToString());
+        this.transform.position -= moveVector.normalized * 0.1f;
         }
         else
         {
             this.transform.position += moveVector;
+            Debug.Log("nonFragtion");
         }
 
     }
