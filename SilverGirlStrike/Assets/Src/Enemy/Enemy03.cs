@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 /**
- * file     Enemy02.cs
+ * file     Enemy03.cs
  * brief    敵Class
  * author   Shou Kaneko
- * date     2018/11/30
+ * date     2018/12/01
  * 状態
  *      待ち、移動
 */
@@ -13,9 +13,14 @@ using UnityEngine;
  * Inspectorの設定値の説明
  * Parameter.Animation アニメーションデータ
  * Parameter.Power ダメージ値
- * Moves.Target 移動先GameObject
- * Moves.WaitTime ↑へ移動する前に待機している時間
- * Moves.MoveTime ↑へ移動する時間を指定
+ * Move.Speed 移動速度 1で1週に360フレームかかる感じ
+ * Move.Radius 半径
+ * Move.Magnification 半径倍率
+ *      基本値1でこの値を増やしたり減らしたりして楕円等の移動を作る
+ * StopDatas 停止タイミングと停止時間の設定
+ *      停止タイミングは0に近い順にいれてください。1週にかかる時間以上を設定している場合無視されます。
+ * StopDatas.WaitTime 停止時間、カウント数です。
+ * StopDatas.StopTime 停止を行うカウント数。1なら移動処理1カウント目に停止します。
  */
 namespace Enemy03
 {
@@ -78,6 +83,8 @@ namespace Enemy03
         private AttackData attackData;
         //! 自身のBoxの当たり判定
         private BoxCollider2D collider;
+        //! 停止データの配列位置番号
+        private int nowNum;
         public Enemy03()
             //! life
             : base(10)
@@ -88,6 +95,7 @@ namespace Enemy03
             base.ChangeState((int)State.MOVE);
             this.originPos = new Vector2();
             this.attackData = new AttackData(this);
+            this.nowNum = 0;
         }
         private void Start()
         {
@@ -163,6 +171,40 @@ namespace Enemy03
                     (int)M_System.LayerName.PLAYER
                     );
         }
+        /**
+         * brief    現在の停止位置の配列番号のデータを返す
+         * return StopData 位置と時間の入ったclass
+         */
+         public StopData GetStopData()
+        {
+            return this.move.stopDatas[this.nowNum];
+        }
+        /**
+         * brief    停止位置を次に移行する
+         * 次がない場合は最初に戻る
+         */
+         public void NextStopData()
+        {
+            this.nowNum++;
+            if(this.move.stopDatas.Length <= this.nowNum)
+            {
+                this.nowNum = 0;
+            }
+        }
+        /**
+         * brief    停止配列の位置を最初に戻す
+         */
+         public void StartStopData()
+        {
+            this.nowNum = 0;
+        }
+        /**
+         * brief    Sceneに自分の通った道に点を置くDebug処理
+         */
+         public void DebugDrawPointer()
+        {
+            Debug.DrawRay(this.transform.localPosition, new Vector3(0.1f, 0), Color.red, 10.0f);
+        }
     }
     /**
      * brief    元となるState
@@ -198,9 +240,10 @@ namespace Enemy03
 
         public override bool Transition(ref StateManager manager)
         {
-            if (Mathf.Sin((int)this.ToRadius(base.GetTime())) == 0 && Mathf.Cos((int)this.ToRadius(base.GetTime())) == 1) 
+            if(this.enemy.GetStopData().stopTime == base.GetTime())
             {
-                Debug.Log("aaa");
+                manager.SetNextState((int)Enemy03.State.WAIT);
+                return true;
             }
             return false;
         }
@@ -210,7 +253,12 @@ namespace Enemy03
             base.TimeUp(1);
             this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) * this.enemy.move.radius * this.enemy.move.magnification.x),
                 this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) * this.enemy.move.radius) * this.enemy.move.magnification.y));
-            Debug.DrawRay(this.enemy.transform.localPosition, /*this.enemy.transform.localPosition*/new Vector3(1,0),Color.red,10.0f);
+            //1週判定
+            if ((int)Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 0 && (int)Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 1)
+            {
+                base.ResetTime();
+                this.enemy.StartStopData();
+            }
         }
         private float ToRadius(float angle)
         {
@@ -234,10 +282,16 @@ namespace Enemy03
         public override void Exit(ref StateManager manager)
         {
             base.ResetTime();
+            this.enemy.NextStopData();
         }
 
         public override bool Transition(ref StateManager manager)
         {
+            if (this.enemy.GetStopData().waitTime == this.GetTime())
+            {
+                manager.SetNextState((int)Enemy03.State.MOVE);
+                return true;
+            }
             return false;
         }
 

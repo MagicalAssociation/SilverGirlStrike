@@ -6586,6 +6586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaseTarget: {fileID: 1709615928}
+  chasePower: 0
 --- !u!1 &520684887
 GameObject:
   m_ObjectHideFlags: 0
@@ -10659,10 +10660,18 @@ MonoBehaviour:
     animation: {fileID: 0}
     power: 0
   move:
-    speed: 30
+    speed: 1
     radius: 1.5
     magnification: {x: 1, y: 1}
-    stopDatas: []
+    stopDatas:
+    - waitTime: 10
+      stopTime: 90
+    - waitTime: 10
+      stopTime: 180
+    - waitTime: 10
+      stopTime: 270
+    - waitTime: 10
+      stopTime: 360
 --- !u!212 &837895782
 SpriteRenderer:
   m_ObjectHideFlags: 0
