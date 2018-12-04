@@ -48,10 +48,6 @@ public class M_System : MonoBehaviour
         //音の設定を行う
         GetComponent<SoundInitializer>().CreateSoundSource();
 
-        Time.fixedDeltaTime = 1.0f / 60.0f;
-        Time.maximumDeltaTime = 1.0f / 30.0f;
-        QualitySettings.vSyncCount = 0;
-
         Cursor.visible = true;
     }
 
