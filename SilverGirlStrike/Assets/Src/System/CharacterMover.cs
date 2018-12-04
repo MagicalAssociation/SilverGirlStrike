@@ -173,13 +173,11 @@ public class CharacterMover : MonoBehaviour {
         {
             float fraction = hitResult.fraction;
             this.transform.position += moveVector * (fraction);
-            Debug.Log("Fragtion:" + fraction.ToString());
         this.transform.position -= moveVector.normalized * 0.1f;
         }
         else
         {
             this.transform.position += moveVector;
-            Debug.Log("nonFragtion");
         }
 
     }

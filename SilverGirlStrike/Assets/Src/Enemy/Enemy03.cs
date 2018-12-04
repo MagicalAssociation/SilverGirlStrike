@@ -11,11 +11,12 @@ using UnityEngine;
 */
 /**
  * Inspectorの設定値の説明
+ * Parameter.MaxHP 最大HP
  * Parameter.Animation アニメーションデータ
  * Parameter.Power ダメージ値
  * Move.Speed 移動速度 1で1週に360フレームかかる感じ
  * Move.Radius 半径
- * Move.Magnification 半径倍率
+ * Move.Scale 半径倍率
  *      基本値1でこの値を増やしたり減らしたりして楕円等の移動を作る
  * StopDatas 停止タイミングと停止時間の設定
  *      停止タイミングは0に近い順にいれてください。1週にかかる時間以上を設定している場合無視されます。
@@ -37,15 +38,27 @@ namespace Enemy03
             MOVE,
         }
         /**
+         * enum Direction
+         */
+         public enum Direction
+        {
+            LEFT = 1,
+            RIGHT = -1
+        }
+        /**
          * brief    エネミー03用パラメータデータ
          */
         [System.Serializable]
         public class Enemy03Parameter
         {
+            //! 最大HP
+            public int maxHP;
             //! アニメーション用class
-            public Animation animation;
+            public Animator animation;
             //! ダメージ量
             public int power;
+            //! 向き情報
+            public Direction direction;
         }
         /**
          * brief    停止用データ
@@ -67,7 +80,7 @@ namespace Enemy03
             //! 移動半径
             public float radius;
             //! 回転軸の移動倍率
-            public Vector2 magnification;
+            public Vector2 scale;
             //! 停止時間とそのタイミング
             public StopData[] stopDatas;
         }
@@ -77,6 +90,8 @@ namespace Enemy03
         public Move move;
         //! 移動の中心位置
         private Vector2 originPos;
+        //! 前回の位置
+        private Vector2 prePos;
         //! 現在位置
         private Vector2 pos;
         //! 攻撃データ
@@ -89,10 +104,6 @@ namespace Enemy03
             //! life
             : base(10)
         {
-            //各ステートを登録&適用
-            base.AddState((int)State.MOVE, new MoveState(this));
-            base.AddState((int)State.WAIT, new WaitState(this));
-            base.ChangeState((int)State.MOVE);
             this.originPos = new Vector2();
             this.attackData = new AttackData(this);
             this.nowNum = 0;
@@ -101,8 +112,15 @@ namespace Enemy03
         {
             //今の位置をいれておく
             this.originPos = this.transform.localPosition;
+            this.prePos = this.originPos;
             this.collider = GetComponent<BoxCollider2D>();
             this.attackData.power = this.parameter.power;
+            this.parameter.animation = GetComponent<Animator>();
+            this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
+            //各ステートを登録&適用
+            base.AddState((int)State.MOVE, new MoveState(this));
+            base.AddState((int)State.WAIT, new WaitState(this));
+            base.ChangeState((int)State.MOVE);
         }
 
         public override void UpdateCharacter()
@@ -132,7 +150,17 @@ namespace Enemy03
 
         public override void MoveCharacter()
         {
+            this.prePos = this.transform.localPosition;
             this.transform.localPosition = new Vector3(pos.x, pos.y, this.transform.position.z);
+            if(this.transform.localPosition.x > this.prePos.x)
+            {
+                this.parameter.direction = Direction.RIGHT;
+            }
+            else if(this.transform.localPosition.x < this.prePos.x)
+            {
+                this.parameter.direction = Direction.LEFT;
+            }
+            this.transform.localScale = new Vector3((int)this.parameter.direction, 1, 1);
         }
         /**
          * brief    固有データを取得する
@@ -231,7 +259,7 @@ namespace Enemy03
 
         public override void Enter(ref StateManager manager)
         {
-            //次自分が向かうMovesのデータを取得
+            this.enemy.parameter.animation.Play("Move");
         }
 
         public override void Exit(ref StateManager manager)
@@ -251,8 +279,8 @@ namespace Enemy03
         public override void Update()
         {
             base.TimeUp(1);
-            this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) * this.enemy.move.radius * this.enemy.move.magnification.x),
-                this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) * this.enemy.move.radius) * this.enemy.move.magnification.y));
+            this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) * this.enemy.move.radius * this.enemy.move.scale.x),
+                this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) * this.enemy.move.radius) * this.enemy.move.scale.y));
             //1週判定
             if ((int)Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 0 && (int)Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 1)
             {
@@ -277,6 +305,7 @@ namespace Enemy03
 
         public override void Enter(ref StateManager manager)
         {
+            this.enemy.parameter.animation.Play("Normal");
         }
 
         public override void Exit(ref StateManager manager)

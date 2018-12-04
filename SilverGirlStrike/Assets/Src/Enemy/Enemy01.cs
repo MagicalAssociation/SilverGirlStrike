@@ -14,6 +14,7 @@ using UnityEngine;
 /**
  * Inspectorの設定値の説明
  * Gravity このCharacterの重さ
+ * Parameter.MaxHP 最大HP
  * Parameter.AttackObject 攻撃する際に出現させるGameObject
  *      これ今MagicBulletしか入らない設計しているので今後の実装によっては変化させます
  * Parameter.Radius このCharacterが攻撃を始める範囲
@@ -57,6 +58,8 @@ namespace Enemy01
         [System.Serializable]
         public class Enemy01Parameter
         {
+            //! 最大HP
+            public int maxHP;
             //! 生成する攻撃オブジェクト
             public Bullet.MagicBullet attackObject;
             //! 攻撃開始範囲の半径
@@ -64,7 +67,7 @@ namespace Enemy01
             //! 攻撃間隔
             public int attackInterval;
             //! Animation
-            public Animation animation;
+            public Animator animation;
             //! 移動用class
             public CharacterMover mover;
             //! 地面判定
@@ -100,11 +103,6 @@ namespace Enemy01
         public Enemy01()
             :base(10)
         {
-            //!-ステートデータを登録＆初期値の設定-!//
-            base.AddState((int)State.NORMAL, new NormalState(this));
-            base.AddState((int)State.ATTACK, new AttackState(this));
-            base.AddState((int)State.FALL, new FallState(this));
-            base.ChangeState((int)State.NORMAL);
         }
         // Update is called once per frame
         private void Start()
@@ -113,6 +111,14 @@ namespace Enemy01
             parameter.foot = this.transform.GetComponentInChildren<Foot>();
             this.collider = GetComponent<BoxCollider2D>();
             this.circleCollider = GetComponent<CircleCollider2D>();
+
+            this.parameter.animation = GetComponent<Animator>();
+            this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
+            //!-ステートデータを登録＆初期値の設定-!//
+            base.AddState((int)State.NORMAL, new NormalState(this));
+            base.AddState((int)State.ATTACK, new AttackState(this));
+            base.AddState((int)State.FALL, new FallState(this));
+            base.ChangeState((int)State.NORMAL);
         }
         public override void UpdateCharacter()
         {
@@ -178,6 +184,7 @@ namespace Enemy01
 
         public override void Enter(ref StateManager manager)
         {
+            this.enemy.parameter.animation.Play("Normal");
         }
 
         public override void Exit(ref StateManager manager)
@@ -218,6 +225,7 @@ namespace Enemy01
 
         public override void Enter(ref StateManager manager)
         {
+            this.enemy.parameter.animation.Play("AttackStart");
         }
 
         public override void Exit(ref StateManager manager)
@@ -227,7 +235,7 @@ namespace Enemy01
 
         public override bool Transition(ref StateManager manager)
         {
-            if(base.GetTime() > 10)
+            if(base.GetTime() > 60)
             {
                 manager.SetNextState((int)Enemy01.State.NORMAL);
                 return true;
@@ -238,7 +246,7 @@ namespace Enemy01
         public override void Update()
         {
             base.TimeUp(1);
-            if(base.GetTime() == 4)
+            if(base.GetTime() == 30)
             {
                 //攻撃生成
                 this.CreateBullet();

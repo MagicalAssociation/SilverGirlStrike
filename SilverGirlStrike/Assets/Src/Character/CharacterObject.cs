@@ -105,11 +105,20 @@ public class HitPoint
     {
         Debug.Log("MapHP->" + this.maxHP + ":NowHP->" + this.currentHP + ":DP->" + this.damagePoint + ":Inv->" + this.invincible + ":Chain->" + this.chain);
     }
+    /**
+     * brief    最大HPの設定
+     * param[in] int maxHP MaxHP
+     */ 
+     public void SetMaxHP(int maxHP)
+    {
+        this.maxHP = maxHP;
+    }
 }
 
 /**
  * brief    こうげきデータ
  */
+ [System.Serializable]
  public class AttackData
 {
     /**
@@ -155,11 +164,13 @@ public class HitPoint
 /**
  * brief    キャラの基底クラス
  */ 
+ [System.Serializable]
 public abstract class CharacterObject : MonoBehaviour
 {
     /**
      * brief    CharacterParameterData
      */ 
+     [System.Serializable]
     public class CharaData
     {
         //! HP関連

@@ -11,6 +11,7 @@ using UnityEngine;
 */
 /**
  * Inspectorの設定値の説明
+ * Parameter.MaxHP 最大HP
  * Parameter.Animation アニメーションデータ
  * Parameter.Power ダメージ値
  * Moves.Target 移動先GameObject
@@ -32,15 +33,27 @@ namespace Enemy02
             MOVE,
         }
         /**
+         * enum Direction 向き
+         */
+         public enum Direction
+        {
+            LEFT = 1,
+            RIGHT = -1
+        }
+        /**
          * brief    エネミー02用パラメータデータ
          */
         [System.Serializable]
         public class Enemy02Parameter
         {
+            //! 最大HP
+            public int maxHP;
             //! アニメーション用class
-            public Animation animation;
+            public Animator animation;
             //! ダメージ量
             public int power;
+            //! 向き情報
+            public Direction direction;
         }
         /**
          * brief    移動用変数をまとめたclass
@@ -63,6 +76,8 @@ namespace Enemy02
         private int nowNum;
         //! 位置情報 !移動はこの値を書き変え、そのままGameObjectに渡します! ※Easingを使って移動しようとしたらこの形が計算少なく済んだ
         private Vector2 pos;
+        //! 前回の位置データ
+        private Vector2 prePos;
         //! 攻撃データ
         private AttackData attackData;
         //! 自身のBoxの当たり判定
@@ -71,10 +86,6 @@ namespace Enemy02
             //! life
             :base(10)
         {
-            //各ステートを登録&適用
-            base.AddState((int)State.MOVE, new MoveState(this));
-            base.AddState((int)State.WAIT, new WaitState(this));
-            base.ChangeState((int)State.WAIT);
             this.pos = new Vector2();
             this.nowNum = 0;
             this.attackData = new AttackData(this);
@@ -83,8 +94,15 @@ namespace Enemy02
         {
             //今の位置をいれておく
             this.pos = this.transform.localPosition;
+            this.prePos = this.pos;
             this.collider =  GetComponent<BoxCollider2D>();
             this.attackData.power = this.parameter.power;
+            this.parameter.animation = GetComponent<Animator>();
+            this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
+            //各ステートを登録&適用
+            base.AddState((int)State.MOVE, new MoveState(this));
+            base.AddState((int)State.WAIT, new WaitState(this));
+            base.ChangeState((int)State.WAIT);
         }
 
         public override void UpdateCharacter()
@@ -114,7 +132,17 @@ namespace Enemy02
 
         public override void MoveCharacter()
         {
+            this.prePos = this.transform.localPosition;
             this.transform.localPosition = new Vector3(pos.x, pos.y, this.transform.position.z);
+            if (this.transform.localPosition.x > this.prePos.x)
+            {
+                this.parameter.direction = Direction.RIGHT;
+            }
+            else if (this.transform.localPosition.x < this.prePos.x)
+            {
+                this.parameter.direction = Direction.LEFT;
+            }
+            this.transform.localScale = new Vector3((int)this.parameter.direction, 1, 1);
         }
         /**
          * brief    固有データを取得する
@@ -198,6 +226,7 @@ namespace Enemy02
             //Easingを登録
             move_x.Set(this.enemy.transform.position.x, this.moveData.targets.transform.position.x - this.enemy.transform.position.x);
             move_y.Set(this.enemy.transform.position.y, this.moveData.targets.transform.position.y - this.enemy.transform.position.y);
+            this.enemy.parameter.animation.Play("Move");
         }
 
         public override void Exit(ref StateManager manager)
@@ -245,6 +274,7 @@ namespace Enemy02
 
         public override void Enter(ref StateManager manager)
         {
+            this.enemy.parameter.animation.Play("Normal");
         }
 
         public override void Exit(ref StateManager manager)
