@@ -128,7 +128,7 @@ namespace Enemy03
             this.UpdateState();
             //プレイヤーと当たったらダメージ処理
             Collider2D hit = this.Hit();
-            if (hit)
+            if (hit != null)
             {
                 hit.GetComponent<CharacterObject>().Damage(this.attackData);
             }

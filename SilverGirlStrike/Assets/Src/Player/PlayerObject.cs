@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+//変更履歴
 //2018/11/20 板倉 : 作成
 //2018/11/21 板倉 : 内部実装
+//2018/12/04 板倉：ダメージ関数の変更を反映
 
 namespace Fuchan
 {
@@ -48,6 +50,7 @@ namespace Fuchan
             public CharacterMover mover;
             public AnchorSelector anchor;
             public Animator playerAnim;
+            public NarrowAttacker[] attackCollisions;
         }
 
 
@@ -94,6 +97,9 @@ namespace Fuchan
             AddState((int)State.ATTACK2, new Attack2State(this));
             AddState((int)State.ATTACK3, new Attack3State(this));
             ChangeState((int)State.IDLE);
+
+
+            GetData().hitPoint.SetInvincible(100);
         }
 
         //メンバ関数
@@ -103,10 +109,13 @@ namespace Fuchan
         }
         public override void ApplyDamage()
         {
+            GetData().hitPoint.DamageUpdate();
         }
 
         public override void Damage(AttackData attackData)
         {
+            //普通に食らう
+            GetData().hitPoint.Damage(attackData.power, attackData.chain);
         }
 
         public override void MoveCharacter()
@@ -122,6 +131,16 @@ namespace Fuchan
             if (this.param.dashRatio < 0.0f)
             {
                 this.param.dashRatio = 0.0f;
+            }
+
+            //無敵時間中は色を変える
+            if (GetData().hitPoint.IsInvincible())
+            {
+                GetComponent<SpriteRenderer>().color = new Color(0.7f, 0.5f, 0.5f, 0.7f);
+            }
+            else
+            {
+                GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             }
 
             //接地判定
@@ -625,11 +644,13 @@ namespace Fuchan
             if (GetParam().onGround)
             {
                 GetInspectorParam().playerAnim.Play("SwordAttack1");
+                GetInspectorParam().attackCollisions[0].StartAttack();
             }
             else
             {
                 GetInspectorParam().playerAnim.Play("JumpSwordAttack1");
                 GetInspectorParam().mover.Jump(6.0f);
+                GetInspectorParam().attackCollisions[0].StartAttack();
             }
 
             this.timeCnt = 0;
@@ -699,11 +720,13 @@ namespace Fuchan
             if (GetParam().onGround)
             {
                 GetInspectorParam().playerAnim.Play("SwordAttack2");
+                GetInspectorParam().attackCollisions[1].StartAttack();
             }
             else
             {
                 GetInspectorParam().playerAnim.Play("JumpSwordAttack2");
                 GetInspectorParam().mover.Jump(6.0f);
+                GetInspectorParam().attackCollisions[1].StartAttack();
             }
 
             this.timeCnt = 0;
@@ -773,11 +796,13 @@ namespace Fuchan
             if (GetParam().onGround)
             {
                 GetInspectorParam().playerAnim.Play("SwordAttack3");
+                GetInspectorParam().attackCollisions[2].StartAttack();
             }
             else
             {
                 GetInspectorParam().playerAnim.Play("JumpSwordAttack3");
                 GetInspectorParam().mover.Jump(6.0f);
+                GetInspectorParam().attackCollisions[2].StartAttack();
             }
 
             this.timeCnt = 0;

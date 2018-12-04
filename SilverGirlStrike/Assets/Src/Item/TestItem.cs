@@ -18,7 +18,7 @@ public class TestItem : SGS.ItemObject
         {
             if (hit.tag == "Player")
             {
-                hit.GetComponent<CharacterObject>().GetData().hitPoint.Damage(-5);
+                hit.GetComponent<CharacterObject>().GetData().hitPoint.Recover(5);
                 this.ChangeMode(SGS.ItemMode.KILL);
             }
         }

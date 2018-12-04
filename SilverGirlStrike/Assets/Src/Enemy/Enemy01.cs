@@ -1,6 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
+//変更履歴
+//2018/12/04 板倉：ダメージ関数の変更を反映
+
+
+
+
+
 /**
  * file     Enemy01.cs
  * brief    敵Class
@@ -126,7 +135,7 @@ namespace Enemy01
         }
         public override void Damage(AttackData data)
         {
-            this.GetData().hitPoint.Damage(data.power);
+            this.GetData().hitPoint.Damage(data.power, data.chain);
         }
         public override void ApplyDamage()
         {

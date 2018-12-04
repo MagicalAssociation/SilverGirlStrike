@@ -5,6 +5,7 @@ using UnityEngine;
 
 //変更履歴
 //2018/11/30 板倉：削除処理をIDを用いたものに変更、そのために登録時のIDを取得している
+//2018/12/04 板倉：基底クラスのCharacterData data とフィールド名が被っていることでエラーが出ていたので名前を変えておいた（動いてはいたが何かあるとメンドイので）
 
 namespace Bullet
 {
@@ -21,7 +22,7 @@ namespace Bullet
             //! ターゲットに向かって飛ぶやつ
             TARGET,
         }
-        AttackData data;
+        AttackData attackData;
         //! 移動速度
         public float moveSpeed;
         //! 寿命
@@ -46,7 +47,7 @@ namespace Bullet
          */
         public void SetAttackData(AttackData data)
         {
-            this.data = data;
+            this.attackData = data;
         }
         /**
          * brief    AttackDataの取得
@@ -54,7 +55,7 @@ namespace Bullet
          */
         public AttackData GetAttackData()
         {
-            return this.data;
+            return this.attackData;
         }
 
         public override void UpdateCharacter()
