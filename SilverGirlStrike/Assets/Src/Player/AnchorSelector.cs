@@ -45,7 +45,10 @@ public class AnchorSelector : MonoBehaviour {
             }
 
             //レイを飛ばして、壁に激突していないかをチェック
-            if(Physics2D.Raycast(this.startPoint, (list[i].transform.position - this.startPoint).normalized, (list[i].transform.position - this.startPoint).magnitude, (int)M_System.LayerName.GROUND))
+            if(Physics2D.Raycast(this.startPoint,
+                (list[i].transform.position - this.startPoint).normalized,
+                (list[i].transform.position - this.startPoint).magnitude,
+                (int)M_System.LayerName.GROUND | (int)M_System.LayerName.PLAYERWALL))
             {
                 continue;
             }

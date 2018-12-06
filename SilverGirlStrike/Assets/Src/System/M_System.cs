@@ -25,6 +25,7 @@ public class M_System : MonoBehaviour
         ITEM = 1 << 12,
         FOOT = 1 << 13,
         BULLET = 1 << 14,
+        PLAYERWALL = 1 << 15,
     }
 
     /**
