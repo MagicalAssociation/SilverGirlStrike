@@ -24,8 +24,6 @@ using UnityEngine;
  * Inspectorの設定値の説明
  * Gravity このCharacterの重さ
  * Parameter.MaxHP 最大HP
- * Parameter.AttackObject 攻撃する際に出現させるGameObject
- *      これ今MagicBulletしか入らない設計しているので今後の実装によっては変化させます
  * Parameter.Radius このCharacterが攻撃を始める範囲
  * Parameter.AttackInterval 攻撃の感覚を指定します。
  * Parameter.Animation アニメーションデータ
@@ -69,8 +67,6 @@ namespace Enemy01
         {
             //! 最大HP
             public int maxHP;
-            //! 生成する攻撃オブジェクト
-            public Bullet.MagicBullet attackObject;
             //! 攻撃開始範囲の半径
             public float radius;
             //! 攻撃間隔
@@ -84,22 +80,12 @@ namespace Enemy01
             //! 向き
             public Direction direction;
         }
-        [System.Serializable]
-        public class BulletData
-        {
-            [Range(0.0f,360.0f)]
-            public float angle;
-            public int power;
-            public float speed;
-            public int life;
-            public GameObject target;
-        }
         //! 重力
         public float gravity;
         //! Parameter
         public Enemy01Parameter parameter;
         //! 生成するBulletのデータ
-        public BulletData bulletData;
+        public Bullet.BulletData bulletData;
         //! 当たり判定
         BoxCollider2D collider;
         //! 攻撃範囲
@@ -266,19 +252,7 @@ namespace Enemy01
          */ 
         private void CreateBullet()
         {
-            Bullet.MagicBullet bullet = Object.Instantiate(base.enemy.GetParameter().attackObject, base.enemy.transform.position, Quaternion.identity) as Bullet.MagicBullet;
-            bullet.SetAttackData(new AttackData(base.enemy));
-            bullet.GetAttackData().power = base.enemy.bulletData.power;
-            bullet.lifeCnt = base.enemy.bulletData.life;
-            bullet.moveSpeed = base.enemy.bulletData.speed;
-            if(this.enemy.bulletData.target != null)
-            {
-                bullet.SetShotTarget(this.enemy.bulletData.target);
-            }
-            else
-            {
-                bullet.SetShotAngle(this.enemy.bulletData.angle);
-            }
+            Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletData);
         }
     }
     /**

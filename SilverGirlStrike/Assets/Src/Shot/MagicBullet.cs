@@ -9,7 +9,23 @@ using UnityEngine;
 
 namespace Bullet
 {
-    public class MagicBullet : CharacterObject
+
+    [System.Serializable]
+    public class BulletData
+    {
+        [Range(0.0f, 360.0f)]
+        public float angle;
+        public int power;
+        public float speed;
+        public int life;
+        public GameObject target;
+        public BaseBullet attackObject;
+    }
+    public abstract class BaseBullet : CharacterObject
+    {
+    }
+
+    public class MagicBullet : BaseBullet
     {
         public enum State
         {
@@ -122,6 +138,25 @@ namespace Bullet
             rad *= (Mathf.PI / 180);
             move.x = Mathf.Cos(rad);
             move.y = Mathf.Sin(rad);
+        }
+        /**
+         * brief    攻撃生成
+         */
+         public static void Create(CharacterObject characterObject,BulletData bulletData)
+        {
+            MagicBullet bullet = Object.Instantiate(bulletData.attackObject, characterObject.transform.position, Quaternion.identity) as Bullet.MagicBullet;
+            bullet.SetAttackData(new AttackData(characterObject));
+            bullet.GetAttackData().power = bulletData.power;
+            bullet.lifeCnt = bulletData.life;
+            bullet.moveSpeed = bulletData.speed;
+            if (bulletData.target != null)
+            {
+                bullet.SetShotTarget(bulletData.target);
+            }
+            else
+            {
+                bullet.SetShotAngle(bulletData.angle);
+            }
         }
     }
     /**
