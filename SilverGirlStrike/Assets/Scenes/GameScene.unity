@@ -6661,7 +6661,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.7, z: -10}
+  m_LocalPosition: {x: 0, y: 1.2, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6827,7 +6827,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 351eb7a66cc52884eb8e3c3dac4352f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 0.9
   spriteCount: 3
   viewCamera: {fileID: 519420030}
   screenRect:
@@ -10648,7 +10648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 351eb7a66cc52884eb8e3c3dac4352f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 0.4
   spriteCount: 3
   viewCamera: {fileID: 519420030}
   screenRect:
@@ -16713,7 +16713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 351eb7a66cc52884eb8e3c3dac4352f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 0.8
   spriteCount: 3
   viewCamera: {fileID: 519420030}
   screenRect:
@@ -22377,7 +22377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 351eb7a66cc52884eb8e3c3dac4352f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 0.5
   spriteCount: 3
   viewCamera: {fileID: 519420030}
   screenRect:
@@ -23193,7 +23193,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1796243766}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.6999998, z: -2}
+  m_LocalPosition: {x: 0, y: 0.4, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1679065050}
@@ -24762,6 +24762,8 @@ MonoBehaviour:
     anchorDashSpeed: 30
     anchorMoveAcceleration: 5
     jumpPower: 20
+    damageKnockBackPower: 6
+    damageKnockBackTime: 10
     footObject: {fileID: 1796243765}
     mover: {fileID: 1796243768}
     anchor: {fileID: 1796243767}

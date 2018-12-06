@@ -8,6 +8,8 @@ using UnityEngine;
 //2018/11/24 金子　：　HitPointにダメージ処理や値修正処理を追記
 //2018/12/04 板倉　：　ダメージの処理に、無敵時間と、無敵時間を無視できる連鎖値の概念を実装
 //                     あと、回復処理を行うRecover()を追加
+//2018/12/06 板倉　：　ステートの現在の番号と一致するか判断するIsCurrentState()追加
+//　　　　　　　　　　 HitPointの void Damage() が「実際にダメージが入ったかどうかを表すbool値」を返すように変更
 
 
 /**
@@ -55,11 +57,12 @@ public class HitPoint
      */
     public void DamageUpdate()
     {
-        //HPにダメージを与える
+        //HPへ実際にダメージを与える
         this.currentHP += this.damagePoint;
-        //ダメージポイントを初期化
+
         this.ResetDamagePoint();
 
+        //無敵時間カウントダウン
         --this.invincibleCount;
         if(this.invincibleCount < 0)
         {
@@ -89,8 +92,9 @@ public class HitPoint
     /**
      * brief    ダメージポイントを蓄積する
      * param[in] int damage ダメージ量
+     * return bool ダメージが蓄積されたかどうか
      */ 
-     public void Damage(int damage, int chain)
+     public bool Damage(int damage, int chain)
     {
         //ダメージは「無敵時間外」 or 「連鎖値がより高い」の時に処理
 
@@ -101,15 +105,16 @@ public class HitPoint
             this.invincibleCount = this.invincible;
             this.damagePoint -= damage;
             this.chain = chain;
-            return;
+            return true;
         }
         //無敵時間中でない場合はダメージ処理(連鎖値を下げないために上書きは上の条件に任せている)
         if (this.invincibleCount == 0)
         {
             this.invincibleCount = this.invincible;
             this.damagePoint -= damage;
-            return;
+            return true;
         }
+        return false;
     }
 
     //HPを増やす（反映は即時、ダメージとは完全に独立）
@@ -319,5 +324,12 @@ public abstract class CharacterObject : MonoBehaviour
     {
         this.data.manager.ChengeState(stateNum);
     }
-
+    /**
+    * brief    現在のStateが引数のものと一致するかを判定
+    * param[in] int state番号
+    */
+    public bool IsCurrentState(int state)
+    {
+        return this.data.manager.GetNowStateNum() == state;
+    }
 }

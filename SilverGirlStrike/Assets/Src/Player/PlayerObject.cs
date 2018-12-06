@@ -7,6 +7,8 @@ using UnityEngine;
 //2018/11/20 板倉 : 作成
 //2018/11/21 板倉 : 内部実装
 //2018/12/04 板倉：ダメージ関数の変更を反映
+//2018/12/04 板倉：ダメージ関数処理追加、攻撃の挙動をより自由度の高い方面へ調整
+//　　　　　　　　 小ジャンプ実装
 
 namespace Fuchan
 {
@@ -34,6 +36,7 @@ namespace Fuchan
             JUMP_ATTACK1,
             JUMP_ATTACK2,
             JUMP_ATTACK3,
+            DAMAGE,
         }
 
         //Inspectorで値変えたい系の変数
@@ -46,6 +49,8 @@ namespace Fuchan
             public float anchorDashSpeed;
             public float anchorMoveAcceleration;
             public float jumpPower;
+            public float damageKnockBackPower;
+            public float damageKnockBackTime;
             public Foot footObject;
             public CharacterMover mover;
             public AnchorSelector anchor;
@@ -73,6 +78,7 @@ namespace Fuchan
 
             //ダッシュ比率
             public float dashRatio;
+
         }
 
         public InspectorParam inspectorParam;
@@ -96,6 +102,7 @@ namespace Fuchan
             AddState((int)State.ATTACK1, new Attack1State(this));
             AddState((int)State.ATTACK2, new Attack2State(this));
             AddState((int)State.ATTACK3, new Attack3State(this));
+            AddState((int)State.DAMAGE, new DamageState(this));
             ChangeState((int)State.IDLE);
 
 
@@ -115,7 +122,12 @@ namespace Fuchan
         public override void Damage(AttackData attackData)
         {
             //普通に食らう
-            GetData().hitPoint.Damage(attackData.power, attackData.chain);
+            var isDamaged = GetData().hitPoint.Damage(attackData.power, attackData.chain);
+            //ステート変更
+            if (isDamaged)
+            {
+                ChangeState((int)PlayerObject.State.DAMAGE);
+            }
         }
 
         public override void MoveCharacter()
@@ -410,6 +422,7 @@ namespace Fuchan
             {
                 GetInspectorParam().mover.Jump(GetInspectorParam().jumpPower);
             }
+            ResetTime();
         }
         //出た時の関数
         public override void Exit(ref StateManager manager)
@@ -447,11 +460,18 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
+            TimeUp(1);
             var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
             //横移動
             GetParam().moveVector += vec;
             //移動方向にて向きを変える
             Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, ref GetParam().myself);
+
+            //一定時間以内にボタンを離すと、上昇力が格段に落ちて小ジャンプになる
+            if (M_System.input.Up(SystemInput.Tag.JUMP) && GetTime() < 20)
+            {
+                GetInspectorParam().mover.Jump(GetInspectorParam().jumpPower * 0.4f);
+            }
         }
     }
 
@@ -641,16 +661,16 @@ namespace Fuchan
         public override void Enter(ref StateManager manager)
         {
             //アニメ
-            if (GetParam().onGround)
+            if (GetParam().onGround && !GetInspectorParam().mover.IsJump())
             {
                 GetInspectorParam().playerAnim.Play("SwordAttack1");
-                GetInspectorParam().attackCollisions[0].StartAttack();
+                GetInspectorParam().attackCollisions[2].StartAttack();
             }
             else
             {
                 GetInspectorParam().playerAnim.Play("JumpSwordAttack1");
                 GetInspectorParam().mover.Jump(6.0f);
-                GetInspectorParam().attackCollisions[0].StartAttack();
+                GetInspectorParam().attackCollisions[2].StartAttack();
             }
 
             this.timeCnt = 0;
@@ -663,6 +683,7 @@ namespace Fuchan
         //遷移を行う
         public override bool Transition(ref StateManager manager)
         {
+            //硬直終わり
             if(this.timeCnt == 20)
             {
                 if (GetParam().onGround)
@@ -673,6 +694,12 @@ namespace Fuchan
                 {
                     manager.SetNextState((int)PlayerObject.State.FALL);
                 }
+                return true;
+            }
+            //ジャンプ、地面についてる時
+            if (M_System.input.Down(SystemInput.Tag.JUMP) && GetParam().onGround && this.timeCnt > 0)
+            {
+                manager.SetNextState((int)PlayerObject.State.JUMP);
                 return true;
             }
             //攻撃
@@ -693,9 +720,19 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed() * 0.2f, 0.0f);
+            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
+            //硬直中は移動速度を落とす
+            if (GetParam().onGround)
+            {
+                vec.x *= 0.2f;
+            }
+            else if(this.timeCnt <= 5)
+            {
+                Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, ref GetParam().myself);
+            }
             //横移動
             GetParam().moveVector += vec;
+
 
             ++this.timeCnt;
         }
@@ -717,16 +754,16 @@ namespace Fuchan
         public override void Enter(ref StateManager manager)
         {
             //アニメ
-            if (GetParam().onGround)
+            if (GetParam().onGround && !GetInspectorParam().mover.IsJump())
             {
                 GetInspectorParam().playerAnim.Play("SwordAttack2");
-                GetInspectorParam().attackCollisions[1].StartAttack();
+                GetInspectorParam().attackCollisions[2].StartAttack();
             }
             else
             {
                 GetInspectorParam().playerAnim.Play("JumpSwordAttack2");
                 GetInspectorParam().mover.Jump(6.0f);
-                GetInspectorParam().attackCollisions[1].StartAttack();
+                GetInspectorParam().attackCollisions[2].StartAttack();
             }
 
             this.timeCnt = 0;
@@ -751,6 +788,13 @@ namespace Fuchan
                 }
                 return true;
             }
+            //ジャンプ、地面についてる時
+            if (M_System.input.Down(SystemInput.Tag.JUMP) && GetParam().onGround && this.timeCnt > 0)
+            {
+                manager.SetNextState((int)PlayerObject.State.JUMP);
+                return true;
+            }
+
             //攻撃
             if (M_System.input.Down(SystemInput.Tag.ATTACK) && this.timeCnt > 0)
             {
@@ -769,9 +813,19 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed() * 0.2f, 0.0f);
+            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
+            //硬直中は移動速度を落とす
+            if (GetParam().onGround)
+            {
+                vec.x *= 0.2f;
+            }
+            else if (this.timeCnt <= 5)
+            {
+                Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, ref GetParam().myself);
+            }
             //横移動
             GetParam().moveVector += vec;
+
 
             ++this.timeCnt;
         }
@@ -793,7 +847,7 @@ namespace Fuchan
         public override void Enter(ref StateManager manager)
         {
             //アニメ
-            if (GetParam().onGround)
+            if (GetParam().onGround && !GetInspectorParam().mover.IsJump())
             {
                 GetInspectorParam().playerAnim.Play("SwordAttack3");
                 GetInspectorParam().attackCollisions[2].StartAttack();
@@ -827,8 +881,16 @@ namespace Fuchan
                 }
                 return true;
             }
+
+            //ジャンプ、地面についてる時
+            if (M_System.input.Down(SystemInput.Tag.JUMP) && GetParam().onGround && this.timeCnt > 0)
+            {
+                manager.SetNextState((int)PlayerObject.State.JUMP);
+                return true;
+            }
+
             //アンカーショット
-            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor() && this.timeCnt > 5)
+            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor() && this.timeCnt > 14)
             {
                 manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
                 return true;
@@ -839,11 +901,79 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed() * 0.2f, 0.0f);
+            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
+            //硬直中は移動速度を落とす
+            if (GetParam().onGround)
+            {
+                vec.x *= 0.2f;
+            }
+            else if (this.timeCnt <= 14)
+            {
+                Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, ref GetParam().myself);
+            }
             //横移動
             GetParam().moveVector += vec;
 
+
             ++this.timeCnt;
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //ダメージ
+    public class DamageState : BaseState
+    {
+        public DamageState(PlayerObject param)
+            : base(param)
+
+        {
+        }
+
+        //入った時の関数
+        public override void Enter(ref StateManager manager)
+        {
+            GetInspectorParam().mover.SetActiveGravity(false, false);
+
+            ResetTime();
+            //アニメ
+            GetInspectorParam().playerAnim.Play("Damage");
+
+        }
+        //出た時の関数
+        public override void Exit(ref StateManager manager)
+        {
+            GetInspectorParam().mover.SetActiveGravity(true, false);
+        }
+        //遷移を行う
+        public override bool Transition(ref StateManager manager)
+        {
+            //硬直が終わったら待機へ遷移
+            if (GetTime() > GetInspectorParam().damageKnockBackTime)
+            {
+                manager.SetNextState((int)PlayerObject.State.IDLE);
+                return true;
+            }
+            
+
+            return false;
+        }
+        //ステート処理
+        public override void Update()
+        {
+            TimeUp(1);
+
+            //後ろへノックバック
+            Vector2 vec;
+            if (GetParam().direction == PlayerObject.Direction.RIGHT)
+            {
+                vec = new Vector2(-GetInspectorParam().damageKnockBackPower, 0.0f);
+            }
+            else
+            {
+                vec = new Vector2(GetInspectorParam().damageKnockBackPower, 0.0f);
+            }
+            //横移動
+            GetParam().moveVector += vec;
         }
     }
 

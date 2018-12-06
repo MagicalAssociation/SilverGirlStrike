@@ -42,7 +42,10 @@ public class CharacterManager : MonoBehaviour
         {
             for(int i = 0; i < this.characters.transform.childCount; ++i)
             {
-                AddCharacter(this.characters.transform.GetChild(i).GetComponent<CharacterObject>());
+                var obj = this.characters.transform.GetChild(i);
+                if (obj.gameObject.activeSelf) {
+                    AddCharacter(obj.GetComponent<CharacterObject>());
+                }
             }
         }
 

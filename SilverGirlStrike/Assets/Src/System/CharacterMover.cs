@@ -6,6 +6,7 @@ using UnityEngine;
 //変更履歴
 //2018/12/01 板倉：仕様変更。RigidBodyで動かすのをやめ、こっち側で制御しやすいCollisionのみの処理にした
 //2018/12/04 板倉：速度面での不利が解消できないため、RigidBodyを利用した処理が復活
+//2018/12/06 板倉：IsJump()で上昇中かどうかを取得できるようになった
 
 public class CharacterMover : MonoBehaviour
 {
@@ -63,6 +64,14 @@ public class CharacterMover : MonoBehaviour
     public bool IsFall()
     {
         return this.fallVelocity < 0.0f;
+    }
+    /**
+    * @brief   現在上昇しているかを返す
+    * @return bool 上昇しているならtrue
+    */
+    public bool IsJump()
+    {
+        return this.fallVelocity > 0.0f;
     }
 
     //（未実装）横移動とか縦移動をもっとスムーズに扱える関数
