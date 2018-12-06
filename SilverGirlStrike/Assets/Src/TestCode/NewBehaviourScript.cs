@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour {
+public class Test : MonoBehaviour {
     //　経過時間
     private float nowTime;
 
