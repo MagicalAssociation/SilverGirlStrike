@@ -8,6 +8,8 @@ using UnityEngine;
 namespace RockGolem
 {
     /*
+            public int hitPoint;                        :　俗にいう生命力                      
+            public int invincible;                      :　無敵時間
             public float moveSpeed;                     :　待機位置への移動速度                         
             public CharacterMover mover;                :　CharacterMoverへのアクセス
             public Animator animator;                   :　アニメーションへのアクセス
@@ -23,6 +25,7 @@ namespace RockGolem
         {
             MOVE,
             IDLE,
+            TACKLE,
             DAMAGE,
         }
 
@@ -48,10 +51,13 @@ namespace RockGolem
         [System.Serializable]
         public class InspectorParam
         {
+            public int hitPoint;
+            public int invincible;
             public float moveSpeed;
 
             public CharacterMover mover;
             public Animator animator;
+            public GameObject targetCharacter;
             public IdlePosition idlePositions;
             public NarrowAttacker[] attackCollisions;
         }
@@ -76,6 +82,11 @@ namespace RockGolem
 
         void Start()
         {
+            GetData().hitPoint.SetMaxHP(this.inspectorParam.hitPoint);
+            GetData().hitPoint.Recover(this.inspectorParam.hitPoint);
+            GetData().hitPoint.SetInvincible(this.inspectorParam.invincible);
+
+
             this.param = new Parameter();
             this.param.myself = this.gameObject;
             this.param.moveVector = Vector2.zero;
@@ -83,20 +94,24 @@ namespace RockGolem
             //ステート追加
             AddState((int)State.MOVE, new MoveState(this));
             AddState((int)State.IDLE, new IdleState(this));
+            AddState((int)State.TACKLE, new ChasePress(this));
             ChangeState((int)State.MOVE);
         }
 
         public override void ApplyDamage()
         {
+            GetData().hitPoint.DamageUpdate();
         }
 
         public override void Damage(AttackData attackData)
         {
+            GetData().hitPoint.Damage(attackData.power, attackData.chain);
         }
 
         public override void MoveCharacter()
         {
             this.inspectorParam.mover.UpdateVelocity(this.param.moveVector.x, this.param.moveVector.y, 0.0f, false);
+            this.param.moveVector = Vector3.zero;
         }
 
         public override void UpdateCharacter()
@@ -104,6 +119,16 @@ namespace RockGolem
             UpdateState();
             //判定垂れ流し
             this.inspectorParam.attackCollisions[0].StartAttack();
+
+            //無敵時間中は色を変える
+            if (GetData().hitPoint.IsInvincible())
+            {
+                GetComponent<SpriteRenderer>().color = new Color(0.9f, 0.5f, 0.5f, 1.0f);
+            }
+            else
+            {
+                GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            }
         }
 
         //ステート
@@ -198,7 +223,13 @@ namespace RockGolem
 
             public override bool Transition(ref StateManager manager)
             {
-                if(GetTime() > 120)
+                if (GetTime() > 120)
+                {
+                    //移動先を確定
+                    manager.SetNextState((int)RockGolemEnemy.State.TACKLE);
+                    return true;
+                }
+                if (GetTime() > 120)
                 {
                     //ランダムで移動先を決定（今の位置と違うものだけ）
                     Vector3 movePosition = GetParam().currentIdlePosition;
@@ -241,6 +272,123 @@ namespace RockGolem
                 TimeUp(1);
                 //待機モーション中に、緩やかに位置がグルグル回る
                 GetParam().moveVector = new Vector2(Mathf.Sin((GetTime() * 0.8f) * Mathf.Deg2Rad) * 0.1f, Mathf.Sin((GetTime() * 2.0f) * Mathf.Deg2Rad));
+            }
+        }
+        /////////////////////////////////////////////////////////////////////////////////////
+        //右か左に体当たり(プレイヤー追従)
+        class Tackle1State : BaseState
+        {
+            enum Direction
+            {
+                LEFT,
+                RIGHT,
+            }
+
+            //メンバー
+            Vector2 attackDirection;
+
+            public Tackle1State(RockGolemEnemy param) : base(param)
+            {
+            }
+
+            public override void Enter(ref StateManager manager)
+            {
+                //タックル方向を決定
+                Direction direction = (Direction)Random.Range(0, 2);
+
+                switch (direction)
+                {
+                    case Direction.LEFT:
+                        {
+                            this.attackDirection = Vector2.left;
+                        }
+                        break;
+                    case Direction.RIGHT:
+                        {
+                            this.attackDirection = Vector2.right;
+                        }
+                        break;
+                }
+
+
+                ResetTime();
+            }
+
+            public override void Exit(ref StateManager manager)
+            {
+            }
+
+            public override bool Transition(ref StateManager manager)
+            {
+
+                return false;
+            }
+
+            public override void Update()
+            {
+                TimeUp(1);
+                //突進
+                GetParam().moveVector += this.attackDirection;
+            }
+        }
+        /////////////////////////////////////////////////////////////////////////////////////
+        //右か左に体当たり(プレイヤー追従)
+        class ChasePress : BaseState
+        {
+            float fallVelocity;
+
+
+            public ChasePress(RockGolemEnemy param) : base(param)
+            {
+            }
+
+            public override void Enter(ref StateManager manager)
+            {
+                fallVelocity = -10.0f;
+                ResetTime();
+            }
+
+            public override void Exit(ref StateManager manager)
+            {
+            }
+
+            public override bool Transition(ref StateManager manager)
+            {
+                if (GetTime() > 260)
+                {
+                    //移動先を確定
+                    Vector3 movePosition = GetInspectorParam().idlePositions.center;
+                    GetParam().currentIdlePosition = movePosition;
+                    manager.SetNextState((int)RockGolemEnemy.State.MOVE);
+                    return true;
+                }
+                return false;
+            }
+
+            public override void Update()
+            {
+                TimeUp(1);
+
+                if (GetTime() < 100)
+                {
+                    //プレイヤー上空でX追尾
+                    const float movePower = 5.0f;
+                    GetParam().moveVector += new Vector2(0.0f, (GetInspectorParam().idlePositions.leftUp.y - this.GetParam().myself.transform.localPosition.y) * movePower);
+                    GetParam().moveVector += new Vector2((GetInspectorParam().targetCharacter.transform.position.x - this.GetParam().myself.transform.position.x) * movePower, 0.0f);
+                }
+                else if(GetTime() < 180)
+                {
+                    GetParam().moveVector += Vector2.down * this.fallVelocity;
+                    this.fallVelocity += 1.4f;
+                }
+                else
+                {
+                    //プレイヤー上空でX追尾
+                    const float movePower = 3.0f;
+                    GetParam().moveVector += new Vector2(0.0f, (GetInspectorParam().idlePositions.leftUp.y - this.GetParam().myself.transform.localPosition.y) * movePower);
+                }
+
+
             }
         }
     }
