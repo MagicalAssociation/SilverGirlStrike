@@ -13,67 +13,98 @@ public class Effect : MonoBehaviour {
         public string key;
         public GameObject eff;
     }
+
     public EffectList[] effectlist;     //effectを格納するリスト
-    public Vector2 pos;     //生成する座標を指定
-    public int deletetime;  //エフェクトが消えるまでの時間
 
-    private List<GameObject> effList = new List<GameObject>();
-
-    int effectSize;         //effectListのsizeを格納
+    //検索用
+    private Dictionary<string, GameObject> effectDictionary;
+    //管理するオブジェクト（id管理用）
+    List<GameObject> objectList;
 
     // Use this for initialization
     void Start () {
+
+        this.effectDictionary = new Dictionary<string, GameObject>();
+        this.objectList = new List<GameObject>();
+
+        //touroku
+        foreach(var i in effectlist)
+        {
+            effectDictionary.Add(i.key, i.eff);
+        }
     }
 
     // Update is called once per frame
     void Update () {
     }
 
-    //名前が一致するゲームオブジェクトがあればreturn、なければnull
-    public GameObject GetEffect(string name)        //検索する名前に一致するgameObjectをreturnする
+    //IDにてエフェクトのGameObjectを取得
+    public GameObject GetEffectameObject(int id)
     {
-        this.effectSize = effectlist.Length;    //長さを取得
-        for (int i = 0; i < this.effectSize; ++i)
+        //範囲外はnull
+        if(id >= this.objectList.Count && id < 0)
         {
-            if(effectlist[i].key==name)
-            {
-                return effectlist[i].eff;       //見つかったのでgameObjectを返す
-            }
+            return null;
         }
-        //デバッグ用
-        Debug.Log(name + "error");              //見つからなかったのでnullを返す
-        return null;
+
+        return this.objectList[id].gameObject;
     }
 
-    //名前を指定してエフェクトを生成する
-    public void CreateEffect(string name)           //検索する名前に一致するgameObjectを生成する
+    //名前を指定してエフェクトを生成する、IDを返す
+    public int CreateEffect(string name, Vector3 pos, Quaternion rot, Vector3 scale)           //検索する名前に一致するgameObjectを生成する
     {
-        this.effectSize = effectlist.Length;    //長さを取得
-        //検索した名前のエフェクトがあるかどうか調べて、あれば生成
-        for (int i = 0; i < this.effectSize; ++i)
-        {
-            if (effectlist[i].key == name)
-            {
-                GameObject eff = Instantiate(effectlist[i].eff, this.pos, Quaternion.identity);
-                effList.Add(eff);
-            }
-        }
+        GameObject eff = Instantiate(this.effectDictionary[name], Vector3.zero, Quaternion.identity);
+        eff.transform.position = pos;
+        eff.transform.rotation = rot;
+        eff.transform.localScale = scale;
+
+        int id = GetUseableID();
+        this.objectList[id] = eff;
+        return id;
     }
 
-    //名前を指定して生成したエフェクトを削除する(一括削除)
-    public void DeleteEffect(string name)
+    //指定IDのエフェクトを削除
+    public void DeleteEffect(int id)
     {
-        this.effectSize = effectlist.Length;    //長さを取得
-        for (int i = 0; i < this.effectSize; ++i)
+        //範囲外は何もしない
+        if (id >= this.objectList.Count && id < 0)
         {
-            if (effectlist[i].key == name)
+            return;
+        }
+        //無効なidも何もしない
+        if(this.objectList[id] == null)
+        {
+            return;
+        }
+
+
+        //削除し、nullを代入
+        Destroy(this.objectList[id]);
+        this.objectList[id] = null;
+    }
+
+
+    //現在の空いているIDを検索、空きがない場合は-1を返す
+    int GetUseableID()
+    {
+        int count = this.objectList.Count;
+        int index = -1;
+        for (int i = 0; i < count; ++i)
+        {
+            if (this.objectList[i] == null)
             {
-                //現存するエフェクトを問答無用で削除
-                for (int j = 0; j < effList.Count; ++j)
-                {
-                    Destroy(effList[j]);
-                }
+                index = i;
+                break;
             }
         }
+
+        //空きがないので追加
+        if (index == -1)
+        {
+            this.objectList.Add(null);
+            index = this.objectList.Count - 1;
+        }
+
+        return index;
     }
 }

@@ -16,11 +16,13 @@ public class HPGauge : MonoBehaviour {
     public GameObject barImage;
 
     //HPメモリ配列
+    List<GameObject> hpMemoryList;
+    //HPバー配列
     List<GameObject> barList;
-
 
     // Use this for initialization
     void Start () {
+        this.hpMemoryList = new List<GameObject>();
         this.barList = new List<GameObject>();
 
         //想定画面サイズに対しての倍率
@@ -40,6 +42,7 @@ public class HPGauge : MonoBehaviour {
             var obj = Instantiate(this.frameImage, this.gameObject.transform);
             obj.SetActive(true);
             obj.transform.position += new Vector3(12.0f * i * aaa, 0.0f, 0.0f);
+            this.barList.Add(obj);
         }
         //HPメモリを生成
         for (int i = 0; i < this.maxHP; ++i)
@@ -47,22 +50,64 @@ public class HPGauge : MonoBehaviour {
             var obj = Instantiate(this.barImage, this.gameObject.transform);
             obj.SetActive(true);
             obj.transform.position += new Vector3(12.0f * i * aaa, 0.0f, 0.0f);
-            this.barList.Add(obj);
+            this.hpMemoryList.Add(obj);
         }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		for(int i = 0; i < this.barList.Count; ++i)
+        UpdateHPBar(this.targetCharacter.GetData().hitPoint.GetMaxHP());
+
+        for (int i = 0; i < this.hpMemoryList.Count; ++i)
         {
             if(this.targetCharacter.GetData().hitPoint.GetHP() <= i)
             {
-                this.barList[i].SetActive(false);
+                this.hpMemoryList[i].SetActive(false);
             }
             else
             {
-                this.barList[i].SetActive(true);
+                this.hpMemoryList[i].SetActive(true);
             }
         }
 	}
+
+
+    private void UpdateHPBar(int maxHP)
+    {
+        //想定画面サイズに対しての倍率
+        float aaa = Screen.width / 960.0f;
+
+        //さいだいHPに合わせて、ゲージの長さを延長
+        if (barList.Count < maxHP - 10)
+        {
+            for (int i = barList.Count + 1; i <= maxHP - 10; ++i)
+            {
+                var obj = Instantiate(this.frameImage, this.frameImage.transform.parent);
+                obj.SetActive(true);
+                obj.transform.position += new Vector3(12.0f * i * aaa, 0.0f, 0.0f);
+                this.barList.Add(obj);
+            }
+        }
+        if (barList.Count > maxHP - 10)
+        {
+            for (int i = maxHP - 10; i <= barList.Count; ++i)
+            {
+                Destroy(this.barList[i]);
+                this.barList[i] = null;
+            }
+            this.barList.RemoveRange(this.maxHP, maxHP - this.maxHP);
+        }
+
+        //HPメモリを生成
+        for (int i = this.hpMemoryList.Count; i < maxHP; ++i)
+        {
+            var obj = Instantiate(this.barImage, this.gameObject.transform);
+            obj.SetActive(true);
+            obj.transform.position += new Vector3(12.0f * i * aaa, 0.0f, 0.0f);
+            this.hpMemoryList.Add(obj);
+        }
+
+
+        this.maxHP = maxHP;
+    }
 }

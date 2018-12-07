@@ -53,6 +53,14 @@ Preset:
     value: 20
     objectReference: {fileID: 0}
   - target: {fileID: 0}
+    propertyPath: inspectorParam.damageKnockBackPower
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: inspectorParam.damageKnockBackTime
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
     propertyPath: inspectorParam.footObject
     value: 
     objectReference: {fileID: 0}
@@ -67,4 +75,8 @@ Preset:
   - target: {fileID: 0}
     propertyPath: inspectorParam.playerAnim
     value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: inspectorParam.attackCollisions.Array.size
+    value: 0
     objectReference: {fileID: 0}

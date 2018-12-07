@@ -38,17 +38,35 @@ public class CharacterManager : MonoBehaviour
         this.activeCharacters = new List<CharacterData>();
         this.objects = new Dictionary<string, CharacterData>();
 
-        if (this.characters)
+        FindChildren(this.characters);
+
+    }
+
+    private void FindChildren(GameObject root)
+    {
+        //子供を全て検索
+        if (root == null)
         {
-            for(int i = 0; i < this.characters.transform.childCount; ++i)
-            {
-                var obj = this.characters.transform.GetChild(i);
-                if (obj.gameObject.activeSelf) {
-                    AddCharacter(obj.GetComponent<CharacterObject>());
-                }
-            }
+            return;
         }
 
+        for (int i = 0; i < root.transform.childCount; ++i)
+        {
+            //子オブジェクトを獲得
+            var obj = root.transform.GetChild(i);
+
+            if (obj.childCount > 0)
+            {
+                //子がいれば再起
+                FindChildren(obj.gameObject);
+            }
+
+            //オブジェクトを追加
+            if (obj.gameObject.activeSelf)
+            {
+                AddCharacter(obj.GetComponent<CharacterObject>());
+            }
+        }
     }
 
     public void FixedUpdate()
@@ -90,6 +108,11 @@ public class CharacterManager : MonoBehaviour
     //実際に生成
     public int AddCharacter(CharacterObject character)
     {
+        if(character == null)
+        {
+            return -1;
+        }
+
         int id = GetUseableID();
         //空きがないので何もできない
         if (id == -1)

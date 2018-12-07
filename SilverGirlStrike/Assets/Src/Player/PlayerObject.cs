@@ -148,7 +148,7 @@ namespace Fuchan
             //無敵時間中は色を変える
             if (GetData().hitPoint.IsInvincible())
             {
-                GetComponent<SpriteRenderer>().color = new Color(0.7f, 0.5f, 0.5f, 0.7f);
+                GetComponent<SpriteRenderer>().color = new Color(0.9f, 0.5f, 0.5f, 1.0f);
             }
             else
             {
@@ -582,7 +582,8 @@ namespace Fuchan
         //出た時の関数
         public override void Exit(ref StateManager manager)
         {
-
+            GetParam().anchorTarget = null;
+            GetParam().myself.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
         }
         //遷移を行う
         public override bool Transition(ref StateManager manager)
@@ -604,9 +605,6 @@ namespace Fuchan
                 GetInspectorParam().mover.SetActiveGravity(true, true);
                 GetInspectorParam().mover.Jump(this.targetDirection.y * GetParam().currentDashSpead * 0.5f);
                 manager.SetNextState((int)PlayerObject.State.JUMP);
-                GetParam().anchorTarget = null;
-
-                GetParam().myself.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
                 return true;
             }
 
@@ -622,8 +620,6 @@ namespace Fuchan
             //アンカーが見つかっている場合にのみ処理を行う
             if (GetParam().anchorTarget != null && this.timeCnt > 2)
             {
-                //速度をダッシュ中のそれにする
-                //this.speedRatio = 1.0f;
                 //アンカーに向かっての移動
                 GetParam().moveVector += this.targetDirection * GetParam().currentDashSpead;
 
