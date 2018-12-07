@@ -79,6 +79,14 @@ namespace Enemy04
             //! 足元の位置
             public Transform footPosition;
         }
+        /**
+         * brief    周囲攻撃の情報をまとめたclass
+         */
+         [System.Serializable]
+         public class AttackParameter
+        {
+            
+        }
         //! 固有パラメータデータ
         public Enemy04Parameter parameter;
         //! 移動用データの配列
@@ -137,7 +145,7 @@ namespace Enemy04
                 hit.GetComponent<CharacterObject>().Damage(this.attackData);
             }
             this.DebugDrawPointer();
-            Debug.Log((State)this.GetData().manager.GetNowStateNum());
+            Debug.Log((State)this.GetData().stateManager.GetNowStateNum());
         }
 
         public override void Damage(AttackData attackData)
@@ -263,26 +271,28 @@ namespace Enemy04
 
         public override bool Transition(ref StateManager manager)
         {
-            base.TimeUp(1);
-            if ((int)Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 0 && (int)Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 1)
+            if (base.GetTime() != 0)
             {
-                manager.SetNextState((int)Enemy04.State.DESCENT);
-                return true;
+                if ((int)Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 0 && (int)Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 1)
+                {
+                    manager.SetNextState((int)Enemy04.State.DESCENT);
+                    base.ResetTime();
+                    return true;
+                }
             }
             return false;
         }
 
         public override void Update()
         {
-            //base.TimeUp(1);
             this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(base.GetTime() * this.enemy.move.speed)) * this.enemy.move.radius * this.enemy.move.scale.x),
                 this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(base.GetTime() * this.enemy.move.speed * 2 + 90)) * this.enemy.move.radius) * this.enemy.move.scale.y));
             //1週判定
-            if ((int)Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 0 && (int)Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 1)
-            {
-                base.ResetTime();
-                this.enemy.StartStopData();
-            }
+            //if ((int)Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 0 && (int)Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 1)
+            //{
+            //    base.ResetTime();
+            //    this.enemy.StartStopData();
+            //}
             if(base.GetTime() % 30 == 0)
             {
                 Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletData);
@@ -325,7 +335,6 @@ namespace Enemy04
 
         public override void Update()
         {
-            base.TimeUp(1);
         }
     }
     /**
@@ -363,7 +372,6 @@ namespace Enemy04
 
         public override void Update()
         {
-            base.TimeUp(1);
             base.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x,
                 this.move_y.linear.None(this.move_y.Time(3), this.move_y.GetStartValue(), this.move_y.GetEndValue(), 3)));
         }
@@ -402,9 +410,43 @@ namespace Enemy04
 
         public override void Update()
         {
-            this.TimeUp(1);
             base.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x,
                 this.move_y.linear.None(this.move_y.Time(3), this.move_y.GetStartValue(), this.move_y.GetEndValue(), 3)));
+        }
+    }
+    /**
+     * brief    周囲攻撃
+     */
+    public class CircumferenceState : BaseState
+    {
+        enum Mode
+        {
+            //! 展開
+            EXPANSION,
+            //! 縮小
+            SHRINKING,
+            //! 待機
+            WAIT,
+        }
+        public CircumferenceState(Enemy04 enemy) : base(enemy)
+        {
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            return false;
+        }
+
+        public override void Update()
+        {
         }
     }
 }

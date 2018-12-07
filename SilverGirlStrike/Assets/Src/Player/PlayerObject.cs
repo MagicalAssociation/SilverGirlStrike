@@ -460,7 +460,6 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            TimeUp(1);
             var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
             //横移動
             GetParam().moveVector += vec;
@@ -960,8 +959,6 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            TimeUp(1);
-
             //後ろへノックバック
             Vector2 vec;
             if (GetParam().direction == PlayerObject.Direction.RIGHT)

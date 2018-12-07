@@ -155,8 +155,6 @@ public class CharacterManager : MonoBehaviour
         }
         return index;
     }
-
-
 }
 
 

@@ -76,7 +76,7 @@ namespace Bullet
 
         public override void UpdateCharacter()
         {
-            GetData().manager.Update();
+            GetData().stateManager.Update();
         }
 
         public override void Damage(AttackData attackData)
@@ -196,7 +196,6 @@ namespace Bullet
 
         public override void Update()
         {
-            base.TimeUp(1);
             //自分がプレイヤーと当たっていた時、プレイヤーにダメージを与え自分は消滅する
             var hit = base.bullet.HitCheck();
             if(hit)

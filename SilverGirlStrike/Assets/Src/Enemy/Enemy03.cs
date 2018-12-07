@@ -278,7 +278,6 @@ namespace Enemy03
 
         public override void Update()
         {
-            base.TimeUp(1);
             this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(base.GetTime() * this.enemy.move.speed)) * this.enemy.move.radius * this.enemy.move.scale.x),
                 this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(base.GetTime() * this.enemy.move.speed)) * this.enemy.move.radius) * this.enemy.move.scale.y));
             //1週判定
@@ -326,8 +325,6 @@ namespace Enemy03
 
         public override void Update()
         {
-            base.TimeUp(1);
-
         }
     }
 }

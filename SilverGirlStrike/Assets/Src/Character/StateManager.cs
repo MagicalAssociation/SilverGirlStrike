@@ -59,7 +59,7 @@ public abstract class StateParameter
      * brief    経過カウントの上昇値を指定
      * param[in]    int cnt 上昇値
      */ 
-    public void TimeUp(int cnt)
+    public void CountUp(int cnt)
     {
         this.timeCnt += cnt;
     }
@@ -122,7 +122,7 @@ public class StateManager
         //変化のおおもとを記録
         int tmpPrevState = this.nowState;
         //変化が収まるか、元の場所に戻る一歩手前で遷移終了
-        while(this.pairs[this.nowState].Transition(ref tmp))
+        while (this.pairs[this.nowState].Transition(ref tmp))
         {
             //出戻りを防止
             if(tmpPrevState == this.nextState)
@@ -131,6 +131,7 @@ public class StateManager
             }
             this.Transition();
         }
+        this.pairs[this.nowState].CountUp(1);
         this.pairs[this.nowState].Update();
     }
     /**

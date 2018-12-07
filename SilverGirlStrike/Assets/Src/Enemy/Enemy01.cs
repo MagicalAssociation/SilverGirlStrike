@@ -205,7 +205,6 @@ namespace Enemy01
 
         public override void Update()
         {
-            base.TimeUp(1);
         }
     }
     /**
@@ -240,7 +239,6 @@ namespace Enemy01
 
         public override void Update()
         {
-            base.TimeUp(1);
             if(base.GetTime() == 30)
             {
                 //攻撃生成
@@ -286,7 +284,6 @@ namespace Enemy01
 
         public override void Update()
         {
-            base.TimeUp(1);
         }
     }
 }

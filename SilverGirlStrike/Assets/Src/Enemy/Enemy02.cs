@@ -256,7 +256,6 @@ namespace Enemy02
 
         public override void Update()
         {
-            base.TimeUp(1);
             //移動値を登録
             base.enemy.SetPos(new Vector2(this.move_x.linear.None(this.move_x.Time(this.moveData.moveTime), this.move_x.GetStartValue(), this.move_x.GetEndValue(), this.moveData.moveTime),
                 this.move_y.linear.None(this.move_y.Time(this.moveData.moveTime), this.move_y.GetStartValue(), this.move_y.GetEndValue(), this.moveData.moveTime)));
@@ -298,7 +297,6 @@ namespace Enemy02
 
         public override void Update()
         {
-            base.TimeUp(1);
         }
     }
 }
