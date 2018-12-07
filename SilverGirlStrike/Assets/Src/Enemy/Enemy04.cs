@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 /**
- * file     Enemy03.cs
+ * file     Enemy04.cs
  * brief    敵Class
  * author   Shou Kaneko
- * date     2018/12/01
+ * date     2018/12/07
  * 状態
  *      待ち、移動
 */
@@ -40,6 +40,12 @@ namespace Enemy04
             DESCENT,
             //! 上昇
             RISING,
+            //! 周囲攻撃
+            CIRCUMFERENCE,
+            //! 軌道待ち
+            ORBIT,
+            //! 死亡
+            DEATH,
         }
         /**
          * enum Direction
@@ -85,7 +91,7 @@ namespace Enemy04
          [System.Serializable]
          public class AttackParameter
         {
-            
+            public NarrowAttacker[] narrowAttackers;
         }
         //! 固有パラメータデータ
         public Enemy04Parameter parameter;
@@ -103,17 +109,18 @@ namespace Enemy04
         private AttackData attackData;
         //! 自身のBoxの当たり判定
         private BoxCollider2D collider;
-        //! 停止データの配列位置番号
-        private int nowNum;
         //! 魔法弾
         public Bullet.BulletData bulletData;
+        //! 周囲攻撃データ
+        public AttackParameter attackParameter;
+        //! プレイヤー検知用Circle
+        private CircleCollider2D circleCollider;
         public Enemy04()
             //! life
             : base(10)
         {
             this.originPos = new Vector2();
             this.attackData = new AttackData(this);
-            this.nowNum = 0;
         }
         private void Start()
         {
@@ -124,6 +131,7 @@ namespace Enemy04
             this.footPos = this.move.footPosition.position;
             this.parameter.direction = Direction.LEFT;
             this.collider = GetComponent<BoxCollider2D>();
+            this.circleCollider = GetComponent<CircleCollider2D>();
             this.attackData.power = this.parameter.power;
             this.parameter.animation = GetComponent<Animator>();
             this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
@@ -132,7 +140,10 @@ namespace Enemy04
             base.AddState((int)State.WAIT, new WaitState(this));
             base.AddState((int)State.DESCENT, new DescentState(this));
             base.AddState((int)State.RISING, new RisingState(this));
-            base.ChangeState((int)State.RISING);
+            base.AddState((int)State.CIRCUMFERENCE, new CircumferenceState(this));
+            base.AddState((int)State.ORBIT, new OrbitState(this));
+            base.AddState((int)State.DEATH, new DeathState(this));
+            base.ChangeState((int)State.ORBIT);
         }
 
         public override void UpdateCharacter()
@@ -142,10 +153,12 @@ namespace Enemy04
             Collider2D hit = this.Hit();
             if (hit != null)
             {
-                hit.GetComponent<CharacterObject>().Damage(this.attackData);
+                if (hit.GetComponent<CharacterObject>() != null)
+                {
+                    hit.GetComponent<CharacterObject>().Damage(this.attackData);
+                }
             }
             this.DebugDrawPointer();
-            Debug.Log((State)this.GetData().stateManager.GetNowStateNum());
         }
 
         public override void Damage(AttackData attackData)
@@ -174,7 +187,6 @@ namespace Enemy04
             {
                 this.parameter.direction = Direction.LEFT;
             }
-            //this.transform.localScale = new Vector3((int)this.parameter.direction, 1, 1);
         }
         /**
          * brief    固有データを取得する
@@ -214,11 +226,14 @@ namespace Enemy04
                     );
         }
         /**
-         * brief    停止配列の位置を最初に戻す
+         * brief    プレイヤー検知
          */
-        public void StartStopData()
+         public Collider2D CheckTargetDetection()
         {
-            this.nowNum = 0;
+            return Physics2D.OverlapCircle(
+                this.circleCollider.transform.position,
+                this.circleCollider.radius,
+                (int)M_System.LayerName.PLAYER);
         }
         /**
          * brief    Sceneに自分の通った道に点を置くDebug処理
@@ -275,7 +290,7 @@ namespace Enemy04
             {
                 if ((int)Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 0 && (int)Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 1)
                 {
-                    manager.SetNextState((int)Enemy04.State.DESCENT);
+                    manager.SetNextState((int)Enemy04.State.WAIT);
                     base.ResetTime();
                     return true;
                 }
@@ -287,12 +302,6 @@ namespace Enemy04
         {
             this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(base.GetTime() * this.enemy.move.speed)) * this.enemy.move.radius * this.enemy.move.scale.x),
                 this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(base.GetTime() * this.enemy.move.speed * 2 + 90)) * this.enemy.move.radius) * this.enemy.move.scale.y));
-            //1週判定
-            //if ((int)Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 0 && (int)Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 1)
-            //{
-            //    base.ResetTime();
-            //    this.enemy.StartStopData();
-            //}
             if(base.GetTime() % 30 == 0)
             {
                 Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletData);
@@ -327,7 +336,17 @@ namespace Enemy04
         {
             if(base.GetTime() >= 30)
             {
-                manager.SetNextState((int)Enemy04.State.RISING);
+                switch (manager.GetPreStateNum())
+                {
+                    case (int)Enemy04.State.RISING:
+                        manager.SetNextState((int)Enemy04.State.MOVE);
+                        break;
+                    case (int)Enemy04.State.MOVE:
+                        manager.SetNextState((int)Enemy04.State.DESCENT);
+                        break;
+                    default:
+                        break;
+                }
                 return true;
             }
             return false;
@@ -362,9 +381,9 @@ namespace Enemy04
 
         public override bool Transition(ref StateManager manager)
         {
-            if(!this.move_y.IsPlay())
+            if (!this.move_y.IsPlay())
             {
-                manager.SetNextState((int)Enemy04.State.WAIT);
+                manager.SetNextState((int)Enemy04.State.CIRCUMFERENCE);
                 return true;
             }
             return false;
@@ -402,7 +421,7 @@ namespace Enemy04
         {
             if(!this.move_y.IsPlay())
             {
-                manager.SetNextState((int)Enemy04.State.MOVE);
+                manager.SetNextState((int)Enemy04.State.WAIT);
                 return true;
             }
             return false;
@@ -415,20 +434,80 @@ namespace Enemy04
         }
     }
     /**
-     * brief    周囲攻撃
-     */
+     * brief    周囲攻撃State
+     */ 
     public class CircumferenceState : BaseState
     {
-        enum Mode
-        {
-            //! 展開
-            EXPANSION,
-            //! 縮小
-            SHRINKING,
-            //! 待機
-            WAIT,
-        }
         public CircumferenceState(Enemy04 enemy) : base(enemy)
+        {
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+            ResetTime();
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            if(base.GetTime() >= 30)
+            {
+                manager.SetNextState((int)Enemy04.State.RISING);
+                return true;
+            }
+            return false;
+        }
+
+        public override void Update()
+        {
+            if(base.GetTime() == 4)
+            {
+                this.enemy.attackParameter.narrowAttackers[0].StartAttack();
+            }
+        }
+    }
+    /**
+     * brief    軌道確認
+     */
+    public class OrbitState : BaseState
+    {
+        public OrbitState(Enemy04 enemy) : base(enemy)
+        {
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+            this.enemy.SetPos(this.enemy.GetFootPosition());
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+            ResetTime();
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            if (base.enemy.CheckTargetDetection() != null)
+            {
+                manager.SetNextState((int)Enemy04.State.RISING);
+                return true;
+            }
+            return false;
+        }
+
+        public override void Update()
+        {
+        }
+    }
+    /**
+     * brief    死亡State
+     */
+    public class DeathState : BaseState
+    {
+        public DeathState(Enemy04 enemy) : base(enemy)
         {
         }
 

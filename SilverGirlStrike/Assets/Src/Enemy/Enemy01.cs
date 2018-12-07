@@ -53,6 +53,7 @@ namespace Enemy01
             NORMAL,
             ATTACK,
             FALL,
+            DEATH,
         }
         /**
          * enum Direction 向き
@@ -87,7 +88,7 @@ namespace Enemy01
         //! 生成するBulletのデータ
         public Bullet.BulletData bulletData;
         //! 当たり判定
-        BoxCollider2D collider;
+        BoxCollider2D boxCollider;
         //! 攻撃範囲
         CircleCollider2D circleCollider;
         //! 重力の有効化設定
@@ -104,7 +105,7 @@ namespace Enemy01
         {
             parameter.mover = GetComponent<CharacterMover>();
             parameter.foot = this.transform.GetComponentInChildren<Foot>();
-            this.collider = GetComponent<BoxCollider2D>();
+            this.boxCollider = GetComponent<BoxCollider2D>();
             this.circleCollider = GetComponent<CircleCollider2D>();
 
             this.parameter.animation = GetComponent<Animator>();
@@ -113,11 +114,13 @@ namespace Enemy01
             base.AddState((int)State.NORMAL, new NormalState(this));
             base.AddState((int)State.ATTACK, new AttackState(this));
             base.AddState((int)State.FALL, new FallState(this));
+            base.AddState((int)State.DEATH, new DeathState(this));
             base.ChangeState((int)State.NORMAL);
         }
         public override void UpdateCharacter()
         {
             this.UpdateState();
+
         }
         public override void Damage(AttackData data)
         {
@@ -128,7 +131,7 @@ namespace Enemy01
             this.GetData().hitPoint.DamageUpdate();
             if(this.GetData().hitPoint.GetHP() <= 0)
             {
-                
+                base.ChangeState((int)State.DEATH);
             }
         }
         public override void MoveCharacter()
@@ -284,6 +287,37 @@ namespace Enemy01
 
         public override void Update()
         {
+        }
+    }
+    /**
+     * brief    死亡モーション
+     */
+    public class DeathState : BaseState
+    {
+        public DeathState(Enemy01 enemy) : base(enemy)
+        {
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            return false;
+        }
+
+        public override void Update()
+        {
+            if(base.GetTime() >= 10)
+            { 
+
+            }
         }
     }
 }

@@ -198,11 +198,10 @@ namespace Bullet
         {
             //自分がプレイヤーと当たっていた時、プレイヤーにダメージを与え自分は消滅する
             var hit = base.bullet.HitCheck();
-            if(hit)
+            if(hit != null)
             {
                 if(hit.tag == "Player")
                 {
-                    //hit.GetComponent<CharacterObject>().GetData().hitPoint.Damage(base.bullet.GetAttackData().power);
                     hit.GetComponent<CharacterObject>().Damage(this.bullet.GetAttackData());
                     base.bullet.Delete();
                     return;
