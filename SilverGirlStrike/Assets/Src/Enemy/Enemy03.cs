@@ -36,6 +36,8 @@ namespace Enemy03
             WAIT,
             //! 移動
             MOVE,
+            //! 死亡
+            DEATH,
         }
         /**
          * enum Direction
@@ -130,7 +132,10 @@ namespace Enemy03
             Collider2D hit = this.Hit();
             if (hit != null)
             {
-                hit.GetComponent<CharacterObject>().Damage(this.attackData);
+                if(hit.GetComponent<CharacterObject>() != null)
+                {
+                    hit.GetComponent<CharacterObject>().Damage(this.attackData);
+                }
             }
         }
 
@@ -278,9 +283,8 @@ namespace Enemy03
 
         public override void Update()
         {
-            base.TimeUp(1);
-            this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) * this.enemy.move.radius * this.enemy.move.scale.x),
-                this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) * this.enemy.move.radius) * this.enemy.move.scale.y));
+            this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(base.GetTime() * this.enemy.move.speed)) * this.enemy.move.radius * this.enemy.move.scale.x),
+                this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(base.GetTime() * this.enemy.move.speed)) * this.enemy.move.radius) * this.enemy.move.scale.y));
             //1週判定
             if ((int)Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 0 && (int)Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 1)
             {
@@ -326,7 +330,30 @@ namespace Enemy03
 
         public override void Update()
         {
-            base.TimeUp(1);
+        }
+    }
+    public class DeathState : BaseState
+    {
+        public DeathState(Enemy03 enemy) : base(enemy)
+        {
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            return false;
+        }
+
+        public override void Update()
+        {
 
         }
     }

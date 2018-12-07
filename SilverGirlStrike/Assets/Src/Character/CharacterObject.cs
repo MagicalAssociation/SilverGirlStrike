@@ -242,14 +242,14 @@ public abstract class CharacterObject : MonoBehaviour
         //! HP関連
         public HitPoint hitPoint;
         //! 状態管理
-        public StateManager manager;
+        public StateManager stateManager;
         /**
          * brief    constructor
          */ 
         public CharaData()
         {
             hitPoint = new HitPoint();
-            manager = new StateManager();
+            stateManager = new StateManager();
         }
         /**
         * brief    constructor
@@ -258,18 +258,18 @@ public abstract class CharacterObject : MonoBehaviour
         public CharaData(int maxHP)
         {
             hitPoint = new HitPoint(maxHP);
-            manager = new StateManager();
+            stateManager = new StateManager();
         }
 
     }
     //! CharacterData
-    CharaData data;
+    CharaData characterData;
     /**
      * brief    constructor
      */ 
     public CharacterObject()
     {
-        data = new CharaData();
+        characterData = new CharaData();
     }
     /**
      * brief    constructor
@@ -277,7 +277,7 @@ public abstract class CharacterObject : MonoBehaviour
      */
     public CharacterObject(int maxHP)
     {
-        data = new CharaData(maxHP);
+        characterData = new CharaData(maxHP);
     }
     /**
      * brief    更新処理
@@ -300,7 +300,7 @@ public abstract class CharacterObject : MonoBehaviour
      */ 
     public CharaData GetData()
     {
-        return this.data;
+        return this.characterData;
     }
     /**
      * brief    Stateの更新処理
@@ -308,21 +308,21 @@ public abstract class CharacterObject : MonoBehaviour
 
     public void UpdateState()
     {
-        this.data.manager.Update();
+        this.characterData.stateManager.Update();
     }
     /**
      * brief    Stateを登録する
      */ 
     public void AddState(int stateNum, StateParameter parameter)
     {
-        this.data.manager.SetParameter(stateNum, parameter);
+        this.characterData.stateManager.SetParameter(stateNum, parameter);
     }
     /**
      * brief    Stateを変更する
      */ 
     public void ChangeState(int stateNum)
     {
-        this.data.manager.ChengeState(stateNum);
+        this.characterData.stateManager.ChengeState(stateNum);
     }
     /**
     * brief    現在のStateが引数のものと一致するかを判定
@@ -330,6 +330,6 @@ public abstract class CharacterObject : MonoBehaviour
     */
     public bool IsCurrentState(int state)
     {
-        return this.data.manager.GetNowStateNum() == state;
+        return this.characterData.stateManager.GetNowStateNum() == state;
     }
 }

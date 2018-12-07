@@ -9,7 +9,23 @@ using UnityEngine;
 
 namespace Bullet
 {
-    public class MagicBullet : CharacterObject
+
+    [System.Serializable]
+    public class BulletData
+    {
+        [Range(0.0f, 360.0f)]
+        public float angle;
+        public int power;
+        public float speed;
+        public int life;
+        public GameObject target;
+        public BaseBullet attackObject;
+    }
+    public abstract class BaseBullet : CharacterObject
+    {
+    }
+
+    public class MagicBullet : BaseBullet
     {
         public enum State
         {
@@ -60,7 +76,7 @@ namespace Bullet
 
         public override void UpdateCharacter()
         {
-            GetData().manager.Update();
+            GetData().stateManager.Update();
         }
 
         public override void Damage(AttackData attackData)
@@ -123,6 +139,25 @@ namespace Bullet
             move.x = Mathf.Cos(rad);
             move.y = Mathf.Sin(rad);
         }
+        /**
+         * brief    攻撃生成
+         */
+         public static void Create(CharacterObject characterObject,BulletData bulletData)
+        {
+            MagicBullet bullet = Object.Instantiate(bulletData.attackObject, characterObject.transform.position, Quaternion.identity) as Bullet.MagicBullet;
+            bullet.SetAttackData(new AttackData(characterObject));
+            bullet.GetAttackData().power = bulletData.power;
+            bullet.lifeCnt = bulletData.life;
+            bullet.moveSpeed = bulletData.speed;
+            if (bulletData.target != null)
+            {
+                bullet.SetShotTarget(bulletData.target);
+            }
+            else
+            {
+                bullet.SetShotAngle(bulletData.angle);
+            }
+        }
     }
     /**
      * brief    元State
@@ -161,14 +196,12 @@ namespace Bullet
 
         public override void Update()
         {
-            base.TimeUp(1);
             //自分がプレイヤーと当たっていた時、プレイヤーにダメージを与え自分は消滅する
             var hit = base.bullet.HitCheck();
-            if(hit)
+            if(hit != null)
             {
                 if(hit.tag == "Player")
                 {
-                    //hit.GetComponent<CharacterObject>().GetData().hitPoint.Damage(base.bullet.GetAttackData().power);
                     hit.GetComponent<CharacterObject>().Damage(this.bullet.GetAttackData());
                     base.bullet.Delete();
                     return;

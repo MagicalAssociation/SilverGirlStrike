@@ -24,8 +24,6 @@ using UnityEngine;
  * Inspectorの設定値の説明
  * Gravity このCharacterの重さ
  * Parameter.MaxHP 最大HP
- * Parameter.AttackObject 攻撃する際に出現させるGameObject
- *      これ今MagicBulletしか入らない設計しているので今後の実装によっては変化させます
  * Parameter.Radius このCharacterが攻撃を始める範囲
  * Parameter.AttackInterval 攻撃の感覚を指定します。
  * Parameter.Animation アニメーションデータ
@@ -55,6 +53,7 @@ namespace Enemy01
             NORMAL,
             ATTACK,
             FALL,
+            DEATH,
         }
         /**
          * enum Direction 向き
@@ -69,8 +68,6 @@ namespace Enemy01
         {
             //! 最大HP
             public int maxHP;
-            //! 生成する攻撃オブジェクト
-            public Bullet.MagicBullet attackObject;
             //! 攻撃開始範囲の半径
             public float radius;
             //! 攻撃間隔
@@ -84,24 +81,14 @@ namespace Enemy01
             //! 向き
             public Direction direction;
         }
-        [System.Serializable]
-        public class BulletData
-        {
-            [Range(0.0f,360.0f)]
-            public float angle;
-            public int power;
-            public float speed;
-            public int life;
-            public GameObject target;
-        }
         //! 重力
         public float gravity;
         //! Parameter
         public Enemy01Parameter parameter;
         //! 生成するBulletのデータ
-        public BulletData bulletData;
+        public Bullet.BulletData bulletData;
         //! 当たり判定
-        BoxCollider2D collider;
+        BoxCollider2D boxCollider;
         //! 攻撃範囲
         CircleCollider2D circleCollider;
         //! 重力の有効化設定
@@ -118,7 +105,7 @@ namespace Enemy01
         {
             parameter.mover = GetComponent<CharacterMover>();
             parameter.foot = this.transform.GetComponentInChildren<Foot>();
-            this.collider = GetComponent<BoxCollider2D>();
+            this.boxCollider = GetComponent<BoxCollider2D>();
             this.circleCollider = GetComponent<CircleCollider2D>();
 
             this.parameter.animation = GetComponent<Animator>();
@@ -127,11 +114,13 @@ namespace Enemy01
             base.AddState((int)State.NORMAL, new NormalState(this));
             base.AddState((int)State.ATTACK, new AttackState(this));
             base.AddState((int)State.FALL, new FallState(this));
+            base.AddState((int)State.DEATH, new DeathState(this));
             base.ChangeState((int)State.NORMAL);
         }
         public override void UpdateCharacter()
         {
             this.UpdateState();
+
         }
         public override void Damage(AttackData data)
         {
@@ -142,7 +131,7 @@ namespace Enemy01
             this.GetData().hitPoint.DamageUpdate();
             if(this.GetData().hitPoint.GetHP() <= 0)
             {
-                
+                base.ChangeState((int)State.DEATH);
             }
         }
         public override void MoveCharacter()
@@ -219,7 +208,6 @@ namespace Enemy01
 
         public override void Update()
         {
-            base.TimeUp(1);
         }
     }
     /**
@@ -254,7 +242,6 @@ namespace Enemy01
 
         public override void Update()
         {
-            base.TimeUp(1);
             if(base.GetTime() == 30)
             {
                 //攻撃生成
@@ -266,19 +253,7 @@ namespace Enemy01
          */ 
         private void CreateBullet()
         {
-            Bullet.MagicBullet bullet = Object.Instantiate(base.enemy.GetParameter().attackObject, base.enemy.transform.position, Quaternion.identity) as Bullet.MagicBullet;
-            bullet.SetAttackData(new AttackData(base.enemy));
-            bullet.GetAttackData().power = base.enemy.bulletData.power;
-            bullet.lifeCnt = base.enemy.bulletData.life;
-            bullet.moveSpeed = base.enemy.bulletData.speed;
-            if(this.enemy.bulletData.target != null)
-            {
-                bullet.SetShotTarget(this.enemy.bulletData.target);
-            }
-            else
-            {
-                bullet.SetShotAngle(this.enemy.bulletData.angle);
-            }
+            Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletData);
         }
     }
     /**
@@ -312,7 +287,37 @@ namespace Enemy01
 
         public override void Update()
         {
-            base.TimeUp(1);
+        }
+    }
+    /**
+     * brief    死亡モーション
+     */
+    public class DeathState : BaseState
+    {
+        public DeathState(Enemy01 enemy) : base(enemy)
+        {
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            return false;
+        }
+
+        public override void Update()
+        {
+            if(base.GetTime() >= 10)
+            { 
+
+            }
         }
     }
 }

@@ -31,6 +31,8 @@ namespace Enemy02
             WAIT,
             //! 移動
             MOVE,
+            //! 死亡
+            DEATH,
         }
         /**
          * enum Direction 向き
@@ -102,6 +104,7 @@ namespace Enemy02
             //各ステートを登録&適用
             base.AddState((int)State.MOVE, new MoveState(this));
             base.AddState((int)State.WAIT, new WaitState(this));
+            base.AddState((int)State.DEATH, new DeathState(this));
             base.ChangeState((int)State.WAIT);
         }
 
@@ -110,9 +113,12 @@ namespace Enemy02
             this.UpdateState();
             //プレイヤーと当たったらダメージ処理
             Collider2D hit = this.Hit();
-            if(hit)
+            if(hit != null)
             {
-                hit.GetComponent<CharacterObject>().Damage(this.attackData);
+                if (hit.GetComponent<CharacterObject>() != null)
+                {
+                    hit.GetComponent<CharacterObject>().Damage(this.attackData);
+                }
             }
         }
 
@@ -126,7 +132,7 @@ namespace Enemy02
             this.GetData().hitPoint.DamageUpdate();
             if(this.GetData().hitPoint.GetHP() <= 0)
             {
-
+                base.ChangeState((int)State.DEATH);
             }
         }
 
@@ -256,7 +262,6 @@ namespace Enemy02
 
         public override void Update()
         {
-            base.TimeUp(1);
             //移動値を登録
             base.enemy.SetPos(new Vector2(this.move_x.linear.None(this.move_x.Time(this.moveData.moveTime), this.move_x.GetStartValue(), this.move_x.GetEndValue(), this.moveData.moveTime),
                 this.move_y.linear.None(this.move_y.Time(this.moveData.moveTime), this.move_y.GetStartValue(), this.move_y.GetEndValue(), this.moveData.moveTime)));
@@ -298,7 +303,29 @@ namespace Enemy02
 
         public override void Update()
         {
-            base.TimeUp(1);
+        }
+    }
+    public class DeathState : BaseState
+    {
+        public DeathState(Enemy02 enemy) : base(enemy)
+        {
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            return false;
+        }
+
+        public override void Update()
+        {
         }
     }
 }
