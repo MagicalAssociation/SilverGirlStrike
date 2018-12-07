@@ -154,6 +154,7 @@ public class StateManager
             this.nowState = this.nextState;
         }
         this.pairs[this.nowState].Enter(ref tmp);
+        this.pairs[this.nowState].ResetTime();
     }
     /**
      * brief    次Stateを指定する

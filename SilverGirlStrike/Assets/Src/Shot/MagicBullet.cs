@@ -145,6 +145,7 @@ namespace Bullet
          public static void Create(CharacterObject characterObject,BulletData bulletData)
         {
             MagicBullet bullet = Object.Instantiate(bulletData.attackObject, characterObject.transform.position, Quaternion.identity) as Bullet.MagicBullet;
+
             bullet.SetAttackData(new AttackData(characterObject));
             bullet.GetAttackData().power = bulletData.power;
             bullet.lifeCnt = bulletData.life;

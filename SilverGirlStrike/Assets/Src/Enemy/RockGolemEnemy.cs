@@ -198,7 +198,6 @@ namespace RockGolem
 
             public override void Update()
             {
-                TimeUp(1);
                 //移動先への移動
                 GetParam().moveVector += this.targetDirection * GetInspectorParam().moveSpeed;
             }
@@ -269,7 +268,6 @@ namespace RockGolem
 
             public override void Update()
             {
-                TimeUp(1);
                 //待機モーション中に、緩やかに位置がグルグル回る
                 GetParam().moveVector = new Vector2(Mathf.Sin((GetTime() * 0.8f) * Mathf.Deg2Rad) * 0.1f, Mathf.Sin((GetTime() * 2.0f) * Mathf.Deg2Rad));
             }
@@ -309,9 +307,6 @@ namespace RockGolem
                         }
                         break;
                 }
-
-
-                ResetTime();
             }
 
             public override void Exit(ref StateManager manager)
@@ -326,7 +321,6 @@ namespace RockGolem
 
             public override void Update()
             {
-                TimeUp(1);
                 //突進
                 GetParam().moveVector += this.attackDirection;
             }
@@ -345,7 +339,6 @@ namespace RockGolem
             public override void Enter(ref StateManager manager)
             {
                 fallVelocity = -10.0f;
-                ResetTime();
             }
 
             public override void Exit(ref StateManager manager)
@@ -367,8 +360,6 @@ namespace RockGolem
 
             public override void Update()
             {
-                TimeUp(1);
-
                 if (GetTime() < 100)
                 {
                     //プレイヤー上空でX追尾
