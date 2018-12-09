@@ -163,15 +163,15 @@ namespace Enemy04
 
         public override void Damage(AttackData attackData)
         {
-
+            this.GetData().hitPoint.Damage(attackData.power, attackData.chain);
         }
 
         public override void ApplyDamage()
         {
             this.GetData().hitPoint.DamageUpdate();
-            if (this.GetData().hitPoint.GetHP() <= 0)
+            if (this.GetData().hitPoint.GetHP() <= 0 && this.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
-
+                base.ChangeState((int)State.DEATH);
             }
         }
 
@@ -291,7 +291,6 @@ namespace Enemy04
                 if ((int)Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 0 && (int)Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 1)
                 {
                     manager.SetNextState((int)Enemy04.State.WAIT);
-                    base.ResetTime();
                     return true;
                 }
             }
@@ -324,12 +323,11 @@ namespace Enemy04
 
         public override void Enter(ref StateManager manager)
         {
-            this.enemy.parameter.animation.Play("Normal");
+            //this.enemy.parameter.animation.Play("");
         }
 
         public override void Exit(ref StateManager manager)
         {
-            base.ResetTime();
         }
 
         public override bool Transition(ref StateManager manager)
@@ -370,12 +368,12 @@ namespace Enemy04
 
         public override void Enter(ref StateManager manager)
         {
+            this.enemy.parameter.animation.Play("Idle");
             move_y.Set(this.enemy.GetOriginPos().y, this.enemy.GetFootPosition().y - this.enemy.GetOriginPos().y);
         }
 
         public override void Exit(ref StateManager manager)
         {
-            base.ResetTime();
             move_y.ResetTime();
         }
 
@@ -408,12 +406,12 @@ namespace Enemy04
 
         public override void Enter(ref StateManager manager)
         {
+            this.enemy.parameter.animation.Play("Idle");
             move_y.Set(this.enemy.GetFootPosition().y, this.enemy.GetOriginPos().y - this.enemy.GetFootPosition().y);
         }
 
         public override void Exit(ref StateManager manager)
         {
-            base.ResetTime();
             move_y.ResetTime();
         }
 
@@ -444,11 +442,11 @@ namespace Enemy04
 
         public override void Enter(ref StateManager manager)
         {
+            this.enemy.parameter.animation.Play("Move");
         }
 
         public override void Exit(ref StateManager manager)
         {
-            ResetTime();
         }
 
         public override bool Transition(ref StateManager manager)
@@ -480,12 +478,12 @@ namespace Enemy04
 
         public override void Enter(ref StateManager manager)
         {
+            this.enemy.parameter.animation.Play("Idle");
             this.enemy.SetPos(this.enemy.GetFootPosition());
         }
 
         public override void Exit(ref StateManager manager)
         {
-            ResetTime();
         }
 
         public override bool Transition(ref StateManager manager)
@@ -513,6 +511,7 @@ namespace Enemy04
 
         public override void Enter(ref StateManager manager)
         {
+            this.enemy.parameter.animation.Play("Idle");
         }
 
         public override void Exit(ref StateManager manager)
@@ -526,6 +525,10 @@ namespace Enemy04
 
         public override void Update()
         {
+            if (base.GetTime() >= 60)
+            {
+                this.enemy.gameObject.SetActive(false);
+            }
         }
     }
 }

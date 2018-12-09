@@ -178,7 +178,6 @@ namespace Enemy05
 
         public override void Exit(ref StateManager manager)
         {
-            base.ResetTime();
         }
 
         public override bool Transition(ref StateManager manager)
@@ -218,7 +217,6 @@ namespace Enemy05
 
         public override void Exit(ref StateManager manager)
         {
-            base.ResetTime();
         }
 
         public override bool Transition(ref StateManager manager)
@@ -266,7 +264,6 @@ namespace Enemy05
 
         public override void Exit(ref StateManager manager)
         {
-            base.ResetTime();
         }
 
         public override bool Transition(ref StateManager manager)

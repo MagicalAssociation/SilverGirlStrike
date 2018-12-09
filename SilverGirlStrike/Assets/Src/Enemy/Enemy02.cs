@@ -124,13 +124,13 @@ namespace Enemy02
 
         public override void Damage(AttackData attackData)
         {
-
+            this.GetData().hitPoint.Damage(attackData.power, attackData.chain);
         }
 
         public override void ApplyDamage()
         {
             this.GetData().hitPoint.DamageUpdate();
-            if(this.GetData().hitPoint.GetHP() <= 0)
+            if (this.GetData().hitPoint.GetHP() <= 0 && base.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
                 base.ChangeState((int)State.DEATH);
             }
@@ -238,7 +238,6 @@ namespace Enemy02
         public override void Exit(ref StateManager manager)
         {
             //各値リセット
-            base.ResetTime();
             this.move_x.ResetTime();
             this.move_y.ResetTime();
             //次の移動配列へ、配列の最後だったら0に戻す
@@ -284,7 +283,6 @@ namespace Enemy02
 
         public override void Exit(ref StateManager manager)
         {
-            base.ResetTime();
         }
 
         public override bool Transition(ref StateManager manager)
@@ -313,6 +311,7 @@ namespace Enemy02
 
         public override void Enter(ref StateManager manager)
         {
+            this.enemy.parameter.animation.Play("Death");
         }
 
         public override void Exit(ref StateManager manager)
@@ -326,6 +325,10 @@ namespace Enemy02
 
         public override void Update()
         {
+            if (base.GetTime() >= 60)
+            {
+                this.enemy.gameObject.SetActive(false);
+            }
         }
     }
 }

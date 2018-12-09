@@ -122,6 +122,7 @@ namespace Enemy03
             //各ステートを登録&適用
             base.AddState((int)State.MOVE, new MoveState(this));
             base.AddState((int)State.WAIT, new WaitState(this));
+            base.AddState((int)State.DEATH, new DeathState(this));
             base.ChangeState((int)State.MOVE);
         }
 
@@ -141,15 +142,15 @@ namespace Enemy03
 
         public override void Damage(AttackData attackData)
         {
-
+            this.GetData().hitPoint.Damage(attackData.power, attackData.chain);
         }
 
         public override void ApplyDamage()
         {
             this.GetData().hitPoint.DamageUpdate();
-            if (this.GetData().hitPoint.GetHP() <= 0)
+            if (this.GetData().hitPoint.GetHP() <= 0 && base.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
-
+                base.ChangeState((int)State.DEATH);
             }
         }
 
@@ -257,9 +258,11 @@ namespace Enemy03
     {
         //! 移動量とかターゲット位置とかの取得用
         Enemy03.Move moveData;
+        int timeCnt;
         public MoveState(Enemy03 enemy)
             : base(enemy)
         {
+            timeCnt = 0;
         }
 
         public override void Enter(ref StateManager manager)
@@ -273,7 +276,7 @@ namespace Enemy03
 
         public override bool Transition(ref StateManager manager)
         {
-            if(this.enemy.GetStopData().stopTime == base.GetTime())
+            if(this.enemy.GetStopData().stopTime == timeCnt)
             {
                 manager.SetNextState((int)Enemy03.State.WAIT);
                 return true;
@@ -283,12 +286,13 @@ namespace Enemy03
 
         public override void Update()
         {
-            this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(base.GetTime() * this.enemy.move.speed)) * this.enemy.move.radius * this.enemy.move.scale.x),
-                this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(base.GetTime() * this.enemy.move.speed)) * this.enemy.move.radius) * this.enemy.move.scale.y));
+            timeCnt++;
+            this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(timeCnt * this.enemy.move.speed)) * this.enemy.move.radius * this.enemy.move.scale.x),
+                this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(timeCnt * this.enemy.move.speed)) * this.enemy.move.radius) * this.enemy.move.scale.y));
             //1週判定
-            if ((int)Mathf.Sin(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 0 && (int)Mathf.Cos(this.ToRadius(base.GetTime()) * this.enemy.move.speed) == 1)
+            if ((int)Mathf.Sin(this.ToRadius(timeCnt) * this.enemy.move.speed) == 0 && (int)Mathf.Cos(this.ToRadius(timeCnt) * this.enemy.move.speed) == 1)
             {
-                base.ResetTime();
+                timeCnt = 0;
                 this.enemy.StartStopData();
             }
         }
@@ -314,7 +318,6 @@ namespace Enemy03
 
         public override void Exit(ref StateManager manager)
         {
-            base.ResetTime();
             this.enemy.NextStopData();
         }
 
@@ -340,7 +343,7 @@ namespace Enemy03
 
         public override void Enter(ref StateManager manager)
         {
-
+            this.enemy.parameter.animation.Play("Death");
         }
 
         public override void Exit(ref StateManager manager)
@@ -354,7 +357,10 @@ namespace Enemy03
 
         public override void Update()
         {
-
+            if (base.GetTime() >= 60)
+            {
+                this.enemy.gameObject.SetActive(false);
+            }
         }
     }
 }

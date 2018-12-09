@@ -120,7 +120,6 @@ namespace Enemy01
         public override void UpdateCharacter()
         {
             this.UpdateState();
-
         }
         public override void Damage(AttackData data)
         {
@@ -129,7 +128,7 @@ namespace Enemy01
         public override void ApplyDamage()
         {
             this.GetData().hitPoint.DamageUpdate();
-            if(this.GetData().hitPoint.GetHP() <= 0)
+            if(this.GetData().hitPoint.GetHP() <= 0 && base.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
                 base.ChangeState((int)State.DEATH);
             }
@@ -187,7 +186,6 @@ namespace Enemy01
 
         public override void Exit(ref StateManager manager)
         {
-            base.ResetTime();
         }
 
         public override bool Transition(ref StateManager manager)
@@ -227,7 +225,6 @@ namespace Enemy01
 
         public override void Exit(ref StateManager manager)
         {
-            base.ResetTime();
         }
 
         public override bool Transition(ref StateManager manager)
@@ -272,7 +269,6 @@ namespace Enemy01
 
         public override void Exit(ref StateManager manager)
         {
-            base.ResetTime();
         }
 
         public override bool Transition(ref StateManager manager)
@@ -300,7 +296,7 @@ namespace Enemy01
 
         public override void Enter(ref StateManager manager)
         {
-
+            this.enemy.parameter.animation.Play("Death");
         }
 
         public override void Exit(ref StateManager manager)
@@ -314,9 +310,9 @@ namespace Enemy01
 
         public override void Update()
         {
-            if(base.GetTime() >= 10)
-            { 
-
+            if(base.GetTime() >= 60)
+            {
+                this.enemy.gameObject.SetActive(false);
             }
         }
     }

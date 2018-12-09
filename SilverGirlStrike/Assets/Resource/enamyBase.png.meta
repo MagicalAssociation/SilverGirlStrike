@@ -11,6 +11,8 @@ TextureImporter:
     21300012: enamyBase_6
     21300014: enamyBase_7
     21300016: enamyBase_8
+    21300018: enamyBase_9
+    21300020: enamyBase_10
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -323,6 +325,46 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 3f3f0f8bb78b7ae4280b251b264e3c35
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enamyBase_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 320
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7d334819e2859642926472f30c3d51b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enamyBase_10
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 320
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef4dd55163ecdf24b836726f490877c5
       vertices: []
       indices: 
       edges: []

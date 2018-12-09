@@ -183,7 +183,6 @@ namespace Bullet
 
         public override void Enter(ref StateManager manager)
         {
-            this.ResetTime();
         }
 
         public override void Exit(ref StateManager manager)
