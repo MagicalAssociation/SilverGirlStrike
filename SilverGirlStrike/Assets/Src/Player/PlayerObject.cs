@@ -659,13 +659,13 @@ namespace Fuchan
             if (GetParam().onGround && !GetInspectorParam().mover.IsJump())
             {
                 GetInspectorParam().playerAnim.Play("SwordAttack1");
-                GetInspectorParam().attackCollisions[2].StartAttack();
+                GetInspectorParam().attackCollisions[0].StartAttack();
             }
             else
             {
                 GetInspectorParam().playerAnim.Play("JumpSwordAttack1");
                 GetInspectorParam().mover.Jump(6.0f);
-                GetInspectorParam().attackCollisions[2].StartAttack();
+                GetInspectorParam().attackCollisions[0].StartAttack();
             }
 
             this.timeCnt = 0;
@@ -752,13 +752,13 @@ namespace Fuchan
             if (GetParam().onGround && !GetInspectorParam().mover.IsJump())
             {
                 GetInspectorParam().playerAnim.Play("SwordAttack2");
-                GetInspectorParam().attackCollisions[2].StartAttack();
+                GetInspectorParam().attackCollisions[1].StartAttack();
             }
             else
             {
                 GetInspectorParam().playerAnim.Play("JumpSwordAttack2");
                 GetInspectorParam().mover.Jump(6.0f);
-                GetInspectorParam().attackCollisions[2].StartAttack();
+                GetInspectorParam().attackCollisions[1].StartAttack();
             }
 
             this.timeCnt = 0;

@@ -30,6 +30,7 @@ public class NarrowAttacker : MonoBehaviour {
         EndAttack();
         this.attackData = new AttackData(this.userCharacter);
         this.attackData.power = this.attackPower;
+        this.attackData.chain = this.chainCount;
         //流石に50以上の敵にはヒットしないっしょ・・・
         this.hitResult = new Collider2D[50];
     }
