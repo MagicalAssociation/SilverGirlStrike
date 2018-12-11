@@ -86,7 +86,7 @@ namespace Enemy01
         //! Parameter
         public Enemy01Parameter parameter;
         //! 生成するBulletのデータ
-        public Bullet.BulletData bulletData;
+        public Bullet.BulletData[] bulletData;
         //! 当たり判定
         BoxCollider2D boxCollider;
         //! 攻撃範囲
@@ -250,7 +250,10 @@ namespace Enemy01
          */ 
         private void CreateBullet()
         {
-            Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletData);
+            for (int i = 0; i < this.enemy.bulletData.Length; ++i)
+            {
+                Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletData[i], this.enemy.transform.position);
+            }
         }
     }
     /**

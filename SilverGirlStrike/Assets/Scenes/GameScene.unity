@@ -1720,7 +1720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameter:
-    maxHP: 1
+    maxHP: 2
     animation: {fileID: 147915691}
     power: 0
     direction: 0
@@ -6720,7 +6720,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ae0be3a01080384e8d479f6e07e9b46, type: 3}
   m_Name: 
@@ -10234,20 +10234,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameter:
-    maxHP: 1
+    maxHP: 13
     animation: {fileID: 0}
     power: 3
     direction: 0
+    attackInterval: 30
   move:
     speed: 2
     radius: 1.5
     scale: {x: 2, y: 1}
     footPosition: {fileID: 211815757}
   bulletData:
-    angle: 0
+  - angle: 0
     power: 3
     speed: 0.3
-    life: 30
+    life: 180
     target: {fileID: 1796243766}
     attackObject: {fileID: 1641364455}
   attackParameter:
@@ -11194,7 +11195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameter:
-    maxHP: 1
+    maxHP: 2
     animation: {fileID: 837895784}
     power: 0
     direction: 0
@@ -13651,7 +13652,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: 0.8
   parameter:
-    maxHP: 10
+    maxHP: 2
     radius: 5.5
     attackInterval: 30
     animation: {fileID: 1011351426}
@@ -13659,10 +13660,10 @@ MonoBehaviour:
     foot: {fileID: 1217189000}
     direction: 0
   bulletData:
-    angle: 0
+  - angle: 0
     power: 3
     speed: 0.3
-    life: 30
+    life: 999999
     target: {fileID: 1796243766}
     attackObject: {fileID: 1641364455}
   enableGravity: 1
@@ -28722,7 +28723,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: 0.8
   parameter:
-    maxHP: 10
+    maxHP: 4
     radius: 5.5
     attackInterval: 30
     animation: {fileID: 2044241852}
@@ -28730,11 +28731,23 @@ MonoBehaviour:
     foot: {fileID: 816564409}
     direction: 0
   bulletData:
-    angle: 186
+  - angle: 0
     power: 3
     speed: 0.3
-    life: 30
-    target: {fileID: 1796243766}
+    life: 60
+    target: {fileID: 0}
+    attackObject: {fileID: 1641364455}
+  - angle: 45
+    power: 3
+    speed: 0.3
+    life: 60
+    target: {fileID: 0}
+    attackObject: {fileID: 1641364455}
+  - angle: 90
+    power: 3
+    speed: 0.3
+    life: 60
+    target: {fileID: 0}
     attackObject: {fileID: 1641364455}
   enableGravity: 1
 --- !u!212 &2044241851

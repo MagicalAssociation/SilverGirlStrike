@@ -142,9 +142,9 @@ namespace Bullet
         /**
          * brief    攻撃生成
          */
-         public static void Create(CharacterObject characterObject,BulletData bulletData)
+         public static void Create(CharacterObject characterObject,BulletData bulletData,Vector3 position)
         {
-            MagicBullet bullet = Object.Instantiate(bulletData.attackObject, characterObject.transform.position, Quaternion.identity) as Bullet.MagicBullet;
+            MagicBullet bullet = Object.Instantiate(bulletData.attackObject, position, Quaternion.identity) as Bullet.MagicBullet;
 
             bullet.SetAttackData(new AttackData(characterObject));
             bullet.GetAttackData().power = bulletData.power;

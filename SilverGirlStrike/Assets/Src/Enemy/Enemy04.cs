@@ -69,6 +69,8 @@ namespace Enemy04
             public int power;
             //! 向き情報
             public Direction direction;
+            //! 攻撃間隔
+            public int attackInterval;
         }
         /**
          * brief    移動用変数をまとめたclass
@@ -110,7 +112,7 @@ namespace Enemy04
         //! 自身のBoxの当たり判定
         private BoxCollider2D collider;
         //! 魔法弾
-        public Bullet.BulletData bulletData;
+        public Bullet.BulletData[] bulletData;
         //! 周囲攻撃データ
         public AttackParameter attackParameter;
         //! プレイヤー検知用Circle
@@ -301,9 +303,12 @@ namespace Enemy04
         {
             this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(base.GetTime() * this.enemy.move.speed)) * this.enemy.move.radius * this.enemy.move.scale.x),
                 this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(base.GetTime() * this.enemy.move.speed * 2 + 90)) * this.enemy.move.radius) * this.enemy.move.scale.y));
-            if(base.GetTime() % 30 == 0)
+            if(base.GetTime() % base.enemy.parameter.attackInterval == 0)
             {
-                Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletData);
+                for (int i = 0; i < this.enemy.bulletData.Length; ++i)
+                {
+                    Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletData[i], this.enemy.transform.position);
+                }
             }
         }
         private float ToRadius(float angle)
