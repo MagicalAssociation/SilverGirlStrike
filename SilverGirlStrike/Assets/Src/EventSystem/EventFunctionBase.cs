@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace TextEvent
 {
+    //イベントテキストの文字列を数値に変換する関数軍
     class TextParser
     {
         //boolっぽい文字をboolに変換
@@ -28,169 +29,43 @@ namespace TextEvent
         }
     }
 
-
-
-    //イベントを実行管理するクラス
-    public class EventManager
+    public class EventFunctionDictionary
     {
+        private Dictionary<string, Term.TermFunction> termFunctions;
+        private Dictionary<string, Action.ActionFunction> actionFunctions;
 
-
-        //条件判定
-        public void Update()
+        //固定値なのでコンストラクターで設定してもいいんじゃないかな
+        public EventFunctionDictionary()
         {
-
-        }
-    }
-
-    public class EventUnit
-    {
-        EventPerser.EventData data;
-        Dictionary<string, Term.TermFunction> termFunctions;
-        Dictionary<string, Action.ActionFunction> actionFunctions;
-        int actionPosition;
-        bool isActive;
-
-        public EventUnit(EventPerser.EventData data)
-        {
-            this.data = data;
-            this.actionPosition = 0;
-            this.isActive = false;
-
-            SetDictionary();
-        }
-
-        //イベントと名前を紐づける
-        void SetDictionary()
-        {
-            //条件
             this.termFunctions = new Dictionary<string, Term.TermFunction>();
-            this.termFunctions.Add("term1", new Term.Term1());
-
-            //イベント処理
             this.actionFunctions = new Dictionary<string, Action.ActionFunction>();
+
+            SetTermFunc();
+            SetActionFunc();
+        }
+
+        //名前から条件判定機能を獲得
+        public Term.TermFunction GetTermFunction(string name)
+        {
+            return this.termFunctions[name];
+        }
+        //名前からイベント処理機能を獲得
+        public Action.ActionFunction GetActionFunction(string name)
+        {
+            return this.actionFunctions[name];
+        }
+
+        //条件追加
+        private void SetTermFunc()
+        {
+            this.termFunctions.Add("term1", new Term.Term1());
+        }
+        //イベント処理追加
+        private void SetActionFunc()
+        {
             this.actionFunctions.Add("action1", new Action.Action1());
         }
 
-        public void Update()
-        {
-            TermCheck();
-            ActionUpdate();
-        }
-
-        void ActionUpdate()
-        {
-            //条件をクリアしていない場合はイベント処理は動かない
-            if (!this.isActive)
-            {
-                return;
-            }
-            var actionText = this.data.actionText[this.actionPosition];
-            var cullentAction = this.actionFunctions[actionText.eventName];
-            //アクションを実行
-            cullentAction.Action(actionText.args);
-            //イベントの1アクションが終わったら次のアクションへ
-            if (cullentAction.IsEnd())
-            {
-                ++this.actionPosition;
-            }
-
-            //イベントの終端に達したらイベント終わり
-            if(this.actionPosition >= this.data.actionText.Count)
-            {
-                this.isActive = false;
-                this.actionPosition = 0;
-            }
-
-        }
-
-        void TermCheck()
-        {
-            //条件判定を一度でもクリアしたら以降はイベント処理を行う
-            if (this.isActive)
-            {
-                return;
-            }
-            //判定
-            bool result = true;
-            foreach(var i in this.data.termText)
-            {
-                var term = this.termFunctions[i.eventName];
-                if (term.Judge(i.args) ==  i.requestedBoolean)
-                {
-                    continue;
-                }
-                //一つでも条件を満たさなかったものがある場合は条件未クリアとする
-                result = false;
-            }
-
-            this.isActive = result;
-        }
-
     }
 
-
-
-    //イベント条件
-    namespace Term
-    {
-        //イベントでの条件判定を行うための基底クラス
-        public abstract class TermFunction
-        {
-            //条件を判定する、引数を示す値として文字列配列が渡される
-            public abstract bool Judge(string[] args);
-        }
-
-
-
-        //テスト条件
-        public class Term1 : TermFunction
-        {
-            public override bool Judge(string[] args)
-            {
-                int arg1 = int.Parse(args[0]);
-                int arg2 = int.Parse(args[1]);
-
-
-                if (arg1 == arg2)
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
-    }
-
-    //イベント処理
-    namespace Action
-    {
-
-        //イベントの実際の処理を行うための基底クラス
-        public abstract class ActionFunction
-        {
-            //イベント処理、引数を表す値として文字列配列が渡される
-            public abstract void Action(string[] args);
-            //イベントの処理が終わったかどうか
-            public abstract bool IsEnd();
-        }
-        //テスト処理
-        public class Action1 : ActionFunction
-        {
-            public override void Action(string[] args)
-            {
-                //指定位置に特定のオブジェクトを動かす
-                var obj = GameObject.Find(args[0]);
-                if(obj == null)
-                {
-                    return;
-                }
-                obj.transform.position = new Vector3(float.Parse(args[1]), float.Parse(args[2]), float.Parse(args[3]));
-            }
-
-            public override bool IsEnd()
-            {
-                //すぐ終わる
-                return true;
-            }
-        }
-    }
 }
