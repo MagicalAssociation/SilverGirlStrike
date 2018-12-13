@@ -359,7 +359,7 @@ namespace Enemy03
         {
             if (base.GetTime() >= 60)
             {
-                this.enemy.gameObject.SetActive(false);
+                base.enemy.KillMyself();
             }
         }
     }

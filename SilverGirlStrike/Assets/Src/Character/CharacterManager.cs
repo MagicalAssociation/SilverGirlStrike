@@ -28,6 +28,8 @@ public class CharacterManager : MonoBehaviour
     List<CharacterData> objectList;
     //更新処理を行うオブジェクトの収集結果を格納するリスト
     List<CharacterData> activeCharacters;
+    //削除が必要なオブジェクトを削除するリスト
+    List<CharacterData> deadCharacters;
 
     //管理するオブジェクト(アクセス用)
     Dictionary<string, CharacterData> objects;
@@ -36,6 +38,7 @@ public class CharacterManager : MonoBehaviour
     {
         this.objectList = new List<CharacterData>();
         this.activeCharacters = new List<CharacterData>();
+        this.deadCharacters = new List<CharacterData>();
         this.objects = new Dictionary<string, CharacterData>();
 
         FindChildren(this.characters);
@@ -55,7 +58,7 @@ public class CharacterManager : MonoBehaviour
             //子オブジェクトを獲得
             var obj = root.transform.GetChild(i);
 
-            if (obj.childCount > 0)
+            if (obj.childCount > 0 && obj.gameObject.activeSelf)
             {
                 //子がいれば再起
                 FindChildren(obj.gameObject);
@@ -87,10 +90,22 @@ public class CharacterManager : MonoBehaviour
             //追加処理：ダメージ適用
             characterData.character.GetData().hitPoint.DamageUpdate();
             characterData.character.MoveCharacter();
+
+            if (characterData.character.IsDead())
+            {
+                this.deadCharacters.Add(characterData);
+            }
+        }
+
+        //全てのオブジェクトの削除を行う
+        foreach (var characterData in this.deadCharacters)
+        {
+            DeleteCharacterDirect(characterData);
         }
 
         //リストを空に
         this.activeCharacters.Clear();
+        this.deadCharacters.Clear();
     }
 
     void CollectCharacter()
@@ -147,9 +162,13 @@ public class CharacterManager : MonoBehaviour
     //キャラを消去、リストからも外す(CharacterData版)
     void DeleteCharacterDirect(CharacterData data)
     {
+        var characterData = data.character;
+
         Object.Destroy(data.character.gameObject);
         this.objectList[data.id] = null;
         this.objects[data.name] = null;
+
+        characterData.Dispose();
     }
 
     //キャラクターへ直接アクセスする

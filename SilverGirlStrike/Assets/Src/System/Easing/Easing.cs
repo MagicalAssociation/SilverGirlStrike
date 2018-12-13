@@ -9,6 +9,12 @@ using UnityEngine;
 */
 public class Easing
 {
+    public abstract class _Easing
+    {
+        public abstract float In(float t, float b, float c, float d);
+        public abstract float Out(float t, float b, float c, float d);
+        public abstract float InOut(float t, float b, float c, float d);
+    }
     //! TimeCount
     float cnt;
     //! EnablePlay
@@ -17,6 +23,8 @@ public class Easing
     float start;
     //! EndValue
     float end;
+    //! 使用するEasing
+    _Easing use;
     /**
 	*@brief	イージング用カウンタ
 	*@param[in]	float duration 設定タイム
@@ -41,7 +49,6 @@ public class Easing
     public bool IsPlay()
     {
         return this.toplay;
-
     }
     /**
     *@brief	タイム初期化
@@ -76,6 +83,10 @@ public class Easing
         this.start = startValue;
         this.end = endValue;
     }
+    public void Use(_Easing easing)
+    {
+        this.use = easing;
+    }
 
     /**
     *@brief	開始始点を取得
@@ -96,21 +107,21 @@ public class Easing
 
     }
     //t = 時間 d = 始点 c = 終点-始点 d = 経過時間
-    public class Linear
+    public class Linear : _Easing
     {
         public float None(float t, float b, float c, float d)
         {
             return c * t / d + b;
         }
-        public float In(float t, float b, float c, float d)
+        public override float In(float t, float b, float c, float d)
         {
             return c * t / d + b;
         }
-        public float Out(float t, float b, float c, float d)
+        public override float Out(float t, float b, float c, float d)
         {
             return c * t / d + b;
         }
-        public float InOut(float t, float b, float c, float d)
+        public override float InOut(float t, float b, float c, float d)
         {
             return c * t / d + b;
         }

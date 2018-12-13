@@ -264,12 +264,15 @@ public abstract class CharacterObject : MonoBehaviour
     }
     //! CharacterData
     CharaData characterData;
+    bool isDead;
+
     /**
      * brief    constructor
      */ 
     public CharacterObject()
     {
         characterData = new CharaData();
+        isDead = false;
     }
     /**
      * brief    constructor
@@ -295,9 +298,17 @@ public abstract class CharacterObject : MonoBehaviour
      * brief    キャラクターの移動処理
      */ 
     public abstract void MoveCharacter();
+
+    /**
+     * brief    キャラクターの削除時の挙動
+     */
+    public virtual void Dispose()
+    {
+
+    }
     /**
      * brief    データの取得
-     */ 
+     */
     public CharaData GetData()
     {
         return this.characterData;
@@ -331,5 +342,14 @@ public abstract class CharacterObject : MonoBehaviour
     public bool IsCurrentState(int state)
     {
         return this.characterData.stateManager.GetNowStateNum() == state;
+    }
+
+    public bool IsDead()
+    {
+        return isDead;
+    }
+    public void KillMyself()
+    {
+        isDead = true;
     }
 }

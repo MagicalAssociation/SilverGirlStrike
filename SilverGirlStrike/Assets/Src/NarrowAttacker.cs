@@ -78,6 +78,7 @@ public class NarrowAttacker : MonoBehaviour {
 
         ContactFilter2D contactFilter2D = new ContactFilter2D();
         contactFilter2D.SetLayerMask(layer);
+        contactFilter2D.useTriggers = true;
         int resultLength = Physics2D.OverlapCollider(this.attackCollition, contactFilter2D, this.hitResult);
         //ダメージ処理
         for (int i = 0; i < resultLength; ++i)

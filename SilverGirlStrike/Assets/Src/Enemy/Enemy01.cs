@@ -315,7 +315,7 @@ namespace Enemy01
         {
             if(base.GetTime() >= 60)
             {
-                this.enemy.gameObject.SetActive(false);
+                base.enemy.KillMyself();
             }
         }
     }

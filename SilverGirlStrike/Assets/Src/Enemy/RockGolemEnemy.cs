@@ -26,9 +26,10 @@ namespace RockGolem
             MOVE,
             IDLE,
             TACKLE,
+            TACKLE2,
             PRESS,
 
-            TACKLE2,
+            STONE_BLAST,
 
             DEATH,
         }
@@ -70,6 +71,7 @@ namespace RockGolem
             public GameObject targetCharacter;
             public IdlePosition idlePositions;
             public NarrowAttacker[] attackCollisions;
+            public Bullet.BulletData[] bulletDatas;
         }
 
 
@@ -77,7 +79,7 @@ namespace RockGolem
         //初期化はちゃんとStart関数でやってね（はあと
         public class Parameter
         {
-            public GameObject myself;
+            public CharacterObject myself;
             //毎移動時の移動ベクトル
             public Vector2 moveVector;
 
@@ -98,7 +100,7 @@ namespace RockGolem
 
 
             this.param = new Parameter();
-            this.param.myself = this.gameObject;
+            this.param.myself = this;
             this.param.moveVector = Vector2.zero;
             this.param.currentIdlePosition = this.inspectorParam.idlePositions.center;
             //ステート追加
@@ -107,6 +109,7 @@ namespace RockGolem
             AddState((int)State.TACKLE, new Tackle1State(this));
             AddState((int)State.TACKLE2, new Tackle2State(this));
             AddState((int)State.PRESS, new ChasePress(this));
+            AddState((int)State.STONE_BLAST, new StoneBlast(this));
             AddState((int)State.DEATH, new DeathState(this));
             ChangeState((int)State.MOVE);
         }
@@ -133,7 +136,7 @@ namespace RockGolem
             //判定垂れ流し
             this.inspectorParam.attackCollisions[0].StartAttack();
 
-            if(GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
+            if (GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
                 //死亡条件はHPが０になること
                 if (GetData().hitPoint.GetHP() == 0)
@@ -151,6 +154,11 @@ namespace RockGolem
             {
                 GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             }
+        }
+
+        public override void Dispose()
+        {
+            Destroy(this.transform.parent.gameObject);
         }
 
         //ステート
@@ -340,7 +348,7 @@ namespace RockGolem
                 if (GetTime() > 100)
                 {
                     //移動先を確定
-                    int randomNumber = Random.Range(0, 2);
+                    int randomNumber = Random.Range(0, 3);
 
                     switch (randomNumber)
                     {
@@ -352,6 +360,11 @@ namespace RockGolem
                         case 1:
                             {
                                 manager.SetNextState((int)RockGolemEnemy.State.TACKLE);
+                                break;
+                            }
+                        case 2:
+                            {
+                                manager.SetNextState((int)RockGolemEnemy.State.STONE_BLAST);
                                 break;
                             }
                         default:
@@ -418,6 +431,11 @@ namespace RockGolem
 
             public override void Update()
             {
+                if (this.power > 2.0f)
+                {
+                    //判定垂れ流し
+                    GetInspectorParam().attackCollisions[1].StartAttack();
+                }
                 //突進
                 GetParam().moveVector += this.attackDirection * this.power;
                 this.power += 1.0f;
@@ -432,7 +450,7 @@ namespace RockGolem
             float movePower;
             const int pressWaitTime = 100;
             const int pressTime = 30;
-            const int finishWaitTime = 10;
+            const int finishWaitTime = 12;
 
             public ChasePress(RockGolemEnemy param) : base(param)
             {
@@ -475,12 +493,12 @@ namespace RockGolem
                 {
                     //落下攻撃
                     GetParam().moveVector += Vector2.down * this.fallVelocity;
-                    this.fallVelocity += 1.8f;
+                    this.fallVelocity += 2.0f;
                 }
                 else if (GetTime() > pressWaitTime + pressTime + finishWaitTime)
                 {
-                    //落下攻撃
-                    GetParam().moveVector += Vector2.up * 1.8f;
+                    //ちょっと上がる
+                    GetParam().moveVector += Vector2.up * 4.0f;
                 }
             }
         }
@@ -532,6 +550,8 @@ namespace RockGolem
 
             public override void Update()
             {
+                //判定垂れ流し
+                GetInspectorParam().attackCollisions[1].StartAttack();
                 //突進
                 GetParam().moveVector += this.attackDirection * this.power;
                 GetParam().moveVector += Vector2.up * Mathf.Sin((float)(GetTime() - 10) * Mathf.Deg2Rad * 8.0f) * 28.0f;
@@ -544,40 +564,90 @@ namespace RockGolem
                 }
             }
 
+
+
         }
-    /////////////////////////////////////////////////////////////////////////////////////
-    //死亡(プレイヤー追従)
-    class DeathState : BaseState
-    {
-        //メンバー
-
-
-        public DeathState(RockGolemEnemy param) : base(param)
+        /////////////////////////////////////////////////////////////////////////////////////
+        //プレイヤーに向けて石を飛ばす
+        class StoneBlast : BaseState
         {
+            const int interval = 5;
+            const int bulletCount = 10;
+            int bulletCurrentCount;
+
+
+            public StoneBlast(RockGolemEnemy param) : base(param)
+            {
+            }
+
+            public override void Enter(ref StateManager manager)
+            {
+                this.bulletCurrentCount = 0;
+            }
+
+            public override void Exit(ref StateManager manager)
+            {
+            }
+
+            public override bool Transition(ref StateManager manager)
+            {
+                if (GetTime() == 60 + bulletCount * interval)
+                {
+                    manager.SetNextState((int)RockGolemEnemy.State.IDLE);
+                    return true;
+                }
+                return false;
+            }
+
+            public override void Update()
+            {
+                //待機モーション中に、緩やかに位置がグルグル回る
+                GetParam().moveVector += new Vector2(Mathf.Cos(GetTime() * Mathf.Deg2Rad * 15.0f), Mathf.Sin(GetTime() * Mathf.Deg2Rad * 15.0f)) * 3.0f;
+                if (GetTime() == 60 + this.bulletCurrentCount * interval)
+                {
+                    //発射
+                    GetInspectorParam().bulletDatas[0].target = GetInspectorParam().targetCharacter;
+                    Bullet.MagicBullet.Create(GetParam().myself, GetInspectorParam().bulletDatas[0], GetParam().myself.transform.position);
+                    this.bulletCurrentCount += 1;
+                }
+            }
         }
 
-        public override void Enter(ref StateManager manager)
+        /////////////////////////////////////////////////////////////////////////////////////
+        //死亡(プレイヤー追従)
+        class DeathState : BaseState
         {
+            //メンバー
+
+
+            public DeathState(RockGolemEnemy param) : base(param)
+            {
+            }
+
+            public override void Enter(ref StateManager manager)
+            {
                 Sound.PlaySE("clearSound");
                 Sound.PlaySE("anchorHit");
                 Sound.StopBGM();
-        }
+                GetParam().myself.KillMyself();
+            }
 
-        public override void Exit(ref StateManager manager)
-        {
-        }
+            public override void Exit(ref StateManager manager)
+            {
+            }
 
-        public override bool Transition(ref StateManager manager)
-        {
-            return false;
-        }
+            public override bool Transition(ref StateManager manager)
+            {
+                return false;
+            }
 
-        public override void Update()
-        {
+            public override void Update()
+            {
+
+            }
 
         }
 
     }
-}
 }
 
