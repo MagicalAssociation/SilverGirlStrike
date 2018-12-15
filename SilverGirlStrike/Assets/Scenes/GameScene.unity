@@ -6789,7 +6789,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ae0be3a01080384e8d479f6e07e9b46, type: 3}
   m_Name: 
@@ -10339,21 +10339,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameter:
-    maxHP: 1
+    maxHP: 30
     animation: {fileID: 0}
     power: 3
     direction: 0
+    attackInterval: 30
   move:
     speed: 2
     radius: 1.5
     scale: {x: 2, y: 1}
     footPosition: {fileID: 211815757}
+    stopCountMin: 180
+    stopCountMax: 360
   bulletData:
-    angle: 0
+  - angle: 0
     power: 3
     speed: 0.3
-    life: 30
-    target: {fileID: 1796243766}
+    life: 180
+    target: {fileID: 0}
     attackObject: {fileID: 1641364455}
   attackParameter:
     narrowAttackers:
@@ -10364,7 +10367,7 @@ CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 780610310}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -11299,9 +11302,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameter:
-    maxHP: 1
+    maxHP: 5
     animation: {fileID: 837895784}
-    power: 0
+    power: 3
     direction: 0
   move:
     speed: 1
@@ -13764,11 +13767,23 @@ MonoBehaviour:
     foot: {fileID: 1217189000}
     direction: 0
   bulletData:
-    angle: 0
+  - angle: 0
     power: 3
     speed: 0.3
-    life: 30
-    target: {fileID: 1796243766}
+    life: 100000
+    target: {fileID: 0}
+    attackObject: {fileID: 1641364455}
+  - angle: 90
+    power: 3
+    speed: 0.3
+    life: 1000000
+    target: {fileID: 0}
+    attackObject: {fileID: 1641364455}
+  - angle: 180
+    power: 3
+    speed: 0.3
+    life: 10000000
+    target: {fileID: 0}
     attackObject: {fileID: 1641364455}
   enableGravity: 1
 --- !u!212 &1011351424
@@ -13823,7 +13838,7 @@ CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1011351418}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -28851,7 +28866,7 @@ CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2044241844}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -28932,15 +28947,15 @@ MonoBehaviour:
     maxHP: 10
     radius: 5.5
     attackInterval: 30
-    animation: {fileID: 2044241852}
-    mover: {fileID: 2044241849}
-    foot: {fileID: 816564409}
+    animation: {fileID: 0}
+    mover: {fileID: 0}
+    foot: {fileID: 0}
     direction: 0
   bulletData:
-    angle: 186
+  - angle: 0
     power: 3
     speed: 0.3
-    life: 30
+    life: 10000
     target: {fileID: 1796243766}
     attackObject: {fileID: 1641364455}
   enableGravity: 1

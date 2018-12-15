@@ -9,7 +9,7 @@ using UnityEngine;
 */
 public class Easing
 {
-    public abstract class _Easing
+    public abstract class EasingBase
     {
         public abstract float In(float t, float b, float c, float d);
         public abstract float Out(float t, float b, float c, float d);
@@ -23,8 +23,10 @@ public class Easing
     float start;
     //! EndValue
     float end;
+    //! Duration
+    float duration;
     //! 使用するEasing
-    _Easing use;
+    EasingBase use;
     /**
 	*@brief	イージング用カウンタ
 	*@param[in]	float duration 設定タイム
@@ -57,8 +59,9 @@ public class Easing
     {
         this.cnt = 0;
         this.toplay = true;
-        this.start = 0;
-        this.end = 0;
+        this.start = 0.0f;
+        this.end = 0.0f;
+        this.duration = 0.0f;
     }
     /**
     *@brief	constructor
@@ -72,20 +75,49 @@ public class Easing
         this.quad = new Quad();
         this.quart = new Quart();
         this.quint = new Quint();
+        //DefaultEasing
+        this.use = new Linear();
     }
     /**
     *@brief	開始と終了地点を登録
     *@param[in] float startValue StartValue
     *@param[in] float endValue EndValue
-*/
+    */
     public void Set(float startValue, float endValue)
     {
         this.start = startValue;
         this.end = endValue;
     }
-    public void Use(_Easing easing)
+    public void Set(float startValue, float endValue, float duration)
+    {
+        this.Set(startValue, endValue);
+        this.duration = duration;
+    }
+    public void Set(float startValue, float endValue, float duration, EasingBase easing)
+    {
+        this.Set(startValue, endValue, duration);
+        this.Use(easing);
+    }
+    public void Use(EasingBase easing)
     {
         this.use = easing;
+    }
+    public EasingBase Get()
+    {
+        return this.use;
+    }
+
+    public float In()
+    {
+        return this.use.In(this.Time(duration), start, end, duration);
+    }
+    public float Out()
+    {
+        return this.use.Out(this.Time(duration), start, end, duration);
+    }
+    public float InOut()
+    {
+        return this.use.InOut(this.Time(duration), start, end, duration);
     }
 
     /**
@@ -107,7 +139,7 @@ public class Easing
 
     }
     //t = 時間 d = 始点 c = 終点-始点 d = 経過時間
-    public class Linear : _Easing
+    public class Linear : EasingBase
     {
         public float None(float t, float b, float c, float d)
         {
@@ -128,22 +160,22 @@ public class Easing
     }
     public Linear linear;
     //t = 時間 d = 始点 c = 終点-始点 d = 経過時間
-    public class Back
+    public class Back : EasingBase
     {
-        public float In(float t, float b, float c, float d)
+        public override float In(float t, float b, float c, float d)
         {
             float s = 1.70158f;
             float postFix = t /= d;
             return c * (postFix) * t * ((s + 1) * t - s) + b;
         }
-        public float Out(float t, float b, float c, float d)
+        public override float Out(float t, float b, float c, float d)
         {
 
             float s = 1.70158f;
 
             return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
         }
-        public float InOut(float t, float b, float c, float d)
+        public override float InOut(float t, float b, float c, float d)
         {
             float s = 1.70158f;
             if ((t /= d / 2) < 1) return c / 2 * (t * t * (((s *= (1.525f)) + 1) * t - s)) + b;
@@ -153,9 +185,9 @@ public class Easing
     }
     public Back back;
     //t = 時間 d = 始点 c = 終点-始点 d = 経過時間
-    public class Bounce
+    public class Bounce : EasingBase
     {
-        public float Out(float t, float b, float c, float d)
+        public override float Out(float t, float b, float c, float d)
         {
 
             if ((t /= d) < (1 / 2.75f))
@@ -178,11 +210,11 @@ public class Easing
                 return c * (7.5625f * (postFix) * t + .984375f) + b;
             }
         }
-        public float In(float t, float b, float c, float d)
+        public override float In(float t, float b, float c, float d)
         {
             return c - Out(d - t, 0, c, d) + b;
         }
-        public float InOut(float t, float b, float c, float d)
+        public override float InOut(float t, float b, float c, float d)
         {
             if (t < d / 2) return In(t * 2, 0, c, d) * .5f + b;
             else return Out(t * 2 - d, 0, c, d) * .5f + c * .5f + b;
@@ -190,17 +222,17 @@ public class Easing
     }
     public Bounce bounce;
     //t = 時間 d = 始点 c = 終点-始点 d = 経過時間
-    public class Cubic
+    public class Cubic : EasingBase
     {
-        public float In(float t, float b, float c, float d)
+        public override float In(float t, float b, float c, float d)
         {
             return c * (t /= d) * t * t + b;
         }
-        public float Out(float t, float b, float c, float d)
+        public override float Out(float t, float b, float c, float d)
         {
             return c * ((t = t / d - 1) * t * t + 1) + b;
         }
-        public float InOut(float t, float b, float c, float d)
+        public override float InOut(float t, float b, float c, float d)
         {
             if ((t /= d / 2) < 1) return c / 2 * t * t * t + b;
             return c / 2 * ((t -= 2) * t * t + 2) + b;
@@ -208,17 +240,17 @@ public class Easing
     }
     public Cubic cubic;
     //t = 時間 d = 始点 c = 終点-始点 d = 経過時間	
-    public class Quad
+    public class Quad : EasingBase
     {
-        public float In(float t, float b, float c, float d)
+        public override float In(float t, float b, float c, float d)
         {
             return c * (t /= d) * t + b;
         }
-        public float Out(float t, float b, float c, float d)
+        public override float Out(float t, float b, float c, float d)
         {
             return -c * (t /= d) * (t - 2) + b;
         }
-        public float InOut(float t, float b, float c, float d)
+        public override float InOut(float t, float b, float c, float d)
         {
             if ((t /= d / 2) < 1) return ((c / 2) * (t * t)) + b;
             return -c / 2 * (((t - 2) * (--t)) - 1) + b;
@@ -226,17 +258,17 @@ public class Easing
     }
     public Quad quad;
     //t = 時間 d = 始点 c = 終点-始点 d = 経過時間
-    public class Quart
+    public class Quart : EasingBase
     {
-        public float In(float t, float b, float c, float d)
+        public override float In(float t, float b, float c, float d)
         {
             return c * (t /= d) * t * t * t + b;
         }
-        public float Out(float t, float b, float c, float d)
+        public override float Out(float t, float b, float c, float d)
         {
             return -c * ((t = t / d - 1) * t * t * t - 1) + b;
         }
-        public float InOut(float t, float b, float c, float d)
+        public override float InOut(float t, float b, float c, float d)
         {
             if ((t /= d / 2) < 1) return c / 2 * t * t * t * t + b;
             return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
@@ -244,17 +276,17 @@ public class Easing
     }
     public Quart quart;
     //t = 時間 d = 始点 c = 終点-始点 d = 経過時間
-    public class Quint
+    public class Quint : EasingBase
     {
-        public float In(float t, float b, float c, float d)
+        public override float In(float t, float b, float c, float d)
         {
             return c * (t /= d) * t * t * t * t + b;
         }
-        public float Out(float t, float b, float c, float d)
+        public override float Out(float t, float b, float c, float d)
         {
             return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
         }
-        public float InOut(float t, float b, float c, float d)
+        public override float InOut(float t, float b, float c, float d)
         {
             if ((t /= d / 2) < 1) return c / 2 * t * t * t * t * t + b;
             return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;

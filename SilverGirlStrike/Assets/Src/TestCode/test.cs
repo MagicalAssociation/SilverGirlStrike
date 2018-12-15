@@ -19,7 +19,7 @@ public class test : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.manager.Update();
+        //this.manager.Update();
     }
 
     void test3()

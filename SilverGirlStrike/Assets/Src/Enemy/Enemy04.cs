@@ -86,6 +86,10 @@ namespace Enemy04
             public Vector2 scale;
             //! 足元の位置
             public Transform footPosition;
+            //! 停止カウント数の最小値
+            public int stopCountMin;
+            //! 停止カウント数の最大値
+            public int stopCountMax;
         }
         /**
          * brief    周囲攻撃の情報をまとめたclass
@@ -104,7 +108,7 @@ namespace Enemy04
         //! 足元位置
         private Vector2 footPos;
         //! 前回の位置(向き変えるために作った)
-        public Vector2 prePos;
+        private Vector2 prePos;
         //! 現在位置
         private Vector2 pos;
         //! 攻撃データ
@@ -121,12 +125,15 @@ namespace Enemy04
         private int stopCount;
         //! 移動速度の最大値
         private float maxSpeed;
+        private Easing easing;
+        private float angle;
         public Enemy04()
             //! life
             : base(10)
         {
             this.originPos = new Vector2();
             this.attackData = new AttackData(this);
+            this.easing = new Easing();
         }
         private void Start()
         {
@@ -141,7 +148,7 @@ namespace Enemy04
             this.attackData.power = this.parameter.power;
             this.parameter.animation = GetComponent<Animator>();
             this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
-            this.stopCount = Random.Range(10, 360);
+            this.stopCount = Random.Range(move.stopCountMin, move.stopCountMax);
             this.maxSpeed = move.speed;
             //各ステートを登録&適用
             base.AddState((int)State.MOVE, new MoveState(this));
@@ -152,6 +159,8 @@ namespace Enemy04
             base.AddState((int)State.ORBIT, new OrbitState(this));
             base.AddState((int)State.DEATH, new DeathState(this));
             base.ChangeState((int)State.ORBIT);
+            this.easing.ResetTime();
+            this.easing.Set(move.speed, 0 - move.speed, 5, new Easing.Linear());
         }
 
         public override void UpdateCharacter()
@@ -167,6 +176,7 @@ namespace Enemy04
                 }
             }
             this.DebugDrawPointer();
+            //Debug.Log(this.easing.In());
         }
 
         public override void Damage(AttackData attackData)
@@ -262,6 +272,22 @@ namespace Enemy04
         {
             return this.stopCount;
         }
+        public void SetPrePos(Vector2 pos)
+        {
+            this.prePos = pos;
+        }
+        public Vector2 GetPrePos()
+        {
+            return this.prePos;
+        }
+        public void SetAngle(float a)
+        {
+            angle = a;
+        }
+        public float GetAngle()
+        {
+            return this.angle;
+        }
     }
     /**
      * brief    元となるState
@@ -280,15 +306,19 @@ namespace Enemy04
     public class MoveState : BaseState
     {
         private int count;
+        Easing easing_Speed;
         public MoveState(Enemy04 enemy)
             : base(enemy)
         {
             count = 0;
+            this.easing_Speed = new Easing();
         }
 
         public override void Enter(ref StateManager manager)
         {
             this.enemy.parameter.animation.Play("Move");
+            this.easing_Speed.ResetTime();
+            this.easing_Speed.Set(0, this.enemy.GetMaxSpeed(), 1, new Easing.Linear());
         }
 
         public override void Exit(ref StateManager manager)
@@ -297,9 +327,9 @@ namespace Enemy04
 
         public override bool Transition(ref StateManager manager)
         {
-            if(base.enemy.GetStopCount() <= 0)
+            if(base.enemy.GetStopCount() < 0 && !this.easing_Speed.IsPlay())
             {
-                base.enemy.SetStopCount(Random.Range(10, 360));
+                base.enemy.SetStopCount(Random.Range(enemy.move.stopCountMin, enemy.move.stopCountMax));
                 manager.SetNextState((int)Enemy04.State.WAIT);
                 return true;
             }
@@ -310,14 +340,22 @@ namespace Enemy04
         {
             ++this.count;
             base.enemy.SetStopCount(base.enemy.GetStopCount() - 1);
-            this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(this.count * this.enemy.move.speed)) * this.enemy.move.radius * this.enemy.move.scale.x),
-                this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(this.count * this.enemy.move.speed * 2 + 90)) * this.enemy.move.radius) * this.enemy.move.scale.y));
-            if(this.count % base.enemy.parameter.attackInterval == 0)
+            this.enemy.move.speed = this.easing_Speed.In();
+            this.enemy.SetAngle(this.enemy.GetAngle() + this.enemy.move.speed);
+            Debug.Log(this.enemy.move.speed);
+            this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(enemy.GetAngle())) * this.enemy.move.radius * this.enemy.move.scale.x),
+                this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(enemy.GetAngle() * 2 + 90)) * this.enemy.move.radius) * this.enemy.move.scale.y));
+            if (this.count % base.enemy.parameter.attackInterval == 0)
             {
                 for (int i = 0; i < this.enemy.bulletData.Length; ++i)
                 {
                     Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletData[i], this.enemy.transform.position);
                 }
+            }
+            if(base.enemy.GetStopCount() == 0)
+            {
+                this.easing_Speed.ResetTime();
+                this.easing_Speed.Set(this.enemy.move.speed, 0 - this.enemy.move.speed, 1);
             }
         }
         private float ToRadius(float angle)
@@ -383,7 +421,7 @@ namespace Enemy04
         {
             this.enemy.parameter.animation.Play("Idle");
             move_y.Set(this.enemy.transform.position.y, this.enemy.GetFootPosition().y - this.enemy.transform.position.y);
-            this.enemy.prePos = this.enemy.transform.position;
+            this.enemy.SetPrePos(this.enemy.transform.position);
         }
 
         public override void Exit(ref StateManager manager)
@@ -421,7 +459,7 @@ namespace Enemy04
         public override void Enter(ref StateManager manager)
         {
             this.enemy.parameter.animation.Play("Idle");
-            move_y.Set(this.enemy.GetFootPosition().y, this.enemy.prePos.y - this.enemy.GetFootPosition().y);
+            move_y.Set(this.enemy.GetFootPosition().y, this.enemy.GetPrePos().y - this.enemy.GetFootPosition().y);
         }
 
         public override void Exit(ref StateManager manager)
