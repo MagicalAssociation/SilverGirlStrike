@@ -56,6 +56,8 @@ namespace Enemy02
             public int power;
             //! 向き情報
             public Direction direction;
+            //! 移動用class
+            public CharacterMover charactermover;
         }
         /**
          * brief    移動用変数をまとめたclass
@@ -100,6 +102,7 @@ namespace Enemy02
             this.collider =  GetComponent<BoxCollider2D>();
             this.attackData.power = this.parameter.power;
             this.parameter.animation = GetComponent<Animator>();
+            this.parameter.charactermover = GetComponent<CharacterMover>();
             this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
             //各ステートを登録&適用
             base.AddState((int)State.MOVE, new MoveState(this));
@@ -140,15 +143,16 @@ namespace Enemy02
         {
             this.prePos = this.transform.localPosition;
             this.transform.localPosition = new Vector3(pos.x, pos.y, this.transform.position.z);
-            if (this.transform.localPosition.x > this.prePos.x)
-            {
-                this.parameter.direction = Direction.RIGHT;
-            }
-            else if (this.transform.localPosition.x < this.prePos.x)
-            {
-                this.parameter.direction = Direction.LEFT;
-            }
-            this.transform.localScale = new Vector3((int)this.parameter.direction, 1, 1);
+            //this.parameter.charactermover.UpdateVelocity(pos.x - this.transform.localPosition.x, pos.y - this.transform.localPosition.y, 0.0f, true);
+            //if (this.transform.localPosition.x > this.prePos.x)
+            //{
+            //    this.parameter.direction = Direction.RIGHT;
+            //}
+            //else if (this.transform.localPosition.x < this.prePos.x)
+            //{
+            //    this.parameter.direction = Direction.LEFT;
+            //}
+            //this.transform.localScale = new Vector3((int)this.parameter.direction, 1, 1);
         }
         /**
          * brief    固有データを取得する
