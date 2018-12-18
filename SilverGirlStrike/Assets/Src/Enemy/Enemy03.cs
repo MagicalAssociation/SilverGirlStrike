@@ -211,7 +211,7 @@ namespace Enemy03
          */
          public StopData GetStopData()
         {
-            return this.move.stopDatas[this.nowNum];
+            return this.move.stopDatas.Length != 0 ? this.move.stopDatas[this.nowNum] : null;
         }
         /**
          * brief    停止位置を次に移行する
@@ -276,10 +276,13 @@ namespace Enemy03
 
         public override bool Transition(ref StateManager manager)
         {
-            if(this.enemy.GetStopData().stopTime == timeCnt)
+            if (this.enemy.GetStopData() != null)
             {
-                manager.SetNextState((int)Enemy03.State.WAIT);
-                return true;
+                if (this.enemy.GetStopData().stopTime == timeCnt)
+                {
+                    manager.SetNextState((int)Enemy03.State.WAIT);
+                    return true;
+                }
             }
             return false;
         }
@@ -323,10 +326,13 @@ namespace Enemy03
 
         public override bool Transition(ref StateManager manager)
         {
-            if (this.enemy.GetStopData().waitTime == this.GetTime())
+            if (this.enemy.GetStopData() != null)
             {
-                manager.SetNextState((int)Enemy03.State.MOVE);
-                return true;
+                if (this.enemy.GetStopData().waitTime == this.GetTime())
+                {
+                    manager.SetNextState((int)Enemy03.State.MOVE);
+                    return true;
+                }
             }
             return false;
         }
