@@ -29,16 +29,20 @@ namespace TextEvent
         }
     }
 
+
+    //イベント関数と、実際のクラスの組み合わせを指す辞書クラス
     public class EventFunctionDictionary
     {
         private Dictionary<string, Term.TermFunction> termFunctions;
         private Dictionary<string, Action.ActionFunction> actionFunctions;
+        EventGameData gameData;
 
         //固定値なのでコンストラクターで設定してもいいんじゃないかな
-        public EventFunctionDictionary()
+        public EventFunctionDictionary(EventGameData gameData)
         {
             this.termFunctions = new Dictionary<string, Term.TermFunction>();
             this.actionFunctions = new Dictionary<string, Action.ActionFunction>();
+            this.gameData = gameData;
 
             SetTermFunc();
             SetActionFunc();
@@ -58,14 +62,80 @@ namespace TextEvent
         //条件追加
         private void SetTermFunc()
         {
-            this.termFunctions.Add("term1", new Term.Term1());
+            this.termFunctions.Add("checkCollision", new Term.CheckCollision(this.gameData));
+            this.termFunctions.Add("equalFlag", new Term.EqualFlagValue(this.gameData));
+            this.termFunctions.Add("greaterFlag", new Term.GreaterFlagValue(this.gameData));
+            this.termFunctions.Add("smallerFlag", new Term.SmallerFlagValue(this.gameData));
         }
         //イベント処理追加
         private void SetActionFunc()
         {
-            this.actionFunctions.Add("action1", new Action.Action1());
+            this.actionFunctions.Add("setCameraTargetPosition", new Action.SetCameraTargetPosition(this.gameData));
+            this.actionFunctions.Add("setCameraTarget", new Action.SetCameraTargetCharacter(this.gameData));
+            this.actionFunctions.Add("setCameraPosition", new Action.SetCameraTargetPosition(this.gameData));
+            this.actionFunctions.Add("setCameraLocalPosition", new Action.SetCameraLocalPosition(this.gameData));
+            this.actionFunctions.Add("stopCameraChase", new Action.StopCameraChase(this.gameData));
+
+            this.actionFunctions.Add("createFlag", new Action.CreateFlag(this.gameData));
+            this.actionFunctions.Add("setFlagValue", new Action.SetFlag(this.gameData));
+            this.actionFunctions.Add("addFlagValue", new Action.AddFlag(this.gameData));
+            this.actionFunctions.Add("mulFlagValue", new Action.Mulflag(this.gameData));
+            this.actionFunctions.Add("divFlagValue", new Action.DivFlag(this.gameData));
+
         }
 
     }
 
+    namespace Action
+    {
+        //イベントの実際の処理を行うための基底クラス
+        public abstract class ActionFunction
+        {
+            private EventGameData gameData;
+
+
+            public ActionFunction(EventGameData gameData)
+            {
+                this.gameData = gameData;
+            }
+
+            public EventGameData GetGameData()
+            {
+                return this.gameData;
+            }
+
+            public abstract void ActionStart(string[] args);
+
+            //イベント処理、引数を表す値として文字列配列が渡される
+            public abstract void Action();
+            //イベントの処理が終わったかどうか
+            public abstract bool IsEnd();
+        }
+    }
+
+    //イベント条件
+    namespace Term
+    {
+
+
+        //イベントでの条件判定を行うための基底クラス
+        public abstract class TermFunction
+        {
+            private EventGameData gameData;
+
+
+            public TermFunction(EventGameData gameData)
+            {
+                this.gameData = gameData;
+            }
+
+            public EventGameData GetGameData()
+            {
+                return this.gameData;
+            }
+
+            //条件を判定する、引数を示す値として文字列配列が渡される
+            public abstract bool Judge(string[] args);
+        }
+    }
 }

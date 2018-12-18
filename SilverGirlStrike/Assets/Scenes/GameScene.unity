@@ -4330,7 +4330,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 369029130}
-  - component: {fileID: 369029129}
   m_Layer: 0
   m_Name: TextEventManager
   m_TagString: Untagged
@@ -4338,18 +4337,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &369029129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 369029128}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e29d539dade58d84a86cd7a56e79bccd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  filePath: event
 --- !u!4 &369029130
 Transform:
   m_ObjectHideFlags: 0
@@ -27634,7 +27621,7 @@ Prefab:
         type: 2}
       propertyPath: targetCharacter
       value: 
-      objectReference: {fileID: 553027683}
+      objectReference: {fileID: 1796243772}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b05d6bc3d206cb42bdc4843ca2b7b3c, type: 2}
   m_IsPrefabAsset: 0

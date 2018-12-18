@@ -7,8 +7,13 @@ using UnityEngine;
 
 //フラグの書き込み、作成、削除などを行うクラス
 //フラグは、整数型で表現される
-public class FlagManager {
+public class FlagManager : MonoBehaviour{
     Dictionary<string, int> flags;
+
+    private void Start()
+    {
+        flags = new Dictionary<string, int>();
+    }
 
     //新規追加（初期値0）
     public void Create(string name)
@@ -59,12 +64,12 @@ public class FlagManager {
         return flags[name] < value;
     }
 
-    //存在してなかったら例外を出す関数
+    //存在してなかったらフラグを追加する
     void CheckExist(string name)
     {
         if (!this.flags.ContainsKey(name))
         {
-            throw new System.Exception("flag error: not exist flag name");
+            Create(name);
         }
     }
 

@@ -5,18 +5,49 @@ using UnityEngine;
 
 namespace TextEvent
 {
+    //イベントでいじれるゲームのシステムへのアクセス
+    [System.Serializable]
+    public struct EventGameData{
+        //カメラの位置をつかさどるオブジェクト
+        public ObjectChaser cameraTargetPosition;
+        //フラグをいじるアクセス
+        public FlagManager flagManager;
+        //キャラクター管理
+        public CharacterManager characterManager;
+        //イベント判定コリジョンの情報
+        public EventCollisionFinder collisionFinder;
+    }
+
+
+
+
     //イベントを実行管理するクラス
     //EventUnitクラスをリストで管理している
     public class EventManager
     {
+        private static EventManager myself;
+        private EventGameData data;
         private List<EventUnit> eventList;
         private EventFunctionDictionary functions;
 
 
-        public EventManager()
+        public static void Create(EventGameData data)
+        {
+            if(myself == null)
+            {
+                myself = new EventManager(data);
+            }
+        }
+        public static EventManager Get()
+        {
+            return myself;
+        }
+
+        private EventManager(EventGameData data)
         {
             this.eventList = new List<EventUnit>();
-            this.functions = new EventFunctionDictionary();
+            this.functions = new EventFunctionDictionary(data);
+            this.data = data;
         }
 
         //全てのイベントを回す
