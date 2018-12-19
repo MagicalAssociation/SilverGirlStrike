@@ -54,6 +54,8 @@ namespace Enemy01
             ATTACK,
             FALL,
             DEATH,
+            //! 軌道待ち
+            ORBIT,
         }
         /**
          * enum Direction 向き
@@ -115,7 +117,8 @@ namespace Enemy01
             base.AddState((int)State.ATTACK, new AttackState(this));
             base.AddState((int)State.FALL, new FallState(this));
             base.AddState((int)State.DEATH, new DeathState(this));
-            base.ChangeState((int)State.NORMAL);
+            base.AddState((int)State.ORBIT, new OrbitState(this));
+            base.ChangeState((int)State.ORBIT);
         }
         public override void UpdateCharacter()
         {
@@ -135,6 +138,7 @@ namespace Enemy01
         }
         public override void MoveCharacter()
         {
+
             parameter.mover.UpdateVelocity(0, 0, this.enableGravity ? this.gravity : 0.0f, parameter.foot.CheckHit());
         }
         /**
@@ -195,8 +199,8 @@ namespace Enemy01
                 manager.SetNextState((int)Enemy01.State.FALL);
                 return true;
             }
-            //30count経過したら攻撃モーションへ移行
-            if(base.GetTime() > base.enemy.GetParameter().attackInterval && base.enemy.TargetDistanceCheck() != null)
+            //一定count経過したら攻撃モーションへ移行
+            if(base.GetTime() > base.enemy.GetParameter().attackInterval)
             {
                 manager.SetNextState((int)Enemy01.State.ATTACK);
                 return true;
@@ -317,6 +321,38 @@ namespace Enemy01
             {
                 base.enemy.KillMyself();
             }
+        }
+    }
+    /**
+    * brief    軌道確認
+    */
+    public class OrbitState : BaseState
+    {
+        public OrbitState(Enemy01 enemy) : base(enemy)
+        {
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+            //this.enemy.parameter.animation.Play("Idle");
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            if (base.enemy.TargetDistanceCheck() != null)
+            {
+                manager.SetNextState((int)Enemy01.State.NORMAL);
+                return true;
+            }
+            return false;
+        }
+
+        public override void Update()
+        {
         }
     }
 }

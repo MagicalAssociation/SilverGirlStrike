@@ -8,6 +8,7 @@ using UnityEngine;
  * date     2018/12/01
  * 状態
  *      待ち、移動
+ * 円状に移動するEnemy
 */
 /**
  * Inspectorの設定値の説明
@@ -118,6 +119,7 @@ namespace Enemy03
             this.collider = GetComponent<BoxCollider2D>();
             this.attackData.power = this.parameter.power;
             this.parameter.animation = GetComponent<Animator>();
+            this.parameter.direction = Direction.LEFT;
             this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
             //各ステートを登録&適用
             base.AddState((int)State.MOVE, new MoveState(this));

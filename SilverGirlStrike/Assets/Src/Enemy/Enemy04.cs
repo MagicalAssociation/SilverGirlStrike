@@ -8,6 +8,7 @@ using UnityEngine;
  * date     2018/12/07
  * 状態
  *      待ち、移動
+ * 中ボス 八の字で動きながらBulletを打つ、落下してきて範囲攻撃を行う
 */
 /**
  * Inspectorの設定値の説明

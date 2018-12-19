@@ -48,11 +48,13 @@ namespace Bullet
         int myselfID;
         BoxCollider2D collider;
         Vector2 move;
+        CharacterMover mover;
         public Mode mode;
         
         private void Start()
         {
             collider = GetComponent<BoxCollider2D>();
+            mover = GetComponent<CharacterMover>();
             this.myselfID = manager.AddCharacter(this);
             base.AddState((int)State.NORMAL, new NormalState(this));
             base.ChangeState((int)State.NORMAL);
@@ -89,7 +91,7 @@ namespace Bullet
 
         public override void MoveCharacter()
         {
-            this.transform.position += new Vector3(move.x * this.moveSpeed, move.y * this.moveSpeed);
+            this.mover.UpdateVelocity(move.x * this.moveSpeed, move.y * this.moveSpeed, 0.0f, true);
         }
         /**
          * brief    自分を消す命令をManagerに行う処理
@@ -115,11 +117,39 @@ namespace Bullet
             }
             return null;
         }
+        public Collider2D HitCheck(int layer)
+        {
+            if (this.collider)
+            {
+                Collider2D hit = Physics2D.OverlapBox(
+                    this.collider.transform.position,
+                    this.collider.size,
+                    this.transform.eulerAngles.z,
+                    layer
+                    );
+                return hit;
+            }
+            return null;
+        }
+        public Collider2D HitCheck(int layer,Vector2 size)
+        {
+            if (this.collider)
+            {
+                Collider2D hit = Physics2D.OverlapBox(
+                    this.collider.transform.position,
+                    size,
+                    this.transform.eulerAngles.z,
+                    layer
+                    );
+                return hit;
+            }
+            return null;
+        }
         /**
          * brief    攻撃を飛ばす方向を指定する
          * param[in] float angle 角度
          */
-         public void SetShotAngle(float angle)
+        public void SetShotAngle(float angle)
         {
             this.mode = Mode.LINE;
             move.x = Mathf.Cos(angle * (Mathf.PI / 180));
@@ -148,7 +178,7 @@ namespace Bullet
             bullet.SetAttackData(new AttackData(characterObject));
             bullet.GetAttackData().power = bulletData.power;
             bullet.lifeCnt = bulletData.life;
-            bullet.moveSpeed = bulletData.speed;
+            bullet.moveSpeed = bulletData.speed * 10.0f;
             if (bulletData.target != null)
             {
                 bullet.SetShotTarget(bulletData.target);
@@ -196,15 +226,22 @@ namespace Bullet
         public override void Update()
         {
             //自分がプレイヤーと当たっていた時、プレイヤーにダメージを与え自分は消滅する
-            var hit = base.bullet.HitCheck();
-            if(hit != null)
+            Collider2D hit = base.bullet.HitCheck((int)M_System.LayerName.PLAYER);
+            if (hit != null)
             {
-                if(hit.tag == "Player")
+                if (hit.tag == "Player")
                 {
                     hit.GetComponent<CharacterObject>().Damage(this.bullet.GetAttackData());
                     base.bullet.Delete();
                     return;
                 }
+            }
+            //地面に当たったら消す
+            hit = base.bullet.HitCheck((int)M_System.LayerName.GROUND,Vector2.zero);
+            if(hit != null)
+            {
+                base.bullet.Delete();
+                return;
             }
             //時間による削除処理
             if(base.GetTime() > base.bullet.lifeCnt)

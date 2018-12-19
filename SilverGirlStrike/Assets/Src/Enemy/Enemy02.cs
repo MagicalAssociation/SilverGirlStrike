@@ -8,6 +8,7 @@ using UnityEngine;
  * date     2018/11/30
  * 状態
  *      待ち、移動
+ * 指定位置を移動し続けるEnemy
 */
 /**
  * Inspectorの設定値の説明
