@@ -171,6 +171,12 @@ public class CharacterManager : MonoBehaviour
         characterData.Dispose();
     }
 
+
+    public Transform GetCharacterTrans(string characterName)
+    {
+        return this.objects[characterName].character.transform;
+    }
+
     //キャラクターへ直接アクセスする
     public CharacterObject.CharaData GetCharacterData(string characterName)
     {
