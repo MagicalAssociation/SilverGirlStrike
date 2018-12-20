@@ -30,6 +30,7 @@ namespace Fuchan
             JUMP,
             FALL,
             WIRE_DASH,
+            STRIKE_ASULT,
             ATTACK1,
             ATTACK2,
             ATTACK3,
@@ -63,7 +64,7 @@ namespace Fuchan
         //初期化はちゃんとStart関数でやってね（はあと
         public class Parameter
         {
-            public GameObject myself;
+            public CharacterObject myself;
             //毎移動時の移動ベクトル
             public Vector2 moveVector;
             //接地フラグ
@@ -87,7 +88,7 @@ namespace Fuchan
         private void Start()
         {
             this.param = new Parameter();
-            this.param.myself = this.gameObject;
+            this.param.myself = this;
             this.param.moveVector = Vector2.zero;
             this.param.direction = Direction.RIGHT;
             this.param.currentDashSpead = 0.0f;
@@ -99,6 +100,7 @@ namespace Fuchan
             AddState((int)State.JUMP, new JumpState(this));
             AddState((int)State.FALL, new FallState(this));
             AddState((int)State.WIRE_DASH, new AnchorDashState(this));
+            AddState((int)State.STRIKE_ASULT, new StrikeAsult(this));
             AddState((int)State.ATTACK1, new Attack1State(this));
             AddState((int)State.ATTACK2, new Attack2State(this));
             AddState((int)State.ATTACK3, new Attack3State(this));
@@ -119,7 +121,7 @@ namespace Fuchan
             GetData().hitPoint.DamageUpdate();
         }
 
-        public override void Damage(AttackData attackData)
+        public override bool Damage(AttackData attackData)
         {
             //普通に食らう
             var isDamaged = GetData().hitPoint.Damage(attackData.power, attackData.chain);
@@ -128,6 +130,7 @@ namespace Fuchan
             {
                 ChangeState((int)PlayerObject.State.DAMAGE);
             }
+            return isDamaged;
         }
 
         public override void MoveCharacter()
@@ -257,7 +260,7 @@ namespace Fuchan
         public override void Enter(ref StateManager manager)
         {
             GetInspectorParam().playerAnim.Play("Idle");
-            if(manager.GetPreStateNum() == (int)PlayerObject.State.FALL)
+            if (manager.GetPreStateNum() == (int)PlayerObject.State.FALL)
             {
                 GetInspectorParam().playerAnim.Play("onGround");
             }
@@ -398,7 +401,7 @@ namespace Fuchan
             //横移動
             GetParam().moveVector += vec;
             //移動方向にて向きを変える
-            Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, ref GetParam().myself);
+            Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, GetParam().myself.transform);
         }
     }
 
@@ -464,7 +467,7 @@ namespace Fuchan
             //横移動
             GetParam().moveVector += vec;
             //移動方向にて向きを変える
-            Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, ref GetParam().myself);
+            Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, GetParam().myself.transform);
 
             //一定時間以内にボタンを離すと、上昇力が格段に落ちて小ジャンプになる
             if (M_System.input.Up(SystemInput.Tag.JUMP) && GetTime() < 20)
@@ -529,7 +532,7 @@ namespace Fuchan
             //横移動
             GetParam().moveVector += vec;
             //移動方向にて向きを変える
-            Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, ref GetParam().myself);
+            Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, GetParam().myself.transform);
         }
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -544,7 +547,6 @@ namespace Fuchan
 
         {
         }
-
 
         //入った時の関数
         public override void Enter(ref StateManager manager)
@@ -568,7 +570,7 @@ namespace Fuchan
 
 
             //移動方向にて向きを変える
-            Func.ChangeDirectionFromMoveX(this.targetDirection.x, ref GetParam().direction, ref GetParam().myself);
+            Func.ChangeDirectionFromMoveX(this.targetDirection.x, ref GetParam().direction, GetParam().myself.transform);
 
             //頭をアンカーに向ける
             float angle = Vector2.Angle(new Vector2(0.0f, 1.0f), this.targetDirection);
@@ -583,7 +585,11 @@ namespace Fuchan
         public override void Exit(ref StateManager manager)
         {
             GetParam().anchorTarget = null;
-            GetParam().myself.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+
+            if (manager.GetNextStateNum() != (int)PlayerObject.State.STRIKE_ASULT)
+            {
+                GetParam().myself.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+            }
         }
         //遷移を行う
         public override bool Transition(ref StateManager manager)
@@ -608,6 +614,11 @@ namespace Fuchan
                 return true;
             }
 
+            //ワイヤー中にやればストライクアサルト
+            if (GetParam().anchorTarget != null && M_System.input.Down(SystemInput.Tag.ATTACK)){
+                manager.SetNextState((int)PlayerObject.State.STRIKE_ASULT);
+                return true;
+            }
 
             return false;
         }
@@ -628,7 +639,7 @@ namespace Fuchan
                 if (GetInspectorParam().anchorDashSpeed > GetParam().currentDashSpead)
                 {
                     GetParam().currentDashSpead += GetInspectorParam().anchorMoveAcceleration;
-                    if (GetInspectorParam().anchorDashSpeed > GetParam().currentDashSpead)
+                    if (GetInspectorParam().anchorDashSpeed < GetParam().currentDashSpead)
                     {
                         //最大値にクランプ
                         GetParam().currentDashSpead = GetInspectorParam().anchorDashSpeed;
@@ -638,6 +649,74 @@ namespace Fuchan
             ++this.timeCnt;
         }
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //アンカーダッシュ攻撃「ストライクアサルト」
+    public class StrikeAsult : BaseState
+    {
+        private Vector2 direction;
+        private GameObject effectObj;
+        private int effectID;
+
+        public StrikeAsult(PlayerObject param)
+            : base(param)
+        {
+        }
+
+        //入った時の関数
+        public override void Enter(ref StateManager manager)
+        {
+            //キャラの頭の向きから移動方向を割り出す
+            this.direction = GetParam().myself.transform.rotation * new Vector2(0.0f, 1.0f);
+            //最高値の速さに変更
+            GetParam().currentDashSpead = GetInspectorParam().anchorDashSpeed;
+
+            //エフェクト生成
+            Vector3 pos = GetParam().myself.transform.position + new Vector3(0.0f, 0.0f, 1.0f);
+            Quaternion directionRot = GetParam().myself.transform.rotation * Quaternion.AngleAxis(90.0f, Vector3.forward);
+            this.effectID = Effect.Get().CreateEffect("tackle", pos, directionRot, Vector3.one);
+            this.effectObj = Effect.Get().GetEffectGameObject(this.effectID);
+
+            //無敵化
+            GetParam().myself.GetData().hitPoint.SetDamageShutout(true);
+        }
+        //出た時の関数
+        public override void Exit(ref StateManager manager)
+        {
+            Effect.Get().DeleteEffect(this.effectID);
+            GetInspectorParam().mover.SetActiveGravity(true, true);
+            GetParam().myself.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+            GetParam().myself.GetData().hitPoint.SetDamageShutout(false);
+        }
+        //遷移を行う
+        public override bool Transition(ref StateManager manager)
+        {
+
+            if(GetTime() > 15)
+            {
+                GetInspectorParam().mover.Jump(this.direction.y * GetParam().currentDashSpead * 0.5f);
+                manager.SetNextState((int)PlayerObject.State.FALL);
+                return true;
+            }
+            return false;
+        }
+        //ステート処理
+        public override void Update()
+        {
+            GetInspectorParam().attackCollisions[3].StartAttack();
+
+            //速度をダッシュ中のそれにする
+            this.GetParam().dashRatio = 1.0f;
+
+            //攻撃方向へ移動
+            GetParam().moveVector += this.direction * GetParam().currentDashSpead * 1.1f;
+
+            //エフェクト追従
+            Vector3 pos = GetParam().myself.transform.position + new Vector3(0.0f, 0.0f, 1.0f);
+            this.effectObj.transform.position = pos;
+        }
+    }
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //攻撃一段目
@@ -723,7 +802,7 @@ namespace Fuchan
             }
             else if(this.timeCnt <= 5)
             {
-                Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, ref GetParam().myself);
+                Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, GetParam().myself.transform);
             }
             //横移動
             GetParam().moveVector += vec;
@@ -816,7 +895,7 @@ namespace Fuchan
             }
             else if (this.timeCnt <= 5)
             {
-                Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, ref GetParam().myself);
+                Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, GetParam().myself.transform);
             }
             //横移動
             GetParam().moveVector += vec;
@@ -904,7 +983,7 @@ namespace Fuchan
             }
             else if (this.timeCnt <= 14)
             {
-                Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, ref GetParam().myself);
+                Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, GetParam().myself.transform);
             }
             //横移動
             GetParam().moveVector += vec;
@@ -913,6 +992,7 @@ namespace Fuchan
             ++this.timeCnt;
         }
     }
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //ダメージ
@@ -989,7 +1069,7 @@ namespace Fuchan
         }
 
         //向き変更関数
-        public static void ChangeDirection(PlayerObject.Direction direction, ref PlayerObject.Direction current, ref GameObject transform)
+        public static void ChangeDirection(PlayerObject.Direction direction, ref PlayerObject.Direction current, Transform transform)
         {
             if (current != direction)
             {
@@ -1002,15 +1082,15 @@ namespace Fuchan
         }
 
         //移動の値から方向を振り分ける関数
-        public static void ChangeDirectionFromMoveX(float xMove, ref PlayerObject.Direction current, ref GameObject transform)
+        public static void ChangeDirectionFromMoveX(float xMove, ref PlayerObject.Direction current, Transform transform)
         {
             if (xMove > 0.0f)
             {
-                ChangeDirection(PlayerObject.Direction.RIGHT, ref current, ref transform);
+                ChangeDirection(PlayerObject.Direction.RIGHT, ref current, transform);
             }
             else if (xMove < 0.0f)
             {
-                ChangeDirection(PlayerObject.Direction.LEFT, ref current, ref transform);
+                ChangeDirection(PlayerObject.Direction.LEFT, ref current, transform);
             }
         }
     }

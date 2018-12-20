@@ -180,9 +180,9 @@ namespace Enemy04
             //Debug.Log(this.easing.In());
         }
 
-        public override void Damage(AttackData attackData)
+        public override bool Damage(AttackData attackData)
         {
-            this.GetData().hitPoint.Damage(attackData.power, attackData.chain);
+            return this.GetData().hitPoint.Damage(attackData.power, attackData.chain);
         }
 
         public override void ApplyDamage()

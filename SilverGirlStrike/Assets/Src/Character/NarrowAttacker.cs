@@ -5,9 +5,6 @@ using UnityEngine;
 //近接攻撃システム
 //攻撃関数を呼ぶと、エフェクトを再生し、当たり判定を一定時間放つ
 public class NarrowAttacker : MonoBehaviour {
-    public Effect effectManager;
-
-
     public CharacterObject userCharacter;
     public Collider2D attackCollition;
     public int attackPower;//攻撃力
@@ -89,8 +86,13 @@ public class NarrowAttacker : MonoBehaviour {
                 continue;
             }
 
-            this.effectManager.CreateEffect("slash", obj.transform.position, Quaternion.identity, Vector3.one);
-            obj.Damage(this.attackData);
+            bool result = obj.Damage(this.attackData);
+
+            if (result)
+            {
+                Vector3 pos = obj.transform.position + new Vector3(0.0f, 0.0f, -1.0f);
+                Effect.Get().CreateEffect("slash", pos, Quaternion.identity, Vector3.one);
+            }
         }
     }
 }

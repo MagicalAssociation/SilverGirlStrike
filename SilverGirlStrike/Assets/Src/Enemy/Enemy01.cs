@@ -124,9 +124,9 @@ namespace Enemy01
         {
             this.UpdateState();
         }
-        public override void Damage(AttackData data)
+        public override bool Damage(AttackData data)
         {
-            this.GetData().hitPoint.Damage(data.power, data.chain);
+            return this.GetData().hitPoint.Damage(data.power, data.chain);
         }
         public override void ApplyDamage()
         {
