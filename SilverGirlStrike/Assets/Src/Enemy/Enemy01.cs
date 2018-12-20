@@ -138,8 +138,10 @@ namespace Enemy01
         }
         public override void MoveCharacter()
         {
-
-            parameter.mover.UpdateVelocity(0, 0, this.enableGravity ? this.gravity : 0.0f, parameter.foot.CheckHit());
+            if (this.GetData().stateManager.GetNowStateNum() != (int)State.ORBIT)
+            {
+                parameter.mover.UpdateVelocity(0, 0, this.enableGravity ? this.gravity : 0.0f, parameter.foot.CheckHit());
+            }
         }
         /**
          * brief    Enemy01専用のパラメータデータ取得
@@ -235,7 +237,14 @@ namespace Enemy01
         {
             if(base.GetTime() > 60)
             {
-                manager.SetNextState((int)Enemy01.State.NORMAL);
+                if (base.enemy.TargetDistanceCheck() != null)
+                {
+                    manager.SetNextState((int)Enemy01.State.NORMAL);
+                }
+                else
+                {
+                    manager.SetNextState((int)Enemy01.State.ORBIT);
+                }
                 return true;
             }
             return false;

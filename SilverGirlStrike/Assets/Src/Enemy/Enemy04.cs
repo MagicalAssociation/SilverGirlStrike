@@ -506,7 +506,14 @@ namespace Enemy04
         {
             if(base.GetTime() >= 30)
             {
-                manager.SetNextState((int)Enemy04.State.RISING);
+                if (base.enemy.CheckTargetDetection() != null)
+                {
+                    manager.SetNextState((int)Enemy04.State.RISING);
+                }
+                else
+                {
+                    manager.SetNextState((int)Enemy04.State.ORBIT);
+                }
                 return true;
             }
             return false;
