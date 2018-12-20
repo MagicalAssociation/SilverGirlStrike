@@ -81,8 +81,9 @@ namespace Bullet
             GetData().stateManager.Update();
         }
 
-        public override void Damage(AttackData attackData)
+        public override bool Damage(AttackData attackData)
         {
+            return false;
         }
 
         public override void ApplyDamage()

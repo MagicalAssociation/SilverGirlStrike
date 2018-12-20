@@ -119,9 +119,9 @@ namespace RockGolem
             GetData().hitPoint.DamageUpdate();
         }
 
-        public override void Damage(AttackData attackData)
+        public override bool Damage(AttackData attackData)
         {
-            GetData().hitPoint.Damage(attackData.power, attackData.chain);
+            return GetData().hitPoint.Damage(attackData.power, attackData.chain);
         }
 
         public override void MoveCharacter()

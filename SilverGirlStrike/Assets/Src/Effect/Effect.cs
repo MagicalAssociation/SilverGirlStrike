@@ -2,44 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class Effect : MonoBehaviour {
-
-    //Dictionary<string, GameObject> list;          //C#のMapの役割
-
-    [System.Serializable]
-    public struct EffectList
-    {
-        public string key;
-        public GameObject eff;
-    }
-
-    public EffectList[] effectlist;     //effectを格納するリスト
+//エフェクト生成クラス、シングルトン
+public class Effect {
+    private static Effect myself;
 
     //検索用
     private Dictionary<string, GameObject> effectDictionary;
     //管理するオブジェクト（id管理用）
     List<GameObject> objectList;
 
-    // Use this for initialization
-    void Start () {
 
+    // Use this for initialization
+    private Effect() {
         this.effectDictionary = new Dictionary<string, GameObject>();
         this.objectList = new List<GameObject>();
-
-        //touroku
-        foreach(var i in effectlist)
-        {
-            effectDictionary.Add(i.key, i.eff);
-        }
     }
 
-    // Update is called once per frame
-    void Update () {
+    //生成メソッド
+    static public Effect Get()
+    {
+        if(myself == null)
+        {
+            myself = new Effect();
+        }
+        return myself;
+    }
+
+    //エフェクトを追加
+    public void AddEffect(string name, GameObject effect)
+    {
+        effectDictionary.Add(name, effect);
     }
 
     //IDにてエフェクトのGameObjectを取得
-    public GameObject GetEffectameObject(int id)
+    public GameObject GetEffectGameObject(int id)
     {
         //範囲外はnull
         if(id >= this.objectList.Count && id < 0)
@@ -53,7 +49,7 @@ public class Effect : MonoBehaviour {
     //名前を指定してエフェクトを生成する、IDを返す
     public int CreateEffect(string name, Vector3 pos, Quaternion rot, Vector3 scale)           //検索する名前に一致するgameObjectを生成する
     {
-        GameObject eff = Instantiate(this.effectDictionary[name], Vector3.zero, Quaternion.identity);
+        GameObject eff = Object.Instantiate(this.effectDictionary[name], Vector3.zero, Quaternion.identity);
         eff.transform.position = pos;
         eff.transform.rotation = rot;
         eff.transform.localScale = scale;
@@ -79,7 +75,7 @@ public class Effect : MonoBehaviour {
 
 
         //削除し、nullを代入
-        Destroy(this.objectList[id]);
+        Object.Destroy(this.objectList[id]);
         this.objectList[id] = null;
     }
 

@@ -28,6 +28,9 @@ public class HitPoint
     int invincibleCount;
     //! 連鎖
     int chain;
+
+    //!ダメージの一切を拒絶するフラグ
+    bool damageShutout;
     /**
      * constructor
      */
@@ -39,6 +42,8 @@ public class HitPoint
         this.invincible = 0;
         this.invincibleCount = 0;
         this.chain = 0;
+
+        this.damageShutout = false;
     }
     /**
      * brief    constructor
@@ -96,8 +101,13 @@ public class HitPoint
      */ 
      public bool Damage(int damage, int chain)
     {
-        //ダメージは「無敵時間外」 or 「連鎖値がより高い」の時に処理
+        //無敵フラグが立っていたらもうなんも関係なくダメージ処理しない
+        if (this.damageShutout)
+        {
+            return false;
+        }
 
+        //ダメージは「無敵時間外」 or 「連鎖値がより高い」の時に処理
 
         //現在の連鎖値より高い連鎖値の場合はダメージ処理が行われる
         if (this.chain < chain)
@@ -174,6 +184,15 @@ public class HitPoint
     public void SetInvincible(int invincible)
     {
         this.invincible = invincible;
+    }
+
+    /**
+    * brief    無敵時間の設定
+    * param[in] int invincible 無敵時間
+    */
+    public void SetDamageShutout(bool isShutout)
+    {
+        this.damageShutout = isShutout;
     }
 }
 
@@ -289,7 +308,7 @@ public abstract class CharacterObject : MonoBehaviour
     /**
      * brief    ダメージ処理
      */ 
-    public abstract void Damage(AttackData attackData);
+    public abstract bool Damage(AttackData attackData);
     /**
      * brief    ダメージを適用する
      */ 

@@ -2111,7 +2111,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903ff5183eee8641b9a2288a20e0c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectManager: {fileID: 631128262}
   userCharacter: {fileID: 1796243772}
   attackCollition: {fileID: 253277549}
   attackPower: 3
@@ -4568,7 +4567,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -40.07, y: 2.66, z: -10}
+  m_LocalPosition: {x: -40.34, y: 0.34, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 665541982}
@@ -5611,12 +5610,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 631128261}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e477e8d84c32a146b16c8530efa59a3, type: 3}
+  m_Script: {fileID: 11500000, guid: d15f989ad4004744abc5d145bc460291, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   effectlist:
   - key: slash
     eff: {fileID: 1789393931402980, guid: f897abb1051988f43b285734d5174592, type: 2}
+  - key: tackle
+    eff: {fileID: 1770877935382060, guid: c7e720b24afe9754f9e860ce226f189a, type: 2}
 --- !u!4 &631128263
 Transform:
   m_ObjectHideFlags: 0
@@ -9347,6 +9348,68 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFoot: 0
   boxColloder: {fileID: 0}
+--- !u!1 &1060818671
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1060818674}
+  - component: {fileID: 1060818672}
+  - component: {fileID: 1060818673}
+  m_Layer: 8
+  m_Name: StrikeAsult
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1060818672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1060818671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4903ff5183eee8641b9a2288a20e0c74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  userCharacter: {fileID: 1796243772}
+  attackCollition: {fileID: 1060818673}
+  attackPower: 3
+  chainCount: 3
+  attackTime: 1
+  targetLayer: 512
+--- !u!58 &1060818673
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1060818671}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.55
+--- !u!4 &1060818674
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1060818671}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1709615928}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1074404825
 GameObject:
   m_ObjectHideFlags: 0
@@ -10420,7 +10483,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903ff5183eee8641b9a2288a20e0c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectManager: {fileID: 631128262}
   userCharacter: {fileID: 1796243772}
   attackCollition: {fileID: 1192919758}
   attackPower: 1
@@ -11089,7 +11151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903ff5183eee8641b9a2288a20e0c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectManager: {fileID: 631128262}
   userCharacter: {fileID: 0}
   attackCollition: {fileID: 1280894816}
   attackPower: 1
@@ -11537,7 +11598,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903ff5183eee8641b9a2288a20e0c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectManager: {fileID: 631128262}
   userCharacter: {fileID: 0}
   attackCollition: {fileID: 1354977056}
   attackPower: 1
@@ -13436,7 +13496,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903ff5183eee8641b9a2288a20e0c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectManager: {fileID: 631128262}
   userCharacter: {fileID: 1796243772}
   attackCollition: {fileID: 1567533535}
   attackPower: 1
@@ -15072,6 +15131,7 @@ Transform:
   - {fileID: 1192919756}
   - {fileID: 1567533536}
   - {fileID: 253277550}
+  - {fileID: 1060818674}
   m_Father: {fileID: 623881275}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -16038,7 +16098,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903ff5183eee8641b9a2288a20e0c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectManager: {fileID: 631128262}
   userCharacter: {fileID: 553027683}
   attackCollition: {fileID: 1767421384}
   attackPower: 2
@@ -16395,7 +16454,6 @@ GameObject:
   - component: {fileID: 1796243771}
   - component: {fileID: 1796243767}
   - component: {fileID: 1796243770}
-  - component: {fileID: 1796243769}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -16428,34 +16486,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75b15101cc35a274fa7bd232f64c29db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1796243769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1796243766}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6452c7d6d029bc4c93046f1cf5c23fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mover: {fileID: 1796243768}
-  foot: {fileID: 1796243765}
-  anchorHitEffect: {fileID: 1603357364847508, guid: 97604df9b40d8c741a02863ea92f133b,
-    type: 2}
-  anchorMaxMoveSpeed: 40
-  anchorMoveAcceleration: 5
-  anchor: {fileID: 1796243767}
-  playerMoveSpeed: 10
-  playerDashSpeed: 20
-  gravity: 0.8
-  jumpPower: 20
-  maxJumpNumber: 1
-  nowJumpNumber: 0
-  hp: 10
-  state: 6
-  preState: 6
-  direction: 0
 --- !u!95 &1796243770
 Animator:
   serializedVersion: 3
@@ -16516,6 +16546,7 @@ MonoBehaviour:
     - {fileID: 1192919757}
     - {fileID: 1567533534}
     - {fileID: 253277548}
+    - {fileID: 1060818672}
 --- !u!61 &1796243773
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -17654,7 +17685,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903ff5183eee8641b9a2288a20e0c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectManager: {fileID: 631128262}
   userCharacter: {fileID: 0}
   attackCollition: {fileID: 1904509611}
   attackPower: 1
@@ -18815,7 +18845,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903ff5183eee8641b9a2288a20e0c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectManager: {fileID: 631128262}
   userCharacter: {fileID: 553027683}
   attackCollition: {fileID: 2028582293}
   attackPower: 2
