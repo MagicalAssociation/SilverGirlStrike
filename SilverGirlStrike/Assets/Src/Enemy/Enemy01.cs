@@ -82,6 +82,8 @@ namespace Enemy01
             public Foot foot;
             //! 向き
             public Direction direction;
+            //攻撃判定オブジェクト
+            public NarrowAttacker[] narrowAttacker;
         }
         //! 重力
         public float gravity;
@@ -122,7 +124,10 @@ namespace Enemy01
         }
         public override void UpdateCharacter()
         {
+            //判定垂れ流し
+            this.parameter.narrowAttacker[0].StartAttack();
             this.UpdateState();
+
         }
         public override bool Damage(AttackData data)
         {

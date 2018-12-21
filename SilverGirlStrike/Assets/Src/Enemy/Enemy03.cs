@@ -62,6 +62,9 @@ namespace Enemy03
             public int power;
             //! 向き情報
             public Direction direction;
+
+            //! 攻撃判定
+            public NarrowAttacker[] narrowAttacker;
         }
         /**
          * brief    停止用データ
@@ -130,16 +133,8 @@ namespace Enemy03
 
         public override void UpdateCharacter()
         {
+            this.parameter.narrowAttacker[0].StartAttack();
             this.UpdateState();
-            //プレイヤーと当たったらダメージ処理
-            Collider2D hit = this.Hit();
-            if (hit != null)
-            {
-                if(hit.GetComponent<CharacterObject>() != null)
-                {
-                    hit.GetComponent<CharacterObject>().Damage(this.attackData);
-                }
-            }
         }
 
         public override bool Damage(AttackData attackData)

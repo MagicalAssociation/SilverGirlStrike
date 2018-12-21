@@ -59,6 +59,8 @@ namespace Enemy02
             public Direction direction;
             //! 移動用class
             public CharacterMover charactermover;
+
+            public NarrowAttacker[] narrowAttacker;
         }
         /**
          * brief    移動用変数をまとめたclass
@@ -114,16 +116,9 @@ namespace Enemy02
 
         public override void UpdateCharacter()
         {
+            //当たり判定
+            this.parameter.narrowAttacker[0].StartAttack();
             this.UpdateState();
-            //プレイヤーと当たったらダメージ処理
-            Collider2D hit = this.Hit();
-            if(hit != null)
-            {
-                if (hit.GetComponent<CharacterObject>() != null)
-                {
-                    hit.GetComponent<CharacterObject>().Damage(this.attackData);
-                }
-            }
         }
 
         public override bool Damage(AttackData attackData)

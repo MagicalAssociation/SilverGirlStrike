@@ -284,6 +284,7 @@ public abstract class CharacterObject : MonoBehaviour
     //! CharacterData
     CharaData characterData;
     bool isDead;
+    CharacterManager characterManager;
 
     /**
      * brief    constructor
@@ -292,6 +293,7 @@ public abstract class CharacterObject : MonoBehaviour
     {
         characterData = new CharaData();
         isDead = false;
+        characterManager = null;
     }
     /**
      * brief    constructor
@@ -319,19 +321,30 @@ public abstract class CharacterObject : MonoBehaviour
     public abstract void MoveCharacter();
 
     /**
-     * brief    キャラクターの削除時の挙動
+     * brief    キャラクターの削除時の挙動、継承しない場合は何も起きない
      */
     public virtual void Dispose()
     {
-
     }
     /**
      * brief    データの取得
      */
     public CharaData GetData()
     {
-        return this.characterData;
+        return characterData;
     }
+
+    public CharacterManager FindManager()
+    {
+        //最初の一回だけはFindで見つける
+        if (characterManager == null)
+        {
+            characterManager = GameObject.Find("CharacterManager").GetComponent<CharacterManager>();
+        }
+
+        return characterManager;
+    }
+
     /**
      * brief    Stateの更新処理
      */ 

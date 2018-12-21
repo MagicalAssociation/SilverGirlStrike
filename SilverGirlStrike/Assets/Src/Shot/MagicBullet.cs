@@ -53,11 +53,13 @@ namespace Bullet
         
         private void Start()
         {
+            this.manager = FindManager();
             collider = GetComponent<BoxCollider2D>();
             mover = GetComponent<CharacterMover>();
             this.myselfID = manager.AddCharacter(this);
             base.AddState((int)State.NORMAL, new NormalState(this));
             base.ChangeState((int)State.NORMAL);
+
         }
         /**
          * brief    AttackData登録

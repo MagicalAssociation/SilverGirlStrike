@@ -91,7 +91,7 @@ public class NarrowAttacker : MonoBehaviour {
             if (result)
             {
                 Vector3 pos = obj.transform.position + new Vector3(0.0f, 0.0f, -1.0f);
-                Effect.Get().CreateEffect("slash", pos, Quaternion.identity, Vector3.one);
+                Effect.Get().CreateEffect("slash", pos, Quaternion.identity, Vector3.one * 3.0f);
             }
         }
     }
