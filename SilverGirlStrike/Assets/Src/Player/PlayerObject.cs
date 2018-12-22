@@ -214,6 +214,7 @@ namespace Fuchan
         //ステート遷移時に使用する、アンカー判定
         public bool ShotAnchor()
         {
+            //スティックの向きを取得
             Vector2 direction = new Vector2(Input.GetAxis("RStickX"), Input.GetAxis("RStickY") * -1);
 
             //スティックがニュートラルの際は、まっすぐX軸にそったレイを設定する
@@ -240,6 +241,8 @@ namespace Fuchan
             //アンカーがなかったらfalse
             if (GetParam().anchorTarget == null)
             {
+                //エフェクト
+                Effect.Get().CreateEffect("wireFailed", GetParam().myself.transform.position, Quaternion.FromToRotation(Vector2.up, direction), Vector3.one);
                 return false;
             }
             return true;
@@ -559,9 +562,7 @@ namespace Fuchan
 
             //ｶｲｰﾝ
             Sound.PlaySE("wireHit");
-            //ヒットエフェクト
-            //var effectObj = Instantiate(this.anchorHitEffect);
-            //effectObj.transform.position = this.anchorObject.transform.position;
+
 
             //現在地から目標のアンカーへ向かうベクトル
             this.targetDirection = new Vector2(GetParam().anchorTarget.transform.localPosition.x - GetParam().myself.transform.localPosition.x, GetParam().anchorTarget.transform.localPosition.y - GetParam().myself.transform.localPosition.y);
@@ -580,6 +581,12 @@ namespace Fuchan
             }
 
             this.GetParam().myself.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+            //エフェクト
+            Effect.Get().CreateEffect("wire", GetParam().myself.transform.position, GetParam().myself.transform.rotation, Vector3.one);
+
+            //ヒットエフェクト
+            Effect.Get().CreateEffect("wireHit", GetParam().anchorTarget.transform.position, Quaternion.identity, Vector3.one);
         }
         //出た時の関数
         public override void Exit(ref StateManager manager)
