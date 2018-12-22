@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4729241597174548}
   - component: {fileID: 212281818947756316}
   - component: {fileID: 95342892100332292}
+  - component: {fileID: 114410768845384124}
   m_Layer: 0
   m_Name: slashEffect
   m_TagString: Untagged
@@ -59,6 +60,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114410768845384124
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1789393931402980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9728917a1be80d45826f84e4ed6acf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deleteTime: 10
 --- !u!212 &212281818947756316
 SpriteRenderer:
   m_ObjectHideFlags: 1

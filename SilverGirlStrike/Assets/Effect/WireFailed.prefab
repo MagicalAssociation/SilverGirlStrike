@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4367150988679640}
   - component: {fileID: 212387601512787828}
   - component: {fileID: 95411283322765726}
+  - component: {fileID: 114193233890510600}
   m_Layer: 8
   m_Name: WireFailed
   m_TagString: Player
@@ -59,6 +60,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114193233890510600
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1740339486619130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9728917a1be80d45826f84e4ed6acf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deleteTime: 20
 --- !u!212 &212387601512787828
 SpriteRenderer:
   m_ObjectHideFlags: 1
