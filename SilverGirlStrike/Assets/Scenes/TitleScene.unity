@@ -433,12 +433,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 335889051}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ec88100830576d48bd3b80b296f2973, type: 3}
+  m_Script: {fileID: 11500000, guid: 34d2bc5f69636ae488d6c4ec0068c9fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cursors:
   - {fileID: 0}
-  animator: {fileID: 0}
 --- !u!1 &467641471
 GameObject:
   m_ObjectHideFlags: 0
