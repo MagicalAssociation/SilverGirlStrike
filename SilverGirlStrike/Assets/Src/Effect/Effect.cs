@@ -31,6 +31,11 @@ public class Effect {
     //エフェクトを追加
     public void AddEffect(string name, GameObject effect)
     {
+        if (effectDictionary.ContainsKey(name))
+        {
+            // すでに登録済みなのでいったん消す
+            effectDictionary.Remove(name);
+        }
         effectDictionary.Add(name, effect);
     }
 

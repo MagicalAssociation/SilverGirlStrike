@@ -8,9 +8,8 @@ using UnityEngine.UI;
 public class GameOverJudge : MonoBehaviour {
     bool missFrag;
     //カメラ止める用
-    public Camera camera;
+    public Camera cameraObj;
 
-    public Image fade;
 
     private void Start()
     {
@@ -30,20 +29,12 @@ public class GameOverJudge : MonoBehaviour {
 
     IEnumerator EndGame()
     {
-        this.camera.gameObject.GetComponent<ObjectChaser>().chaseTarget = null;
+        this.cameraObj.gameObject.GetComponent<ObjectChaser>().chaseTarget = null;
 
-        float fadeAlpha = 0.0f;
         yield return new WaitForSeconds(2.0f);
-        for (int i = 0; i < 60; ++i)
-        {
-            fadeAlpha += 1.0f / 60.0f;
-            fade.color = new Color(0.0f, 0.0f, 0.0f, fadeAlpha);
-            yield return null;
-        }
-        fade.color = new Color(0.0f, 0.0f, 0.0f, 1.0f);
-        yield return null;
-
-        yield return new WaitForSeconds(1.0f);
-        SceneManager.LoadScene("TitleScene");
+        // 現在のScene名を取得する
+        Scene loadScene = SceneManager.GetActiveScene();
+        // Sceneの読み直し
+        SceneManager.LoadScene(loadScene.name);
     }
 }
