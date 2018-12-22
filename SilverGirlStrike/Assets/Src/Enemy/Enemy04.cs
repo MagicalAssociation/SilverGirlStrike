@@ -166,16 +166,9 @@ namespace Enemy04
 
         public override void UpdateCharacter()
         {
+            this.attackParameter.narrowAttackers[0].StartAttack();
+
             this.UpdateState();
-            //プレイヤーと当たったらダメージ処理
-            Collider2D hit = this.Hit();
-            if (hit != null)
-            {
-                if (hit.GetComponent<CharacterObject>() != null)
-                {
-                    hit.GetComponent<CharacterObject>().Damage(this.attackData);
-                }
-            }
             this.DebugDrawPointer();
             //Debug.Log(this.easing.In());
         }
@@ -504,7 +497,7 @@ namespace Enemy04
 
         public override bool Transition(ref StateManager manager)
         {
-            if(base.GetTime() >= 30)
+            if(base.GetTime() >= 30 + 40)
             {
                 if (base.enemy.CheckTargetDetection() != null)
                 {
@@ -521,9 +514,9 @@ namespace Enemy04
 
         public override void Update()
         {
-            if(base.GetTime() == 4)
+            if(base.GetTime() == 40)
             {
-                this.enemy.attackParameter.narrowAttackers[0].StartAttack();
+                this.enemy.attackParameter.narrowAttackers[1].StartAttack();
             }
         }
     }

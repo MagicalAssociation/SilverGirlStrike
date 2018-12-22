@@ -42,7 +42,6 @@ public class CharacterManager : MonoBehaviour
         this.objects = new Dictionary<string, CharacterData>();
 
         FindChildren(this.characters);
-
     }
 
     private void FindChildren(GameObject root)
