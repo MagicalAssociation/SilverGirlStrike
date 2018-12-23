@@ -9,49 +9,48 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1789393931402980}
+  m_RootGameObject: {fileID: 1190346195610396}
   m_IsPrefabAsset: 1
---- !u!1 &1789393931402980
+--- !u!1 &1190346195610396
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4729241597174548}
-  - component: {fileID: 212281818947756316}
-  - component: {fileID: 95342892100332292}
-  - component: {fileID: 114410768845384124}
+  - component: {fileID: 4718543771642830}
+  - component: {fileID: 212359647977801330}
+  - component: {fileID: 95532379545490800}
   m_Layer: 0
-  m_Name: slashEffect
+  m_Name: HitEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4729241597174548
+--- !u!4 &4718543771642830
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1789393931402980}
+  m_GameObject: {fileID: 1190346195610396}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -63.6, y: -1.25, z: 0}
+  m_LocalPosition: {x: -43.30456, y: 0.0040115714, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &95342892100332292
+--- !u!95 &95532379545490800
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1789393931402980}
+  m_GameObject: {fileID: 1190346195610396}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f4c22f154385d2548b331099f6d03498, type: 2}
+  m_Controller: {fileID: 9100000, guid: b802fe00c3e33fb458af0f580fcb0b24, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -60,24 +59,12 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114410768845384124
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1789393931402980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9728917a1be80d45826f84e4ed6acf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deleteTime: 10
---- !u!212 &212281818947756316
+--- !u!212 &212359647977801330
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1789393931402980}
+  m_GameObject: {fileID: 1190346195610396}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -106,8 +93,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10000
-  m_Sprite: {fileID: 21300000, guid: f178d0a53f3115a4086ed5ccc754348e, type: 3}
+  m_SortingOrder: 1000
+  m_Sprite: {fileID: 21300008, guid: f178d0a53f3115a4086ed5ccc754348e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

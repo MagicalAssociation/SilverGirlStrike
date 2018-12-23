@@ -17,7 +17,7 @@ public class ObjectChaser : MonoBehaviour {
 
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
         if(this.chaseTarget == null)
         {
             return;
