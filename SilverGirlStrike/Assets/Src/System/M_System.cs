@@ -13,6 +13,8 @@ public class M_System : MonoBehaviour
 {
     static bool frag = false;
 
+    static M_System myself;
+
     //! 入力を扱う公開変数
     static public SystemInput input;
 
@@ -28,15 +30,17 @@ public class M_System : MonoBehaviour
         PLAYERWALL = 1 << 15,
     }
 
+    public const string characterManagerObjectName = "CharacterManager";
+
     /**
      * brief    初期化
      */
     private void Awake()
     {
-        //初期化は一回だけ
+        //初期化は一回だけ、複数回オブジェクトが置かれるのを防ぐ
         if (frag)
         {
-            return;
+            Destroy(this.gameObject);
         }
 
         M_System.frag = true;
