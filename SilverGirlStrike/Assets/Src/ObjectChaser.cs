@@ -8,23 +8,31 @@ using UnityEngine;
 
 //特定のゲームオブジェクトに、遅れて追尾するスクリプト（相対位置で追尾位置をずらせる）
 public class ObjectChaser : MonoBehaviour {
+    //Z座標
+    float zPos;
+
+    //相対座標となる点
+    [SerializeField]
+    private Transform pivot;
+
     public Transform chaseTarget;
 
     [Range(0, 1)]
     public float chasePower;
-    Vector3 relativePosition;
+    public Vector3 relativePosition;
     Vector3 targetPosition;
 
 
     // Use this for initialization
     void Awake () {
+        this.zPos = this.transform.position.z;
         if(this.chaseTarget == null)
         {
             return;
         }
 
         //ターゲットとの相対位置を取得
-        this.relativePosition = this.transform.position - this.chaseTarget.position;
+        this.relativePosition = this.transform.position - this.pivot.position;
 	}
 	
 	// Update is called once per frame
@@ -42,6 +50,7 @@ public class ObjectChaser : MonoBehaviour {
 
 
         this.transform.position += ((this.targetPosition + this.relativePosition) - this.transform.position) * this.chasePower * (Time.deltaTime * 60.0f);
+        this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.zPos);
 	}
 
 
