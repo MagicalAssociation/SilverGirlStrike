@@ -117,7 +117,10 @@ namespace Enemy02
         public override void UpdateCharacter()
         {
             //当たり判定
-            this.parameter.narrowAttacker[0].StartAttack();
+            if (this.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
+            {
+                this.parameter.narrowAttacker[0].StartAttack();
+            }
             this.UpdateState();
         }
 
@@ -128,10 +131,13 @@ namespace Enemy02
 
         public override void ApplyDamage()
         {
-            this.GetData().hitPoint.DamageUpdate();
             if (this.GetData().hitPoint.GetHP() <= 0 && base.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
                 base.ChangeState((int)State.DEATH);
+            }
+            else
+            {
+                this.GetData().hitPoint.DamageUpdate();
             }
         }
 
@@ -232,7 +238,7 @@ namespace Enemy02
             //Easingを登録
             move_x.Set(this.enemy.transform.position.x, this.moveData.targets.transform.position.x - this.enemy.transform.position.x);
             move_y.Set(this.enemy.transform.position.y, this.moveData.targets.transform.position.y - this.enemy.transform.position.y);
-            this.enemy.parameter.animation.Play("Move");
+            this.enemy.parameter.animation.Play("Normal");
         }
 
         public override void Exit(ref StateManager manager)
@@ -312,6 +318,7 @@ namespace Enemy02
         public override void Enter(ref StateManager manager)
         {
             this.enemy.parameter.animation.Play("Death");
+            this.enemy.GetComponentInChildren<MagicTeam>().NotActive();
         }
 
         public override void Exit(ref StateManager manager)

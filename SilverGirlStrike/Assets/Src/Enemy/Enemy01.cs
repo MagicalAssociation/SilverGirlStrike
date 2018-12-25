@@ -56,6 +56,8 @@ namespace Enemy01
             DEATH,
             //! 軌道待ち
             ORBIT,
+            STARTATTACK,
+            ENDATTACK,
         }
         /**
          * enum Direction 向き
@@ -90,11 +92,13 @@ namespace Enemy01
         //! Parameter
         public Enemy01Parameter parameter;
         //! 生成するBulletのデータ
-        public Bullet.BulletData[] bulletData;
+        public Bullet.BulletParameter bulletParameter;
         //! 当たり判定
         BoxCollider2D boxCollider;
         //! 攻撃範囲
         CircleCollider2D circleCollider;
+        //! 移動値
+        Vector2 movePower;
         //! 重力の有効化設定
         public bool enableGravity;
         /**
@@ -103,6 +107,7 @@ namespace Enemy01
         public Enemy01()
             :base(10)
         {
+            this.movePower = new Vector2();
         }
         // Update is called once per frame
         private void Start()
@@ -120,12 +125,17 @@ namespace Enemy01
             base.AddState((int)State.FALL, new FallState(this));
             base.AddState((int)State.DEATH, new DeathState(this));
             base.AddState((int)State.ORBIT, new OrbitState(this));
+            base.AddState((int)State.STARTATTACK, new AttackStartState(this));
+            base.AddState((int)State.ENDATTACK, new AttackEndState(this));
             base.ChangeState((int)State.ORBIT);
         }
         public override void UpdateCharacter()
         {
             //判定垂れ流し
-            this.parameter.narrowAttacker[0].StartAttack();
+            if (this.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
+            {
+                this.parameter.narrowAttacker[0].StartAttack();
+            }
             this.UpdateState();
 
         }
@@ -135,17 +145,22 @@ namespace Enemy01
         }
         public override void ApplyDamage()
         {
-            this.GetData().hitPoint.DamageUpdate();
+            //HPなくなったら死亡へ
             if(this.GetData().hitPoint.GetHP() <= 0 && base.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
                 base.ChangeState((int)State.DEATH);
+            }
+            else
+            {
+                this.GetData().hitPoint.DamageUpdate();
             }
         }
         public override void MoveCharacter()
         {
             if (this.GetData().stateManager.GetNowStateNum() != (int)State.ORBIT)
             {
-                parameter.mover.UpdateVelocity(0, 0, this.enableGravity ? this.gravity : 0.0f, parameter.foot.CheckHit());
+                parameter.mover.UpdateVelocity(this.movePower.x, this.movePower.y, this.enableGravity ? this.gravity : 0.0f, parameter.foot.CheckHit());
+                this.movePower = Vector2.zero;
             }
         }
         /**
@@ -166,6 +181,10 @@ namespace Enemy01
                    this.circleCollider.radius,
                    (int)M_System.LayerName.PLAYER
                    );
+        }
+        public void SetMovePower(Vector2 move)
+        {
+            this.movePower = move;
         }
     }
     /**
@@ -209,7 +228,7 @@ namespace Enemy01
             //一定count経過したら攻撃モーションへ移行
             if(base.GetTime() > base.enemy.GetParameter().attackInterval)
             {
-                manager.SetNextState((int)Enemy01.State.ATTACK);
+                manager.SetNextState((int)Enemy01.State.STARTATTACK);
                 return true;
             }
             return false;
@@ -224,6 +243,9 @@ namespace Enemy01
      */
     public class AttackState : BaseState
     {
+        float preDeltaTime;
+        public float animationTime;
+        bool shot;
         public AttackState(Enemy01 enemy) 
             : base(enemy)
         {
@@ -231,7 +253,11 @@ namespace Enemy01
 
         public override void Enter(ref StateManager manager)
         {
-            this.enemy.parameter.animation.Play("AttackStart");
+
+            this.enemy.parameter.animation.Play("Attack");
+            this.animationTime = this.enemy.parameter.animation.GetCurrentAnimatorStateInfo(0).length;
+            this.preDeltaTime = Time.deltaTime;
+            this.shot = false;
         }
 
         public override void Exit(ref StateManager manager)
@@ -240,7 +266,103 @@ namespace Enemy01
 
         public override bool Transition(ref StateManager manager)
         {
-            if(base.GetTime() > 60)
+            if(this.GetTime() == 0)
+            {
+                return false;
+            }
+            if (GetTime() % (this.enemy.bulletParameter.interval * this.enemy.bulletParameter.bulletNum) == 0)
+            {
+                manager.SetNextState((int)Enemy01.State.ENDATTACK);
+                return true;
+            }
+            return false;
+        }
+
+        public override void Update()
+        {
+            if (GetTime() % this.enemy.bulletParameter.interval == 0)
+            {
+                this.CreateBullet();
+            }
+        }
+        /**
+         * brief    攻撃生成
+         */ 
+        private void CreateBullet()
+        {
+            for (int i = 0; i < this.enemy.bulletParameter.bulletData.Length; ++i)
+            {
+                Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[i], this.enemy.transform.position);
+            }
+        }
+    }
+    /**
+     * brief    攻撃開始モーション
+     */
+    public class AttackStartState : BaseState
+    {
+        float preDeltaTime;
+        float deltaTime;
+        public float animationTime;
+        public AttackStartState(Enemy01 enemy) : base(enemy)
+        {
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+
+            this.enemy.parameter.animation.Play("AttackStart");
+            this.animationTime = 0.283f;
+            this.deltaTime = 0.0f;
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            if (deltaTime >= this.animationTime)
+            {
+                manager.SetNextState((int)Enemy01.State.ATTACK);
+                return true;
+            }
+            return false;
+        }
+
+        public override void Update()
+        {
+            this.deltaTime += Time.deltaTime;
+        }
+    }
+    /**
+     * brief   攻撃終了モーション
+     */
+    public class AttackEndState : BaseState
+    {
+        float preDeltaTime;
+        public float animationTime;
+        float deltaTime;
+        public AttackEndState(Enemy01 enemy) : base(enemy)
+        {
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+            
+            this.enemy.parameter.animation.Play("AttackEnd");
+            this.animationTime = 0.283f;
+            this.preDeltaTime = Time.deltaTime;
+            deltaTime = 0.0f;
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            if(deltaTime >= this.animationTime)
             {
                 if (base.enemy.TargetDistanceCheck() != null)
                 {
@@ -257,21 +379,7 @@ namespace Enemy01
 
         public override void Update()
         {
-            if(base.GetTime() == 30)
-            {
-                //攻撃生成
-                this.CreateBullet();
-            }
-        }
-        /**
-         * brief    攻撃生成
-         */ 
-        private void CreateBullet()
-        {
-            for (int i = 0; i < this.enemy.bulletData.Length; ++i)
-            {
-                Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletData[i], this.enemy.transform.position);
-            }
+            deltaTime += Time.deltaTime;
         }
     }
     /**
@@ -318,6 +426,8 @@ namespace Enemy01
         public override void Enter(ref StateManager manager)
         {
             this.enemy.parameter.animation.Play("Death");
+            this.enemy.parameter.mover.Jump(5.0f);
+            this.enemy.gravity /= 5.0f;
         }
 
         public override void Exit(ref StateManager manager)
@@ -331,6 +441,14 @@ namespace Enemy01
 
         public override void Update()
         {
+            if(this.enemy.transform.localScale.x == 1)
+            {
+                this.enemy.SetMovePower(new Vector2(3, 0));
+            }
+            else if(this.enemy.transform.localScale.x == -1)
+            {
+                this.enemy.SetMovePower(new Vector2(-3, 0));
+            }
             if(base.GetTime() >= 60)
             {
                 base.enemy.KillMyself();

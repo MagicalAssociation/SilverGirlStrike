@@ -65,6 +65,7 @@ namespace Enemy03
 
             //! 攻撃判定
             public NarrowAttacker[] narrowAttacker;
+            public CharacterMover characterMover;
         }
         /**
          * brief    停止用データ
@@ -99,7 +100,7 @@ namespace Enemy03
         //! 前回の位置
         private Vector2 prePos;
         //! 現在位置
-        private Vector2 pos;
+        public Vector2 pos;
         //! 攻撃データ
         private AttackData attackData;
         //! 自身のBoxの当たり判定
@@ -122,6 +123,7 @@ namespace Enemy03
             this.collider = GetComponent<BoxCollider2D>();
             this.attackData.power = this.parameter.power;
             this.parameter.animation = GetComponent<Animator>();
+            this.parameter.characterMover = GetComponent<CharacterMover>();
             this.parameter.direction = Direction.LEFT;
             this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
             //各ステートを登録&適用
@@ -133,7 +135,10 @@ namespace Enemy03
 
         public override void UpdateCharacter()
         {
-            this.parameter.narrowAttacker[0].StartAttack();
+            if (this.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
+            {
+                this.parameter.narrowAttacker[0].StartAttack();
+            }
             this.UpdateState();
         }
 
@@ -144,10 +149,13 @@ namespace Enemy03
 
         public override void ApplyDamage()
         {
-            this.GetData().hitPoint.DamageUpdate();
             if (this.GetData().hitPoint.GetHP() <= 0 && base.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
                 base.ChangeState((int)State.DEATH);
+            }
+            else
+            {
+                this.GetData().hitPoint.DamageUpdate();
             }
         }
 
@@ -155,15 +163,6 @@ namespace Enemy03
         {
             this.prePos = this.transform.localPosition;
             this.transform.localPosition = new Vector3(pos.x, pos.y, this.transform.position.z);
-            if(this.transform.localPosition.x > this.prePos.x)
-            {
-                this.parameter.direction = Direction.RIGHT;
-            }
-            else if(this.transform.localPosition.x < this.prePos.x)
-            {
-                this.parameter.direction = Direction.LEFT;
-            }
-            this.transform.localScale = new Vector3((int)this.parameter.direction, 1, 1);
         }
         /**
          * brief    固有データを取得する
@@ -264,7 +263,7 @@ namespace Enemy03
 
         public override void Enter(ref StateManager manager)
         {
-            this.enemy.parameter.animation.Play("Move");
+            this.enemy.parameter.animation.Play("Normal");
         }
 
         public override void Exit(ref StateManager manager)
@@ -347,6 +346,7 @@ namespace Enemy03
         public override void Enter(ref StateManager manager)
         {
             this.enemy.parameter.animation.Play("Death");
+            this.enemy.GetComponentInChildren<MagicTeam>().NotActive();
         }
 
         public override void Exit(ref StateManager manager)

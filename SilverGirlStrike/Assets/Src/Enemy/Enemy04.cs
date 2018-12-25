@@ -166,11 +166,12 @@ namespace Enemy04
 
         public override void UpdateCharacter()
         {
-            this.attackParameter.narrowAttackers[0].StartAttack();
-
+            if (this.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
+            {
+                this.attackParameter.narrowAttackers[0].StartAttack();
+            }
             this.UpdateState();
             this.DebugDrawPointer();
-            //Debug.Log(this.easing.In());
         }
 
         public override bool Damage(AttackData attackData)
@@ -180,10 +181,13 @@ namespace Enemy04
 
         public override void ApplyDamage()
         {
-            this.GetData().hitPoint.DamageUpdate();
             if (this.GetData().hitPoint.GetHP() <= 0 && this.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
                 base.ChangeState((int)State.DEATH);
+            }
+            else
+            {
+                this.GetData().hitPoint.DamageUpdate();
             }
         }
 

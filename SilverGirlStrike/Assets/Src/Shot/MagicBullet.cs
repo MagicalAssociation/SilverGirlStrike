@@ -21,6 +21,16 @@ namespace Bullet
         public GameObject target;
         public BaseBullet attackObject;
     }
+    [System.Serializable]
+    public class BulletParameter
+    {
+        //! 生成弾数
+        public int bulletNum;
+        //! 攻撃間隔
+        public int interval;
+        //! 攻撃データ
+        public BulletData[] bulletData;
+    }
     public abstract class BaseBullet : CharacterObject
     {
     }
@@ -43,7 +53,6 @@ namespace Bullet
         public float moveSpeed;
         //! 寿命
         public int lifeCnt;
-        public CharacterManager manager;
         //自分の登録番号
         int myselfID;
         BoxCollider2D collider;
@@ -53,10 +62,9 @@ namespace Bullet
         
         private void Start()
         {
-            this.manager = FindManager();
             collider = GetComponent<BoxCollider2D>();
             mover = GetComponent<CharacterMover>();
-            this.myselfID = manager.AddCharacter(this);
+            this.myselfID = base.FindManager().AddCharacter(this);
             base.AddState((int)State.NORMAL, new NormalState(this));
             base.ChangeState((int)State.NORMAL);
 
