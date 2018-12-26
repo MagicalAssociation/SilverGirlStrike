@@ -33,8 +33,8 @@ Preset:
     value: 0.8
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: parameter.attackObject
-    value: 
+    propertyPath: parameter.maxHP
+    value: 3
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: parameter.radius
@@ -47,39 +47,68 @@ Preset:
   - target: {fileID: 0}
     propertyPath: parameter.animation
     value: 
-    objectReference: {fileID: 0}
+    objectReference: {fileID: 95198928428834882, guid: 2b3606b8395ae2e4490295c67f23d010,
+      type: 2}
   - target: {fileID: 0}
     propertyPath: parameter.mover
     value: 
-    objectReference: {fileID: 0}
+    objectReference: {fileID: 114972980276426064, guid: 2b3606b8395ae2e4490295c67f23d010,
+      type: 2}
   - target: {fileID: 0}
     propertyPath: parameter.foot
     value: 
-    objectReference: {fileID: 0}
+    objectReference: {fileID: 114150177540351664, guid: 2b3606b8395ae2e4490295c67f23d010,
+      type: 2}
   - target: {fileID: 0}
     propertyPath: parameter.direction
     value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: bulletData.angle
-    value: 186
+    propertyPath: parameter.narrowAttacker.Array.size
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: bulletData.power
+    propertyPath: parameter.narrowAttacker.Array.data[0]
+    value: 
+    objectReference: {fileID: 114440869586017348, guid: 2b3606b8395ae2e4490295c67f23d010,
+      type: 2}
+  - target: {fileID: 0}
+    propertyPath: bulletParameter.bulletNum
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bulletParameter.interval
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bulletParameter.bulletData.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bulletParameter.bulletData.Array.data[0].angle
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bulletParameter.bulletData.Array.data[0].power
     value: 3
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: bulletData.speed
-    value: 0.3
+    propertyPath: bulletParameter.bulletData.Array.data[0].speed
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: bulletData.life
-    value: 30
+    propertyPath: bulletParameter.bulletData.Array.data[0].life
+    value: 10000
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: bulletData.target
+    propertyPath: bulletParameter.bulletData.Array.data[0].target
     value: 
     objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bulletParameter.bulletData.Array.data[0].attackObject
+    value: 
+    objectReference: {fileID: 114516956546061212, guid: 84b6877f89ca83c4a8c14d729b9e5e5c,
+      type: 2}
   - target: {fileID: 0}
     propertyPath: enableGravity
     value: 1

@@ -316,7 +316,7 @@ namespace Enemy04
         {
             this.enemy.parameter.animation.Play("Move");
             this.easing_Speed.ResetTime();
-            this.easing_Speed.Set(0, this.enemy.GetMaxSpeed(), 1, new Easing.Linear());
+            this.easing_Speed.Set(0, this.enemy.GetMaxSpeed(), 5, new Easing.Linear());
         }
 
         public override void Exit(ref StateManager manager)
@@ -353,7 +353,7 @@ namespace Enemy04
             if(base.enemy.GetStopCount() == 0)
             {
                 this.easing_Speed.ResetTime();
-                this.easing_Speed.Set(this.enemy.move.speed, 0 - this.enemy.move.speed, 1);
+                this.easing_Speed.Set(this.enemy.move.speed, 0 - this.enemy.move.speed, 5);
             }
         }
         private float ToRadius(float angle)
@@ -382,7 +382,7 @@ namespace Enemy04
 
         public override bool Transition(ref StateManager manager)
         {
-            if(base.GetTime() >= 30)
+            if(base.GetTime() >= 0)
             {
                 switch (manager.GetPreStateNum())
                 {
@@ -440,7 +440,7 @@ namespace Enemy04
         public override void Update()
         {
             base.enemy.SetPos(new Vector2(this.enemy.transform.position.x,
-                this.move_y.linear.None(this.move_y.Time(3), this.move_y.GetStartValue(), this.move_y.GetEndValue(), 3)));
+                this.move_y.quint.InOut(this.move_y.Time(10), this.move_y.GetStartValue(), this.move_y.GetEndValue(), 10)));
         }
     }
     /**
@@ -478,7 +478,7 @@ namespace Enemy04
         public override void Update()
         {
             base.enemy.SetPos(new Vector2(this.enemy.transform.position.x,
-                this.move_y.linear.None(this.move_y.Time(3), this.move_y.GetStartValue(), this.move_y.GetEndValue(), 3)));
+                this.move_y.quint.InOut(this.move_y.Time(10), this.move_y.GetStartValue(), this.move_y.GetEndValue(), 10)));
         }
     }
     /**

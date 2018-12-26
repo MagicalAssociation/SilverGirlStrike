@@ -328,7 +328,7 @@ MonoBehaviour:
       power: 3
       speed: 1
       life: 10000000
-      target: {fileID: 0}
+      target: {fileID: 1517860858183936, guid: 774225a328eb7754988280c801161af9, type: 2}
       attackObject: {fileID: 114516956546061212, guid: 84b6877f89ca83c4a8c14d729b9e5e5c,
         type: 2}
   enableGravity: 1
@@ -366,7 +366,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 12
   m_Sprite: {fileID: 21300002, guid: fc5f02ca9e2949846bb84c8cfe4e9923, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

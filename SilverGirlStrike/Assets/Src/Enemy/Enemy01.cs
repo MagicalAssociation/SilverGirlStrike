@@ -428,6 +428,19 @@ namespace Enemy01
             this.enemy.parameter.animation.Play("Death");
             this.enemy.parameter.mover.Jump(5.0f);
             this.enemy.gravity /= 5.0f;
+            if (this.enemy.transform.localScale.x == 1)
+            {
+                this.enemy.transform.Rotate(new Vector3(0, 0, -30));
+            }
+            else if (this.enemy.transform.localScale.x == -1)
+            {
+                this.enemy.transform.Rotate(new Vector3(0, 0, 30));
+            }
+            var magicteam = this.enemy.GetComponent<MagicTeam>();
+            if(magicteam != null)
+            {
+                magicteam.NotActive();
+            }
         }
 
         public override void Exit(ref StateManager manager)
