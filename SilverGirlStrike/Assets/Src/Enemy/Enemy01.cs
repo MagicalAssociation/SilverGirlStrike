@@ -490,6 +490,7 @@ namespace Enemy01
         {
             if (base.enemy.TargetDistanceCheck() != null)
             {
+                enemy.bulletParameter.Search();
                 manager.SetNextState((int)Enemy01.State.NORMAL);
                 return true;
             }

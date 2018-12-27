@@ -282,6 +282,10 @@ MonoBehaviour:
   bulletParameter:
     bulletNum: 1
     interval: 5
+    targetSearch:
+      enable: 0
+      targetLayer: 0
+      searchRange: {fileID: 0}
     bulletData:
     - angle: 0
       power: 3

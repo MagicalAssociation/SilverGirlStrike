@@ -162,7 +162,14 @@ namespace Enemy03
         public override void MoveCharacter()
         {
             this.prePos = this.transform.localPosition;
-            this.transform.localPosition = new Vector3(pos.x, pos.y, this.transform.position.z);
+            if (this.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
+            {
+                this.transform.localPosition = new Vector3(pos.x, pos.y, this.transform.position.z);
+            }
+            else
+            {
+                this.parameter.characterMover.UpdateVelocity(pos.x, pos.y, 0.8f / 5.0f, false);
+            }
         }
         /**
          * brief    固有データを取得する
@@ -347,6 +354,23 @@ namespace Enemy03
         {
             this.enemy.parameter.animation.Play("Death");
             this.enemy.GetComponentInChildren<MagicTeam>().NotActive();
+            this.enemy.parameter.characterMover.Jump(5.0f);
+            if (this.enemy.transform.localScale.x == 1)
+            {
+                this.enemy.SetPos(new Vector2(3, 0));
+            }
+            else if (this.enemy.transform.localScale.x == -1)
+            {
+                this.enemy.SetPos(new Vector2(-3, 0));
+            }
+            if (this.enemy.transform.localScale.x == 1)
+            {
+                this.enemy.transform.Rotate(new Vector3(0, 0, -30));
+            }
+            else if (this.enemy.transform.localScale.x == -1)
+            {
+                this.enemy.transform.Rotate(new Vector3(0, 0, 30));
+            }
         }
 
         public override void Exit(ref StateManager manager)

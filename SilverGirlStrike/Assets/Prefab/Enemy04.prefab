@@ -334,15 +334,24 @@ MonoBehaviour:
     footPosition: {fileID: 4475127104010984}
     stopCountMin: 180
     stopCountMax: 360
-  bulletData:
-  - angle: 0
-    power: 3
-    speed: 0.3
-    life: 180
-    target: {fileID: 0}
-    attackObject: {fileID: 114516956546061212, guid: 84b6877f89ca83c4a8c14d729b9e5e5c,
-      type: 2}
+  bulletParameter:
+    bulletNum: 3
+    interval: 10
+    targetSearch:
+      enable: 1
+      targetLayer: 256
+      searchRange: {fileID: 58245592772688574}
+    bulletData:
+    - angle: 0
+      power: 3
+      speed: 1
+      life: 100000
+      target: {fileID: 0}
+      attackObject: {fileID: 114516956546061212, guid: 84b6877f89ca83c4a8c14d729b9e5e5c,
+        type: 2}
   attackParameter:
+    beginTime: 30
+    attackTime: 40
     narrowAttackers:
     - {fileID: 114647996075754252}
     - {fileID: 114908477534389480}

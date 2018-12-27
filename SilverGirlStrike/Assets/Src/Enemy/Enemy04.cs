@@ -98,6 +98,8 @@ namespace Enemy04
          [System.Serializable]
          public class AttackParameter
         {
+            public int beginTime;
+            public int attackTime;
             public NarrowAttacker[] narrowAttackers;
         }
         //! 固有パラメータデータ
@@ -117,7 +119,7 @@ namespace Enemy04
         //! 自身のBoxの当たり判定
         private BoxCollider2D collider;
         //! 魔法弾
-        public Bullet.BulletData[] bulletData;
+        public Bullet.BulletParameter bulletParameter;
         //! 周囲攻撃データ
         public AttackParameter attackParameter;
         //! プレイヤー検知用Circle
@@ -305,6 +307,8 @@ namespace Enemy04
     {
         private int count;
         Easing easing_Speed;
+        bool attackFlag;
+        int attackcount;
         public MoveState(Enemy04 enemy)
             : base(enemy)
         {
@@ -317,6 +321,8 @@ namespace Enemy04
             this.enemy.parameter.animation.Play("Move");
             this.easing_Speed.ResetTime();
             this.easing_Speed.Set(0, this.enemy.GetMaxSpeed(), 5, new Easing.Linear());
+            this.attackFlag = false;
+            this.attackcount = 0;
         }
 
         public override void Exit(ref StateManager manager)
@@ -337,19 +343,36 @@ namespace Enemy04
         public override void Update()
         {
             ++this.count;
+            //カウントのあれこれ
             base.enemy.SetStopCount(base.enemy.GetStopCount() - 1);
+            //速度をEasingで変化
             this.enemy.move.speed = this.easing_Speed.In();
+            //速度で中心からの角度を指定
             this.enemy.SetAngle(this.enemy.GetAngle() + this.enemy.move.speed);
-            Debug.Log(this.enemy.move.speed);
+            //移動処理
             this.enemy.SetPos(new Vector2(this.enemy.GetOriginPos().x + (Mathf.Sin(this.ToRadius(enemy.GetAngle())) * this.enemy.move.radius * this.enemy.move.scale.x),
                 this.enemy.GetOriginPos().y + (Mathf.Cos(this.ToRadius(enemy.GetAngle() * 2 + 90)) * this.enemy.move.radius) * this.enemy.move.scale.y));
-            if (this.count % base.enemy.parameter.attackInterval == 0)
+            //攻撃処理
+            if ((this.GetTime() + attackcount) % base.enemy.parameter.attackInterval == 0 && attackFlag != true)
             {
-                for (int i = 0; i < this.enemy.bulletData.Length; ++i)
+                attackFlag = true;
+                this.attackcount = this.GetTime();
+            }
+            else
+            {
+                if (attackFlag == true)
                 {
-                    Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletData[i], this.enemy.transform.position);
+                    if((GetTime() - attackcount) % this.enemy.bulletParameter.interval == 0)
+                    {
+                        this.CreateBullet();
+                    }
+                    if((GetTime() - attackcount) % (this.enemy.bulletParameter.interval* this.enemy.bulletParameter.bulletNum) == 0)
+                    {
+                        this.attackFlag = false;
+                    }
                 }
             }
+            //終了カウントで減速を開始
             if(base.enemy.GetStopCount() == 0)
             {
                 this.easing_Speed.ResetTime();
@@ -359,6 +382,13 @@ namespace Enemy04
         private float ToRadius(float angle)
         {
             return (angle * Mathf.PI) / 180.0f;
+        }
+        private void CreateBullet()
+        {
+            for (int i = 0; i < this.enemy.bulletParameter.bulletData.Length; ++i)
+            {
+                Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[i], this.enemy.transform.position);
+            }
         }
     }
     /**
@@ -501,7 +531,7 @@ namespace Enemy04
 
         public override bool Transition(ref StateManager manager)
         {
-            if(base.GetTime() >= 30 + 40)
+            if(base.GetTime() >= this.enemy.attackParameter.beginTime + this.enemy.attackParameter.attackTime)
             {
                 if (base.enemy.CheckTargetDetection() != null)
                 {
@@ -518,7 +548,7 @@ namespace Enemy04
 
         public override void Update()
         {
-            if(base.GetTime() == 40)
+            if(base.GetTime() == this.enemy.attackParameter.beginTime)
             {
                 this.enemy.attackParameter.narrowAttackers[1].StartAttack();
             }
@@ -547,6 +577,7 @@ namespace Enemy04
         {
             if (base.enemy.CheckTargetDetection() != null)
             {
+                enemy.bulletParameter.Search();
                 manager.SetNextState((int)Enemy04.State.RISING);
                 return true;
             }
