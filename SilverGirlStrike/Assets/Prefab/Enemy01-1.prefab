@@ -283,9 +283,9 @@ MonoBehaviour:
     bulletNum: 1
     interval: 5
     targetSearch:
-      enable: 0
-      targetLayer: 0
-      searchRange: {fileID: 0}
+      enable: 1
+      targetLayer: 256
+      searchRange: {fileID: 58845643350064854}
     bulletData:
     - angle: 0
       power: 3
