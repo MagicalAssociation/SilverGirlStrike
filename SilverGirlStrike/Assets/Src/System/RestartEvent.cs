@@ -67,7 +67,6 @@ public class RestartEvent : MonoBehaviour {
 
         //プレイヤーをカメラが追従するように設定
         cameraObj.SetTarget(obj.transform);
-
     }
 
     private void DontDestroySetting()
