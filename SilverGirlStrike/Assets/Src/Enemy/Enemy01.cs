@@ -226,7 +226,7 @@ namespace Enemy01
                 return true;
             }
             //一定count経過したら攻撃モーションへ移行
-            if(base.GetTime() > base.enemy.GetParameter().attackInterval)
+            if(base.enemy.bulletParameter.bulletNum != 0 && base.GetTime() > base.enemy.GetParameter().attackInterval)
             {
                 manager.SetNextState((int)Enemy01.State.STARTATTACK);
                 return true;
