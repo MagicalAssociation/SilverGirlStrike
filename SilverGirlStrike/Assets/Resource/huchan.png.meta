@@ -73,6 +73,18 @@ TextureImporter:
     21300136: huchan_68
     21300138: huchan_69
     21300140: huchan_70
+    21300142: huchan_71
+    21300144: huchan_72
+    21300146: huchan_73
+    21300148: huchan_74
+    21300150: huchan_75
+    21300152: huchan_76
+    21300154: huchan_77
+    21300156: huchan_78
+    21300158: huchan_79
+    21300160: huchan_80
+    21300162: huchan_81
+    21300164: huchan_82
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -1603,6 +1615,246 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 0d22b0dca7869fa4d905d554cc048f22
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: huchan_71
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 1536
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87aa5695e8106f2489fc356a46e798d7
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: huchan_72
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 1536
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c2ead9d050f49a41af73dbd5bdc6c8d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: huchan_73
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 1536
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f63fca7e198837f41b21f077935694a2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: huchan_74
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 1536
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00dfe91dbeca9a04ababaa3a8f79e7eb
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: huchan_75
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 1536
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22399eec4db7b8d49a3eb2a3c7b0f00d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: huchan_76
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 1536
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5f26402d50a4da419a21a325b1a3280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: huchan_77
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1456
+        width: 48
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb245a6cbad8d2f4f911a7473c723c21
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: huchan_78
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 1456
+        width: 48
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8934123859f5d584bac3b080c4dc0fff
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: huchan_79
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 1456
+        width: 48
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7590122af16fd494d91592fb8c604803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: huchan_80
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 1456
+        width: 48
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 246b6eec1b190aa45bf5bd2c6af12596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: huchan_81
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 1456
+        width: 48
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed55e9448aad4fc429fd40d56431ec67
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: huchan_82
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 1456
+        width: 48
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8db92ffa877a01e4580789c0de5535d0
       vertices: []
       indices: 
       edges: []

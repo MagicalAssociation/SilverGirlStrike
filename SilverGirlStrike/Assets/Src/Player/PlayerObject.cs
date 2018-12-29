@@ -25,6 +25,7 @@ namespace Fuchan
         //ステートの定数
         public enum State
         {
+            START,
             IDLE,
             WALK,
             JUMP,
@@ -95,6 +96,7 @@ namespace Fuchan
             this.param.anchorTarget = null;
             this.param.dashRatio = 0.0f;
             //ステート追加
+            AddState((int)State.START, new StartState(this));
             AddState((int)State.IDLE, new IdleState(this));
             AddState((int)State.WALK, new WalkState(this));
             AddState((int)State.JUMP, new JumpState(this));
@@ -105,7 +107,7 @@ namespace Fuchan
             AddState((int)State.ATTACK2, new Attack2State(this));
             AddState((int)State.ATTACK3, new Attack3State(this));
             AddState((int)State.DAMAGE, new DamageState(this));
-            ChangeState((int)State.IDLE);
+            ChangeState((int)State.START);
 
 
             GetData().hitPoint.SetInvincible(100);
@@ -250,6 +252,49 @@ namespace Fuchan
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //登場ステート
+    public class StartState : BaseState
+    {
+        public StartState(PlayerObject param)
+            : base(param)
+
+        {
+        }
+
+        //入った時の関数
+        public override void Enter(ref StateManager manager)
+        {
+            GetInspectorParam().playerAnim.Play("Start");
+            //エフェクト
+            Effect.Get().CreateEffect("wireHit", GetParam().myself.transform.position, Quaternion.identity, Vector3.one);
+        }
+        //出た時の関数
+        public override void Exit(ref StateManager manager)
+        {
+
+        }
+        //遷移を行う
+        public override bool Transition(ref StateManager manager)
+        {
+
+            //歩きへ遷移
+            if (GetTime() > 80.0f)
+            {
+                manager.SetNextState((int)PlayerObject.State.IDLE);
+                return true;
+            }
+
+            return false;
+        }
+        //ステート処理
+        public override void Update()
+        {
+            //移動しない、待機なんでね
+            GetParam().moveVector = Vector3.zero;
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //待機
     public class IdleState : BaseState
     {
@@ -262,6 +307,13 @@ namespace Fuchan
         //入った時の関数
         public override void Enter(ref StateManager manager)
         {
+            //登場ステートからの移行の場合、アニメーションはすでに待機モーション
+            if(manager.GetPreStateNum() == (int)PlayerObject.State.START)
+            {
+                return;
+            }
+
+
             GetInspectorParam().playerAnim.Play("Idle");
             if (manager.GetPreStateNum() == (int)PlayerObject.State.FALL)
             {

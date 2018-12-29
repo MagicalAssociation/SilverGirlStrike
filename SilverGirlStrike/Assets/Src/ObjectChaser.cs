@@ -76,6 +76,7 @@ public class ObjectChaser : MonoBehaviour {
     public void SetTarget(Transform target)
     {
         this.chaseTarget = target;
+        this.targetPosition = target.position;
     }
     //移動追従のターゲットを設定
     public void SetTarget(Vector3 targetPosition)
@@ -89,5 +90,12 @@ public class ObjectChaser : MonoBehaviour {
     public void StopChase()
     {
         SetTarget(this.chaseTarget.position);
+    }
+
+    //即座にターゲットの位置に移動
+    public void MoveToTarget()
+    {
+        this.transform.position = this.targetPosition + this.relativePosition;
+        this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.zPos);
     }
 }
