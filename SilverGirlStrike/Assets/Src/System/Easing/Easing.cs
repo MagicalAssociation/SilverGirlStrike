@@ -58,7 +58,7 @@ public class Easing
     public void ResetTime()
     {
         this.cnt = 0;
-        this.toplay = true;
+        this.toplay = false;
         this.start = 0.0f;
         this.end = 0.0f;
         this.duration = 0.0f;
@@ -87,6 +87,7 @@ public class Easing
     {
         this.start = startValue;
         this.end = endValue;
+        this.toplay = true;
     }
     public void Set(float startValue, float endValue, float duration)
     {

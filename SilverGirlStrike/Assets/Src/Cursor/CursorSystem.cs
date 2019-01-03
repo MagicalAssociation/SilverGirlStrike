@@ -11,10 +11,13 @@ public class CursorSystem : MonoBehaviour {
     bool enable;
     bool loop;
 	// Use this for initialization
-	void Start () {
+	public void Init () {
         nowPos = new Vector2Int(0, 0);
         cursorlist = new List<CursorParam[]>();
-        cursorlist.Add(cursors[0].GetComponentsInChildren<CursorParam>());
+        for (int i = 0; i < cursors.Length; ++i)
+        {
+            cursorlist.Add(cursors[i].GetComponentsInChildren<CursorParam>());
+        }
         enable = true;
         loop = true;
 	}
@@ -84,7 +87,7 @@ public class CursorSystem : MonoBehaviour {
             if(loop)
             {
                 //マイナスの分だけ最大値から引く
-                nowPos.y = cursorlist[nowPos.x].Length - nowPos.y;
+                nowPos.y = cursorlist[nowPos.x].Length + nowPos.y;
             }
             else
             {
@@ -124,7 +127,7 @@ public class CursorSystem : MonoBehaviour {
             if (loop)
             {
                 //最大値-マイナス値
-                nowPos.x = cursorlist.Count - nowPos.x;
+                nowPos.x = cursorlist.Count + nowPos.x;
             }
             else
             {

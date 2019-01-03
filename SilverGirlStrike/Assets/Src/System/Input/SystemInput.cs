@@ -71,14 +71,27 @@ public class SystemInput
         float axis;
         //! 強制判定の角度
         float axisForced;
+        //! 角度値反転
+        float axisFlip;
+        //! 判定フラグ
+        bool axisFlag;
         /**
          * brief    constructor
          * param[in]    string name 対応させたいInputManagerの使用する名前
          */
-        public InputData(string name)
+        public InputData(string name,bool flag = false,bool flip = false)
         {
             this.name = name;
             this.Reset();
+            if(flip == true)
+            {
+                axisFlip = -1.0f;
+            }
+            else
+            {
+                axisFlip = 1.0f;
+            }
+            axisFlag = flag;
         }
         /**
          * brief    constructor
@@ -129,7 +142,8 @@ public class SystemInput
         public void AxisUpdate(float power)
         {
             //this.axis = Input.GetAxis(this.name) != 0.0f ? Input.GetAxis(this.name) : this.axis;
-            this.axis = Input.GetAxis(this.name) != 0.0f ? Input.GetAxis(this.name) : this.axis;
+            //this.axis = Input.GetAxis(this.name) != 0.0f ? Input.GetAxis(this.name) : 0.0f;
+            this.axis = Input.GetAxis(this.name) * this.axisFlip != 0.0f ? Input.GetAxis(this.name) * this.axisFlip : 0.0f;
             if(this.GetForced())
             {
                 this.axis = this.GetAxisForced();
@@ -153,7 +167,8 @@ public class SystemInput
          */
          public bool GetOn()
         {
-            return this.input_On || Input.GetButton(this.name) || this.GetForced();
+            return (this.axisFlag) ? this.input_On : Input.GetButton(this.name) || this.GetForced();
+            //return this.input_On || Input.GetButton(this.name) || this.GetForced();
         }
         /**
          * brief    up判定取得
@@ -161,7 +176,8 @@ public class SystemInput
          */
         public bool GetUp()
         {
-            return this.input_Up || Input.GetButtonUp(this.name) || this.GetForced();
+            return (this.axisFlag) ? this.input_Up : Input.GetButtonUp(this.name) || this.GetForced();
+            //return this.input_Up || Input.GetButtonUp(this.name) || this.GetForced();
         }
         /**
          * brief    down判定取得
@@ -169,7 +185,8 @@ public class SystemInput
          */
         public bool GetDown()
         {
-            return this.input_Down || Input.GetButtonDown(this.name) || this.GetForced();
+            return (this.axisFlag) ? this.input_Down : Input.GetButtonDown(this.name) || this.GetForced();
+            //return this.input_Down || Input.GetButtonDown(this.name) || this.GetForced();
         }
         /**
          * brief    倒してる角度を取得
@@ -246,10 +263,14 @@ public class SystemInput
         this.inputData[(int)Tag.ITEM_D] = new InputData("D");
         this.inputData[(int)Tag.ITEM_U] = new InputData("U");
         this.inputData[(int)Tag.PAUSE] = new InputData("START");
-        this.inputData[(int)Tag.LSTICK_DOWN] = new InputData("RStickY");
-        this.inputData[(int)Tag.LSTICK_UP] = new InputData("RStickY");
-        this.inputData[(int)Tag.LSTICK_RIGHT] = new InputData("RStickX");
-        this.inputData[(int)Tag.LSTICK_LEFT] = new InputData("RStickX");
+        //1
+        this.inputData[(int)Tag.LSTICK_DOWN] = new InputData("RStickY",true);
+        //-1
+        this.inputData[(int)Tag.LSTICK_UP] = new InputData("RStickY", true,true);
+        //1
+        this.inputData[(int)Tag.LSTICK_RIGHT] = new InputData("RStickX",true);
+        //-1
+        this.inputData[(int)Tag.LSTICK_LEFT] = new InputData("RStickX", true,true);
         this.axis_Power = 1.0f;
     }
     /**
