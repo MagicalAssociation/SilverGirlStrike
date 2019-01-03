@@ -17,8 +17,10 @@ public class TitleCursorSystem : CursorSystem
     {
         base.Init();
         cursorMove = new Easing();
+        //EasingはLinearを使用（仮）
         cursorMove.Use(new Easing.Linear());
         //cursorObject = GetComponentInChildren<GameObject>();
+        //初期位置は0,0の位置(仮)
         cursorObject.transform.position = base.GetNowParam().transform.position;
     }
     private void Update()
@@ -26,12 +28,14 @@ public class TitleCursorSystem : CursorSystem
         //カーソルが動いていない時に決定を優先に入力判定を行う
         if (!cursorMove.IsPlay())
         {
+            //決定ボタンで決定処理を行う
             if (M_System.input.Down(SystemInput.Tag.DECISION))
             {
                 base.GetNowParam().Decision();
             }
             else
             {
+                //カーソルの移動入力の検知
                 if(CursorMoveInput())
                 {
                     //Easingの登録をする
@@ -41,6 +45,7 @@ public class TitleCursorSystem : CursorSystem
         }
         else
         {
+            //Easingを使ってy座標の移動をする
             cursorObject.transform.position = new Vector2(cursorObject.transform.position.x, this.cursorMove.In());
         }
         
@@ -64,6 +69,7 @@ public class TitleCursorSystem : CursorSystem
     }
     void SetMoveCursorEasing()
     {
+        //Easingを登録
         this.cursorMove.ResetTime();
         this.cursorMove.Set(cursorObject.transform.position.y, base.GetNowParam().transform.position.y - cursorObject.transform.position.y, parameter.moveTime);
     }

@@ -2,7 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+//カーソルの位置と全部の位置の管理を行う
+//使う場合は継承して移動や演出処理を加える
+//必ずInitを呼ぶこと
+//cursors[]に縦１列分の位置をいれる
+//その１つ１つにCursorParamを継承した処理を記述しておく
+//配列オーバーとかは起きないよう計算しているので多分大丈夫です
+//enableでDown達の処理が呼ばれても実行するか決める
+//継承先は気にしないで問題ない
+//ループ設定をtrueにしておくと下から上、上から下にカーソルの移動を許可します
 [System.Serializable]
 public class CursorSystem : MonoBehaviour {
     public GameObject[] cursors;
@@ -60,8 +68,12 @@ public class CursorSystem : MonoBehaviour {
     //※--しかしないからいらない。
     public bool Down()
     {
+        if (enable != true)
+        {
+            return false;
+        }
         //カーソル値を下に移動
-        if(loop)
+        if (loop)
         {
             //0~配列数-1をループする計算
             nowPos.y = (nowPos.y + 1) % cursorlist[nowPos.x].Length;
@@ -80,6 +92,10 @@ public class CursorSystem : MonoBehaviour {
     }
     public bool Up()
     {
+        if (enable != true)
+        {
+            return false;
+        }
         --nowPos.y;
         //位置がマイナスになった時ループなら下に、そうでないなら0にする
         if(nowPos.y < 0)
@@ -100,6 +116,10 @@ public class CursorSystem : MonoBehaviour {
     }
     public bool Right()
     {
+        if (enable != true)
+        {
+            return false;
+        }
         if (loop)
         {
             //0~配列数-1をループする計算
@@ -120,6 +140,10 @@ public class CursorSystem : MonoBehaviour {
     }
     public bool Left()
     {
+        if(enable != true)
+        {
+            return false;
+        }
         --nowPos.x;
         //位置がマイナスになった時ループなら下に、そうでないなら0にする
         if (nowPos.x < 0)
@@ -145,5 +169,13 @@ public class CursorSystem : MonoBehaviour {
         {
             nowPos.y = cursorlist[nowPos.x].Length - 1;
         }
+    }
+    public void SetLoop(bool enableloop)
+    {
+        this.loop = enableloop;
+    }
+    public void SetEnable(bool enable)
+    {
+        this.enable = enable;
     }
 }
