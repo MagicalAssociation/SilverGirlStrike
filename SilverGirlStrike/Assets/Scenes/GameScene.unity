@@ -179,32 +179,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4025536515512308, guid: 31bef7ca38f7a164b9d6de79a11a79a3,
     type: 2}
   m_PrefabInternal: {fileID: 9456230}
---- !u!1 &25392898 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1517860858183936, guid: 774225a328eb7754988280c801161af9,
-    type: 2}
-  m_PrefabInternal: {fileID: 1701221687}
---- !u!68 &25392906
-EdgeCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 25392898}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
-  m_Points:
-  - {x: 0.11431503, y: -0.394178}
-  - {x: 0.16740799, y: -0.46085677}
-  - {x: 0.14215088, y: -0.49766794}
-  - {x: -0.14500427, y: -0.49780908}
-  - {x: -0.17222595, y: -0.45967588}
-  - {x: -0.12742233, y: -0.4031637}
 --- !u!1 &38527195
 GameObject:
   m_ObjectHideFlags: 0
@@ -8317,6 +8291,26 @@ Prefab:
       propertyPath: m_Radius
       value: 0.1458937
       objectReference: {fileID: 0}
+    - target: {fileID: 61496348107118556, guid: 774225a328eb7754988280c801161af9,
+        type: 2}
+      propertyPath: m_EdgeRadius
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 61496348107118556, guid: 774225a328eb7754988280c801161af9,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 61496348107118556, guid: 774225a328eb7754988280c801161af9,
+        type: 2}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 61496348107118556, guid: 774225a328eb7754988280c801161af9,
+        type: 2}
+      propertyPath: m_Size.x
+      value: 0.2586975
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 58259498650009424, guid: 774225a328eb7754988280c801161af9, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 774225a328eb7754988280c801161af9, type: 2}
@@ -9479,7 +9473,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ca3a18a4c2e94046b886bf963bb9852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPoint: {fileID: 469990764}
+  startPoint:
+  - {fileID: 469990764}
+  startPointIndex: 0
   playerObj: {fileID: 114445538107119984, guid: 774225a328eb7754988280c801161af9,
     type: 2}
   cameraObjName: Main Camera

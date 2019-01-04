@@ -86,7 +86,7 @@ namespace Fuchan
         public InspectorParam inspectorParam;
         public Parameter param;
 
-        private void Start()
+        private void Awake()
         {
             this.param = new Parameter();
             this.param.myself = this;

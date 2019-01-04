@@ -126,7 +126,6 @@ public class CharacterManager : MonoBehaviour
         {
             return -1;
         }
-        Debug.Log(this.objectList.Count);
 
         int id = GetUseableID();
         //空きがないので何もできない

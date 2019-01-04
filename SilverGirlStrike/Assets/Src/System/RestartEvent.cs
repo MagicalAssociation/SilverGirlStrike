@@ -10,7 +10,9 @@ public class RestartEvent : MonoBehaviour {
     private static bool isExist = false;
 
     [SerializeField]
-    private Transform startPoint;
+    private Transform[] startPoint;
+    [SerializeField]
+    private int startPointIndex;
 
     //配置するプレイヤーキャラ
     [SerializeField]
@@ -30,6 +32,7 @@ public class RestartEvent : MonoBehaviour {
             Destroy(this.gameObject);
             return;
         }
+
         //初期化
         DontDestroySetting();
         CreatePlayerObject();
@@ -57,13 +60,15 @@ public class RestartEvent : MonoBehaviour {
         //生成
         var obj = this.characterManager.GetCharacterTrans("Player");
 
+
         //z軸の座標は、初期値のまま動かさないので保持しておく
         float zPos = obj.position.z;
-        obj.position = new Vector3(this.startPoint.position.x, this.startPoint.position.y, zPos);
+        obj.position = new Vector3(this.startPoint[this.startPointIndex].position.x, this.startPoint[this.startPointIndex].position.y, zPos);
 
         //登録
         var character = obj.gameObject.GetComponent<CharacterObject>();
         character.ChangeState((int)Fuchan.PlayerObject.State.START);
+
 
         //プレイヤーをカメラが追従するように設定
         cameraObj.SetTarget(obj);
