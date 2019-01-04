@@ -13,6 +13,11 @@ public class NarrowAttacker : MonoBehaviour {
     //攻撃対象のレイヤー
     public M_System.LayerName targetLayer;
 
+    //ヒット時のエフェクト
+    public string hitEffectName;
+    public Vector3 hitEffectScale;
+
+
     //当たった相手
     Collider2D[] hitResult;
 
@@ -88,10 +93,10 @@ public class NarrowAttacker : MonoBehaviour {
 
             bool result = obj.Damage(this.attackData);
 
-            if (result)
+            if (result && this.hitEffectName != "")
             {
                 Vector3 pos = obj.transform.position + new Vector3(0.0f, 0.0f, -1.0f);
-                Effect.Get().CreateEffect("slash", pos, Quaternion.identity, Vector3.one * 3.0f);
+                Effect.Get().CreateEffect(this.hitEffectName, pos, Quaternion.identity, this.hitEffectScale);
             }
         }
     }
