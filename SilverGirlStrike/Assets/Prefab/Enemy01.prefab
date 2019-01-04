@@ -75,7 +75,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1560725140110238}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -24.837435, y: -19.855465, z: -2}
+  m_LocalPosition: {x: 131.09, y: -11.76, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4228411400162646}
@@ -298,6 +298,10 @@ MonoBehaviour:
   chainCount: 0
   attackTime: 1
   targetLayer: 256
+  hitEffectName: 
+  hitEffectScale: {x: 0, y: 0, z: 0}
+  effectRotation: 0
+  effectRotationRange: 0
 --- !u!114 &114940350102197206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -323,9 +327,13 @@ MonoBehaviour:
   bulletParameter:
     bulletNum: 3
     interval: 10
+    targetSearch:
+      enable: 0
+      targetLayer: 0
+      searchRange: {fileID: 0}
     bulletData:
-    - angle: 0
-      power: 3
+    - angle: 180
+      power: 1
       speed: 1
       life: 10000000
       target: {fileID: 1517860858183936, guid: 774225a328eb7754988280c801161af9, type: 2}

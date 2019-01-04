@@ -10,12 +10,17 @@ public class NarrowAttacker : MonoBehaviour {
     public int attackPower;//攻撃力
     public int chainCount;//無敵を無視する連鎖値
     public int attackTime;//攻撃判定が出続ける時間
+
     //攻撃対象のレイヤー
     public M_System.LayerName targetLayer;
 
     //ヒット時のエフェクト
     public string hitEffectName;
     public Vector3 hitEffectScale;
+    //エフェクトの回転
+    public int effectRotation;
+    //回転の振れ幅
+    public int effectRotationRange;
 
 
     //当たった相手
@@ -96,7 +101,10 @@ public class NarrowAttacker : MonoBehaviour {
             if (result && this.hitEffectName != "")
             {
                 Vector3 pos = obj.transform.position + new Vector3(0.0f, 0.0f, -1.0f);
-                Effect.Get().CreateEffect(this.hitEffectName, pos, Quaternion.identity, this.hitEffectScale);
+                float a = Random.Range(0.0f, this.effectRotationRange);
+                a -= a * 0.5f;
+                Quaternion rot = Quaternion.AngleAxis(this.effectRotation + a, Vector3.forward);
+                Effect.Get().CreateEffect(this.hitEffectName, pos, rot, this.hitEffectScale);
             }
         }
     }
