@@ -55,18 +55,18 @@ public class RestartEvent : MonoBehaviour {
         this.cameraObj = GameObject.Find(this.cameraObjName).GetComponent<ObjectChaser>();
 
         //生成
-        var obj = Instantiate(this.playerObj);
+        var obj = this.characterManager.GetCharacterTrans("Player");
 
         //z軸の座標は、初期値のまま動かさないので保持しておく
-        float zPos = obj.transform.position.z;
-        obj.transform.position = new Vector3(this.startPoint.position.x, this.startPoint.position.y, zPos);
+        float zPos = obj.position.z;
+        obj.position = new Vector3(this.startPoint.position.x, this.startPoint.position.y, zPos);
 
         //登録
-        var character = obj.GetComponent<CharacterObject>();
-        this.characterManager.AddCharacter(character);
+        var character = obj.gameObject.GetComponent<CharacterObject>();
+        character.ChangeState((int)Fuchan.PlayerObject.State.START);
 
         //プレイヤーをカメラが追従するように設定
-        cameraObj.SetTarget(obj.transform);
+        cameraObj.SetTarget(obj);
     }
 
     private void DontDestroySetting()

@@ -107,7 +107,7 @@ namespace Fuchan
             AddState((int)State.ATTACK2, new Attack2State(this));
             AddState((int)State.ATTACK3, new Attack3State(this));
             AddState((int)State.DAMAGE, new DamageState(this));
-            ChangeState((int)State.START);
+            ChangeState((int)State.IDLE);
 
 
             GetData().hitPoint.SetInvincible(100);
