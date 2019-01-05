@@ -2,17 +2,20 @@ fileFormatVersion: 2
 guid: 6d8ffeb16cf406a4a8eb557bfb3e35f9
 TextureImporter:
   fileIDToRecycleName:
-    21300000: "OP\u30B9\u30C6\u30FC\u30B8_0"
-    21300002: "OP\u30B9\u30C6\u30FC\u30B8_1"
-    21300004: "OP\u30B9\u30C6\u30FC\u30B8_2"
-    21300006: "OP\u30B9\u30C6\u30FC\u30B8_3"
-    21300008: "OP\u30B9\u30C6\u30FC\u30B8_4"
-    21300010: "OP\u30B9\u30C6\u30FC\u30B8_5"
-    21300012: "OP\u30B9\u30C6\u30FC\u30B8_6"
-    21300014: "OP\u30B9\u30C6\u30FC\u30B8_7"
-    21300016: "OP\u30B9\u30C6\u30FC\u30B8_8"
-    21300018: "OP\u30B9\u30C6\u30FC\u30B8_9"
-    21300020: "OP\u30B9\u30C6\u30FC\u30B8_10"
+    21300000: OpStageMapParts_0
+    21300002: OpStageMapParts_1
+    21300004: OpStageMapParts_2
+    21300006: OpStageMapParts_3
+    21300008: OpStageMapParts_4
+    21300010: OpStageMapParts_5
+    21300012: OpStageMapParts_6
+    21300014: OpStageMapParts_7
+    21300016: OpStageMapParts_8
+    21300018: OpStageMapParts_9
+    21300020: OpStageMapParts_10
+    21300022: OpStageMapParts_11
+    21300024: OpStageMapParts_12
+    21300026: OpStageMapParts_13
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -117,13 +120,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "OP\u30B9\u30C6\u30FC\u30B8_0"
+      name: OpStageMapParts_0
       rect:
         serializedVersion: 2
         x: 7
-        y: 0
+        y: 221
         width: 105
-        height: 581
+        height: 360
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,13 +140,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "OP\u30B9\u30C6\u30FC\u30B8_1"
+      name: OpStageMapParts_1
       rect:
         serializedVersion: 2
         x: 128
-        y: 0
+        y: 221
         width: 128
-        height: 581
+        height: 360
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -157,13 +160,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "OP\u30B9\u30C6\u30FC\u30B8_2"
+      name: OpStageMapParts_2
       rect:
         serializedVersion: 2
         x: 272
-        y: 0
+        y: 221
         width: 106
-        height: 581
+        height: 360
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -177,7 +180,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "OP\u30B9\u30C6\u30FC\u30B8_3"
+      name: OpStageMapParts_3
       rect:
         serializedVersion: 2
         x: 392
@@ -197,7 +200,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "OP\u30B9\u30C6\u30FC\u30B8_4"
+      name: OpStageMapParts_4
       rect:
         serializedVersion: 2
         x: 391
@@ -217,7 +220,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "OP\u30B9\u30C6\u30FC\u30B8_5"
+      name: OpStageMapParts_5
       rect:
         serializedVersion: 2
         x: 561
@@ -237,7 +240,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "OP\u30B9\u30C6\u30FC\u30B8_6"
+      name: OpStageMapParts_6
       rect:
         serializedVersion: 2
         x: 392
@@ -257,7 +260,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "OP\u30B9\u30C6\u30FC\u30B8_7"
+      name: OpStageMapParts_7
       rect:
         serializedVersion: 2
         x: 561
@@ -277,7 +280,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "OP\u30B9\u30C6\u30FC\u30B8_8"
+      name: OpStageMapParts_8
       rect:
         serializedVersion: 2
         x: 393
@@ -297,7 +300,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "OP\u30B9\u30C6\u30FC\u30B8_9"
+      name: OpStageMapParts_9
       rect:
         serializedVersion: 2
         x: 601
@@ -317,7 +320,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "OP\u30B9\u30C6\u30FC\u30B8_10"
+      name: OpStageMapParts_10
       rect:
         serializedVersion: 2
         x: 393
@@ -332,6 +335,66 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: f6f6d923e952eb34283f6164e4992db0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OpStageMapParts_11
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 0
+        width: 105
+        height: 221
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c87422e0d7c3f5b4b9328637abaa2ffe
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OpStageMapParts_12
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 128
+        height: 221
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1dc96eefc89e13245b3aaee9dacdd1b0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OpStageMapParts_13
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 0
+        width: 106
+        height: 221
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77b2f552b9483ef4db535397be7361fb
       vertices: []
       indices: 
       edges: []

@@ -1,21 +1,21 @@
 fileFormatVersion: 2
-guid: fc5f02ca9e2949846bb84c8cfe4e9923
+guid: f1515f19899f31a4fbfc681f404958b0
 TextureImporter:
   fileIDToRecycleName:
-    21300000: enamyBase_3
-    21300002: enamyBase_0
-    21300004: enamyBase_1
-    21300006: enamyBase_2
-    21300008: enamyBase_4
-    21300010: enamyBase_5
-    21300012: enamyBase_6
-    21300014: enamyBase_7
-    21300016: enamyBase_8
-    21300018: enamyBase_9
-    21300020: enamyBase_10
-    21300022: enamyBase_11
-    21300024: enamyBase_12
-    21300026: enamyBase_13
+    21300000: fixTargetMadou_3
+    21300002: fixTargetMadou_0
+    21300004: fixTargetMadou_1
+    21300006: fixTargetMadou_2
+    21300008: fixTargetMadou_4
+    21300010: fixTargetMadou_5
+    21300012: fixTargetMadou_6
+    21300014: fixTargetMadou_7
+    21300016: fixTargetMadou_8
+    21300018: fixTargetMadou_9
+    21300020: fixTargetMadou_10
+    21300022: fixTargetMadou_11
+    21300024: fixTargetMadou_12
+    21300026: fixTargetMadou_13
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -153,7 +153,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: enamyBase_3
+      name: fixTargetMadou_3
       rect:
         serializedVersion: 2
         x: 144
@@ -173,7 +173,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_0
+      name: fixTargetMadou_0
       rect:
         serializedVersion: 2
         x: 0
@@ -193,7 +193,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_1
+      name: fixTargetMadou_1
       rect:
         serializedVersion: 2
         x: 48
@@ -213,7 +213,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_2
+      name: fixTargetMadou_2
       rect:
         serializedVersion: 2
         x: 96
@@ -233,7 +233,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_4
+      name: fixTargetMadou_4
       rect:
         serializedVersion: 2
         x: 0
@@ -253,7 +253,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_5
+      name: fixTargetMadou_5
       rect:
         serializedVersion: 2
         x: 64
@@ -273,7 +273,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_6
+      name: fixTargetMadou_6
       rect:
         serializedVersion: 2
         x: 128
@@ -293,7 +293,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_7
+      name: fixTargetMadou_7
       rect:
         serializedVersion: 2
         x: 192
@@ -313,7 +313,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_8
+      name: fixTargetMadou_8
       rect:
         serializedVersion: 2
         x: 256
@@ -333,7 +333,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_9
+      name: fixTargetMadou_9
       rect:
         serializedVersion: 2
         x: 0
@@ -353,7 +353,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_10
+      name: fixTargetMadou_10
       rect:
         serializedVersion: 2
         x: 48
@@ -373,7 +373,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_11
+      name: fixTargetMadou_11
       rect:
         serializedVersion: 2
         x: 96
@@ -381,19 +381,19 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0305a5b6fec596449a3c0837c3aa0c15
+      spriteID: 3deb96cfedf52da4988f82fd88dd9c0e
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_12
+      name: fixTargetMadou_12
       rect:
         serializedVersion: 2
         x: 160
@@ -401,19 +401,19 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0841b5ce63e0b894bbcbe9838709a3d1
+      spriteID: a5703d51780ded3479166265f9ad3739
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamyBase_13
+      name: fixTargetMadou_13
       rect:
         serializedVersion: 2
         x: 224
@@ -421,13 +421,13 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f9c552ebb9231f34c8d8f5129c803f17
+      spriteID: 72ffa59d85aa94544ac27df37d0ff175
       vertices: []
       indices: 
       edges: []
