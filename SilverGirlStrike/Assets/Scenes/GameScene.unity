@@ -29479,7 +29479,7 @@ GameObject:
   - component: {fileID: 1423333862}
   - component: {fileID: 1423333861}
   - component: {fileID: 1423333860}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: GameOverCollition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
