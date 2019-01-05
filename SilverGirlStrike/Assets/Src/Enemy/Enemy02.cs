@@ -230,12 +230,14 @@ namespace Enemy02
 
         public override void Enter(ref StateManager manager)
         {
+
             //次自分が向かうMovesのデータを取得
             this.moveData = base.enemy.moves[base.enemy.GetNowNum()];
             //Easingを登録
             move_x.Set(this.enemy.transform.position.x, this.moveData.targets.transform.position.x - this.enemy.transform.position.x);
             move_y.Set(this.enemy.transform.position.y, this.moveData.targets.transform.position.y - this.enemy.transform.position.y);
             this.enemy.parameter.animation.Play("Normal");
+
         }
 
         public override void Exit(ref StateManager manager)

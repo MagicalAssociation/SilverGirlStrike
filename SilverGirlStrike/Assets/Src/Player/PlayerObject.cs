@@ -643,10 +643,10 @@ namespace Fuchan
         //出た時の関数
         public override void Exit(ref StateManager manager)
         {
-            GetParam().anchorTarget = null;
 
             if (manager.GetNextStateNum() != (int)PlayerObject.State.STRIKE_ASULT)
             {
+                GetParam().anchorTarget = null;
                 GetParam().myself.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
             }
         }
@@ -716,6 +716,7 @@ namespace Fuchan
         private Vector2 direction;
         private GameObject effectObj;
         private int effectID;
+        int counter;
 
         public StrikeAsult(PlayerObject param)
             : base(param)
@@ -738,10 +739,13 @@ namespace Fuchan
 
             //無敵化
             GetParam().myself.GetData().hitPoint.SetDamageShutout(true);
+
+            this.counter = 0;
         }
         //出た時の関数
         public override void Exit(ref StateManager manager)
         {
+            GetParam().anchorTarget = null;
             Effect.Get().DeleteEffect(this.effectID);
             GetInspectorParam().mover.SetActiveGravity(true, true);
             GetParam().myself.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
@@ -750,13 +754,19 @@ namespace Fuchan
         //遷移を行う
         public override bool Transition(ref StateManager manager)
         {
-
-            if(GetTime() > 15)
+            //進行方向と、現在のアンカーへ向かうベクトルを比較し、後ろにあったらJUMPに移行
+            float dot = Vector2.Dot(this.direction, GetParam().anchorTarget.transform.position - GetParam().myself.transform.position);
+            if (dot < 0.0f)
             {
-                GetInspectorParam().mover.Jump(this.direction.y * GetParam().currentDashSpead * 0.5f);
-                manager.SetNextState((int)PlayerObject.State.FALL);
-                return true;
+                ++this.counter;
+                if(this.counter > 10)
+                {
+                    GetInspectorParam().mover.Jump(this.direction.y * GetParam().currentDashSpead * 0.5f);
+                    manager.SetNextState((int)PlayerObject.State.FALL);
+                    return true;
+                }
             }
+
             return false;
         }
         //ステート処理
