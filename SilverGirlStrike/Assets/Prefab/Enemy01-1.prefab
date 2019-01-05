@@ -276,9 +276,13 @@ MonoBehaviour:
     animation: {fileID: 95198928428834882}
     mover: {fileID: 114972980276426064}
     foot: {fileID: 114150177540351664}
-    direction: 0
     narrowAttacker:
     - {fileID: 114440869586017348}
+    autoScaleChange:
+      targetSearch:
+        enable: 1
+        targetLayer: 256
+        searchRange: {fileID: 58845643350064854}
   bulletParameter:
     bulletNum: 1
     interval: 5
@@ -325,6 +329,8 @@ MonoBehaviour:
   chainCount: 0
   attackTime: 1
   targetLayer: 256
+  hitEffectName: 
+  hitEffectScale: {x: 0, y: 0, z: 0}
 --- !u!114 &114972980276426064
 MonoBehaviour:
   m_ObjectHideFlags: 1

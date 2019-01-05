@@ -327,6 +327,11 @@ MonoBehaviour:
     power: 3
     direction: 0
     attackInterval: 30
+    autoScaleChange:
+      targetSearch:
+        enable: 1
+        targetLayer: 256
+        searchRange: {fileID: 58245592772688574}
   move:
     speed: 2
     radius: 1.5
@@ -372,6 +377,8 @@ MonoBehaviour:
   chainCount: 0
   attackTime: 1
   targetLayer: 256
+  hitEffectName: 
+  hitEffectScale: {x: 0, y: 0, z: 0}
 --- !u!114 &114893148954876506
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -402,6 +409,8 @@ MonoBehaviour:
   chainCount: 1
   attackTime: 30
   targetLayer: 256
+  hitEffectName: 
+  hitEffectScale: {x: 0, y: 0, z: 0}
 --- !u!212 &212441070294070944
 SpriteRenderer:
   m_ObjectHideFlags: 1

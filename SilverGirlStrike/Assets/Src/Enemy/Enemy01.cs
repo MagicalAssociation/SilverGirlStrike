@@ -59,14 +59,6 @@ namespace Enemy01
             STARTATTACK,
             ENDATTACK,
         }
-        /**
-         * enum Direction 向き
-         */
-        public enum Direction
-        {
-            LEFT,
-            RIGHT,
-        }
         [System.Serializable]
         public class Enemy01Parameter
         {
@@ -82,10 +74,10 @@ namespace Enemy01
             public CharacterMover mover;
             //! 地面判定
             public Foot foot;
-            //! 向き
-            public Direction direction;
             //攻撃判定オブジェクト
             public NarrowAttacker[] narrowAttacker;
+            // 向きの自動変更
+            public Enemy.AutoScaleChange autoScaleChange;
         }
         //! 重力
         public float gravity;
@@ -119,6 +111,7 @@ namespace Enemy01
 
             this.parameter.animation = GetComponent<Animator>();
             this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
+            this.parameter.autoScaleChange.Init(this.gameObject);
             //!-ステートデータを登録＆初期値の設定-!//
             base.AddState((int)State.NORMAL, new NormalState(this));
             base.AddState((int)State.ATTACK, new AttackState(this));
@@ -162,6 +155,7 @@ namespace Enemy01
                 parameter.mover.UpdateVelocity(this.movePower.x, this.movePower.y, this.enableGravity ? this.gravity : 0.0f, parameter.foot.CheckHit());
                 this.movePower = Vector2.zero;
             }
+            this.parameter.autoScaleChange.DirectionUpdate();
         }
         /**
          * brief    Enemy01専用のパラメータデータ取得
@@ -364,6 +358,7 @@ namespace Enemy01
         {
             if(deltaTime >= this.animationTime)
             {
+                Debug.Log(base.enemy.TargetDistanceCheck());
                 if (base.enemy.TargetDistanceCheck() != null)
                 {
                     manager.SetNextState((int)Enemy01.State.NORMAL);
