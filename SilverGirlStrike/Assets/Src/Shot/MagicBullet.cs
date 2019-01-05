@@ -160,7 +160,7 @@ namespace Bullet
 
             //弾の向き
             float angle = Vector2.Angle(new Vector2(1.0f, 0.0f), move);
-            this.transform.rotation = Quaternion.AngleAxis(-angle, Vector3.forward);
+            this.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
         /**
          * brief    自分を消す命令をManagerに行う処理
@@ -233,12 +233,10 @@ namespace Bullet
         public void SetShotTarget(GameObject target)
         {
             this.mode = Mode.TARGET;
-            move = (target.transform.position - this.transform.position);
+            move = (target.transform.position - this.transform.position).normalized;
             float di = Mathf.Atan2(move.y, move.x);
-            float rad = Mathf.Rad2Deg * di;
-            rad *= (Mathf.PI / 180);
-            move.x = Mathf.Cos(rad);
-            move.y = Mathf.Sin(rad);
+            move.x = Mathf.Cos(di);
+            move.y = Mathf.Sin(di);
         }
         /**
          * brief    攻撃生成

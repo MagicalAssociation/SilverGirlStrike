@@ -668,7 +668,7 @@ namespace Fuchan
             {
                 //移行時、少しだけ滞空時間を延ばすためにジャンプのような挙動を行う
                 GetInspectorParam().mover.SetActiveGravity(true, true);
-                GetInspectorParam().mover.Jump(this.targetDirection.y * GetParam().currentDashSpead * 0.5f);
+                GetInspectorParam().mover.Jump(this.targetDirection.y * GetParam().currentDashSpead * 0.65f);
                 manager.SetNextState((int)PlayerObject.State.JUMP);
                 return true;
             }
@@ -983,14 +983,13 @@ namespace Fuchan
             if (GetParam().onGround && !GetInspectorParam().mover.IsJump())
             {
                 GetInspectorParam().playerAnim.Play("SwordAttack3");
-                GetInspectorParam().attackCollisions[2].StartAttack();
             }
             else
             {
                 GetInspectorParam().playerAnim.Play("JumpSwordAttack3");
                 GetInspectorParam().mover.Jump(6.0f);
-                GetInspectorParam().attackCollisions[2].StartAttack();
             }
+
 
             this.timeCnt = 0;
         }
@@ -1046,6 +1045,22 @@ namespace Fuchan
             }
             //横移動
             GetParam().moveVector += vec;
+
+
+
+            //攻撃処理は遅れて実行される
+            //アニメ
+            if (GetTime() == 5)
+            {
+                if (GetParam().onGround && !GetInspectorParam().mover.IsJump())
+                {
+                    GetInspectorParam().attackCollisions[2].StartAttack();
+                }
+                else
+                {
+                    GetInspectorParam().attackCollisions[2].StartAttack();
+                }
+            }
 
 
             ++this.timeCnt;
