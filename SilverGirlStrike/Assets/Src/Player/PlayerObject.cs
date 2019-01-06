@@ -239,7 +239,6 @@ namespace Fuchan
             var anchorDirection = new Vector2(GetParam().myself.transform.position.x + direction.x, GetParam().myself.transform.position.y + direction.y);
             GetInspectorParam().anchor.FindAnchor(GetParam().myself.transform.position, anchorDirection, out GetParam().anchorTarget);
 
-            Debug.Log(GetParam().anchorTarget);
             //アンカーがなかったらfalse
             if (GetParam().anchorTarget == null)
             {

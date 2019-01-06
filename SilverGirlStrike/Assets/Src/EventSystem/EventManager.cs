@@ -25,7 +25,7 @@ namespace TextEvent
     //EventUnitクラスをリストで管理している
     public class EventManager
     {
-        private static EventManager myself;
+        private static EventManager myself = null;
         private EventGameData data;
         private List<EventUnit> eventList;
         private EventFunctionDictionary functions;

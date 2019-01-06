@@ -9,10 +9,16 @@ using UnityEngine;
 //フラグは、整数型で表現される
 public class FlagManager : MonoBehaviour{
     Dictionary<string, int> flags;
+    //保存イベントによって保存される領域
+    static Dictionary<string, int> savedFlag = null;
 
     private void Start()
     {
         flags = new Dictionary<string, int>();
+        if (savedFlag == null)
+        {
+            savedFlag = new Dictionary<string, int>();
+        }
     }
 
     //新規追加（初期値0）
@@ -73,4 +79,24 @@ public class FlagManager : MonoBehaviour{
         }
     }
 
+    //セーブ用の領域にフラグのデータをコピー
+    public void SaveFlag()
+    {
+        savedFlag.Clear();
+        foreach(var i in this.flags)
+        {
+            savedFlag[i.Key] = i.Value;
+        }
+
+    }
+    //セーブ用の領域からフラグのデータをコピー
+    public void LoadFlag()
+    {
+        this.flags.Clear();
+        foreach (var i in savedFlag)
+        {
+            this.flags[i.Key] = i.Value;
+        }
+
+    }
 }

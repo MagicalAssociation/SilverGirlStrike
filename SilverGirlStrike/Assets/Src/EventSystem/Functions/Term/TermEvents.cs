@@ -9,6 +9,23 @@ namespace TextEvent
     namespace Term
     {
         /////////////////////////////////////////////////////////////////////////////////////
+        //キャラが生きているかどうか
+        //args: (string characterName)
+        public class CheckAliveCharacter : TermFunction
+        {
+            public CheckAliveCharacter(EventGameData gameData) :
+                base(gameData)
+            {
+            }
+
+            public override bool Judge(string[] args)
+            {
+                var character = GetGameData().characterManager.GetCharacterData(args[0]);
+
+                return (character != null);
+            }
+        }
+        /////////////////////////////////////////////////////////////////////////////////////
         //コリジョンに触れているとtrue
         //args: (string collisionObjectName)
         public class CheckCollision : TermFunction

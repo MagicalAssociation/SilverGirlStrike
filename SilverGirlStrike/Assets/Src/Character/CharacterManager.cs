@@ -168,6 +168,7 @@ public class CharacterManager : MonoBehaviour
         this.objects[data.name] = null;
 
         characterData.Dispose();
+        this.objects.Remove(data.name);
     }
 
 
@@ -179,7 +180,14 @@ public class CharacterManager : MonoBehaviour
     //キャラクターへ直接アクセスする
     public CharacterObject.CharaData GetCharacterData(string characterName)
     {
-        return this.objects[characterName].character.GetData();
+        CharacterManager.CharacterData charaData = null;
+        if (this.objects.TryGetValue(characterName, out charaData))
+        {
+            Debug.Log(charaData);
+            Debug.Log(charaData.character);
+            return charaData.character.GetData();
+        }
+        return null;
     }
     //キャラクターへ直接アクセスする
     public CharacterObject.CharaData GetCharacterData(int characterID)

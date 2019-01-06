@@ -159,8 +159,7 @@ namespace Bullet
             this.mover.UpdateVelocity(move.x * this.moveSpeed, move.y * this.moveSpeed, 0.0f, true);
 
             //弾の向き
-            float angle = Vector2.Angle(new Vector2(1.0f, 0.0f), move);
-            this.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            this.transform.rotation = Quaternion.FromToRotation(new Vector2(1.0f, 0.0f), move);
         }
         /**
          * brief    自分を消す命令をManagerに行う処理

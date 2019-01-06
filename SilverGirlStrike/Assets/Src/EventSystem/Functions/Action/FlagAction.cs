@@ -158,6 +158,57 @@ namespace TextEvent
             }
         }
 
+        /////////////////////////////////////////////////////////////////////////
+        //フラグを記録
+        //args: (無し)
+        public class SaveFlag : ActionFunction
+        {
+            public SaveFlag(EventGameData eventGameData) :
+                base(eventGameData)
+            {
+            }
+
+            public override void Action()
+            {
+                GetGameData().flagManager.SaveFlag();
+            }
+
+            public override void ActionStart(string[] args)
+            {
+            }
+
+            public override bool IsEnd()
+            {
+                //すぐ終わる
+                return true;
+            }
+        }
+        /////////////////////////////////////////////////////////////////////////
+        //フラグを読み出し
+        //args: (無し)
+        public class LoadFlag : ActionFunction
+        {
+            public LoadFlag(EventGameData eventGameData) :
+                base(eventGameData)
+            {
+            }
+
+            public override void Action()
+            {
+                GetGameData().flagManager.LoadFlag();
+            }
+
+            public override void ActionStart(string[] args)
+            {
+            }
+
+            public override bool IsEnd()
+            {
+                //すぐ終わる
+                return true;
+            }
+        }
+
     }
 }
 
