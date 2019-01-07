@@ -30,6 +30,7 @@ public class NarrowAttacker : MonoBehaviour {
 
     int timeCnt;
     bool isAttack;
+    bool isHit;
 
 
 	// Use this for initialization
@@ -50,7 +51,7 @@ public class NarrowAttacker : MonoBehaviour {
             return;
         }
 
-        Attack();
+        AttackJudge((int)this.targetLayer);
 
         ++this.timeCnt;
         //攻撃終了
@@ -74,19 +75,29 @@ public class NarrowAttacker : MonoBehaviour {
         this.timeCnt = 0;
         this.isAttack = true;
         this.attackCollition.enabled = true;
+        this.isHit = false;
+    }
+    public bool IsHit()
+    {
+        return this.isHit;
     }
 
     //実際のダメージ処理
-    void Attack()
+    public bool AttackJudge(int targetLayerID)
     {
+        bool isHitCollition = false;
+        this.isHit = false;
+
         //レイヤーマスク設定
         LayerMask layer = new LayerMask();
-        layer.value = (int)targetLayer;
+        layer.value = targetLayerID;
 
         ContactFilter2D contactFilter2D = new ContactFilter2D();
         contactFilter2D.SetLayerMask(layer);
         contactFilter2D.useTriggers = true;
         int resultLength = Physics2D.OverlapCollider(this.attackCollition, contactFilter2D, this.hitResult);
+
+        isHitCollition = resultLength > 0;
         //ダメージ処理
         for (int i = 0; i < resultLength; ++i)
         {
@@ -98,14 +109,21 @@ public class NarrowAttacker : MonoBehaviour {
 
             bool result = obj.Damage(this.attackData);
 
-            if (result && this.hitEffectName != "")
+            if (result)
             {
-                Vector3 pos = obj.transform.position + new Vector3(0.0f, 0.0f, -1.0f);
-                float a = Random.Range(0.0f, this.effectRotationRange);
-                a -= a * 0.5f;
-                Quaternion rot = Quaternion.AngleAxis(this.effectRotation + a, Vector3.forward);
-                Effect.Get().CreateEffect(this.hitEffectName, pos, rot, this.hitEffectScale);
+                //ヒットしたのでフラグを立てる
+                this.isHit = true;
+                if (this.hitEffectName != "")
+                {
+                    Vector3 pos = obj.transform.position + new Vector3(0.0f, 0.0f, -1.0f);
+                    float a = Random.Range(0.0f, this.effectRotationRange);
+                    a -= a * 0.5f;
+                    Quaternion rot = Quaternion.AngleAxis(this.effectRotation + a, Vector3.forward);
+                    Effect.Get().CreateEffect(this.hitEffectName, pos, rot, this.hitEffectScale);
+                }
             }
         }
+
+        return isHitCollition;
     }
 }

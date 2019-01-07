@@ -150,7 +150,7 @@ namespace Enemy02
             }
             else
             {
-                this.parameter.charactermover.UpdateVelocity(pos.x, pos.y, 0.8f / 5.0f, false);
+                this.parameter.charactermover.UpdateVelocity(pos.x, pos.y, 3.0f / 5.0f, false);
             }
         }
         /**
@@ -318,7 +318,7 @@ namespace Enemy02
         {
             this.enemy.parameter.animation.Play("Death");
             this.enemy.GetComponentInChildren<MagicTeam>().NotActive();
-            this.enemy.parameter.charactermover.Jump(5.0f);
+            this.enemy.parameter.charactermover.Jump(8.0f);
             if (this.enemy.transform.localScale.x == 1)
             {
                 this.enemy.SetPos(new Vector2(3, 0));
@@ -335,6 +335,8 @@ namespace Enemy02
             {
                 this.enemy.transform.Rotate(new Vector3(0, 0, 30));
             }
+            Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
+            this.enemy.GetData().hitPoint.SetDamageShutout(true);
         }
 
         public override void Exit(ref StateManager manager)
@@ -348,7 +350,7 @@ namespace Enemy02
 
         public override void Update()
         {
-            if (base.GetTime() >= 60)
+            if (base.GetTime() >= 30)
             {
                 base.enemy.KillMyself();
             }

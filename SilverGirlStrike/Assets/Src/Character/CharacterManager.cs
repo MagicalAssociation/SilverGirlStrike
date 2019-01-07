@@ -183,8 +183,6 @@ public class CharacterManager : MonoBehaviour
         CharacterManager.CharacterData charaData = null;
         if (this.objects.TryGetValue(characterName, out charaData))
         {
-            Debug.Log(charaData);
-            Debug.Log(charaData.character);
             return charaData.character.GetData();
         }
         return null;
