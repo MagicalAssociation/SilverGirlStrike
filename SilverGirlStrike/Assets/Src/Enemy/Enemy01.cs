@@ -358,7 +358,6 @@ namespace Enemy01
         {
             if(deltaTime >= this.animationTime)
             {
-                Debug.Log(base.enemy.TargetDistanceCheck());
                 if (base.enemy.TargetDistanceCheck() != null)
                 {
                     manager.SetNextState((int)Enemy01.State.NORMAL);

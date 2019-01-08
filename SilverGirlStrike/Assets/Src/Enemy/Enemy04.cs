@@ -334,7 +334,7 @@ namespace Enemy04
 
         public override bool Transition(ref StateManager manager)
         {
-            if(base.enemy.GetStopCount() < 0 && !this.easing_Speed.IsPlay())
+            if(base.enemy.GetStopCount() < 0 && !this.easing_Speed.IsPlay() && attackFlag == false)
             {
                 base.enemy.SetStopCount(Random.Range(enemy.move.stopCountMin, enemy.move.stopCountMax));
                 manager.SetNextState((int)Enemy04.State.WAIT);
@@ -346,8 +346,7 @@ namespace Enemy04
         public override void Update()
         {
             ++this.count;
-            //カウントのあれこれ
-            base.enemy.SetStopCount(base.enemy.GetStopCount() - 1);
+        
             //速度をEasingで変化
             this.enemy.move.speed = this.easing_Speed.In();
             //速度で中心からの角度を指定
@@ -374,13 +373,20 @@ namespace Enemy04
                         this.attackFlag = false;
                     }
                 }
+            }   
+            //カウントのあれこれ
+            if (attackFlag != true)
+            {
+                base.enemy.SetStopCount(base.enemy.GetStopCount() - 1);
             }
             //終了カウントで減速を開始
-            if(base.enemy.GetStopCount() == 0)
+            if (base.enemy.GetStopCount() == 0)
             {
                 this.easing_Speed.ResetTime();
                 this.easing_Speed.Set(this.enemy.move.speed, 0 - this.enemy.move.speed, 5);
             }
+            Debug.Log(base.enemy.GetStopCount());
+            Debug.Log(attackFlag);
         }
         private float ToRadius(float angle)
         {
