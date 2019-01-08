@@ -5,14 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class LoadGame : CursorParam
 {
-    IEnumerator GameStart()
+    IEnumerator LoadStart()
     {
         yield return new WaitForSeconds(1.0f);
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("LoadScene");
     }
     public override void Decision()
     {
         Sound.PlaySE("clearSound2");
-        StartCoroutine(GameStart());
+        StartCoroutine(LoadStart());
     }
 }
