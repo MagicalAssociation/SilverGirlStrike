@@ -57,7 +57,6 @@ public class RestartEvent : MonoBehaviour {
         this.characterManager = GameObject.Find(M_System.characterManagerObjectName).GetComponent<CharacterManager>();
         this.cameraObj = GameObject.Find(this.cameraObjName).GetComponent<ObjectChaser>();
 
-        //生成
         var obj = this.characterManager.GetCharacterTrans("Player");
 
 
@@ -71,7 +70,8 @@ public class RestartEvent : MonoBehaviour {
 
 
         //プレイヤーをカメラが追従するように設定
-        cameraObj.SetTarget(obj);
+        var chaseObj = this.characterManager.GetCharacterTrans("PlayerCameraMan");
+        cameraObj.SetTarget(chaseObj);
     }
 
     private void DontDestroySetting()

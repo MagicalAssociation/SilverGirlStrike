@@ -603,6 +603,8 @@ namespace Enemy04
         public override void Enter(ref StateManager manager)
         {
             this.enemy.parameter.animation.Play("Idle");
+            Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
+            this.enemy.GetData().hitPoint.SetDamageShutout(true);
         }
 
         public override void Exit(ref StateManager manager)
@@ -616,7 +618,7 @@ namespace Enemy04
 
         public override void Update()
         {
-            if (base.GetTime() >= 60)
+            if (base.GetTime() >= 30)
             {
                 this.enemy.KillMyself();
             }

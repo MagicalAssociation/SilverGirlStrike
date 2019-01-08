@@ -46,7 +46,7 @@ namespace TextEvent
 
         /////////////////////////////////////////////////
         //カメラのターゲットを指定する(キャラ)
-        //args: (Vector2(少数2つ) relationalPosition)
+        //args: (Vector2(少数2つ) position)
         public class SetCameraTargetPosition : ActionFunction
         {
             Vector3 position;
@@ -107,7 +107,7 @@ namespace TextEvent
         }
 
         /////////////////////////////////////////////////
-        //カメラのターゲットを指定する(キャラ)
+        //カメラを止める
         //args: 無し
         public class StopCameraChase : ActionFunction
         {

@@ -18,6 +18,8 @@ namespace TextEvent
             this.collision = GetComponent<Collider2D>();
             //当たってるかどうかだけほしいので１つ
             this.hitResult = new Collider2D[1];
+
+            Debug.Log(this.collision);
         }
 
         //コリジョンを獲得

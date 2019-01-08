@@ -62,6 +62,7 @@ namespace TextEvent
         //条件追加
         private void SetTermFunc()
         {
+            this.termFunctions.Add("checkAliveCharacter", new Term.CheckAliveCharacter(this.gameData));
             this.termFunctions.Add("checkCollision", new Term.CheckCollision(this.gameData));
             this.termFunctions.Add("equalFlag", new Term.EqualFlagValue(this.gameData));
             this.termFunctions.Add("greaterFlag", new Term.GreaterFlagValue(this.gameData));
@@ -81,6 +82,8 @@ namespace TextEvent
             this.actionFunctions.Add("addFlagValue", new Action.AddFlag(this.gameData));
             this.actionFunctions.Add("mulFlagValue", new Action.Mulflag(this.gameData));
             this.actionFunctions.Add("divFlagValue", new Action.DivFlag(this.gameData));
+            this.actionFunctions.Add("saveFlag", new Action.SaveFlag(this.gameData));
+            this.actionFunctions.Add("loadFlag", new Action.LoadFlag(this.gameData));
 
         }
 

@@ -69,14 +69,13 @@ namespace Bullet
         public int lifeCnt;
         //自分の登録番号
         int myselfID;
-        BoxCollider2D collider;
+        public NarrowAttacker attacker;
         Vector2 move;
         CharacterMover mover;
         public Mode mode;
         
         private void Start()
         {
-            collider = GetComponent<BoxCollider2D>();
             mover = GetComponent<CharacterMover>();
             this.myselfID = base.FindManager().AddCharacter(this);
             base.AddState((int)State.NORMAL, new NormalState(this));
@@ -117,6 +116,9 @@ namespace Bullet
         public override void MoveCharacter()
         {
             this.mover.UpdateVelocity(move.x * this.moveSpeed, move.y * this.moveSpeed, 0.0f, true);
+
+            //弾の向き
+            this.transform.rotation = Quaternion.FromToRotation(new Vector2(1.0f, 0.0f), move);
         }
         /**
          * brief    自分を消す命令をManagerに行う処理
@@ -125,51 +127,7 @@ namespace Bullet
         {
             base.KillMyself();
         }
-        /**
-         * brief    当たり判定
-         */
-        public Collider2D HitCheck()
-        {
-            if (this.collider)
-            {
-                Collider2D hit = Physics2D.OverlapBox(
-                    this.collider.transform.position,
-                    this.collider.size,
-                    this.transform.eulerAngles.z,
-                    (int)M_System.LayerName.PLAYER
-                    );
-                return hit;
-            }
-            return null;
-        }
-        public Collider2D HitCheck(int layer)
-        {
-            if (this.collider)
-            {
-                Collider2D hit = Physics2D.OverlapBox(
-                    this.collider.transform.position,
-                    this.collider.size,
-                    this.transform.eulerAngles.z,
-                    layer
-                    );
-                return hit;
-            }
-            return null;
-        }
-        public Collider2D HitCheck(int layer,Vector2 size)
-        {
-            if (this.collider)
-            {
-                Collider2D hit = Physics2D.OverlapBox(
-                    this.collider.transform.position,
-                    size,
-                    this.transform.eulerAngles.z,
-                    layer
-                    );
-                return hit;
-            }
-            return null;
-        }
+
         /**
          * brief    攻撃を飛ばす方向を指定する
          * param[in] float angle 角度
@@ -179,7 +137,9 @@ namespace Bullet
             this.mode = Mode.LINE;
             move.x = Mathf.Cos(angle * (Mathf.PI / 180));
             move.y = Mathf.Sin(angle * (Mathf.PI / 180));
+
         }
+
         /**
          * brief    攻撃を飛ばす方向を指定オブジェクトにする
          * param[in] GameObject target ターゲット
@@ -187,12 +147,10 @@ namespace Bullet
         public void SetShotTarget(GameObject target)
         {
             this.mode = Mode.TARGET;
-            move = (target.transform.position - this.transform.position);
+            move = (target.transform.position - this.transform.position).normalized;
             float di = Mathf.Atan2(move.y, move.x);
-            float rad = Mathf.Rad2Deg * di;
-            rad *= (Mathf.PI / 180);
-            move.x = Mathf.Cos(rad);
-            move.y = Mathf.Sin(rad);
+            move.x = Mathf.Cos(di);
+            move.y = Mathf.Sin(di);
         }
         /**
          * brief    攻撃生成
@@ -250,26 +208,23 @@ namespace Bullet
 
         public override void Update()
         {
+            base.bullet.attacker.StartAttack();
             //自分がプレイヤーと当たっていた時、プレイヤーにダメージを与え自分は消滅する
-            Collider2D hit = base.bullet.HitCheck((int)M_System.LayerName.PLAYER);
-            if (hit != null)
+           base.bullet.attacker.AttackJudge((int)M_System.LayerName.PLAYER);
+            if (base.bullet.attacker.IsHit())
             {
-                if (hit.tag == "Player")
-                {
-                    hit.GetComponent<CharacterObject>().Damage(this.bullet.GetAttackData());
-                    base.bullet.Delete();
-                    return;
-                }
+                base.bullet.Delete();
+                return;
             }
             //地面に当たったら消す
-            hit = base.bullet.HitCheck((int)M_System.LayerName.GROUND,Vector2.zero);
-            if(hit != null)
+           var hit = base.bullet.attacker.AttackJudge((int)M_System.LayerName.GROUND);
+            if (hit)
             {
                 base.bullet.Delete();
                 return;
             }
             //時間による削除処理
-            if(base.GetTime() > base.bullet.lifeCnt)
+            if (base.GetTime() > base.bullet.lifeCnt)
             {
                 base.bullet.Delete();
                 return;
