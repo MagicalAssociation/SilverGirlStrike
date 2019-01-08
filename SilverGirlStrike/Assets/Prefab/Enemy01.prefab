@@ -302,6 +302,7 @@ MonoBehaviour:
   hitEffectScale: {x: 0, y: 0, z: 0}
   effectRotation: 0
   effectRotationRange: 0
+
 --- !u!114 &114940350102197206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -321,9 +322,13 @@ MonoBehaviour:
     animation: {fileID: 95634447447188230}
     mover: {fileID: 114072991032136212}
     foot: {fileID: 114108893950646212}
-    direction: 0
     narrowAttacker:
     - {fileID: 114883030525009412}
+    autoScaleChange:
+      targetSearch:
+        enable: 1
+        targetLayer: 256
+        searchRange: {fileID: 58905676869385044}
   bulletParameter:
     bulletNum: 3
     interval: 10
@@ -336,7 +341,7 @@ MonoBehaviour:
       power: 1
       speed: 1
       life: 10000000
-      target: {fileID: 1517860858183936, guid: 774225a328eb7754988280c801161af9, type: 2}
+      target: {fileID: 0}
       attackObject: {fileID: 114516956546061212, guid: 84b6877f89ca83c4a8c14d729b9e5e5c,
         type: 2}
   enableGravity: 1

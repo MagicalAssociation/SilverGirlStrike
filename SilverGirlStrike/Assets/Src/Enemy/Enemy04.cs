@@ -72,6 +72,7 @@ namespace Enemy04
             public Direction direction;
             //! 攻撃間隔
             public int attackInterval;
+            public Enemy.AutoScaleChange autoScaleChange;
         }
         /**
          * brief    移動用変数をまとめたclass
@@ -153,6 +154,7 @@ namespace Enemy04
             this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
             this.stopCount = Random.Range(move.stopCountMin, move.stopCountMax);
             this.maxSpeed = move.speed;
+            this.parameter.autoScaleChange.Init(this.gameObject);
             //各ステートを登録&適用
             base.AddState((int)State.MOVE, new MoveState(this));
             base.AddState((int)State.WAIT, new WaitState(this));
@@ -196,6 +198,7 @@ namespace Enemy04
         public override void MoveCharacter()
         {
             this.transform.localPosition = new Vector3(pos.x, pos.y, this.transform.position.z);
+            this.parameter.autoScaleChange.DirectionUpdate();
         }
         /**
          * brief    固有データを取得する
