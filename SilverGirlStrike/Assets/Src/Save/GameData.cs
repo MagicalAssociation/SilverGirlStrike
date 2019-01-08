@@ -8,14 +8,9 @@ public class DataParameter
     int money;
     bool[] stageClearFlag;
 }
-public class GameData
+public class GameData : MonoBehaviour
 {
-    public enum File
-    {
-        SAVE1,
-        SAVE2,
-        SAVE3,
-    }
+    public string[] filePaths;
     static public void Save(string filePath)
     {
 
@@ -23,5 +18,13 @@ public class GameData
     static public GameData Load(string filePath)
     {
         return new GameData();
+    }
+    public string GetFilePath(int n)
+    {
+        if (n < 0 || filePaths.Length <= n)
+        {
+            return null;
+        }
+        return filePaths[n];
     }
 }
