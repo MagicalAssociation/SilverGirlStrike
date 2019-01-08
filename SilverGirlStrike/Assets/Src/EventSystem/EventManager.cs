@@ -7,7 +7,7 @@ namespace TextEvent
 {
     //イベントでいじれるゲームのシステムへのアクセス
     [System.Serializable]
-    public struct EventGameData{
+    public class EventGameData{
         //カメラの位置をつかさどるオブジェクト
         public ObjectChaser cameraTargetPosition;
         //フラグをいじるアクセス
@@ -16,6 +16,11 @@ namespace TextEvent
         public CharacterManager characterManager;
         //イベント判定コリジョンの情報
         public EventCollisionFinder collisionFinder;
+
+
+        //現在実行中のイベント、イベント固有の値をゲッツするための苦肉の策
+        [System.NonSerialized]
+        public EventUnit currentEvent;
     }
 
 
@@ -33,10 +38,7 @@ namespace TextEvent
 
         public static void Create(EventGameData data)
         {
-            if(myself == null)
-            {
-                myself = new EventManager(data);
-            }
+             myself = new EventManager(data);
         }
         public static EventManager Get()
         {
@@ -55,6 +57,9 @@ namespace TextEvent
         {
             foreach (var eventUnit in this.eventList)
             {
+                //今のイベントを登録
+                this.data.currentEvent = eventUnit;
+                //イベントの更新
                 eventUnit.Update(this.functions);
             }
         }
@@ -90,11 +95,13 @@ namespace TextEvent
         private int actionPosition;
         private bool isAwake;
         private bool isActive;
+        private int count;
 
         private Action.ActionFunction currentAction;
 
         public EventUnit(EventPerser.EventData data)
         {
+            this.count = 0;
             this.data = data;
             this.actionPosition = 0;
             this.isAwake = false;
@@ -116,6 +123,11 @@ namespace TextEvent
         public void SetActive(bool isActive)
         {
             this.isActive = isActive;
+        }
+
+        public int GetExecuteCount()
+        {
+            return this.count;
         }
 
         //イベント処理
@@ -174,6 +186,7 @@ namespace TextEvent
             if (this.isAwake)
             {
                 SetCurrentAction(this.actionPosition, func);
+                ++this.count;
             }
         }
 

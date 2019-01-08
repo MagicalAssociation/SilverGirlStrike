@@ -15,7 +15,6 @@ namespace TextEvent
         //boolっぽい文字をboolに変換
         public static bool ParseBoolean(string text)
         {
-            Debug.Log(text);
             switch (text)
             {
                 case "true":
@@ -62,6 +61,7 @@ namespace TextEvent
         //条件追加
         private void SetTermFunc()
         {
+            this.termFunctions.Add("checkCount", new Term.CheckCount(this.gameData));
             this.termFunctions.Add("checkAliveCharacter", new Term.CheckAliveCharacter(this.gameData));
             this.termFunctions.Add("checkCollision", new Term.CheckCollision(this.gameData));
             this.termFunctions.Add("equalFlag", new Term.EqualFlagValue(this.gameData));
@@ -85,6 +85,13 @@ namespace TextEvent
             this.actionFunctions.Add("saveFlag", new Action.SaveFlag(this.gameData));
             this.actionFunctions.Add("loadFlag", new Action.LoadFlag(this.gameData));
 
+            this.actionFunctions.Add("playBGM", new Action.BGMPlay(this.gameData));
+            this.actionFunctions.Add("stopBGM", new Action.BGMStop(this.gameData));
+
+            this.actionFunctions.Add("stopInput", new Action.StopInput(this.gameData));
+            this.actionFunctions.Add("startInput", new Action.StartInput(this.gameData));
+
+            this.actionFunctions.Add("inputLeftStick", new Action.InputLeftStick(this.gameData));
         }
 
     }
@@ -125,6 +132,7 @@ namespace TextEvent
         public abstract class TermFunction
         {
             private EventGameData gameData;
+            private int count;
 
 
             public TermFunction(EventGameData gameData)

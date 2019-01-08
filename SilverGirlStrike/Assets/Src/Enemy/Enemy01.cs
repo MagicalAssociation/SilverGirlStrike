@@ -358,7 +358,6 @@ namespace Enemy01
         {
             if(deltaTime >= this.animationTime)
             {
-                Debug.Log(base.enemy.TargetDistanceCheck());
                 if (base.enemy.TargetDistanceCheck() != null)
                 {
                     manager.SetNextState((int)Enemy01.State.NORMAL);
@@ -435,6 +434,7 @@ namespace Enemy01
             {
                 magicteam.NotActive();
             }
+            Sound.PlaySE("slashFlash");
             Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward, Quaternion.identity, Vector3.one );
             this.enemy.GetData().hitPoint.SetDamageShutout(true);
         }

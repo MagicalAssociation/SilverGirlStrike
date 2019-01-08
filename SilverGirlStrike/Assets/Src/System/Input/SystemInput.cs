@@ -39,6 +39,7 @@ public class SystemInput
         ITEM_U,
         //! ポーズ
         PAUSE,
+
         //! 左スティック上
         LSTICK_UP,
         //! 左スティック下
@@ -167,6 +168,17 @@ public class SystemInput
          */
          public bool GetOn()
         {
+            //強制入力は停止中も有効
+            if (GetForced())
+            {
+                return true;
+            }
+            //入力の強制停止
+            if (this.enableStop)
+            {
+                return false;
+            }
+
             return (this.axisFlag) ? this.input_On : Input.GetButton(this.name) || this.GetForced();
             //return this.input_On || Input.GetButton(this.name) || this.GetForced();
         }
@@ -176,6 +188,17 @@ public class SystemInput
          */
         public bool GetUp()
         {
+            //強制入力は停止中も有効
+            if (GetForced())
+            {
+                return true;
+            }
+            //入力の強制停止
+            if (this.enableStop)
+            {
+                return false;
+            }
+
             return (this.axisFlag) ? this.input_Up : Input.GetButtonUp(this.name) || this.GetForced();
             //return this.input_Up || Input.GetButtonUp(this.name) || this.GetForced();
         }
@@ -185,15 +208,32 @@ public class SystemInput
          */
         public bool GetDown()
         {
-            return (this.axisFlag) ? this.input_Down : Input.GetButtonDown(this.name) || this.GetForced();
+            //強制入力は停止中も有効
+            if (GetForced())
+            {
+                return true;
+            }
+            //入力の強制停止
+            if (this.enableStop)
+            {
+                return false;
+            }
+
+            return (this.axisFlag) ? this.input_Down : Input.GetButtonDown(this.name);
             //return this.input_Down || Input.GetButtonDown(this.name) || this.GetForced();
         }
+
         /**
          * brief    倒してる角度を取得
          * ボタン系は0か1を返す
          */
          public float GetAxis()
         {
+            //入力停止中かつ強制入力中でない場合
+            if (this.enableStop && !this.GetForced())
+            {
+                return 0.0f;
+            }
             return this.axis;
         }
         /**
@@ -263,6 +303,7 @@ public class SystemInput
         this.inputData[(int)Tag.ITEM_D] = new InputData("D");
         this.inputData[(int)Tag.ITEM_U] = new InputData("U");
         this.inputData[(int)Tag.PAUSE] = new InputData("START");
+
         //1
         this.inputData[(int)Tag.LSTICK_DOWN] = new InputData("RStickY",true);
         //-1
@@ -309,7 +350,7 @@ public class SystemInput
     public bool On(SystemInput.Tag tag)
     {
         //return !this.inputData[(int)tag].GetEnableStop() && (Input.GetButton(this.inputData[(int)tag].GetName()) || this.inputData[(int)tag].GetOn());
-        return !this.inputData[(int)tag].GetEnableStop() && this.inputData[(int)tag].GetOn();
+        return this.inputData[(int)tag].GetOn();
     }
     /**
     * brief    登録タグのDOWN入力を取得
@@ -319,7 +360,7 @@ public class SystemInput
     public bool Down(SystemInput.Tag tag)
     {
         //return !this.inputData[(int)tag].GetEnableStop() && (Input.GetButtonDown(this.inputData[(int)tag].GetName()) || this.inputData[(int)tag].GetDown());
-        return !this.inputData[(int)tag].GetEnableStop() && this.inputData[(int)tag].GetDown();
+        return this.inputData[(int)tag].GetDown();
     }
     /**
     * brief    登録タグのUP入力を取得
@@ -329,7 +370,7 @@ public class SystemInput
     public bool Up(SystemInput.Tag tag)
     {
         //return !this.inputData[(int)tag].GetEnableStop() && (Input.GetButtonUp(this.inputData[(int)tag].GetName()) || this.inputData[(int)tag].GetUp());
-        return !this.inputData[(int)tag].GetEnableStop() && this.inputData[(int)tag].GetUp();
+        return this.inputData[(int)tag].GetUp();
     }
     /**
      * brief    登録タグの軸角度を取得
@@ -338,7 +379,7 @@ public class SystemInput
      */
      public float Axis(SystemInput.Tag tag)
     {
-        return this.inputData[(int)tag].GetEnableStop() ? 0.0f : this.inputData[(int)tag].GetAxis();
+        return this.inputData[(int)tag].GetAxis();
     }
     /**
      * brief    強制入力制御設定
@@ -348,6 +389,17 @@ public class SystemInput
     public void SetEnableStop(SystemInput.Tag tag, bool flag)
     {
         this.inputData[(int)tag].SetEnableStop(flag);
+    }
+    /**
+    * brief    強制入力制御設定(全部)
+    * param[in]    bool flag 入力を止める場合true
+    */
+    public void SetEnableStop(bool flag)
+    {
+        foreach (var i in this.inputData)
+        {
+            i.SetEnableStop(flag);
+        }
     }
     /**
     * brief    強制入力制御を取得

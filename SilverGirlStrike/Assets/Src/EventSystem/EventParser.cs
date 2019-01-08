@@ -120,8 +120,6 @@ namespace TextEvent
         public EventPerser(string filePath)
         {
             TextAsset text = Resources.Load(filePath, typeof(TextAsset)) as TextAsset;
-            Debug.Log(filePath);
-            Debug.Log(text);
 
             //文字を列ごとに読み出し
             string allText = text.text;

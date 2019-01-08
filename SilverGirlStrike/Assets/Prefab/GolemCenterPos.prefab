@@ -353,7 +353,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1447172533132932}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -40.02, y: 2.64, z: 0}
+  m_LocalPosition: {x: 538.18, y: 19.79, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4888555937926522}
@@ -563,8 +563,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae0be3a01080384e8d479f6e07e9b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pivot: {fileID: 4888555937926522}
   chaseTarget: {fileID: 4916169998849554}
   chasePower: 0.175
+  relativePosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114228053167467548
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -576,8 +578,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae0be3a01080384e8d479f6e07e9b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pivot: {fileID: 4888555937926522}
   chaseTarget: {fileID: 4916169998849554}
   chasePower: 0.424
+  relativePosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114295735111636508
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -589,8 +593,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae0be3a01080384e8d479f6e07e9b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pivot: {fileID: 4888555937926522}
   chaseTarget: {fileID: 4916169998849554}
   chasePower: 0.185
+  relativePosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114309689952233984
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -606,6 +612,7 @@ MonoBehaviour:
     hitPoint: 30
     invincible: 70
     moveSpeed: 15
+    hitRigidCollision: {fileID: 61280172866622440}
     mover: {fileID: 114959383007037684}
     animator: {fileID: 0}
     targetCharacter: {fileID: 0}
@@ -619,10 +626,11 @@ MonoBehaviour:
     bulletDatas:
     - angle: 0
       power: 1
-      speed: 0.23
+      speed: 0.5
       life: 100
       target: {fileID: 0}
-      attackObject: {fileID: 0}
+      attackObject: {fileID: 114638837673408150, guid: 80828c49cc2a5564fb3eaac67706dacd,
+        type: 2}
 --- !u!114 &114549890772928812
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -634,8 +642,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae0be3a01080384e8d479f6e07e9b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pivot: {fileID: 4888555937926522}
   chaseTarget: {fileID: 4916169998849554}
   chasePower: 0.294
+  relativePosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114648882794261052
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -647,8 +657,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae0be3a01080384e8d479f6e07e9b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pivot: {fileID: 4888555937926522}
   chaseTarget: {fileID: 4916169998849554}
   chasePower: 0.284
+  relativePosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114686920323831902
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -660,8 +672,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae0be3a01080384e8d479f6e07e9b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pivot: {fileID: 4888555937926522}
   chaseTarget: {fileID: 4916169998849554}
   chasePower: 0.191
+  relativePosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114715333378947004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -673,8 +687,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae0be3a01080384e8d479f6e07e9b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pivot: {fileID: 4888555937926522}
   chaseTarget: {fileID: 4916169998849554}
   chasePower: 0.062
+  relativePosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114827328394395380
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -686,8 +702,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae0be3a01080384e8d479f6e07e9b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pivot: {fileID: 4888555937926522}
   chaseTarget: {fileID: 4916169998849554}
   chasePower: 0.16
+  relativePosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114933955671707522
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -699,13 +717,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903ff5183eee8641b9a2288a20e0c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectManager: {fileID: 0}
   userCharacter: {fileID: 114309689952233984}
   attackCollition: {fileID: 61486344493390138}
   attackPower: 2
   chainCount: 0
   attackTime: 1
   targetLayer: 256
+  hitSound: 
+  hitEffectName: 
+  hitEffectScale: {x: 0, y: 0, z: 0}
+  effectRotation: 0
+  effectRotationRange: 0
 --- !u!114 &114959383007037684
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -728,13 +750,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903ff5183eee8641b9a2288a20e0c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectManager: {fileID: 0}
   userCharacter: {fileID: 114309689952233984}
   attackCollition: {fileID: 58661036341366016}
   attackPower: 2
   chainCount: 0
   attackTime: 1
   targetLayer: 256
+  hitSound: 
+  hitEffectName: 
+  hitEffectScale: {x: 0, y: 0, z: 0}
+  effectRotation: 0
+  effectRotationRange: 0
 --- !u!212 &212020014095936158
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -14,6 +14,9 @@ public class NarrowAttacker : MonoBehaviour {
     //攻撃対象のレイヤー
     public M_System.LayerName targetLayer;
 
+    //ヒット時の効果音
+    public string hitSound;
+
     //ヒット時のエフェクト
     public string hitEffectName;
     public Vector3 hitEffectScale;
@@ -120,6 +123,10 @@ public class NarrowAttacker : MonoBehaviour {
                     a -= a * 0.5f;
                     Quaternion rot = Quaternion.AngleAxis(this.effectRotation + a, Vector3.forward);
                     Effect.Get().CreateEffect(this.hitEffectName, pos, rot, this.hitEffectScale);
+                }
+                if (this.hitSound != "")
+                {
+                    Sound.PlaySE(this.hitSound);
                 }
             }
         }

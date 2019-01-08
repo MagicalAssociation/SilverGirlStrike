@@ -23,6 +23,7 @@ namespace RockGolem
         //ステートの定数
         public enum State
         {
+            START,
             MOVE,
             IDLE,
             TACKLE,
@@ -66,6 +67,7 @@ namespace RockGolem
             public int invincible;
             public float moveSpeed;
 
+            public Collider2D hitRigidCollision;
             public CharacterMover mover;
             public Animator animator;
             public GameObject targetCharacter;
@@ -104,6 +106,7 @@ namespace RockGolem
             this.param.moveVector = Vector2.zero;
             this.param.currentIdlePosition = this.inspectorParam.idlePositions.center;
             //ステート追加
+            AddState((int)State.START, new StartState(this));
             AddState((int)State.MOVE, new MoveState(this));
             AddState((int)State.IDLE, new IdleState(this));
             AddState((int)State.TACKLE, new Tackle1State(this));
@@ -111,7 +114,7 @@ namespace RockGolem
             AddState((int)State.PRESS, new ChasePress(this));
             AddState((int)State.STONE_BLAST, new StoneBlast(this));
             AddState((int)State.DEATH, new DeathState(this));
-            ChangeState((int)State.MOVE);
+            ChangeState((int)State.START);
         }
 
         public override void ApplyDamage()
@@ -134,7 +137,10 @@ namespace RockGolem
         {
             UpdateState();
             //判定垂れ流し
-            this.inspectorParam.attackCollisions[0].StartAttack();
+            if (GetData().stateManager.GetNowStateNum() != (int)State.START)
+            {
+                this.inspectorParam.attackCollisions[0].StartAttack();
+            }
 
             if (GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
@@ -248,7 +254,83 @@ namespace RockGolem
             }
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        //登場演出
+        class StartState : BaseState
+        {
+            int count;
+            bool isActive;
 
+            float movePower;
+
+
+            public StartState(RockGolemEnemy param) : base(param)
+            {
+            }
+
+            public override void Enter(ref StateManager manager)
+            {
+                GetInspectorParam().hitRigidCollision.isTrigger = true;
+                GetParam().moveVector = Vector3.down * 400.0f;
+                GetParam().myself.transform.position += Vector3.forward;
+                this.count = 0;
+                this.isActive = false;
+                this.movePower = 45.0f;
+            }
+
+            public override void Exit(ref StateManager manager)
+            {
+                GetInspectorParam().hitRigidCollision.isTrigger = false;
+                GetParam().myself.transform.position += -Vector3.forward;
+            }
+
+            public override bool Transition(ref StateManager manager)
+            {
+                if(this.count > 160)
+                {
+                    manager.SetNextState((int)RockGolemEnemy.State.IDLE);
+                    return true;
+                }
+                return false;
+            }
+
+            public override void Update()
+            {
+                if (!CheckActive())
+                {
+                    //有効じゃないなら何もしない
+                    return;
+                }
+                ++this.count;
+
+                if(this.count < 120 || this.count > 160)
+                {
+                    return;
+                }
+
+                //ジャンプのような飛び出し挙動
+                GetParam().moveVector = Vector3.up * this.movePower;
+                this.movePower += -1.6f;
+            }
+
+
+            bool CheckActive()
+            {
+                //一度有効になったらもう止まらない
+                if (this.isActive)
+                {
+                    return true;
+                }
+
+                float distance = Vector3.Distance(GetInspectorParam().targetCharacter.transform.position, GetParam().myself.transform.position);
+                if (distance < 6.0f)
+                {
+                    isActive = true;
+                    return true;
+                }
+                return false;
+            }
+        }
         /////////////////////////////////////////////////////////////////////////////////////
         //所定位置への移動
         class MoveState : BaseState
@@ -626,8 +708,10 @@ namespace RockGolem
 
             public override void Enter(ref StateManager manager)
             {
-                Sound.PlaySE("clearSound");
-                Sound.PlaySE("anchorHit");
+                Sound.PlaySE("slashFlash");
+                Effect.Get().CreateEffect("defeat", GetParam().myself.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
+                GetParam().myself.GetData().hitPoint.SetDamageShutout(true);
+
                 Sound.StopBGM();
                 GetParam().myself.KillMyself();
             }

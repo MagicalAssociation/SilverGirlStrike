@@ -51,8 +51,10 @@ public class PlayerCameraMan : CharacterObject
 
         //そこからずらす
         //スティックの向きを取得
-        float stickX = Input.GetAxis("RStickX");
-        float stickY = Input.GetAxis("RStickY") * -1;
+        float x = M_System.input.Axis(SystemInput.Tag.LSTICK_RIGHT);
+        float y = M_System.input.Axis(SystemInput.Tag.LSTICK_DOWN);
+        float stickX = x;
+        float stickY = y * -1;
         var vector = new Vector3(stickX, stickY);
 
         if (vector.magnitude > 0.6f)
