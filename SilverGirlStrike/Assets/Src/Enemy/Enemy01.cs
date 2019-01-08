@@ -358,7 +358,6 @@ namespace Enemy01
         {
             if(deltaTime >= this.animationTime)
             {
-                Debug.Log(base.enemy.TargetDistanceCheck());
                 if (base.enemy.TargetDistanceCheck() != null)
                 {
                     manager.SetNextState((int)Enemy01.State.NORMAL);
@@ -421,8 +420,7 @@ namespace Enemy01
         public override void Enter(ref StateManager manager)
         {
             this.enemy.parameter.animation.Play("Death");
-            this.enemy.parameter.mover.Jump(5.0f);
-            this.enemy.gravity /= 5.0f;
+            this.enemy.parameter.mover.Jump(6.0f);
             if (this.enemy.transform.localScale.x == 1)
             {
                 this.enemy.transform.Rotate(new Vector3(0, 0, -30));
@@ -436,6 +434,8 @@ namespace Enemy01
             {
                 magicteam.NotActive();
             }
+            Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward, Quaternion.identity, Vector3.one );
+            this.enemy.GetData().hitPoint.SetDamageShutout(true);
         }
 
         public override void Exit(ref StateManager manager)
@@ -457,7 +457,7 @@ namespace Enemy01
             {
                 this.enemy.SetMovePower(new Vector2(-3, 0));
             }
-            if(base.GetTime() >= 60)
+            if(base.GetTime() >= 30)
             {
                 base.enemy.KillMyself();
             }

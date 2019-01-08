@@ -42,6 +42,8 @@ public class SpriteLoop : MonoBehaviour
         //コピー元のオブジェクトだけがクローンを生成
         if (this.copyFrag)
         {
+            Transform[] transforms = new Transform[this.spriteCount - 1];
+
             for(int i = 1; i < this.spriteCount; ++i)
             {
                 var a = Instantiate<GameObject>(this.gameObject).GetComponent<SpriteLoop>();
@@ -49,6 +51,11 @@ public class SpriteLoop : MonoBehaviour
                 float moveDistance = this.spriteSize.x / this.pixelPerUnit * i;
                 a.transform.position = this.transform.position;
                 a.transform.position += new Vector3(moveDistance, 0.0f, 0.0f);
+                transforms[i - 1] = a.transform;
+            }
+            for(int i = 0; i < transforms.Length; ++i)
+            {
+                transforms[i].parent = this.transform;
             }
         }
     }
@@ -56,22 +63,28 @@ public class SpriteLoop : MonoBehaviour
     //少なくともカメラの移動後、という要件を満たせばLateUpdate()でなくてもいい
     void LateUpdate()
     {
+        //可動域
         float moveDistance = this.spriteSize.x * this.spritePos;
 
-        Vector3 moveVector = this.cameraPos.position - this.prevCameraPos;
-        this.transform.position += moveVector * speed;
-        this.prevCameraPos = this.cameraPos.position;
+        if (this.copyFrag)
+        {
+            Vector3 moveVector = this.cameraPos.position - this.prevCameraPos;
+            this.transform.position += moveVector * speed;
+            this.prevCameraPos = this.cameraPos.position;
+        }
 
         //Debug.Log(this.prevCameraPos);
 
 
         //カメラからの相対位置に変換し、Unityの長さ単位に変換
         var spritex = ((transform.position - this.cameraPos.position) * this.pixelPerUnit + this.spriteSize / 2).x;
+        //左端に達した時
         if (spritex < this.screenRect.x - moveDistance)
         {
             FixL();
         }
-        if ((transform.position.x - this.cameraPos.position.x) * this.pixelPerUnit > (this.screenRect.x + this.screenRect.width * this.spriteCount - moveDistance))
+        //右端に達した時
+        if (spritex > (this.screenRect.x + this.screenRect.width * this.spriteCount - moveDistance))
         {
             FixR();
         }

@@ -56,7 +56,6 @@ public class AnchorSelector : MonoBehaviour {
             //デバッグ用
             Debug.DrawRay(this.startPoint, (list[i].transform.position - this.startPoint), Color.yellow, 1);
             Debug.DrawRay(this.startPoint, (this.goalPoint - this.startPoint), Color.yellow, 1);
-            Debug.Log("angle" + angle);
 
 
             float score = 0.0f;
