@@ -10,24 +10,18 @@ public class DataParameter
 }
 public class GameData
 {
-    static GameData gameData;
-    public void Save()
+    public enum File
+    {
+        SAVE1,
+        SAVE2,
+        SAVE3,
+    }
+    static public void Save(string filePath)
     {
 
     }
-    public void Load()
+    static public GameData Load(string filePath)
     {
-
-    }
-    static public void Create()
-    {
-        if(GameData.gameData == null)
-        {
-            GameData.gameData = new GameData();
-        }
-    }
-    static public GameData Get()
-    {
-        return GameData.gameData;
+        return new GameData();
     }
 }
