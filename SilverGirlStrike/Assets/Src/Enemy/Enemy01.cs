@@ -434,6 +434,7 @@ namespace Enemy01
             {
                 magicteam.NotActive();
             }
+            Sound.PlaySE("slashFlash");
             Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward, Quaternion.identity, Vector3.one );
             this.enemy.GetData().hitPoint.SetDamageShutout(true);
         }

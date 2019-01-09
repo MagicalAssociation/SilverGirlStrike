@@ -9,6 +9,23 @@ namespace TextEvent
     namespace Term
     {
         /////////////////////////////////////////////////////////////////////////////////////
+        //指定回数のみtrue
+        //args: (int count)
+        public class CheckCount : TermFunction
+        {
+            public CheckCount(EventGameData gameData) :
+                base(gameData)
+            {
+            }
+
+            public override bool Judge(string[] args)
+            {
+                int count = int.Parse(args[0]);
+                return (GetGameData().currentEvent.GetExecuteCount() < count);
+            }
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
         //キャラが生きているかどうか
         //args: (string characterName)
         public class CheckAliveCharacter : TermFunction

@@ -62,13 +62,10 @@ public class M_System : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)){
+        M_System.input.Update();
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
             Application.Quit();
         }
-    }
-
-    private void FixedUpdate()
-    {
-        M_System.input.Update();
     }
 }

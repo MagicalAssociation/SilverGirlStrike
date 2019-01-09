@@ -16,6 +16,7 @@ public class SoundInitializer : MonoBehaviour {
 
 	// Use this for initialization
 	public void CreateSoundSource () {
+        Sound.GetInstance();
         //読み込み
         foreach(var i in this.bgmList)
         {

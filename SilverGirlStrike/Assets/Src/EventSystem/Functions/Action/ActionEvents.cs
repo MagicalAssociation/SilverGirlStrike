@@ -169,5 +169,186 @@ namespace TextEvent
             }
         }
 
+
+        /////////////////////////////////////////////////
+        //BGMストップ
+        //args: (float フェード時間)
+        public class BGMStop : ActionFunction
+        {
+            int fadeTime;
+            int count;
+
+            public BGMStop(EventGameData gameData) :
+                base(gameData)
+            {
+
+            }
+
+            public override void Action()
+            {
+                ++this.count;
+                Sound.SetVolumeBGM(Sound.GetBaseVolumeBGM() * (1.0f - (float)this.count / (float)this.fadeTime));
+                if (this.count > this.fadeTime)
+                {
+                    Sound.StopBGM();
+                }
+            }
+
+            public override void ActionStart(string[] args)
+            {
+                //徐々に音量を下げる
+                this.fadeTime = int.Parse(args[0]);
+                this.count = 0;
+            }
+
+            public override bool IsEnd()
+            {
+                if(this.count > this.fadeTime)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        /////////////////////////////////////////////////
+        //BGMスタート
+        //args: (string BGMName)
+        public class BGMPlay : ActionFunction
+        {
+            //相対的な位置
+            string bgmName;
+
+            public BGMPlay(EventGameData gameData) :
+                base(gameData)
+            {
+
+            }
+
+            public override void Action()
+            {
+                Sound.PlayBGM(this.bgmName);
+                Sound.SetVolumeBGM(Sound.GetBaseVolumeBGM());
+            }
+
+            public override void ActionStart(string[] args)
+            {
+                //BGM名
+                this.bgmName = args[0];
+            }
+
+            public override bool IsEnd()
+            {
+                //すぐ終わる
+                return true;
+            }
+        }
+
+
+        /////////////////////////////////////////////////
+        //入力をストップ
+        //args: (無し)
+        public class StopInput : ActionFunction
+        {
+            //相対的な位置
+
+            public StopInput(EventGameData gameData) :
+                base(gameData)
+            {
+
+            }
+
+            public override void Action()
+            {
+                M_System.input.SetEnableStop(true);
+            }
+
+            public override void ActionStart(string[] args)
+            {
+            }
+
+            public override bool IsEnd()
+            {
+                //すぐ終わる
+                return true;
+            }
+        }
+
+        /////////////////////////////////////////////////
+        //入力ストップを解除
+        //args: (無し)
+        public class StartInput : ActionFunction
+        {
+            //相対的な位置
+
+            public StartInput(EventGameData gameData) :
+                base(gameData)
+            {
+
+            }
+
+            public override void Action()
+            {
+                M_System.input.SetEnableStop(false);
+            }
+
+            public override void ActionStart(string[] args)
+            {
+            }
+
+            public override bool IsEnd()
+            {
+                //すぐ終わる
+                return true;
+            }
+        }
+
+        /////////////////////////////////////////////////
+        //左スティック強制入力
+        //args: (float x, float y, int waitFrame)
+        public class InputLeftStick : ActionFunction
+        {
+            //スティックの値
+            Vector2 axis;
+            int waitFrame;
+            int count;
+
+            public InputLeftStick(EventGameData gameData) :
+                base(gameData)
+            {
+
+            }
+
+            public override void Action()
+            {
+                M_System.input.SetAxisForced(SystemInput.Tag.LSTICK_RIGHT, this.axis.x);
+                M_System.input.SetAxisForced(SystemInput.Tag.LSTICK_DOWN, this.axis.y);
+                M_System.input.SetForced(SystemInput.Tag.LSTICK_RIGHT, true);
+                M_System.input.SetForced(SystemInput.Tag.LSTICK_DOWN, true);
+                ++this.count;
+
+                //終了の後かたずけ
+                if(this.count > this.waitFrame)
+                {
+                    M_System.input.SetForced(SystemInput.Tag.LSTICK_RIGHT, false);
+                    M_System.input.SetForced(SystemInput.Tag.LSTICK_DOWN, false);
+                }
+            }
+
+            public override void ActionStart(string[] args)
+            {
+                this.axis = new Vector2(float.Parse(args[0]), float.Parse(args[1]));
+                this.waitFrame = int.Parse(args[2]);
+
+                this.count = 0;
+            }
+
+            public override bool IsEnd()
+            {
+                //すぐ終わる
+                return this.count > this.waitFrame;
+            }
+        }
+
     }
 }

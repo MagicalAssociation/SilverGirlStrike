@@ -107,6 +107,7 @@ namespace Fuchan
             AddState((int)State.ATTACK2, new Attack2State(this));
             AddState((int)State.ATTACK3, new Attack3State(this));
             AddState((int)State.DAMAGE, new DamageState(this));
+
             ChangeState((int)State.IDLE);
 
 
@@ -216,8 +217,10 @@ namespace Fuchan
         //ステート遷移時に使用する、アンカー判定
         public bool ShotAnchor()
         {
+            float x = M_System.input.Axis(SystemInput.Tag.LSTICK_RIGHT);
+            float y = M_System.input.Axis(SystemInput.Tag.LSTICK_DOWN);
             //スティックの向きを取得
-            Vector2 direction = new Vector2(Input.GetAxis("RStickX"), Input.GetAxis("RStickY") * -1);
+            Vector2 direction = new Vector2(x, y * -1);
 
             //スティックがニュートラルの際は、まっすぐX軸にそったレイを設定する
             if (direction.magnitude == 0.0f)
@@ -307,7 +310,7 @@ namespace Fuchan
         public override void Enter(ref StateManager manager)
         {
             //登場ステートからの移行の場合、アニメーションはすでに待機モーション
-            if(manager.GetPreStateNum() == (int)PlayerObject.State.START)
+            if (manager.GetPreStateNum() == (int)PlayerObject.State.START)
             {
                 return;
             }
@@ -343,8 +346,7 @@ namespace Fuchan
         //遷移を行う
         public override bool Transition(ref StateManager manager)
         {
-
-            float axis = Func.FixXAxis(Input.GetAxis("RStickX"));
+            float axis = Func.FixXAxis(M_System.input.Axis(SystemInput.Tag.LSTICK_RIGHT));
 
             //歩きへ遷移
             if (axis != 0.0f)
@@ -365,10 +367,14 @@ namespace Fuchan
                 return true;
             }
             //アンカーショット
-            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor())
+            if (M_System.input.Down(SystemInput.Tag.WIRE))
             {
-                manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
-                return true;
+                Sound.PlaySE("wireShot");
+                if (ShotAnchor())
+                {
+                    manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                    return true;
+                }
             }
             //攻撃
             if (M_System.input.Down(SystemInput.Tag.ATTACK))
@@ -413,7 +419,7 @@ namespace Fuchan
         public override bool Transition(ref StateManager manager)
         {
 
-            float axis = Func.FixXAxis(Input.GetAxis("RStickX"));
+            float axis = Func.FixXAxis(M_System.input.Axis(SystemInput.Tag.LSTICK_RIGHT));
 
             //待機へ遷移
             if (Mathf.Abs(axis) < 0.001f)
@@ -434,10 +440,14 @@ namespace Fuchan
                 return true;
             }
             //アンカーショット
-            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor())
+            if (M_System.input.Down(SystemInput.Tag.WIRE))
             {
-                manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
-                return true;
+                Sound.PlaySE("wireShot");
+                if (ShotAnchor())
+                {
+                    manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                    return true;
+                }
             }
             //攻撃
             if (M_System.input.Down(SystemInput.Tag.ATTACK))
@@ -451,7 +461,8 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
+            float axis = M_System.input.Axis(SystemInput.Tag.LSTICK_RIGHT);
+            var vec = new Vector2(Func.FixXAxis(axis) * GetPlayerMoveSpeed(), 0.0f);
             //横移動
             GetParam().moveVector += vec;
             //移動方向にて向きを変える
@@ -472,11 +483,11 @@ namespace Fuchan
         //入った時の関数
         public override void Enter(ref StateManager manager)
         {
-            Sound.PlaySE("jump");
             //アニメ
             GetInspectorParam().playerAnim.Play("JumpUp");
             if (manager.GetPreStateNum() != (int)PlayerObject.State.WIRE_DASH)
             {
+                Sound.PlaySE("jump");
                 GetInspectorParam().mover.Jump(GetInspectorParam().jumpPower);
             }
             ResetTime();
@@ -489,9 +500,6 @@ namespace Fuchan
         //遷移を行う
         public override bool Transition(ref StateManager manager)
         {
-
-            float axis = Func.FixXAxis(Input.GetAxis("RStickX"));
-
             //落下
             if (GetInspectorParam().mover.IsFall())
             {
@@ -499,10 +507,14 @@ namespace Fuchan
                 return true;
             }
             //アンカーショット
-            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor())
+            if (M_System.input.Down(SystemInput.Tag.WIRE))
             {
-                manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
-                return true;
+                Sound.PlaySE("wireShot");
+                if (ShotAnchor())
+                {
+                    manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                    return true;
+                }
             }
             //攻撃
             if (M_System.input.Down(SystemInput.Tag.ATTACK))
@@ -517,7 +529,8 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
+            float axis = M_System.input.Axis(SystemInput.Tag.LSTICK_RIGHT);
+            var vec = new Vector2(Func.FixXAxis(axis) * GetPlayerMoveSpeed(), 0.0f);
             //横移動
             GetParam().moveVector += vec;
             //移動方向にて向きを変える
@@ -555,9 +568,6 @@ namespace Fuchan
         //遷移を行う
         public override bool Transition(ref StateManager manager)
         {
-
-            float axis = Func.FixXAxis(Input.GetAxis("RStickX"));
-
             //着地
             if (GetParam().onGround)
             {
@@ -565,10 +575,14 @@ namespace Fuchan
                 return true;
             }
             //アンカーショット
-            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor())
+            if (M_System.input.Down(SystemInput.Tag.WIRE))
             {
-                manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
-                return true;
+                Sound.PlaySE("wireShot");
+                if (ShotAnchor())
+                {
+                    manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                    return true;
+                }
             }
             //攻撃
             if (M_System.input.Down(SystemInput.Tag.ATTACK))
@@ -582,7 +596,8 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
+            float axis = M_System.input.Axis(SystemInput.Tag.LSTICK_RIGHT);
+            var vec = new Vector2(Func.FixXAxis(axis) * GetPlayerMoveSpeed(), 0.0f);
             //横移動
             GetParam().moveVector += vec;
             //移動方向にて向きを変える
@@ -673,7 +688,7 @@ namespace Fuchan
             }
 
             //ワイヤー中にやればストライクアサルト
-            if (GetParam().anchorTarget != null && M_System.input.Down(SystemInput.Tag.ATTACK)){
+            if (GetParam().anchorTarget != null && M_System.input.Down(SystemInput.Tag.ATTACK)) {
                 manager.SetNextState((int)PlayerObject.State.STRIKE_ASULT);
                 return true;
             }
@@ -725,6 +740,7 @@ namespace Fuchan
         //入った時の関数
         public override void Enter(ref StateManager manager)
         {
+            Sound.PlaySE("impact1");
             //キャラの頭の向きから移動方向を割り出す
             this.direction = GetParam().myself.transform.rotation * new Vector2(0.0f, 1.0f);
             //最高値の速さに変更
@@ -758,7 +774,7 @@ namespace Fuchan
             if (dot < 0.0f)
             {
                 ++this.counter;
-                if(this.counter > 10)
+                if (this.counter > 10)
                 {
                     GetInspectorParam().mover.Jump(this.direction.y * GetParam().currentDashSpead * 0.5f);
                     manager.SetNextState((int)PlayerObject.State.FALL);
@@ -815,6 +831,7 @@ namespace Fuchan
                 GetInspectorParam().attackCollisions[0].StartAttack();
             }
 
+            Sound.PlaySE("swingSmall");
             this.timeCnt = 0;
         }
         //出た時の関数
@@ -826,7 +843,7 @@ namespace Fuchan
         public override bool Transition(ref StateManager manager)
         {
             //硬直終わり
-            if(this.timeCnt == 20)
+            if (this.timeCnt == 20)
             {
                 if (GetParam().onGround)
                 {
@@ -851,10 +868,14 @@ namespace Fuchan
                 return true;
             }
             //アンカーショット
-            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor() && this.timeCnt > 5)
+            if (M_System.input.Down(SystemInput.Tag.WIRE))
+            {
+                Sound.PlaySE("wireShot");
+                if (ShotAnchor())
                 {
-                manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
-                return true;
+                    manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                    return true;
+                }
             }
 
             return false;
@@ -862,13 +883,14 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
+            float axis = M_System.input.Axis(SystemInput.Tag.LSTICK_RIGHT);
+            var vec = new Vector2(Func.FixXAxis(axis) * GetPlayerMoveSpeed(), 0.0f);
             //硬直中は移動速度を落とす
             if (GetParam().onGround)
             {
                 vec.x *= 0.2f;
             }
-            else if(this.timeCnt <= 5)
+            else if (this.timeCnt <= 5)
             {
                 Func.ChangeDirectionFromMoveX(vec.x, ref GetParam().direction, GetParam().myself.transform);
             }
@@ -908,6 +930,7 @@ namespace Fuchan
                 GetInspectorParam().attackCollisions[1].StartAttack();
             }
 
+            Sound.PlaySE("swingSmall");
             this.timeCnt = 0;
         }
         //出た時の関数
@@ -944,10 +967,14 @@ namespace Fuchan
                 return true;
             }
             //アンカーショット
-            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor() && this.timeCnt > 5)
+            if (M_System.input.Down(SystemInput.Tag.WIRE))
+            {
+                Sound.PlaySE("wireShot");
+                if (ShotAnchor())
                 {
-                manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
-                return true;
+                    manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                    return true;
+                }
             }
 
             return false;
@@ -955,7 +982,8 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
+            float axis = M_System.input.Axis(SystemInput.Tag.LSTICK_RIGHT);
+            var vec = new Vector2(Func.FixXAxis(axis) * GetPlayerMoveSpeed(), 0.0f);
             //硬直中は移動速度を落とす
             if (GetParam().onGround)
             {
@@ -1031,10 +1059,14 @@ namespace Fuchan
             }
 
             //アンカーショット
-            if (M_System.input.Down(SystemInput.Tag.WIRE) && ShotAnchor() && this.timeCnt > 14)
+            if (M_System.input.Down(SystemInput.Tag.WIRE))
             {
-                manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
-                return true;
+                Sound.PlaySE("wireShot");
+                if (ShotAnchor())
+                {
+                    manager.SetNextState((int)PlayerObject.State.WIRE_DASH);
+                    return true;
+                }
             }
 
             return false;
@@ -1042,7 +1074,8 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
-            var vec = new Vector2(Func.FixXAxis(Input.GetAxis("RStickX")) * GetPlayerMoveSpeed(), 0.0f);
+            float axis = M_System.input.Axis(SystemInput.Tag.LSTICK_RIGHT);
+            var vec = new Vector2(Func.FixXAxis(axis) * GetPlayerMoveSpeed(), 0.0f);
             //硬直中は移動速度を落とす
             if (GetParam().onGround)
             {
@@ -1069,6 +1102,7 @@ namespace Fuchan
                 {
                     GetInspectorParam().attackCollisions[2].StartAttack();
                 }
+                Sound.PlaySE("swingBig");
             }
 
 
@@ -1096,6 +1130,7 @@ namespace Fuchan
             //アニメ
             GetInspectorParam().playerAnim.Play("Damage");
 
+            Sound.PlaySE("PlayerDamage");
         }
         //出た時の関数
         public override void Exit(ref StateManager manager)
@@ -1111,7 +1146,7 @@ namespace Fuchan
                 manager.SetNextState((int)PlayerObject.State.IDLE);
                 return true;
             }
-            
+
 
             return false;
         }
@@ -1132,7 +1167,6 @@ namespace Fuchan
             GetParam().moveVector += vec;
         }
     }
-
 
     //便利関数系
     public class Func
