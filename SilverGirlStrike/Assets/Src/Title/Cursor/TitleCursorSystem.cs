@@ -13,7 +13,7 @@ public class TitleCursorSystem : CursorSystem
     //Vector2 imagePos;
     public Parameter parameter;
     public GameObject cursorObject;
-    private void Start()
+    private void Awake()
     {
         base.Init();
         cursorMove = new Easing();
