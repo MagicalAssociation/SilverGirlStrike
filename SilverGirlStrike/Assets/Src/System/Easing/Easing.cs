@@ -54,7 +54,7 @@ public class Easing
     }
     /**
     *@brief	タイム初期化
-*/
+    */
     public void ResetTime()
     {
         this.cnt = 0;
@@ -65,7 +65,7 @@ public class Easing
     }
     /**
     *@brief	constructor
-*/
+    */
     public Easing() {
         this.ResetTime();
         this.back = new Back();
@@ -99,15 +99,46 @@ public class Easing
         this.Set(startValue, endValue, duration);
         this.Use(easing);
     }
+    public void Set(float startValue, float endValue, float duration, Type type)
+    {
+        this.Set(startValue, endValue, duration);
+        this.Use(type);
+    }
     public void Use(EasingBase easing)
     {
         this.use = easing;
+    }
+    public void Use(Type type)
+    {
+        switch(type)
+        {
+            case Type.Linear:
+                this.use = new Linear();
+                break;
+            case Type.Back:
+                this.use = new Back();
+                break;
+            case Type.Bounce:
+                this.use = new Bounce();
+                break;
+            case Type.Cubic:
+                this.use = new Cubic();
+                break;
+            case Type.Quad:
+                this.use = new Quad();
+                break;
+            case Type.Quart:
+                this.use = new Quart();
+                break;
+            case Type.Quint:
+                this.use = new Quint();
+                break;
+        }
     }
     public EasingBase Get()
     {
         return this.use;
     }
-
     public float In()
     {
         return this.use.In(this.Time(duration), start, end, duration);
@@ -120,7 +151,6 @@ public class Easing
     {
         return this.use.InOut(this.Time(duration), start, end, duration);
     }
-
     /**
     *@brief	開始始点を取得
     *@return float StartValue
@@ -133,11 +163,22 @@ public class Easing
     /**
     *@brief	終了始点を取得
     *@return float EndValue
-*/
+    */
     public float GetEndValue()
     {
         return this.end;
 
+    }
+    [System.Serializable]
+    public enum Type
+    {
+        Linear,
+        Back,
+        Bounce,
+        Cubic,
+        Quad,
+        Quart,
+        Quint,
     }
     //t = 時間 d = 始点 c = 終点-始点 d = 経過時間
     public class Linear : EasingBase

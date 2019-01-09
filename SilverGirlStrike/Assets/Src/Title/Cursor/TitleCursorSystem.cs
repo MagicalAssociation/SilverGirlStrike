@@ -52,11 +52,6 @@ public class TitleCursorSystem : CursorSystem
     }
     bool CursorMoveInput()
     {
-        //return (M_System.input.On(SystemInput.Tag.LSTICK_UP)) ? 
-        //    base.Up() : (M_System.input.On(SystemInput.Tag.LSTICK_DOWN)) ? 
-        //    base.Down() : (M_System.input.On(SystemInput.Tag.LSTICK_LEFT)) ? 
-        //    base.Left() : (M_System.input.On(SystemInput.Tag.LSTICK_RIGHT)) ? 
-        //    base.Right() : false;
         if(M_System.input.On(SystemInput.Tag.LSTICK_UP))
         {
             return base.Up();
