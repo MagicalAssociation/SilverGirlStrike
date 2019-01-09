@@ -41,6 +41,15 @@ public class Sound
     // SEにアクセスするためのテーブル 
     Dictionary<string, SoundData> poolSe = new Dictionary<string, SoundData>();
 
+    //ベースボリューム(いわゆるデフォルトの値)
+    float BGMBaseVolume;
+    float SEBaseVolume;
+    //現在のボリューム
+    float BGMVolume;
+    float SEVolume;
+
+    float MasterVolume;
+
     /// 保持するデータ
     class SoundData
     {
@@ -66,11 +75,69 @@ public class Sound
         }
     }
 
+    //BGMボリューム
+    public static void SetVolumeBGM(float volume)
+    {
+        var instance = GetInstance();
+        instance.BGMVolume = volume;
+        instance.sourceBgm.volume = instance.BGMVolume;
+    }
+
+    //BGMの規定のボリューム(フェードインなどの目印になったりする)
+    public static void SetBaseVolumeBGM(float volume)
+    {
+        var instance = GetInstance();
+        instance.BGMBaseVolume = volume;
+    }
+    //SEボリューム
+    public static void SetVolumeSE(float volume)
+    {
+        var instance = GetInstance();
+        instance.SEVolume = volume;
+        foreach (var i in instance.sourceSeArray)
+        {
+            i.volume = instance.SEVolume;
+        }
+    }
+    //SEの規定のボリューム(フェードインなどの目印になったりする)
+    public static void SetBaseVolumeSE(float volume)
+    {
+        var instance = GetInstance();
+        instance.SEBaseVolume = volume;
+    }
+
+    //ゲッタ
+    public static float GetBaseVolumeBGM()
+    {
+        var instance = GetInstance();
+        return instance.BGMBaseVolume;
+    }
+    public static float GetBaseVolumeSE()
+    {
+        var instance = GetInstance();
+        return instance.SEBaseVolume;
+    }
+    public static float GetVolumeBGM()
+    {
+        var instance = GetInstance();
+        return instance.BGMVolume;
+    }
+    public static float GetVolumeSE()
+    {
+        var instance = GetInstance();
+        return instance.SEVolume;
+    }
+
     /// コンストラクタ
     public Sound()
     {
         // チャンネル確保
         sourceSeArray = new AudioSource[SE_CHANNEL];
+        this.SEVolume = 1.0f;
+        this.BGMVolume = 1.0f;
+        this.SEBaseVolume = 1.0f;
+        this.BGMBaseVolume = 1.0f;
+        this.MasterVolume = 1.0f;
     }
 
     // サウンドのロード

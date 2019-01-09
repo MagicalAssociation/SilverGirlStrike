@@ -608,6 +608,7 @@ namespace Enemy04
 
         public override void Enter(ref StateManager manager)
         {
+            Sound.PlaySE("slashFlash");
             this.enemy.parameter.animation.Play("Idle");
             Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
             this.enemy.GetData().hitPoint.SetDamageShutout(true);
