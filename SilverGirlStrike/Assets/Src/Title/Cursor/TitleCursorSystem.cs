@@ -7,6 +7,7 @@ public class TitleCursorSystem : CursorSystem
     [System.Serializable]
     public class Parameter
     {
+        public Easing.Type type;
         public float moveTime;
     }
     Easing cursorMove;
@@ -18,7 +19,7 @@ public class TitleCursorSystem : CursorSystem
         base.Init();
         cursorMove = new Easing();
         //EasingはLinearを使用（仮）
-        cursorMove.Use(new Easing.Linear());
+        cursorMove.Use(parameter.type);
         //cursorObject = GetComponentInChildren<GameObject>();
         //初期位置は0,0の位置(仮)
         cursorObject.transform.position = base.GetNowParam().transform.position;
@@ -46,7 +47,7 @@ public class TitleCursorSystem : CursorSystem
         else
         {
             //Easingを使ってy座標の移動をする
-            cursorObject.transform.position = new Vector2(cursorObject.transform.position.x, this.cursorMove.In());
+            cursorObject.transform.position = new Vector2(cursorObject.transform.position.x, this.cursorMove.Out());
         }
         
     }

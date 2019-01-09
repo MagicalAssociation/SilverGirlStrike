@@ -9,38 +9,45 @@ namespace Title
         [System.Serializable]
         public class TitleLogoMover
         {
-            public GameObject logoObject;
-            public Transform target;
+            public Image logoObject;
+            public Vector2 startPosition;
             public Easing.Type type;
             public float moveTime;
             public int waitTime;
-            Easing[] easing;
+            Easing move;
             public void Init()
             {
-                easing = new Easing[2];
-                for(int i = 0;i < 2;++i)
-                {
-                    easing[i] = new Easing();
-                }
-                easing[1].Use(type);
-                easing[1].Set(logoObject.transform.position.y, target.position.y - logoObject.transform.position.y);
+                //easing = new Easing[2];
+                move = new Easing();
+                
+                move.Use(type);
+                move.Set(logoObject.rectTransform.localPosition.y + startPosition.y, -startPosition.y,moveTime);
+                logoObject.rectTransform.localPosition += new Vector3(0.0f, startPosition.y);
             }
             public void Move()
             {
-                logoObject.transform.position = new Vector2(logoObject.transform.position.x, easing[1].Out());
+                logoObject.rectTransform.localPosition = new Vector3(logoObject.rectTransform.localPosition.x, move.Out(), 0.0f);
             }
-            public Easing[] GetEasing()
+            public Easing GetEasing()
             {
-                return this.easing;
+                return this.move;
             }
+        }
+        [System.Serializable]
+        public class ColorChange
+        {
+            public Image image;
+            public Color color;
         }
         [System.Serializable]
         public class FlachParameter
         {
             public Image flash;
             public GameObject[] displayImage;
+            public ColorChange[] colors;
             public Easing.Type type;
             public float time;
+            public int waitTime;
             Easing easing;
             public void Init()
             {
@@ -79,7 +86,7 @@ namespace Title
             public Color maxColor;
             public void Update(int cnt)
             {
-                back.color = Color.Lerp(minColor, maxColor, Mathf.Cos(((cnt * Mathf.PI) / 180.0f) + 1) / 2);
+                back.color = Color.Lerp(minColor, maxColor, Mathf.Sin((((cnt + 270) * Mathf.PI) / 180.0f) + 1) / 2);
             }
         }
         [System.Serializable]
@@ -88,13 +95,15 @@ namespace Title
             public Image cursor;
             public Easing.Type type;
             public float time;
+            [Range(0.0f,1.0f)]
+            public float alpha;
             public FlashingBackGround flashing;
             Easing easing;
             public void Init()
             {
                 easing = new Easing();
                 easing.Use(type);
-                easing.Set(0.0f, 1.0f, time);
+                easing.Set(0.0f, alpha, time);
             }
             public Easing GetEasing()
             {
@@ -108,6 +117,7 @@ namespace Title
             FEADIN_TEXT,
             CURSOR_MOVE,
         }
+        public int startWait;
         public TitleCursorSystem titleCursorSystem;
         public FlachParameter flachParameter;
         public FeadInTextParameter textParameter;
@@ -126,10 +136,11 @@ namespace Title
             }
 
             stateManager = new StateManager();
+            stateManager.SetParameter((int)State.LOGOMOVE, new LogoMove(this));
             stateManager.SetParameter((int)State.FLASH, new Flash(this));
             stateManager.SetParameter((int)State.FEADIN_TEXT, new FeadInText(this));
             stateManager.SetParameter((int)State.CURSOR_MOVE, new CursorMove(this));
-            stateManager.ChengeState((int)State.FLASH);
+            stateManager.ChengeState((int)State.LOGOMOVE);
         }
         // Update is called once per frame
         void Update()
@@ -168,7 +179,6 @@ namespace Title
 
         public override void Enter(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
         }
 
         public override void Exit(ref StateManager manager)
@@ -178,7 +188,7 @@ namespace Title
         public override bool Transition(ref StateManager manager)
         {
             //配列最後のEasingが終了したなら次へ
-            if (!Base().titleLogoMover[Base().titleLogoMover.Length - 1].GetEasing()[1].IsPlay())
+            if (now >= Base().titleLogoMover.Length)
             {
                 manager.SetNextState((int)Title.TitleProduction.State.FLASH);
                 return true;
@@ -188,14 +198,17 @@ namespace Title
 
         public override void Update()
         {
-            Base().titleLogoMover[now].Move();
-            if(!Base().titleLogoMover[now].GetEasing()[1].IsPlay())
+            if (Base().startWait <= GetTime())
             {
-                ++waitCount;
-                if(waitCount >= Base().titleLogoMover[now].waitTime)
+                Base().titleLogoMover[now].Move();
+                if (!Base().titleLogoMover[now].GetEasing().IsPlay())
                 {
-                    ++now;
-                    waitCount = 0;
+                    ++waitCount;
+                    if (waitCount >= Base().titleLogoMover[now].waitTime)
+                    {
+                        ++now;
+                        waitCount = 0;
+                    }
                 }
             }
         }
@@ -216,6 +229,10 @@ namespace Title
             {
                 parameter.displayImage[i].SetActive(true);
             }
+            for (int i = 0; i < parameter.colors.Length;++i)
+            {
+                parameter.colors[i].image.color = parameter.colors[i].color;
+            }
             parameter.Init();
         }
 
@@ -235,7 +252,10 @@ namespace Title
 
         public override void Update()
         {
-            parameter.flash.color = new Color(parameter.flash.color.r, parameter.flash.color.g, parameter.flash.color.b, parameter.GetEasing().Out());
+            if (GetTime() >= parameter.waitTime)
+            {
+                parameter.flash.color = new Color(parameter.flash.color.r, parameter.flash.color.g, parameter.flash.color.b, parameter.GetEasing().Out());
+            }
         }
     }
     //テキスト文字フェードイン
@@ -311,6 +331,7 @@ namespace Title
         public override void Update()
         {
             parameter.cursor.color = new Color(1.0f, 1.0f, 1.0f, parameter.GetEasing().In());
+            //背景を少し点滅ぽくする
             parameter.flashing.Update(GetTime());
         }
     }
