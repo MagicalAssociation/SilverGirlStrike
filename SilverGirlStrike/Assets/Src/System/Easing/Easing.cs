@@ -151,6 +151,19 @@ public class Easing
     {
         return this.use.InOut(this.Time(duration), start, end, duration);
     }
+    public float Move(MoveType move)
+    {
+        switch(move)
+        {
+            case Easing.MoveType.In:
+                return this.In();
+            case Easing.MoveType.Out:
+                return this.Out();
+            case Easing.MoveType.InOut:
+                return this.InOut();
+        }
+        return this.InOut();
+    }
     /**
     *@brief	開始始点を取得
     *@return float StartValue
@@ -179,6 +192,13 @@ public class Easing
         Quad,
         Quart,
         Quint,
+    }
+    [System.Serializable]
+    public enum MoveType
+    {
+        In,
+        Out,
+        InOut,
     }
     //t = 時間 d = 始点 c = 終点-始点 d = 経過時間
     public class Linear : EasingBase

@@ -12,6 +12,7 @@ namespace Title
             public Image logoObject;
             public Vector2 startPosition;
             public Easing.Type type;
+            public Easing.MoveType moveType;
             public float moveTime;
             public int waitTime;
             Easing move;
@@ -26,7 +27,7 @@ namespace Title
             }
             public void Move()
             {
-                logoObject.rectTransform.localPosition = new Vector3(logoObject.rectTransform.localPosition.x, move.Out(), 0.0f);
+                logoObject.rectTransform.localPosition = new Vector3(logoObject.rectTransform.localPosition.x, move.Move(moveType), 0.0f);
             }
             public Easing GetEasing()
             {
@@ -46,6 +47,7 @@ namespace Title
             public GameObject[] displayImage;
             public ColorChange[] colors;
             public Easing.Type type;
+            public Easing.MoveType moveType;
             public float time;
             public int waitTime;
             Easing easing;
@@ -254,7 +256,7 @@ namespace Title
         {
             if (GetTime() >= parameter.waitTime)
             {
-                parameter.flash.color = new Color(parameter.flash.color.r, parameter.flash.color.g, parameter.flash.color.b, parameter.GetEasing().Out());
+                parameter.flash.color = new Color(parameter.flash.color.r, parameter.flash.color.g, parameter.flash.color.b, parameter.GetEasing().Move(parameter.moveType));
             }
         }
     }

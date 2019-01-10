@@ -225,6 +225,10 @@ Preset:
     value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
+    propertyPath: titleLogoMover.Array.data[0].moveType
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
     propertyPath: titleLogoMover.Array.data[0].moveTime
     value: 1
     objectReference: {fileID: 0}
@@ -249,6 +253,10 @@ Preset:
     value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
+    propertyPath: titleLogoMover.Array.data[1].moveType
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
     propertyPath: titleLogoMover.Array.data[1].moveTime
     value: 1
     objectReference: {fileID: 0}
@@ -271,6 +279,10 @@ Preset:
   - target: {fileID: 0}
     propertyPath: titleLogoMover.Array.data[2].type
     value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: titleLogoMover.Array.data[2].moveType
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: titleLogoMover.Array.data[2].moveTime
