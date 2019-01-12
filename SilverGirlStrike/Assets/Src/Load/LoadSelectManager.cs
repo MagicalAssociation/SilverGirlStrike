@@ -11,11 +11,11 @@ public class LoadSelectManager : MonoBehaviour {
         child = GetComponentsInChildren<LoadText>();
         for(int i = 0;i < child.Length;++i)
         {
-            DataParameter data = GameData.Load(GameData.GetSaveFilePath()[i]);
+            Save.DataParameter data = GameData.Load(GameData.GetSaveFilePath()[i]);
             string text;
             if (data != null)
             {
-                text = GameData.GetSaveFilePath()[i] + "\nmoney " + GameData.Load(GameData.GetSaveFilePath()[i]).money.ToString();
+                text = GameData.GetSaveFilePath()[i] + "\nmoney " + GameData.Load(GameData.GetSaveFilePath()[i]).gold.ToString();
             }
             else
             {
