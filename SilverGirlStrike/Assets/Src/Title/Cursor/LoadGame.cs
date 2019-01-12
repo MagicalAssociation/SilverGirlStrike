@@ -15,4 +15,5 @@ public class LoadGame : CursorParam
         Sound.PlaySE("clearSound2");
         StartCoroutine(LoadStart());
     }
+    
 }

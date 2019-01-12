@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class LoadCursorSystem : CursorSystem {
+public class SaveCursorSystem : CursorSystem {
+
     [System.Serializable]
     public class CursorColor
     {
@@ -14,16 +14,17 @@ public class LoadCursorSystem : CursorSystem {
     }
     public CursorColor cursorColor;
     public GameObject loadSelects;
-    private LoadGameStart[] loadParams;
+    public SelectManager selectManager;
+    private SaveGame[] saveGame;
     private void Start()
     {
         base.Init();
-        loadParams = loadSelects.GetComponentsInChildren<LoadGameStart>();
+        saveGame = loadSelects.GetComponentsInChildren<SaveGame>();
         SetColor();
     }
     private void Update()
     {
-        if(CursorMoveInput())
+        if (CursorMoveInput())
         {
             //色変更処理
             SetColor();
@@ -34,10 +35,7 @@ public class LoadCursorSystem : CursorSystem {
             if (M_System.input.Down(SystemInput.Tag.DECISION))
             {
                 base.GetNowParam().Decision();
-            }
-            else if (M_System.input.Down(SystemInput.Tag.CANCEL))
-            {
-                StartCoroutine(Cancel());
+                selectManager.GameDataUpdate();
             }
         }
     }
@@ -55,25 +53,20 @@ public class LoadCursorSystem : CursorSystem {
     }
     void SetColor()
     {
-        for(int i = 0;i < loadParams.Length;++i)
+        for (int i = 0; i < saveGame.Length; ++i)
         {
-            if(i == GetNow().y)
+            if (i == GetNow().y)
             {
                 //選択カラー
-                loadParams[i].image.color = cursorColor.selectImageColor;
-                loadParams[i].text.color = cursorColor.selectTextColor;
+                saveGame[i].image.color = cursorColor.selectImageColor;
+                saveGame[i].text.color = cursorColor.selectTextColor;
             }
             else
             {
                 //非選択カラー
-                loadParams[i].image.color = cursorColor.notSelectcImageColor;
-                loadParams[i].text.color = cursorColor.notSelectTextColor;
+                saveGame[i].image.color = cursorColor.notSelectcImageColor;
+                saveGame[i].text.color = cursorColor.notSelectTextColor;
             }
         }
-    }
-    IEnumerator Cancel()
-    {
-        yield return new WaitForSeconds(0.0f);
-        SceneManager.LoadScene("TitleScene");
     }
 }

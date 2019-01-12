@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Exit : CursorParam
 {
+
     public override void Decision()
     {
         Application.Quit();

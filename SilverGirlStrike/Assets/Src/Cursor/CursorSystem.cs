@@ -33,10 +33,6 @@ public class CursorSystem : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        //if(enable && M_System.input.Down(SystemInput.Tag.DECISION))
-        //{
-        //    cursorlist[nowPos.x][nowPos.y].Decision();
-        //}
 	}
     public Vector2Int GetNow()
     {
@@ -45,6 +41,10 @@ public class CursorSystem : MonoBehaviour {
     public List<CursorParam[]> GetList()
     {
         return this.cursorlist;
+    }
+    public CursorParam[] GetLine(int x)
+    {
+        return cursorlist[x];
     }
     public CursorParam GetNowParam()
     {

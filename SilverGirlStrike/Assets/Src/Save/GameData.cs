@@ -2,53 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-
-[System.Serializable]
-public class DataParameter
+namespace Save
 {
-    public DataParameter()
+    [System.Serializable]
+    public class DataParameter
     {
-        money = 0;
-        stageClearFlag = new int[6];
-    }
-    public void DebugLog()
-    {
-        Debug.Log("money:" + this.money);
-        for (int i = 0; i < stageClearFlag.Length;++i)
+        public DataParameter()
         {
-            Debug.Log("flag:" + i.ToString() + ":" + stageClearFlag[i].ToString());
+            gold = 0;
+            stageClearFlag = new int[6];
+            filePath = "";
         }
+        public int gold;
+        public int[] stageClearFlag;
+        public string filePath;
     }
-    public int money;
-    public int[] stageClearFlag;
 }
 public class GameData : MonoBehaviour
 {
+    //セーブデータファイル名を保存してるファイルが破損したときに使う用
     static public void SaveNameCreate()
     {
-
         string path = Application.dataPath + @"\Resources\savename.txt";
         string reset = "save1\nsave2\nsave3\n";
         File.WriteAllText(path, reset);
     }
-    static public void Save(string filePath,DataParameter dataParameter)
+    static public void Save(Save.DataParameter dataParameter)
     {
         //ファイルの中身をとりあえず空にする
-        string path = Application.dataPath + @"\Resources\" + filePath + @".txt";
+        string path = Application.dataPath + @"\Resources\" + dataParameter.filePath + @".txt";
         string reset = "";
-        File.WriteAllText(path, reset);
+        File.WriteAllText(path, reset, System.Text.Encoding.Unicode);
         //そこからデータを保存していく
-        string text = "money " + dataParameter.money.ToString() + "\n"; 
-        File.AppendAllText(path, text);
+        string text = "gold " + dataParameter.gold.ToString() + "\n"; 
+        File.AppendAllText(path, text,System.Text.Encoding.Unicode);
         for(int i = 0;i < dataParameter.stageClearFlag.Length;++i)
         {
             text = "stage " + (i + 1).ToString() + " " + dataParameter.stageClearFlag[i].ToString() + "\n";
-            File.AppendAllText(path, text);
+            File.AppendAllText(path, text, System.Text.Encoding.Unicode);
         }
     }
-    static public DataParameter Load(string filePath)
+    static public Save.DataParameter Load(string filePath)
     {
-        DataParameter gameData = new DataParameter();
+        Save.DataParameter gameData = new Save.DataParameter();
         //Unityの機能で読み込む場合、Unityに登録するまでのラグでファイル欠損扱いされる場合があるのでC#の機能で読み込む
         string path = Application.dataPath + @"\Resources\" + filePath + @".txt";
         string textasset = "";
@@ -68,14 +64,15 @@ public class GameData : MonoBehaviour
             string[] text = textMassage[i].Split(' ');
             switch (text[0])
             {
-                case "money":
-                    gameData.money = int.Parse(text[1]);
+                case "gold":
+                    gameData.gold = int.Parse(text[1]);
                     break;
                 case "stage":
                     gameData.stageClearFlag[int.Parse(text[1]) - 1] = int.Parse(text[2]);
                     break;
             }
         }
+        gameData.filePath = filePath;
         return gameData;
     }
     static public string[] GetSaveFilePath()

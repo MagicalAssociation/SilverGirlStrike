@@ -20,6 +20,6 @@ public class InputTest : MonoBehaviour {
         //Debug.Log("On  :" + SystemInput.Tag.LSTICK_UP + M_System.input.On(SystemInput.Tag.LSTICK_UP));
         //Debug.Log("Axis:" + SystemInput.Tag.ATTACK + M_System.input.Axis(SystemInput.Tag.ATTACK));
         //Debug.Log("Axis:" + SystemInput.Tag.LSTICK_UP + M_System.input.Axis(SystemInput.Tag.LSTICK_UP));
-        Debug.Log(M_System.input.On(SystemInput.Tag.LSTICK_UP));
+        Debug.Log(M_System.input.On(SystemInput.Tag.LSTICK_DOWN));
     }
 }
