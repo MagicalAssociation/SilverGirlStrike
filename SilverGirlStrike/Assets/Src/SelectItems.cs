@@ -79,7 +79,9 @@ public class SelectItems : MonoBehaviour
         this.Move();
     }
 
+    //-------------------------------------------------------------------------------------------------------
     //終了位置を指定
+    //-------------------------------------------------------------------------------------------------------
     private void SetEndpos()
     {
         //下が押されたら
@@ -118,7 +120,7 @@ public class SelectItems : MonoBehaviour
                     this.starttime = Time.timeSinceLevelLoad;                                   //スタート時間を取得
 
                     //デバッグ用
-                    Debug.Log("座標" + i + ":" + itemlist[i].endposition);
+                    //Debug.Log("座標" + i + ":" + itemlist[i].endposition);
                 }
             }
         }
@@ -157,12 +159,17 @@ public class SelectItems : MonoBehaviour
                     this.starttime = Time.timeSinceLevelLoad;                                   //スタート時間を取得
 
                     //デバッグ用
-                    Debug.Log("座標" + i + ":" + itemlist[i].endposition);
+                    //Debug.Log("座標" + i + ":" + itemlist[i].endposition);
                 }
             }
         }
     }
+    //-----------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------
 
+    //-----------------------------------------------------------------------------------------
+    //移動処理
+    //-----------------------------------------------------------------------------------------
     private void Move()
     {
         for (int i = 0; i < itemlist.Length; ++i)
@@ -181,36 +188,35 @@ public class SelectItems : MonoBehaviour
             itemlist[i].gameobject.transform.position = Vector3.Lerp(itemlist[i].startposition, itemlist[i].endposition, rate);
         }
     }
+    //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 
-    //-------------------------------------------------------------------------------
-    //移動処理
-    //----------------------------------------------------------------------------------
-    ////初期化
-    //private void MoveInitialize(Vector3 endpos, float time)
-    //{
-    //    //if(time<=0)             //時間切れであれば
-    //    //{
-    //    //    transform.position = endpos;
-    //    //    enabled = false;
-    //    //    return;
-    //    //}
-    //    //this.starttime = Time.timeSinceLevelLoad;
-    //    //itemlist[].startposition = transform.position;
-    //}
-    ////更新
-    //private void MoveUpdate(Vector3 endpos,float time)
-    //{
-    //    //var diff = Time.timeSinceLevelLoad - starttime;     //経過時間カウント?
 
-    //    //if(diff > time)     //時間切れなら
-    //    //{
-    //    //    transform.position = endpos;
-    //    //    enabled = false;
-    //    //}
+    //-----------------------------------------------------------------------------
+    //シーン遷移について
+    //-----------------------------------------------------------------------------
+    void SetNextScene()
+    {
+        for (int i = 0; i < itemlist.Length; ++i)
+        {
+            if (itemlist[i].stopnum == 2)           //中央で止まっていたら
+            {
+                switch (itemlist[i].key)
+                {
+                    case ("stage"):
+                        //移動先のsceneを順次追加
+                        break;
+                    case ("stage1"):
+                        break;
+                    case ("stage2"):
+                        break;
+                    case ("stage3"):
+                        break;
 
-    //    //var rate = diff / time;
-
-    //    //transform.position = Vector3.Lerp(itemlist[].startposition, itemlist[].endposition, rate);
-    //}
-    ////-----------------------------------------------------------------------------------------------------
+                        //順次追加
+                }
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------
 }

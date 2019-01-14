@@ -309,3 +309,67 @@ InputManager:
     type: 0
     axis: 1
     joyNum: 0
+  - serializedVersion: 3
+    m_Name: Submit
+    descriptiveName: RStickY
+    descriptiveNegativeName: RStickY
+    negativeButton: w
+    positiveButton: s
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 15
+    dead: 0.19
+    sensitivity: 15
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 1
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Cancel
+    descriptiveName: RStickY
+    descriptiveNegativeName: RStickY
+    negativeButton: w
+    positiveButton: s
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 15
+    dead: 0.19
+    sensitivity: 15
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 1
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Horizontal
+    descriptiveName: RStickY
+    descriptiveNegativeName: RStickY
+    negativeButton: w
+    positiveButton: s
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 15
+    dead: 0.19
+    sensitivity: 15
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 1
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Vertical
+    descriptiveName: RStickY
+    descriptiveNegativeName: RStickY
+    negativeButton: w
+    positiveButton: s
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 15
+    dead: 0.19
+    sensitivity: 15
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 1
+    joyNum: 0
