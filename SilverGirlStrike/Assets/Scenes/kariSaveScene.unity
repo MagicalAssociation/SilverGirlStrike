@@ -296,6 +296,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90847d969c2535348b1bf02f63360444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashing:
+    back: {fileID: 974852614}
+    minColor: {r: 1, g: 1, b: 1, a: 1}
+    maxColor: {r: 0.6226415, g: 0.6226415, b: 0.6226415, a: 1}
 --- !u!224 &973806268
 RectTransform:
   m_ObjectHideFlags: 0

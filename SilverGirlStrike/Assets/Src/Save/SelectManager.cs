@@ -1,9 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class SelectManager : MonoBehaviour {
-
+public class SelectManager : MonoBehaviour
+{
+    [System.Serializable]
+    public class FlashingBackGround
+    {
+        public Image back;
+        public Color minColor;
+        public Color maxColor;
+        private int count;
+        public FlashingBackGround()
+        {
+            count = 0;
+        }
+        public void Update()
+        {
+            back.color = Color.Lerp(minColor, maxColor, Mathf.Sin((((count + 270) * Mathf.PI) / 180.0f) + 1) / 2);
+            ++count;
+        }
+    }
+    public FlashingBackGround flashing;
     Select[] child;
     // Use this for initialization
     void Start ()
@@ -32,7 +51,8 @@ public class SelectManager : MonoBehaviour {
     }
 
 	// Update is called once per frame
-	void Update () {
-		
+	void Update ()
+    {
+        flashing.Update();	
 	}
 }

@@ -1,6 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+
+/**
+ * アイテムのデータはすべて外部ファイルを使用して行う
+ * ファイルにはID,名前,説明,リソースID,固有パラメータ値の順でいれる
+ * 回復アイテムの場合 [id]0 [name]Elixir [remarks]HPを少し回復する [resourceid]0 [回復値]5
+ */ 
 
 /**
  * file     Item.cs
@@ -30,48 +37,95 @@ namespace SGS
     /**
      * brief アイテムの基底クラス
      */ 
-    public abstract class Item
+     [System.Serializable]
+    public class Item
     {
-        /**
-         * brief    constructor
-         */ 
-        public Item()
-        {
-
-        }
+        //使用者
+        public CharacterObject master;        
+        //個別ID
+        private int id;
+        //アイテム名
+        public string name;
+        //説明
+        public string remarks;
+        //リソースID
+        private int resourceID;
         /**
          * brief    使用時の効果を記述
          */ 
-        public abstract void Use();
+        public virtual void Use() { }
+        public void SetData(int id,string name,string remarks,int resourceid)
+        {
+            this.id = id;
+            this.name = name;
+            this.remarks = remarks;
+            this.resourceID = resourceid;
+        }
+        public void SetData(string[] data)
+        {
+            this.id = int.Parse(data[0]);
+            this.name = data[1];
+            this.remarks = data[2];
+            this.resourceID = int.Parse(data[3]);
+        }
+        public static string[] Load(int id)
+        {
+            string path = Application.dataPath + @"\Resources\ItemData.txt";
+            string textasset = "";
+            string[] error = new string[4];
+            error[0] = "-1";
+            error[1] = "Error";
+            error[2] = "Failed to read data";
+            error[3] = "-1";
+            try
+            {
+                textasset = File.ReadAllText(path, System.Text.Encoding.Unicode);
+            }
+            catch
+            {
+                return error;
+            }
+            string[] textMassage = textasset.Split('\n');
+            for (int i = 0; i < textMassage.Length; ++i)
+            {
+                string[] text = textMassage[i].Split(' ');
+                if (int.Parse(text[0]) == id)
+                {
+                    return text;
+                }
+            }
+            return error;
+        }
+        public void DebugLog()
+        {
+            Debug.Log("ID" + this.id + " Name" + this.name + " S" + this.remarks + " RID" + this.resourceID);
+        }
+        public int GetID()
+        {
+            return this.id;
+        }
     }
     /**
      * brief    設置するItem
-     * これをコンポーネントしているGameObjectにはBoxCollider2Dをいれておくこと
      */
+     [System.Serializable]
     public abstract class ItemObject : MonoBehaviour
     {
+        public M_System.LayerName[] targets;
         //! 使用時効果等ある場合のための変数
         Item item;
         //! 状態管理
         ItemMode mode;
         //! 当たり判定を行うためのCollider
-        BoxCollider2D collider;
+        public Collider2D collider;
+        //名前とかを取得するときのID
+        public int id;
         /**
-         * brief    constructor
+         * @brief   初期化処理
          */
-        public ItemObject()
+         public void Init(Item item = null)
         {
             this.mode = ItemMode.NORMAL;
-            collider = null;
-        }
-        /**
-         * brief    constructor
-         * param[in] ref Item item アイテムデータを登録
-         */
-        public ItemObject(ref Item item)
-        {
-            this.mode = ItemMode.NORMAL;
-            //collider = GetComponent<BoxCollider2D>();
             this.item = item;
         }
         /**
@@ -82,12 +136,12 @@ namespace SGS
         /**
          * brief    当たった時の動作を記述する
          */
-        public abstract void Enter();
+        public abstract void Enter(GameObject hitObject);
         /**
          * brief    アイテムデータを登録する
          * param[in] ref Item item アイテムデータ
          */
-        public void SetItemData(ref Item item)
+        public void SetItemData(Item item)
         {
             this.item = item;
         }
@@ -115,30 +169,9 @@ namespace SGS
         {
             this.mode = mode;
         }
-        /**
-         * brief    Colliderを登録する
-         * param[in] ref BoxCollider2D collider
-         */
-         public void SetCollider(BoxCollider2D box)
+        public void Destory()
         {
-            this.collider = box;
-        }
-        /**
-         * brief    当たり判定
-         */
-        public Collider2D HitCheck()
-        {
-            if (this.collider)
-            {
-                Collider2D hit = Physics2D.OverlapBox(
-                    this.collider.transform.position, 
-                    this.collider.size,
-                    this.transform.eulerAngles.z, 
-                    (int)M_System.LayerName.PLAYER
-                    );
-                return hit;
-            }
-            return null;
+            this.mode = ItemMode.KILL;
         }
     }
 }

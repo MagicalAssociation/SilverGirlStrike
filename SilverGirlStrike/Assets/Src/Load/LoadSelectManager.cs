@@ -7,8 +7,8 @@ public class LoadSelectManager : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        LoadText[] child;
-        child = GetComponentsInChildren<LoadText>();
+        Select[] child;
+        child = GetComponentsInChildren<Select>();
         for(int i = 0;i < child.Length;++i)
         {
             Save.DataParameter data = GameData.Load(GameData.GetSaveFilePath()[i]);
@@ -22,6 +22,7 @@ public class LoadSelectManager : MonoBehaviour {
                 text = "NO DATA";
             }
             child[i].TextChange(text);
+            child[i].SetData(data);
         }
 	}
 	

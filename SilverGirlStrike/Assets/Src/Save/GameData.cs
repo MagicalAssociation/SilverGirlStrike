@@ -7,15 +7,31 @@ namespace Save
     [System.Serializable]
     public class DataParameter
     {
+        public class ItemData
+        {
+            public int id;
+            public int num;
+            public ItemData()
+            {
+
+            }
+            public ItemData(int id,int num)
+            {
+                this.id = id;
+                this.num = num;
+            }
+        }
         public DataParameter()
         {
             gold = 0;
             stageClearFlag = new int[6];
             filePath = "";
+            itemData = new List<ItemData>();
         }
         public int gold;
         public int[] stageClearFlag;
         public string filePath;
+        public List<ItemData> itemData;
     }
 }
 public class GameData : MonoBehaviour
@@ -39,6 +55,11 @@ public class GameData : MonoBehaviour
         for(int i = 0;i < dataParameter.stageClearFlag.Length;++i)
         {
             text = "stage " + (i + 1).ToString() + " " + dataParameter.stageClearFlag[i].ToString() + "\n";
+            File.AppendAllText(path, text, System.Text.Encoding.Unicode);
+        }
+        for(int i = 0;i < dataParameter.itemData.Count;++i)
+        {
+            text = "item " + dataParameter.itemData[i].id.ToString() + " " + dataParameter.itemData[i].num.ToString() + "\n";
             File.AppendAllText(path, text, System.Text.Encoding.Unicode);
         }
     }
@@ -69,6 +90,9 @@ public class GameData : MonoBehaviour
                     break;
                 case "stage":
                     gameData.stageClearFlag[int.Parse(text[1]) - 1] = int.Parse(text[2]);
+                    break;
+                case "item":
+                    gameData.itemData.Add(new Save.DataParameter.ItemData(int.Parse(text[1]), int.Parse(text[2])));
                     break;
             }
         }

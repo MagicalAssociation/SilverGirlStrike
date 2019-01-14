@@ -19,6 +19,9 @@ public class SaveGame : CursorParam {
             Save.DataParameter data = new Save.DataParameter();
             data.filePath = GameData.GetSaveFilePath()[1];
             data.gold = 200;
+            data.itemData.Add(new Save.DataParameter.ItemData(0, 1));
+            data.itemData.Add(new Save.DataParameter.ItemData(1, 3));
+            data.itemData.Add(new Save.DataParameter.ItemData(3, 10));
             GameData.Save(data);
         }
     }

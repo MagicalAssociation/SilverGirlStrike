@@ -626,6 +626,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90847d969c2535348b1bf02f63360444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashing:
+    back: {fileID: 2057270914}
+    minColor: {r: 0.23921569, g: 0.37254903, b: 0.63529414, a: 0.94509804}
+    maxColor: {r: 1, g: 1, b: 1, a: 0.94509804}
 --- !u!1001 &1262607865
 Prefab:
   m_ObjectHideFlags: 0
@@ -857,7 +861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.3984514, g: 0.44531927, b: 0.6981132, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
