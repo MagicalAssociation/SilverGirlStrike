@@ -40,6 +40,12 @@ namespace SGS
      [System.Serializable]
     public class Item
     {
+        [System.Serializable]
+        public class ResourceData
+        {
+            public Sprite sprite;
+            public int id;
+        }
         //使用者
         public CharacterObject master;        
         //個別ID
