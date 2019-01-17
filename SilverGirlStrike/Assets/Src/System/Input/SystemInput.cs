@@ -76,6 +76,8 @@ public class SystemInput
         float axisFlip;
         //! 判定フラグ
         bool axisFlag;
+        //! デバッグフラグ※これをtrueにするとキーボード入力を受け付ける
+        public bool debug;
         /**
          * brief    constructor
          * param[in]    string name 対応させたいInputManagerの使用する名前
@@ -178,7 +180,6 @@ public class SystemInput
             {
                 return false;
             }
-
             return (this.axisFlag) ? this.input_On : Input.GetButton(this.name) || this.GetForced();
             //return this.input_On || Input.GetButton(this.name) || this.GetForced();
         }
@@ -278,6 +279,7 @@ public class SystemInput
             this.input_On = false;
             this.enableStop = false;
             this.enableForced = false;
+            this.debug = false;
             this.axisForced = 0.0f;
             this.axis = 0.0f;
         }

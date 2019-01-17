@@ -18,6 +18,7 @@ public class SaveCursorSystem : CursorSystem {
     private SaveGame[] saveGame;
     private void Start()
     {
+        GameData.SaveNameCreate();
         base.Init();
         saveGame = loadSelects.GetComponentsInChildren<SaveGame>();
         SetColor();

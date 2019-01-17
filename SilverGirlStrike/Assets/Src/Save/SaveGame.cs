@@ -16,13 +16,16 @@ public class SaveGame : CursorParam {
         {
             //仮処理
             //save2にお金200にして保存する
-            Save.DataParameter data = new Save.DataParameter();
-            data.filePath = GameData.GetSaveFilePath()[1];
-            data.gold = 200;
-            data.itemData.Add(new Save.DataParameter.ItemData(0, 1));
-            data.itemData.Add(new Save.DataParameter.ItemData(1, 3));
-            data.itemData.Add(new Save.DataParameter.ItemData(3, 10));
-            GameData.Save(data);
+            for (int i = 0; i < 2; ++i)
+            {
+                Save.DataParameter data = new Save.DataParameter();
+                data.filePath = GameData.GetSaveFilePath()[i];
+                data.gold = 200 * i;
+                data.itemData.Add(new Save.DataParameter.ItemData(0, 1));
+                data.itemData.Add(new Save.DataParameter.ItemData(1, 3));
+                data.itemData.Add(new Save.DataParameter.ItemData(3, 10));
+                GameData.Save(data);
+            }
         }
     }
 }

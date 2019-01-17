@@ -33,7 +33,7 @@ public class TitleCursorSystem : CursorSystem
         if (!cursorMove[0].IsPlay() && !cursorMove[1].IsPlay())
         {
             //決定ボタンで決定処理を行う
-            if (M_System.input.Down(SystemInput.Tag.DECISION))
+            if (M_System.input.Down(SystemInput.Tag.DECISION) && base.GetEnable())
             {
                 base.GetNowParam().Decision();
             }

@@ -41,14 +41,15 @@ public class GameData : MonoBehaviour
     {
         string path = Application.dataPath + @"\Resources\savename.txt";
         string reset = "save1\nsave2\nsave3\n";
-        File.WriteAllText(path, reset);
+        File.WriteAllText(path, reset, System.Text.Encoding.Unicode);
     }
     static public void Save(Save.DataParameter dataParameter)
     {
         //ファイルの中身をとりあえず空にする
-        string path = Application.dataPath + @"\Resources\" + dataParameter.filePath + @".txt";
+        string path = Application.dataPath + @"\Resources\" + dataParameter.filePath + ".txt";
         string reset = "";
         File.WriteAllText(path, reset, System.Text.Encoding.Unicode);
+        
         //そこからデータを保存していく
         string text = "gold " + dataParameter.gold.ToString() + "\n"; 
         File.AppendAllText(path, text,System.Text.Encoding.Unicode);
@@ -67,7 +68,7 @@ public class GameData : MonoBehaviour
     {
         Save.DataParameter gameData = new Save.DataParameter();
         //Unityの機能で読み込む場合、Unityに登録するまでのラグでファイル欠損扱いされる場合があるのでC#の機能で読み込む
-        string path = Application.dataPath + @"\Resources\" + filePath + @".txt";
+        string path = Application.dataPath + @"\Resources\" + filePath + ".txt";
         string textasset = "";
         try
         {
@@ -102,7 +103,7 @@ public class GameData : MonoBehaviour
     static public string[] GetSaveFilePath()
     {
         string path = Application.dataPath + @"\Resources\savename.txt";
-        string textasset = File.ReadAllText(path);
+        string textasset = File.ReadAllText(path,System.Text.Encoding.Unicode);
         //1列ごとに分ける
        return textasset.Split('\n');
     }

@@ -109,6 +109,10 @@ namespace SGS
         }
         private void Add()
         {
+            if(itemChild == null)
+            {
+                return;
+            }
             for (int i = 0; i < itemChild.transform.childCount; ++i)
             {
                 if (itemChild.gameObject.activeSelf == true)

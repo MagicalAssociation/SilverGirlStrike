@@ -178,4 +178,8 @@ public class CursorSystem : MonoBehaviour {
     {
         this.enable = enable;
     }
+    public bool GetEnable()
+    {
+        return this.enable;
+    }
 }
