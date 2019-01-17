@@ -38,14 +38,21 @@ public class PlayerCameraMan : CharacterObject
 
     public override void MoveCharacter()
     {
-
-
-        //プレイヤーにべったり
-        this.transform.position = targetPlayer.transform.position;
-
-        if (this.targetPlayer.IsCurrentState((int)Fuchan.PlayerObject.State.START))
+        //プレイヤーの生存確認
+        if (targetPlayer != null && targetPlayer.IsDead())
         {
-            return;
+            targetPlayer = null;
+        }
+        //生きているプレイヤーのみを対象にする
+        if (targetPlayer != null)
+        {
+            //プレイヤーにべったり
+            this.transform.position = targetPlayer.transform.position;
+
+            if (this.targetPlayer.IsCurrentState((int)Fuchan.PlayerObject.State.START))
+            {
+                return;
+            }
         }
 
 
@@ -53,6 +60,14 @@ public class PlayerCameraMan : CharacterObject
         //スティックの向きを取得
         float x = M_System.input.Axis(SystemInput.Tag.LSTICK_RIGHT);
         float y = M_System.input.Axis(SystemInput.Tag.LSTICK_DOWN);
+
+        //プレイヤーが死亡時、あるいは死亡ステート時は操作を無効に
+        if(targetPlayer == null || this.targetPlayer.IsCurrentState((int)Fuchan.PlayerObject.State.DEATH))
+        {
+            x = 0.0f;
+            y = 0.0f;
+        }
+
         float stickX = x;
         float stickY = y * -1;
         var vector = new Vector3(stickX, stickY);

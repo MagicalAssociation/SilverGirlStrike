@@ -364,8 +364,10 @@ namespace Enemy04
             {
                 if (attackFlag == true)
                 {
+                    //時間が来たら攻撃
                     if((GetTime() - attackcount) % this.enemy.bulletParameter.interval == 0)
                     {
+                        Sound.PlaySE("shot1");
                         this.CreateBullet();
                     }
                     if((GetTime() - attackcount) % (this.enemy.bulletParameter.interval* this.enemy.bulletParameter.bulletNum) == 0)
@@ -560,6 +562,8 @@ namespace Enemy04
             if(base.GetTime() == this.enemy.attackParameter.beginTime)
             {
                 this.enemy.attackParameter.narrowAttackers[1].StartAttack();
+                Effect.Get().CreateEffect("magicAttack1", base.enemy.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
+                //Sound.PlaySE("");
             }
         }
     }
@@ -608,10 +612,11 @@ namespace Enemy04
 
         public override void Enter(ref StateManager manager)
         {
-            Sound.PlaySE("slashFlash");
+            Sound.PlaySE("crash1");
             this.enemy.parameter.animation.Play("Idle");
-            Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
             this.enemy.GetData().hitPoint.SetDamageShutout(true);
+
+
         }
 
         public override void Exit(ref StateManager manager)
@@ -625,7 +630,19 @@ namespace Enemy04
 
         public override void Update()
         {
-            if (base.GetTime() >= 30)
+            if (base.GetTime() % 5 == 0 && base.GetTime() <= 20)
+            {
+                Sound.PlaySE("bombSmall");
+                Vector3 randomMove = new Vector3(Random.Range(0.0f, 2.0f) - 1.0f, Random.Range(0.0f, 2.0f) - 1.0f, 0.0f);
+                Effect.Get().CreateEffect("manyBombs", base.enemy.transform.position - Vector3.forward + randomMove, Quaternion.identity, Vector3.one * 2);
+            }
+
+            if (base.GetTime() == 30)
+            {
+                Sound.PlaySE("slashFlash");
+                Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
+            }
+            if (base.GetTime() >= 60)
             {
                 this.enemy.KillMyself();
             }
