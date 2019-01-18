@@ -9,16 +9,29 @@ public class GameOverJudge : MonoBehaviour {
     bool missFrag;
     //カメラ止める用
     public Camera cameraObj;
+    public CharacterManager manager;
 
 
     private void Start()
     {
         this.missFrag = false;
+
     }
+
+    private void Update()
+    {
+        if(this.manager.GetCharacterData("Player") == null)
+        {
+            Sound.StopBGM();
+            this.missFrag = true;
+            StartCoroutine(EndGame());
+        }
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //ゴール領域にプレイヤーが入り込んだら
+        //領域にプレイヤーが入り込んだら
         if (collision.tag == "Player" && !this.missFrag)
         {
             Sound.StopBGM();

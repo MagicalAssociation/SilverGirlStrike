@@ -130,8 +130,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1835013205027166}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 300.08, y: 16.37, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 203.3904, y: -6.76, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4475127104010984}
@@ -337,8 +337,8 @@ MonoBehaviour:
     radius: 1.5
     scale: {x: 2, y: 1}
     footPosition: {fileID: 4475127104010984}
-    stopCountMin: 180
-    stopCountMax: 360
+    stopCountMin: 80
+    stopCountMax: 100
   bulletParameter:
     bulletNum: 3
     interval: 10
@@ -377,11 +377,11 @@ MonoBehaviour:
   chainCount: 0
   attackTime: 1
   targetLayer: 256
+  hitSound: 
   hitEffectName: 
   hitEffectScale: {x: 0, y: 0, z: 0}
   effectRotation: 0
   effectRotationRange: 0
-
 --- !u!114 &114893148954876506
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -412,6 +412,7 @@ MonoBehaviour:
   chainCount: 1
   attackTime: 30
   targetLayer: 256
+  hitSound: 
   hitEffectName: 
   hitEffectScale: {x: 0, y: 0, z: 0}
   effectRotation: 0

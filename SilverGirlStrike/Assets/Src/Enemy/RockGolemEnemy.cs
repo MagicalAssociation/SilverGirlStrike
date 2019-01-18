@@ -70,7 +70,7 @@ namespace RockGolem
             public Collider2D hitRigidCollision;
             public CharacterMover mover;
             public Animator animator;
-            public GameObject targetCharacter;
+            public CharacterObject targetCharacter;
             public IdlePosition idlePositions;
             public NarrowAttacker[] attackCollisions;
             public Bullet.BulletData[] bulletDatas;
@@ -271,7 +271,7 @@ namespace RockGolem
             public override void Enter(ref StateManager manager)
             {
                 GetInspectorParam().hitRigidCollision.isTrigger = true;
-                GetParam().moveVector = Vector3.down * 400.0f;
+                GetParam().myself.transform.position += Vector3.down * 8.0f;
                 GetParam().myself.transform.position += Vector3.forward;
                 this.count = 0;
                 this.isActive = false;
@@ -321,6 +321,18 @@ namespace RockGolem
                 {
                     return true;
                 }
+
+                //プレイヤーが死んでいるときはもう関係ない
+                if(GetInspectorParam().targetCharacter == null)
+                {
+                    return false;
+                }
+                if (GetInspectorParam().targetCharacter != null && GetInspectorParam().targetCharacter.IsDead())
+                {
+                    GetInspectorParam().targetCharacter = null;
+                    return false;
+                }
+
 
                 float distance = Vector3.Distance(GetInspectorParam().targetCharacter.transform.position, GetParam().myself.transform.position);
                 if (distance < 6.0f)
@@ -492,6 +504,7 @@ namespace RockGolem
 
 
                 this.attackDirection = SetDirectionWithDirection(direction);
+                Sound.PlaySE("charge1");
             }
 
             public override void Exit(ref StateManager manager)
@@ -579,8 +592,15 @@ namespace RockGolem
                 }
                 else if (GetTime() > pressWaitTime + pressTime + finishWaitTime)
                 {
+
                     //ちょっと上がる
                     GetParam().moveVector += Vector2.up * 4.0f;
+                }
+
+                //着地
+                if (GetTime() == pressWaitTime + pressTime - 1)
+                {
+                    Sound.PlaySE("press1");
                 }
             }
         }
@@ -673,6 +693,7 @@ namespace RockGolem
 
             public override bool Transition(ref StateManager manager)
             {
+                //打ち終わったら遷移
                 if (GetTime() == 60 + bulletCount * interval)
                 {
                     manager.SetNextState((int)RockGolemEnemy.State.IDLE);
@@ -688,7 +709,8 @@ namespace RockGolem
                 if (GetTime() == 60 + this.bulletCurrentCount * interval)
                 {
                     //発射
-                    GetInspectorParam().bulletDatas[0].target = GetInspectorParam().targetCharacter;
+                    Sound.PlaySE("shot2");
+                    GetInspectorParam().bulletDatas[0].target = GetInspectorParam().targetCharacter.gameObject;
                     Bullet.MagicBullet.Create(GetParam().myself, GetInspectorParam().bulletDatas[0], GetParam().myself.transform.position);
                     this.bulletCurrentCount += 1;
                 }
@@ -700,7 +722,8 @@ namespace RockGolem
         class DeathState : BaseState
         {
             //メンバー
-
+            const int burstStartTime = 120;
+            const int burstTime = 120;
 
             public DeathState(RockGolemEnemy param) : base(param)
             {
@@ -708,12 +731,9 @@ namespace RockGolem
 
             public override void Enter(ref StateManager manager)
             {
-                Sound.PlaySE("slashFlash");
-                Effect.Get().CreateEffect("defeat", GetParam().myself.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
                 GetParam().myself.GetData().hitPoint.SetDamageShutout(true);
 
                 Sound.StopBGM();
-                GetParam().myself.KillMyself();
             }
 
             public override void Exit(ref StateManager manager)
@@ -728,6 +748,22 @@ namespace RockGolem
             public override void Update()
             {
 
+                GetParam().myself.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.0f, 0.0f, 1.0f);
+
+
+                if (base.GetTime() % 5 == 0 && base.GetTime() >= burstStartTime && base.GetTime() <= burstStartTime + burstTime)
+                {
+                    Sound.PlaySE("bombSmall");
+                    Vector3 randomMove = new Vector3(Random.Range(0.0f, 2.0f) - 1.0f, Random.Range(0.0f, 2.0f) - 1.0f, 0.0f);
+                    Effect.Get().CreateEffect("manyBombs", GetParam().myself.transform.position - Vector3.forward + randomMove, Quaternion.identity, Vector3.one * 2);
+                }
+
+                if(base.GetTime() > burstStartTime + burstTime)
+                {
+                    Sound.PlaySE("slashFlash");
+                    Effect.Get().CreateEffect("defeat", GetParam().myself.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
+                    GetParam().myself.KillMyself();
+                }
             }
 
         }

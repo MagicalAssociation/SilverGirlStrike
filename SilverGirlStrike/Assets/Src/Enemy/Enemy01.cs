@@ -247,7 +247,6 @@ namespace Enemy01
 
         public override void Enter(ref StateManager manager)
         {
-
             this.enemy.parameter.animation.Play("Attack");
             this.animationTime = this.enemy.parameter.animation.GetCurrentAnimatorStateInfo(0).length;
             this.preDeltaTime = Time.deltaTime;
@@ -276,6 +275,7 @@ namespace Enemy01
         {
             if (GetTime() % this.enemy.bulletParameter.interval == 0)
             {
+                Sound.PlaySE("shot1");
                 this.CreateBullet();
             }
         }
@@ -304,7 +304,6 @@ namespace Enemy01
 
         public override void Enter(ref StateManager manager)
         {
-
             this.enemy.parameter.animation.Play("AttackStart");
             this.animationTime = 0.283f;
             this.deltaTime = 0.0f;

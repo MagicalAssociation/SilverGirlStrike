@@ -39,6 +39,7 @@ namespace Fuchan
             JUMP_ATTACK2,
             JUMP_ATTACK3,
             DAMAGE,
+            DEATH,
         }
 
         //Inspectorで値変えたい系の変数
@@ -107,6 +108,7 @@ namespace Fuchan
             AddState((int)State.ATTACK2, new Attack2State(this));
             AddState((int)State.ATTACK3, new Attack3State(this));
             AddState((int)State.DAMAGE, new DamageState(this));
+            AddState((int)State.DEATH, new DeathState(this));
 
             ChangeState((int)State.IDLE);
 
@@ -122,6 +124,11 @@ namespace Fuchan
         public override void ApplyDamage()
         {
             GetData().hitPoint.DamageUpdate();
+
+            if (this.GetData().hitPoint.GetHP() <= 0 && !IsCurrentState((int)State.DEATH))
+            {
+                base.ChangeState((int)State.DEATH);
+            }
         }
 
         public override bool Damage(AttackData attackData)
@@ -152,7 +159,7 @@ namespace Fuchan
             }
 
             //無敵時間中は色を変える
-            if (GetData().hitPoint.IsInvincible())
+            if (GetData().hitPoint.IsInvincible() && GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
                 GetComponent<SpriteRenderer>().color = new Color(0.9f, 0.5f, 0.5f, 1.0f);
             }
@@ -1165,6 +1172,75 @@ namespace Fuchan
             }
             //横移動
             GetParam().moveVector += vec;
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //死亡
+    public class DeathState : BaseState
+    {
+        float knockBackPower;
+
+
+        public DeathState(PlayerObject param)
+            : base(param)
+
+        {
+        }
+
+        //入った時の関数
+        public override void Enter(ref StateManager manager)
+        {
+            GetInspectorParam().mover.SetActiveGravity(false, false);
+            //アニメ
+            GetInspectorParam().playerAnim.Play("Death");
+
+            //以後一切のダメージ処理は行わない
+            GetParam().myself.GetData().hitPoint.SetDamageShutout(true);
+
+            //割合で表す
+            this.knockBackPower = 1.0f;
+
+            Sound.PlaySE("crash1");
+        }
+        //出た時の関数
+        public override void Exit(ref StateManager manager)
+        {
+        }
+        //遷移を行う
+        public override bool Transition(ref StateManager manager)
+        {
+
+
+
+            return false;
+        }
+        //ステート処理
+        public override void Update()
+        {
+            //後ろへノックバック
+            Vector2 vec;
+            if (GetParam().direction == PlayerObject.Direction.RIGHT)
+            {
+                vec = new Vector2(-GetInspectorParam().damageKnockBackPower * this.knockBackPower, 0.0f);
+            }
+            else
+            {
+                vec = new Vector2(GetInspectorParam().damageKnockBackPower * this.knockBackPower, 0.0f);
+            }
+            //横移動
+            GetParam().moveVector += vec;
+
+            //ちょっとだけノックバックを遅くする
+            this.knockBackPower *= 0.95f;
+
+            if(this.knockBackPower < 0.05f)
+            {
+                //十分に速度が落ちたらキャラ消去
+                GetParam().myself.KillMyself();
+                Sound.PlaySE("noiseLong");
+                Effect.Get().CreateEffect("PlayerDeath", GetParam().myself.transform.position, Quaternion.identity, Vector3.one);
+            }
         }
     }
 
