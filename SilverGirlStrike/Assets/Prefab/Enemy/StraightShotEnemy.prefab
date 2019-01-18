@@ -75,7 +75,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1786340121834698}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13, y: -20.3, z: -2}
+  m_LocalPosition: {x: -2.37, y: -21.64, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4415829725895058}
@@ -285,6 +285,7 @@ MonoBehaviour:
   chainCount: 0
   attackTime: 1
   targetLayer: 256
+  hitSound: 
   hitEffectName: 
   hitEffectScale: {x: 0, y: 0, z: 0}
   effectRotation: 0
@@ -321,9 +322,14 @@ MonoBehaviour:
     animation: {fileID: 95071221950947570}
     mover: {fileID: 114081683943620074}
     foot: {fileID: 114421810572017360}
-    direction: 0
     narrowAttacker:
     - {fileID: 114365082854822926}
+    autoScaleChange:
+      targetSearch:
+        enable: 0
+        targetLayer: 0
+        searchRange: {fileID: 0}
+    damageInvincible: 5
   bulletParameter:
     bulletNum: 3
     interval: 10

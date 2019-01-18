@@ -68,7 +68,7 @@ public class Effect {
     public void DeleteEffect(int id)
     {
         //範囲外は何もしない
-        if (id >= this.objectList.Count && id < 0)
+        if (id >= this.objectList.Count || id < 0)
         {
             return;
         }

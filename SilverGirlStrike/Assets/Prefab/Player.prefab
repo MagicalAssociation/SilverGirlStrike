@@ -488,6 +488,8 @@ MonoBehaviour:
     - {fileID: 114843751850619174}
     - {fileID: 114301069276646730}
     - {fileID: 114928298753498928}
+    strikeAsultCoolTime: 60
+    damageInvincible: 60
 --- !u!114 &114843751850619174
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -557,7 +559,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   userCharacter: {fileID: 114445538107119984}
   attackCollition: {fileID: 58177074769401688}
-  attackPower: 3
+  attackPower: 2
   chainCount: 3
   attackTime: 1
   targetLayer: 512

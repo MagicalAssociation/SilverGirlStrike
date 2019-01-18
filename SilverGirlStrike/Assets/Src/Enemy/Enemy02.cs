@@ -61,6 +61,9 @@ namespace Enemy02
             public CharacterMover charactermover;
 
             public NarrowAttacker[] narrowAttacker;
+
+            //無敵時間
+            public int damageInvincible;
         }
         /**
          * brief    移動用変数をまとめたclass
@@ -107,6 +110,8 @@ namespace Enemy02
             this.parameter.animation = GetComponent<Animator>();
             this.parameter.charactermover = GetComponent<CharacterMover>();
             this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
+            this.GetData().hitPoint.Recover(this.parameter.maxHP);
+            this.GetData().hitPoint.SetInvincible(this.parameter.damageInvincible);
             //各ステートを登録&適用
             base.AddState((int)State.MOVE, new MoveState(this));
             base.AddState((int)State.WAIT, new WaitState(this));

@@ -78,6 +78,9 @@ namespace Enemy01
             public NarrowAttacker[] narrowAttacker;
             // 向きの自動変更
             public Enemy.AutoScaleChange autoScaleChange;
+
+            //無敵時間
+            public int damageInvincible;
         }
         //! 重力
         public float gravity;
@@ -111,6 +114,9 @@ namespace Enemy01
 
             this.parameter.animation = GetComponent<Animator>();
             this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
+            this.GetData().hitPoint.Recover(this.parameter.maxHP);
+            this.GetData().hitPoint.SetInvincible(this.parameter.damageInvincible);
+
             this.parameter.autoScaleChange.Init(this.gameObject);
             //!-ステートデータを登録＆初期値の設定-!//
             base.AddState((int)State.NORMAL, new NormalState(this));
