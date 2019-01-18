@@ -29,11 +29,6 @@ public class CursorSystem : MonoBehaviour {
         enable = true;
         loop = true;
 	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-	}
     public Vector2Int GetNow()
     {
         return this.nowPos;
@@ -176,7 +171,26 @@ public class CursorSystem : MonoBehaviour {
     }
     public void SetEnable(bool enable)
     {
+        if(this.enable == false && enable == true)
+        {
+            this.Enter();
+        } else if(this.enable == true && enable == false)
+        {
+            this.Exit();
+        }
         this.enable = enable;
+    }
+    public virtual void Enter()
+    {
+
+    }
+    public virtual void Exit()
+    {
+
+    }
+    public virtual void SystemUpdate()
+    {
+
     }
     public bool GetEnable()
     {

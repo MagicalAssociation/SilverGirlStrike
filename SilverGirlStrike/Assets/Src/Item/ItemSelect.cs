@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemSelect : MonoBehaviour {
+public class ItemSelect : CursorParam {
     public SpriteRenderer back;
     public SpriteRenderer itemImg;
     SGS.Item item;
@@ -24,5 +24,15 @@ public class ItemSelect : MonoBehaviour {
     {
         item = new SGS.Item();
         item.SetData(SGS.Item.Load(id));
+    }
+
+    public override void Decision()
+    {
+
+    }
+    public void SetColor(Color iamge,Color back)
+    {
+        itemImg.color = iamge;
+        this.back.color = back;
     }
 }
