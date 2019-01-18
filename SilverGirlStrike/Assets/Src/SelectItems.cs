@@ -11,6 +11,7 @@ public class SelectItems : MonoBehaviour
     public struct Items
     {
         public string key;              //名前を設定(Scene遷移時に使用)
+        public string location;         //ステージの場所を格納
         public int num;                 //番号を設定(上から順に0~)
         public GameObject gameobject;   //場所を移動させるゲームオブジェクト指定
         public Vector3 endposition;     //移動停止位置を指定
@@ -39,8 +40,11 @@ public class SelectItems : MonoBehaviour
     private float starttime;    //移動を開始した時間を格納
     //選択可能な中央の位置を求める
     int center;
+
     //表示textの変更用
-    public Text targetText;
+    public Text stageNameText;
+    public Text locationText;
+    public Text clearTimeText;
 
     // Use this for initialization
     void Start()
@@ -103,7 +107,8 @@ public class SelectItems : MonoBehaviour
     private void SetEndpos()
     {
         //下が押されたら
-        if (Input.GetKey(KeyCode.DownArrow))
+        //if (Input.GetKey(KeyCode.DownArrow))          //デバッグ用(方向キーで動く)
+        if (M_System.input.Down(SystemInput.Tag.LSTICK_DOWN))
         {
             if (this.canmove)
             {
@@ -121,7 +126,7 @@ public class SelectItems : MonoBehaviour
                         {
                             itemlist[i].stopnum = 1;                                    //空きを無くすため1番の入れ物へ
                         }
-                        else                                                        
+                        else
                         {
                             itemlist[i].stopnum = 0;
                         }
@@ -138,7 +143,8 @@ public class SelectItems : MonoBehaviour
         }
 
         //上が押されたら
-        if (Input.GetKey(KeyCode.UpArrow))
+        //if (Input.GetKey(KeyCode.UpArrow))        //デバッグ用(方向キーで動く)
+        if (M_System.input.Down(SystemInput.Tag.LSTICK_UP))
         {
             if (this.canmove)
             {
@@ -160,7 +166,7 @@ public class SelectItems : MonoBehaviour
                         {
                             itemlist[i].stopnum = poslist.Length - 1;
                         }
-                        itemlist[i].startposition = poslist[poslist.Length-1].pos;      //下の外へ
+                        itemlist[i].startposition = poslist[poslist.Length - 1].pos;      //下の外へ
 
                         this.canmove = false;
                     }
@@ -181,7 +187,7 @@ public class SelectItems : MonoBehaviour
     {
         for (int i = 0; i < itemlist.Length; ++i)
         {
-            var diff = Time.timeSinceLevelLoad - starttime;     //経過時間カウント?
+            var diff = Time.timeSinceLevelLoad - starttime;     //経過時間カウント
 
             if (diff > time)     //時間切れなら
             {
@@ -199,7 +205,7 @@ public class SelectItems : MonoBehaviour
 
 
     //-----------------------------------------------------------------------------
-    //シーン遷移について
+    //シーン遷移について(未実装)
     //-----------------------------------------------------------------------------
     void SetNextScene()
     {
@@ -211,6 +217,7 @@ public class SelectItems : MonoBehaviour
                 {
                     case ("stage"):
                         //sceneを移動する処理を実装(未実装)
+                        //SceneManager.LoadScene("GameScene");
                         break;
                     case ("stage1"):
                         //sceneを移動する処理を実装(未実装)
@@ -232,9 +239,9 @@ public class SelectItems : MonoBehaviour
     //選択可能なアイコン以外暗くする
     void ChangeColor()
     {
-        for(int i=0;i<itemlist.Length;++i)
+        for (int i = 0; i < itemlist.Length; ++i)
         {
-            if(itemlist[i].stopnum == center)          //選択できる項目なら
+            if (itemlist[i].stopnum == center)          //選択できる項目なら
             {
                 //通常色に
                 itemlist[i].gameobject.GetComponent<SpriteRenderer>().color = new Color(255.0f, 255.0f, 255.0f);
@@ -250,15 +257,14 @@ public class SelectItems : MonoBehaviour
     //textの変更(現在選択している項目の詳細を表示する)
     void ChangeText()
     {
-        //this.targetText = this.GetComponent<Text>();
-        //デバッグ用
-        //Debug.Log("Text" + targetText.text);
-
         for (int i = 0; i < itemlist.Length; ++i)
         {
             if (itemlist[i].stopnum == center)
             {
-                this.targetText.text = itemlist[i].key;
+                this.stageNameText.text = itemlist[i].key;
+                this.locationText.text = itemlist[i].location;
+                //クリアタイムのデータを取ってこられるように追加予定
+                //this.clearTimeText=
             }
         }
     }
