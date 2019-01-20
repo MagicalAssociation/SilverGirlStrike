@@ -11,11 +11,11 @@ public class ItemSelect : CursorParam {
     {
         return this.item;
     }
-    public void ItemDataLoad(int id,int number)
+    public void ItemDataLoad(int id)
     {
         item = new SGS.Item();
         item.SetData(SGS.Item.Load(id));
-        num = number;
+        num = M_System.currentData.GetData().GetItemNumber(id);
     }
 
     public override void Decision()

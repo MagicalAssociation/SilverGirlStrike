@@ -29,6 +29,17 @@ namespace Save
             filePath = "";
             itemData = new List<ItemData>();
         }
+        public int GetItemNumber(int id)
+        {
+            for(int i = 0;i < itemData.Count;++i)
+            {
+                if(itemData[i].id == id)
+                {
+                    return itemData[i].num;
+                }
+            }
+            return 0;
+        }
         public int gold;
         public int[] stageClearFlag;
         public string filePath;
@@ -37,17 +48,14 @@ namespace Save
 }
 public class CurrentData
 {
-    static CurrentData singleton;
-    public static void Create()
+    Save.DataParameter data;
+    public void SetData(Save.DataParameter parameter)
     {
-        if(singleton == null)
-        {
-            singleton = new CurrentData();
-        }
+        data = parameter;
     }
-    public static CurrentData Get()
+    public Save.DataParameter GetData()
     {
-        return CurrentData.singleton;
+        return this.data;
     }
 }
 public class GameData : MonoBehaviour

@@ -18,6 +18,9 @@ public class M_System : MonoBehaviour
     //! 入力を扱う公開変数
     static public SystemInput input;
 
+    //読み込んだセーブデータの保持
+    static public CurrentData currentData;
+
     public enum LayerName : int
     {
         PLAYER = 1 << 8,
@@ -49,7 +52,7 @@ public class M_System : MonoBehaviour
         DontDestroyOnLoad(this);
         Application.targetFrameRate = 60; //60FPSに設定
         M_System.input = new SystemInput();
-
+        M_System.currentData = new CurrentData();
         //音の設定を行う
         GetComponent<SoundInitializer>().CreateSoundSource();
 

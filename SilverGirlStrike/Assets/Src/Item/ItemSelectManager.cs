@@ -22,8 +22,6 @@ public class ItemSelectManager : CursorSystem
     public int oneRowNumber;
     public CursorColor cursorColor;
     public ItemSetSelectManager nextManager;
-    //外からアイテムの手持ち数を持ってくる
-    public Save.DataParameter dataParameter;
     public SGS.Item.ResourceData[] resourceData;
     private List<List<ItemSelect>> itemSelects;
     // Use this for initialization
@@ -43,7 +41,7 @@ public class ItemSelectManager : CursorSystem
             //リソースデータの上から順番に生成
             //1列に出す数とピクセルサイズ/PixelsPerUnitをかけて隙間のない位置を指定する
             ItemSelect itemSelect = Object.Instantiate(prefab, new Vector3(startPosition.position.x + (GetPosition(i).x + GetClearance(i).x), startPosition.position.y - (GetPosition(i).y + GetClearance(i).y), 0), Quaternion.identity) as ItemSelect;
-            itemSelect.ItemDataLoad(resourceData[i].id, GetItemNumber(resourceData[i].id));
+            itemSelect.ItemDataLoad(resourceData[i].id);
             itemSelect.back.sprite = back;
             itemSelect.itemImg.sprite = resourceData[i].sprite;
             itemSelect.GetItem().SetSprite(resourceData[i].sprite);
@@ -118,16 +116,5 @@ public class ItemSelectManager : CursorSystem
     public override void Exit()
     {
         itemSelects[GetNow().x][GetNow().y].SetColor(cursorColor.notSelectcImageColor, cursorColor.notSelectBackColor);
-    }
-    public int GetItemNumber(int id)
-    {
-        for(int i = 0;i < this.dataParameter.itemData.Count;++i)
-        {
-            if(dataParameter.itemData[i].id == id)
-            {
-                return dataParameter.itemData[i].num;
-            }
-        }
-        return 0;
     }
 }

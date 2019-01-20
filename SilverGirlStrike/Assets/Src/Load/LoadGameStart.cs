@@ -19,6 +19,7 @@ public class LoadGameStart : CursorParam
     {
         if (GetComponent<Select>().GetData() != null)
         {
+            M_System.currentData.SetData(GetComponent<Select>().GetData());
             StartCoroutine(GameStart());
         }
     }
