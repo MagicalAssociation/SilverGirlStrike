@@ -631,6 +631,7 @@ namespace Fuchan
     {
         Vector2 targetDirection;
         int timeCnt;
+        bool isEnd;
 
         public AnchorDashState(PlayerObject param)
             : base(param)
@@ -688,18 +689,12 @@ namespace Fuchan
         //遷移を行う
         public override bool Transition(ref StateManager manager)
         {
-
-
-
-
             if (!GetParam().anchorTarget)
             {
                 return false;
             }
-            //進行方向と、現在のアンカーへ向かうベクトルを比較し、後ろにあったらJUMPに移行
-            float dot = Vector2.Dot(this.targetDirection, GetParam().anchorTarget.transform.position - GetParam().myself.transform.position);
-
-            if (GetParam().anchorTarget != null && dot < 0.0f)
+            //カウントが進んだら滞空に移行
+            if (this.timeCnt > 3)
             {
                 //移行時、少しだけ滞空時間を延ばすためにジャンプのような挙動を行う
                 GetInspectorParam().mover.SetActiveGravity(true, true);
@@ -729,7 +724,7 @@ namespace Fuchan
             this.GetParam().dashRatio = 1.0f;
 
             //アンカーが見つかっている場合にのみ処理を行う
-            if (GetParam().anchorTarget != null && this.timeCnt > 2)
+            if (GetParam().anchorTarget != null && GetTime() > 2)
             {
                 //アンカーに向かっての移動
                 GetParam().moveVector += this.targetDirection * GetParam().currentDashSpead;
@@ -746,7 +741,17 @@ namespace Fuchan
                     }
                 }
             }
-            ++this.timeCnt;
+
+            //進行方向と、現在のアンカーへ向かうベクトルを比較し、後ろにあったらJUMPに移行
+            float dot = Vector2.Dot(this.targetDirection, GetParam().anchorTarget.transform.position - GetParam().myself.transform.position);
+
+            if (GetParam().anchorTarget != null && dot < 0.0f || this.timeCnt > 0)
+            {
+                //一度でも後ろにきたらカウントを進める
+                ++this.timeCnt;
+            }
+
+            
         }
     }
 
