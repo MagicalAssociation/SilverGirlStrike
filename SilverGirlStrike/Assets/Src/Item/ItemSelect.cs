@@ -6,24 +6,16 @@ public class ItemSelect : CursorParam {
     public SpriteRenderer back;
     public SpriteRenderer itemImg;
     SGS.Item item;
-	// Use this for initialization
-	void Start ()
-    {
-        item = new SGS.Item();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    int num;
     public SGS.Item GetItem()
     {
         return this.item;
     }
-    public void ItemDataLoad(int id)
+    public void ItemDataLoad(int id,int number)
     {
         item = new SGS.Item();
         item.SetData(SGS.Item.Load(id));
+        num = number;
     }
 
     public override void Decision()

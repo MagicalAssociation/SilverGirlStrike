@@ -56,6 +56,8 @@ namespace SGS
         public string remarks;
         //リソースID
         private int resourceID;
+        //実際のリソース情報
+        private Sprite sprite;
         /**
          * brief    使用時の効果を記述
          */ 
@@ -109,6 +111,14 @@ namespace SGS
         public int GetID()
         {
             return this.id;
+        }
+        public void SetSprite(Sprite image)
+        {
+            sprite = image;
+        }
+        public Sprite GetSprite()
+        {
+            return sprite;
         }
     }
     /**

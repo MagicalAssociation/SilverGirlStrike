@@ -28,45 +28,40 @@ public class ItemSetSelectManager : CursorSystem
         }
     }
     public Parameter parameter;
-    public ItemSelectManager preManager;
     SetSelect nowParam;
     SGS.Item item;
     public CursorColor cursorColor;
+    public GameObject cursor;
+    public Vector2 cursorOffset;
 	// Use this for initialization
 	void Start ()
     {
-        this.SetEnable(false);
-	}
-	
+        cursor.transform.position = parameter.up.transform.position;
+        ChangeColor();
+	}	
 	// Update is called once per frame
-	void Update ()
+	public override void SystemUpdate(CursorSystemManager manager)
     {
         if(MoveInput() == true)
         {
             this.ChangeColor();
+            this.CursoeMove();
         }
         else
         {
-            if(M_System.input.Down(SystemInput.Tag.DECISION) && GetEnable() == true)
+            if(M_System.input.Down(SystemInput.Tag.DECISION))
             {
                 nowParam.SetItemData(item);
-                base.SetEnable(false);
-                preManager.SetEnable(true);
+                manager.Next(0);
             }
-            else if(M_System.input.Down(SystemInput.Tag.CANCEL) && GetEnable() == true)
+            else if(M_System.input.Down(SystemInput.Tag.CANCEL))
             {
-                base.SetEnable(false);
-                base.SetEnable(false);
-                preManager.SetEnable(true);
+                manager.Next(0);
             }
         }
 	}
     private bool MoveInput()
     {
-        if(GetEnable() == false)
-        {
-            return false;
-        }
         if(M_System.input.Down(SystemInput.Tag.LSTICK_UP))
         {
             nowParam = parameter.up;
@@ -97,6 +92,11 @@ public class ItemSetSelectManager : CursorSystem
             nowParam.SetColor(cursorColor.selectImageColor, cursorColor.selectBackColor);
         }
     }
+    private void CursoeMove()
+    {
+        cursor.transform.position = nowParam.transform.position;
+        cursor.transform.position = cursor.transform.position + new Vector3(cursorOffset.x, cursorOffset.y);
+    }
     public void SetItemData(SGS.Item item)
     {
         this.item = item;
@@ -105,10 +105,13 @@ public class ItemSetSelectManager : CursorSystem
     {
         nowParam = parameter.up;
         ChangeColor();
+        cursor.GetComponent<SpriteRenderer>().sprite = item.GetSprite();
+        CursoeMove();
     }
     public override void Exit()
     {
         nowParam = null;
         ChangeColor();
+        cursor.GetComponent<SpriteRenderer>().sprite = null;
     }
 }

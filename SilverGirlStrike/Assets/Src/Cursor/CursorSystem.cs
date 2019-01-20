@@ -188,7 +188,7 @@ public class CursorSystem : MonoBehaviour {
     {
 
     }
-    public virtual void SystemUpdate()
+    public virtual void SystemUpdate(CursorSystemManager manager)
     {
 
     }

@@ -7,6 +7,7 @@ namespace Save
     [System.Serializable]
     public class DataParameter
     {
+        [System.Serializable]
         public class ItemData
         {
             public int id;
@@ -32,6 +33,21 @@ namespace Save
         public int[] stageClearFlag;
         public string filePath;
         public List<ItemData> itemData;
+    }
+}
+public class CurrentData
+{
+    static CurrentData singleton;
+    public static void Create()
+    {
+        if(singleton == null)
+        {
+            singleton = new CurrentData();
+        }
+    }
+    public static CurrentData Get()
+    {
+        return CurrentData.singleton;
     }
 }
 public class GameData : MonoBehaviour

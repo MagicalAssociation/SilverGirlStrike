@@ -14,6 +14,7 @@ public class SetSelect : CursorParam
     public void SetItemData(SGS.Item item)
     {
         this.item = item;
+        this.imageSprite.sprite = item.GetSprite();
     }
     public void SetColor(Color image,Color back)
     {
