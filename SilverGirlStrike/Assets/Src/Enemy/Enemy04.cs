@@ -73,6 +73,9 @@ namespace Enemy04
             //! 攻撃間隔
             public int attackInterval;
             public Enemy.AutoScaleChange autoScaleChange;
+
+            //無敵時間
+            public int damageInvincible;
         }
         /**
          * brief    移動用変数をまとめたclass
@@ -151,7 +154,11 @@ namespace Enemy04
             this.circleCollider = GetComponent<CircleCollider2D>();
             this.attackData.power = this.parameter.power;
             this.parameter.animation = GetComponent<Animator>();
+
             this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
+            this.GetData().hitPoint.Recover(this.parameter.maxHP);
+            this.GetData().hitPoint.SetInvincible(this.parameter.damageInvincible);
+
             this.stopCount = Random.Range(move.stopCountMin, move.stopCountMax);
             this.maxSpeed = move.speed;
             this.parameter.autoScaleChange.Init(this.gameObject);

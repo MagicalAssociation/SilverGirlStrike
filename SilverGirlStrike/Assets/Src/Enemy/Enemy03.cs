@@ -66,6 +66,9 @@ namespace Enemy03
             //! 攻撃判定
             public NarrowAttacker[] narrowAttacker;
             public CharacterMover characterMover;
+
+            //無敵時間
+            public int damageInvincible;
         }
         /**
          * brief    停止用データ
@@ -126,6 +129,8 @@ namespace Enemy03
             this.parameter.characterMover = GetComponent<CharacterMover>();
             this.parameter.direction = Direction.LEFT;
             this.GetData().hitPoint.SetMaxHP(this.parameter.maxHP);
+            this.GetData().hitPoint.Recover(this.parameter.maxHP);
+            this.GetData().hitPoint.SetInvincible(this.parameter.damageInvincible);
             //各ステートを登録&適用
             base.AddState((int)State.MOVE, new MoveState(this));
             base.AddState((int)State.WAIT, new WaitState(this));

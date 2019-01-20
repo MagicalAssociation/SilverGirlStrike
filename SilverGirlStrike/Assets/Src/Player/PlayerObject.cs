@@ -59,6 +59,10 @@ namespace Fuchan
             public AnchorSelector anchor;
             public Animator playerAnim;
             public NarrowAttacker[] attackCollisions;
+            //ストライクアサルトのクールタイム
+            public int strikeAsultCoolTime;
+            //無敵時間
+            public int damageInvincible;
         }
 
 
@@ -82,6 +86,8 @@ namespace Fuchan
             //ダッシュ比率
             public float dashRatio;
 
+            //ストライクアサルトのクールタイムカウンタ
+            public int strikeAsultRestTime;
         }
 
         public InspectorParam inspectorParam;
@@ -96,6 +102,7 @@ namespace Fuchan
             this.param.currentDashSpead = 0.0f;
             this.param.anchorTarget = null;
             this.param.dashRatio = 0.0f;
+            this.param.strikeAsultRestTime = 0;
             //ステート追加
             AddState((int)State.START, new StartState(this));
             AddState((int)State.IDLE, new IdleState(this));
@@ -113,7 +120,7 @@ namespace Fuchan
             ChangeState((int)State.IDLE);
 
 
-            GetData().hitPoint.SetInvincible(100);
+            GetData().hitPoint.SetInvincible(this.inspectorParam.damageInvincible);
         }
 
         //メンバ関数
@@ -152,10 +159,17 @@ namespace Fuchan
 
         public override void UpdateCharacter()
         {
+            //ダッシュ速度を自動的に減速
             this.param.dashRatio += -0.02f;
             if (this.param.dashRatio < 0.0f)
             {
                 this.param.dashRatio = 0.0f;
+            }
+            //クールタイム消費
+            --this.param.strikeAsultRestTime;
+            if (this.param.strikeAsultRestTime < 0)
+            {
+                this.param.strikeAsultRestTime = 0;
             }
 
             //無敵時間中は色を変える
@@ -617,6 +631,7 @@ namespace Fuchan
     {
         Vector2 targetDirection;
         int timeCnt;
+        bool isEnd;
 
         public AnchorDashState(PlayerObject param)
             : base(param)
@@ -674,18 +689,12 @@ namespace Fuchan
         //遷移を行う
         public override bool Transition(ref StateManager manager)
         {
-
-
-
-
             if (!GetParam().anchorTarget)
             {
                 return false;
             }
-            //進行方向と、現在のアンカーへ向かうベクトルを比較し、後ろにあったらJUMPに移行
-            float dot = Vector2.Dot(this.targetDirection, GetParam().anchorTarget.transform.position - GetParam().myself.transform.position);
-
-            if (GetParam().anchorTarget != null && dot < 0.0f)
+            //カウントが進んだら滞空に移行
+            if (this.timeCnt > 3)
             {
                 //移行時、少しだけ滞空時間を延ばすためにジャンプのような挙動を行う
                 GetInspectorParam().mover.SetActiveGravity(true, true);
@@ -694,11 +703,17 @@ namespace Fuchan
                 return true;
             }
 
-            //ワイヤー中にやればストライクアサルト
-            if (GetParam().anchorTarget != null && M_System.input.Down(SystemInput.Tag.ATTACK)) {
-                manager.SetNextState((int)PlayerObject.State.STRIKE_ASULT);
-                return true;
+            //クールタイムが終わっているか
+            if (GetParam().strikeAsultRestTime == 0)
+            {
+                //ワイヤー中にやればストライクアサルト
+                if (GetParam().anchorTarget != null && M_System.input.Down(SystemInput.Tag.ATTACK))
+                {
+                    manager.SetNextState((int)PlayerObject.State.STRIKE_ASULT);
+                    return true;
+                }
             }
+
 
             return false;
         }
@@ -709,7 +724,7 @@ namespace Fuchan
             this.GetParam().dashRatio = 1.0f;
 
             //アンカーが見つかっている場合にのみ処理を行う
-            if (GetParam().anchorTarget != null && this.timeCnt > 2)
+            if (GetParam().anchorTarget != null && GetTime() > 2)
             {
                 //アンカーに向かっての移動
                 GetParam().moveVector += this.targetDirection * GetParam().currentDashSpead;
@@ -726,7 +741,101 @@ namespace Fuchan
                     }
                 }
             }
-            ++this.timeCnt;
+
+            //進行方向と、現在のアンカーへ向かうベクトルを比較し、後ろにあったらJUMPに移行
+            float dot = Vector2.Dot(this.targetDirection, GetParam().anchorTarget.transform.position - GetParam().myself.transform.position);
+
+            if (GetParam().anchorTarget != null && dot < 0.0f || this.timeCnt > 0)
+            {
+                //一度でも後ろにきたらカウントを進める
+                ++this.timeCnt;
+            }
+
+            
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //アンカーダッシュ攻撃「ストライクアサルト」 キャンセル攻撃版
+    public class StrikeAsultBurst : BaseState
+    {
+        Vector2 direction;
+        private GameObject effectObj;
+        private int effectID;
+
+        public StrikeAsultBurst(PlayerObject param)
+            : base(param)
+        {
+        }
+
+        //入った時の関数
+        public override void Enter(ref StateManager manager)
+        {
+            Sound.PlaySE("impact1");
+            Sound.PlaySE("swingBig");
+
+            //速度をダッシュ中のそれにする
+            this.GetParam().dashRatio = 0.4f;
+
+            //キャラの頭の向きから移動方向を割り出す
+            this.direction = GetParam().myself.transform.rotation * new Vector2(0.0f, 1.0f);
+            //最高値の速さに変更
+            GetParam().currentDashSpead = GetInspectorParam().anchorDashSpeed;
+
+            //エフェクト生成
+            Vector3 pos = GetParam().myself.transform.position + new Vector3(0.0f, 0.0f, 1.0f);
+            Quaternion directionRot = GetParam().myself.transform.rotation * Quaternion.AngleAxis(90.0f, Vector3.forward);
+
+            this.effectID = Effect.Get().CreateEffect("magicAttack1", pos, directionRot, Vector3.one * 5.0f);
+            this.effectObj = Effect.Get().GetEffectGameObject(this.effectID);
+
+            GetParam().myself.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+            GetInspectorParam().mover.SetActiveGravity(true, true);
+            GetInspectorParam().attackCollisions[3].StartAttack();
+
+            //アニメ
+            if (GetParam().onGround && !GetInspectorParam().mover.IsJump())
+            {
+                GetInspectorParam().playerAnim.Play("SwordAttack3");
+            }
+            else
+            {
+                GetInspectorParam().playerAnim.Play("JumpSwordAttack3");
+                GetInspectorParam().mover.Jump(12.0f);
+            }
+        }
+        //出た時の関数
+        public override void Exit(ref StateManager manager)
+        {
+            GetParam().anchorTarget = null;
+        }
+        //遷移を行う
+        public override bool Transition(ref StateManager manager)
+        {
+            if (GetTime() >= 20)
+            {
+                if (GetParam().onGround)
+                {
+                    manager.SetNextState((int)PlayerObject.State.IDLE);
+                }
+                else
+                {
+                    manager.SetNextState((int)PlayerObject.State.FALL);
+                }
+                return true;
+            }
+
+            return false;
+        }
+        //ステート処理
+        public override void Update()
+        {
+            //攻撃方向へ移動
+            GetParam().moveVector += this.direction * GetParam().currentDashSpead * 1.0f * this.GetParam().dashRatio;
+
+            //エフェクト追従
+            Vector3 pos = GetParam().myself.transform.position + new Vector3(0.0f, 0.0f, 1.0f);
+            this.effectObj.transform.position = pos;
         }
     }
 
@@ -737,7 +846,6 @@ namespace Fuchan
         private Vector2 direction;
         private GameObject effectObj;
         private int effectID;
-        int counter;
 
         public StrikeAsult(PlayerObject param)
             : base(param)
@@ -762,7 +870,6 @@ namespace Fuchan
             //無敵化
             GetParam().myself.GetData().hitPoint.SetDamageShutout(true);
 
-            this.counter = 0;
         }
         //出た時の関数
         public override void Exit(ref StateManager manager)
@@ -772,21 +879,18 @@ namespace Fuchan
             GetInspectorParam().mover.SetActiveGravity(true, true);
             GetParam().myself.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
             GetParam().myself.GetData().hitPoint.SetDamageShutout(false);
+
         }
         //遷移を行う
         public override bool Transition(ref StateManager manager)
         {
-            //進行方向と、現在のアンカーへ向かうベクトルを比較し、後ろにあったらJUMPに移行
-            float dot = Vector2.Dot(this.direction, GetParam().anchorTarget.transform.position - GetParam().myself.transform.position);
-            if (dot < 0.0f)
+
+            if (GetTime() > 30)
             {
-                ++this.counter;
-                if (this.counter > 10)
-                {
-                    GetInspectorParam().mover.Jump(this.direction.y * GetParam().currentDashSpead * 0.5f);
-                    manager.SetNextState((int)PlayerObject.State.FALL);
-                    return true;
-                }
+                //GetInspectorParam().mover.Jump(this.direction.y * GetParam().currentDashSpead * 0.5f);
+                GetInspectorParam().mover.Jump(0.5f);
+                manager.SetNextState((int)PlayerObject.State.FALL);
+                return true;
             }
 
             return false;
@@ -794,17 +898,40 @@ namespace Fuchan
         //ステート処理
         public override void Update()
         {
+            if (GetTime() < 10)
+            {
+                //速度をダッシュ中のそれにする
+                this.GetParam().dashRatio = 1.0f;
+            }
+            else
+            {
+                this.GetParam().dashRatio *= 0.93f;
+            }
+            //十分に減速したら無敵時間を解除
+            if(GetTime() > 20)
+            {
+                GetParam().myself.GetData().hitPoint.SetDamageShutout(false);
+                Effect.Get().DeleteEffect(this.effectID);
+                this.effectID = -1;
+            }
+            else
+            {
+                //エフェクト追従
+                Vector3 pos = GetParam().myself.transform.position + new Vector3(0.0f, 0.0f, 1.0f);
+                this.effectObj.transform.position = pos;
+            }
+
+
+            //クールタイム発生
+            GetParam().strikeAsultRestTime = GetInspectorParam().strikeAsultCoolTime;
+
             GetInspectorParam().attackCollisions[3].StartAttack();
 
-            //速度をダッシュ中のそれにする
-            this.GetParam().dashRatio = 1.0f;
 
             //攻撃方向へ移動
-            GetParam().moveVector += this.direction * GetParam().currentDashSpead * 1.1f;
+            GetParam().moveVector += this.direction * GetParam().currentDashSpead * 1.5f * this.GetParam().dashRatio;
 
-            //エフェクト追従
-            Vector3 pos = GetParam().myself.transform.position + new Vector3(0.0f, 0.0f, 1.0f);
-            this.effectObj.transform.position = pos;
+
         }
     }
 

@@ -15,6 +15,8 @@ public class CharacterMover : MonoBehaviour
     BoxCollider2D boxCollider2D;
     float fallVelocity;
 
+    float gravityRatio;
+
     Vector2 normal;
 
 
@@ -31,6 +33,8 @@ public class CharacterMover : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        this.gravityRatio = 1.0f;
+
         this.rigid = this.GetComponent<Rigidbody2D>();
         this.rigid.sharedMaterial = new PhysicsMaterial2D();
         this.fallVelocity = 0.0f;
@@ -85,6 +89,11 @@ public class CharacterMover : MonoBehaviour
 
     }
 
+    //重力が効く割合を設定
+    public void SetGravityRatio(float ratio)
+    {
+        this.gravityRatio = ratio;
+    }
 
     //横移動をセットし、物理挙動に速度を設定、縦移動は落下速度に影響を及ぼさないので、それをやりたい場合はJump()にて落下速度を設定するといい
     public void UpdateVelocity(float movePowerX, float movePowerY, float gravity, bool onGround)
@@ -93,7 +102,7 @@ public class CharacterMover : MonoBehaviour
         if (this.acvtiveGravity)
         {
             //落下
-            this.fallVelocity -= gravity;
+            this.fallVelocity -= gravity * this.gravityRatio;
             //接地しなくなった際には落下速度リセット
             if (this.prevOnGround && !onGround)
             {

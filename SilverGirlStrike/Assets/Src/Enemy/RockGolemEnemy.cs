@@ -135,6 +135,13 @@ namespace RockGolem
 
         public override void UpdateCharacter()
         {
+            //プレイヤーが死んだときはターゲットをnullにする
+            if (this.inspectorParam.targetCharacter != null && this.inspectorParam.targetCharacter.IsDead())
+            {
+                this.inspectorParam.targetCharacter = null;
+            }
+
+
             UpdateState();
             //判定垂れ流し
             if (GetData().stateManager.GetNowStateNum() != (int)State.START)
@@ -708,6 +715,12 @@ namespace RockGolem
                 GetParam().moveVector += new Vector2(Mathf.Cos(GetTime() * Mathf.Deg2Rad * 15.0f), Mathf.Sin(GetTime() * Mathf.Deg2Rad * 15.0f)) * 3.0f;
                 if (GetTime() == 60 + this.bulletCurrentCount * interval)
                 {
+                    //ターゲットがいないときは打たない
+                    if(GetInspectorParam().targetCharacter == null)
+                    {
+                        return;
+                    }
+
                     //発射
                     Sound.PlaySE("shot2");
                     GetInspectorParam().bulletDatas[0].target = GetInspectorParam().targetCharacter.gameObject;

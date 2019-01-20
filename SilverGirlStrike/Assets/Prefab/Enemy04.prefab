@@ -332,6 +332,7 @@ MonoBehaviour:
         enable: 1
         targetLayer: 256
         searchRange: {fileID: 58245592772688574}
+    damageInvincible: 30
   move:
     speed: 2
     radius: 1.5
