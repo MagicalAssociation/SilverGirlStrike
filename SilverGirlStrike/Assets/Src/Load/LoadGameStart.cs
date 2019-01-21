@@ -13,7 +13,7 @@ public class LoadGameStart : CursorParam
     IEnumerator GameStart()
     {
         yield return new WaitForSeconds(0.0f);
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("kariItemSelectScene");
     }
     public override void Decision()
     {

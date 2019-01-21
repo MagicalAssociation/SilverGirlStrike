@@ -78,6 +78,22 @@ namespace SGS
         }
         public static string[] Load(int id)
         {
+            string[] textMassage = Item.Load();
+            if (textMassage != null)
+            {
+                for (int i = 0; i < textMassage.Length; ++i)
+                {
+                    string[] text = textMassage[i].Split(' ');
+                    if (int.Parse(text[0]) == id)
+                    {
+                        return text;
+                    }
+                }
+            }
+            return null;
+        }
+        public static string[] Load()
+        {
             string path = Application.dataPath + @"\Resources\ItemData.txt";
             string textasset = "";
             string[] error = new string[4];
@@ -91,18 +107,24 @@ namespace SGS
             }
             catch
             {
-                return error;
+                return null;
             }
-            string[] textMassage = textasset.Split('\n');
-            for (int i = 0; i < textMassage.Length; ++i)
-            {
-                string[] text = textMassage[i].Split(' ');
-                if (int.Parse(text[0]) == id)
-                {
-                    return text;
-                }
-            }
-            return error;
+            return textasset.Split('\n');
+        }
+        public static int GetID(string line)
+        {
+            string[] text = line.Split(' ');
+            return int.Parse(text[0]);
+        }
+        public static string GetName(string line)
+        {
+            string[] text = line.Split(' ');
+            return text[1];
+        }
+        public static int GetResourceID(string line)
+        {
+            string[] text = line.Split(' ');
+            return int.Parse(text[3]);
         }
         public void DebugLog()
         {
