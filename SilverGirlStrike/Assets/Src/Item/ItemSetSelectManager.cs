@@ -26,6 +26,13 @@ public class ItemSetSelectManager : CursorSystem
             up.SetColor(image,back);
             down.SetColor(image,back);
         }
+        public void Reset()
+        {
+            left.SetItemData(null);
+            right.SetItemData(null);
+            up.SetItemData(null);
+            down.SetItemData(null);
+        }
     }
     public Parameter parameter;
     SetSelect nowParam;

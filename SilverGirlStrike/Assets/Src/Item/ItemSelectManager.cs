@@ -28,6 +28,11 @@ public class ItemSelectManager : CursorSystem
     void Start()
     {
         //カーソルの1列分をまとめる親GameObjectを生成する
+        string[] texts = SGS.Item.Load();
+        if(texts.Length < oneRowNumber)
+        {
+            oneRowNumber = texts.Length;
+        }
         cursors = new GameObject[oneRowNumber];
         itemSelects = new List<List<ItemSelect>>();
         for(int i = 0;i < oneRowNumber;++i)
@@ -35,16 +40,16 @@ public class ItemSelectManager : CursorSystem
             cursors[i] = new GameObject();
             itemSelects.Add(new List<ItemSelect>());
         }
-        for (int i = 0; i < resourceData.Length; ++i)
+        for(int i = 0;i < texts.Length;++i)
         {
-            //Objectの生成と各値の登録
-            //リソースデータの上から順番に生成
-            //1列に出す数とピクセルサイズ/PixelsPerUnitをかけて隙間のない位置を指定する
-            ItemSelect itemSelect = Object.Instantiate(prefab, new Vector3(startPosition.position.x + (GetPosition(i).x + GetClearance(i).x), startPosition.position.y - (GetPosition(i).y + GetClearance(i).y), 0), Quaternion.identity) as ItemSelect;
-            itemSelect.ItemDataLoad(resourceData[i].id);
+            ItemSelect itemSelect = Object.Instantiate(prefab, new Vector3(
+                startPosition.position.x + (GetPosition(i, SGS.Item.GetID(texts[i])).x + GetClearance(i, SGS.Item.GetID(texts[i])).x), 
+                startPosition.position.y - (GetPosition(i, SGS.Item.GetID(texts[i])).y + GetClearance(i, SGS.Item.GetID(texts[i])).y)),
+                Quaternion.identity) as ItemSelect;
+            itemSelect.ItemDataLoad(SGS.Item.GetID(texts[i]));
             itemSelect.back.sprite = back;
-            itemSelect.itemImg.sprite = resourceData[i].sprite;
-            itemSelect.GetItem().SetSprite(resourceData[i].sprite);
+            itemSelect.itemImg.sprite = SGS.Item.ResourceData.GetSprite(resourceData,itemSelect.GetItem().GetID());
+            itemSelect.GetItem().SetSprite(itemSelect.itemImg.sprite);
             itemSelect.itemImg.color = cursorColor.notSelectcImageColor;
             itemSelect.back.color = cursorColor.notSelectBackColor;
             //itemSelectの親にカーソルの親を指定する
@@ -101,13 +106,13 @@ public class ItemSelectManager : CursorSystem
         }
         return false;
     }
-    private Vector2 GetClearance(int num)
+    private Vector2 GetClearance(int num,int id)
     {
-        return new Vector2((num % oneRowNumber) * (clearance.x / resourceData[num].sprite.pixelsPerUnit), (num / oneRowNumber) * (clearance.y / resourceData[num].sprite.pixelsPerUnit));
+        return new Vector2((num % oneRowNumber) * (clearance.x / SGS.Item.ResourceData.GetSprite(resourceData, id).pixelsPerUnit), (num / oneRowNumber) * (clearance.y / SGS.Item.ResourceData.GetSprite(resourceData, id).pixelsPerUnit));
     }
-    private Vector2 GetPosition(int num)
+    private Vector2 GetPosition(int num,int id)
     {
-        return new Vector2((num % oneRowNumber) * (size.x / resourceData[num].sprite.pixelsPerUnit), (num / oneRowNumber) * (size.y / resourceData[num].sprite.pixelsPerUnit));
+        return new Vector2((num % oneRowNumber) * (size.x / SGS.Item.ResourceData.GetSprite(resourceData, id).pixelsPerUnit), (num / oneRowNumber) * (size.y / SGS.Item.ResourceData.GetSprite(resourceData, id).pixelsPerUnit));
     }
     public override void Enter()
     {

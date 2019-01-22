@@ -15,6 +15,7 @@ public class ItemSelect : CursorParam {
     {
         item = new SGS.Item();
         item.SetData(SGS.Item.Load(id));
+        M_System.currentData.SetData(new Save.DataParameter());
         num = M_System.currentData.GetData().GetItemNumber(id);
     }
 

@@ -21,6 +21,8 @@ public class M_System : MonoBehaviour
     //読み込んだセーブデータの保持
     static public CurrentData currentData;
 
+    static public SGS.Item[] gameStartItems;
+
     public enum LayerName : int
     {
         PLAYER = 1 << 8,
@@ -32,6 +34,15 @@ public class M_System : MonoBehaviour
         BULLET = 1 << 14,
         PLAYERWALL = 1 << 15,
     }
+
+    public enum ItemDirection : int
+    {
+        UP = 0,
+        DOWN = 1,
+        LEFT = 2,
+        RIGHT = 3,
+    }
+    
 
     public const string characterManagerObjectName = "CharacterManager";
 
@@ -53,6 +64,7 @@ public class M_System : MonoBehaviour
         Application.targetFrameRate = 60; //60FPSに設定
         M_System.input = new SystemInput();
         M_System.currentData = new CurrentData();
+        M_System.gameStartItems = new SGS.Item[4];
         //音の設定を行う
         GetComponent<SoundInitializer>().CreateSoundSource();
 
@@ -69,6 +81,13 @@ public class M_System : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
+        }
+    }
+    public static void ResetGameStartItemData()
+    {
+        for(int i = 0;i < gameStartItems.Length;++i)
+        {
+            gameStartItems[i] = null;
         }
     }
 }

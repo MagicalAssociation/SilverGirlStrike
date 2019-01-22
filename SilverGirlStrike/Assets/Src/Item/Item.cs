@@ -45,6 +45,17 @@ namespace SGS
         {
             public Sprite sprite;
             public int id;
+            public static Sprite GetSprite(ResourceData[] resources,int id)
+            {
+                for(int i = 0;i < resources.Length;++i)
+                {
+                    if(resources[i].id == id)
+                    {
+                        return resources[i].sprite;
+                    }
+                }
+                return null;
+            }
         }
         //使用者
         public CharacterObject master;        
@@ -58,6 +69,16 @@ namespace SGS
         private int resourceID;
         //実際のリソース情報
         private Sprite sprite;
+        /**
+         * enum LinesItemNumber
+         */ 
+         public enum Type
+        {
+            ID = 0,
+            NAME = 1,
+            REMARKS = 2,
+            R_ID = 3,
+        }
         /**
          * brief    使用時の効果を記述
          */ 
