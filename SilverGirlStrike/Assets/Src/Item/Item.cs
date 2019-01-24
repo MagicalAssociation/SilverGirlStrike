@@ -155,6 +155,10 @@ namespace SGS
         {
             return this.id;
         }
+        public int GetResourceID()
+        {
+            return this.resourceID;
+        }
         public void SetSprite(Sprite image)
         {
             sprite = image;

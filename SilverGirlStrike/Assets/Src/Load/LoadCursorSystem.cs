@@ -57,7 +57,7 @@ public class LoadCursorSystem : CursorSystem {
     {
         for(int i = 0;i < loadParams.Length;++i)
         {
-            if(i == GetNow().y)
+            if(i == GetPos().y)
             {
                 //選択カラー
                 loadParams[i].image.color = cursorColor.selectImageColor;

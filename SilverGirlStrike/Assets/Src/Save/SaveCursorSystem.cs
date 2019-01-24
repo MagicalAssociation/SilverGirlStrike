@@ -56,7 +56,7 @@ public class SaveCursorSystem : CursorSystem {
     {
         for (int i = 0; i < saveGame.Length; ++i)
         {
-            if (i == GetNow().y)
+            if (i == GetPos().y)
             {
                 //選択カラー
                 saveGame[i].image.color = cursorColor.selectImageColor;

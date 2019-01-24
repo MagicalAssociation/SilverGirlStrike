@@ -7,15 +7,14 @@ using UnityEngine;
 public class CursorSystemManager : MonoBehaviour
 {
     public CursorSystem[] systems;
-    public int startSystemNumber;
     private int nowSystem;
     private int preSystem;
     private int nextSystem;
-    private void Start()
+    public void Init(int startNum)
     {
-        nowSystem = startSystemNumber % systems.Length;
+        nowSystem = startNum % systems.Length;
     }
-    private void Update()
+    public void SystemUpdate()
     {
         Change();
         if(nowSystem < 0 || nowSystem >= systems.Length)

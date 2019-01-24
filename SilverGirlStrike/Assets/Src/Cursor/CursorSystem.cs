@@ -17,7 +17,19 @@ public class CursorSystem : MonoBehaviour {
     private Vector2Int nowPos;
     private List<CursorParam[]> cursorlist;
     bool enable;
-    bool loop;
+    bool[] loop;
+    public enum Direction : int
+    {
+        X = 0,
+        Y = 1
+    }
+    public enum Warp : int
+    {
+        TOP,
+        DOWN,
+        LEFT,
+        RIGTH,
+    }
 	// Use this for initialization
 	public void Init () {
         nowPos = new Vector2Int(0, 0);
@@ -25,11 +37,14 @@ public class CursorSystem : MonoBehaviour {
         for (int i = 0; i < cursors.Length; ++i)
         {
             cursorlist.Add(cursors[i].GetComponentsInChildren<CursorParam>());
+            //AddCursors(cursors[i]);
         }
         enable = true;
-        loop = true;
+        loop = new bool[2];
+        loop[(int)Direction.X] = true;
+        loop[(int)Direction.Y] = true;
 	}
-    public Vector2Int GetNow()
+    public Vector2Int GetPos()
     {
         return this.nowPos;
     }
@@ -68,7 +83,7 @@ public class CursorSystem : MonoBehaviour {
             return false;
         }
         //カーソル値を下に移動
-        if (loop)
+        if (loop[(int)Direction.Y])
         {
             //0~配列数-1をループする計算
             nowPos.y = (nowPos.y + 1) % cursorlist[nowPos.x].Length;
@@ -95,7 +110,7 @@ public class CursorSystem : MonoBehaviour {
         //位置がマイナスになった時ループなら下に、そうでないなら0にする
         if(nowPos.y < 0)
         {
-            if(loop)
+            if(loop[(int)Direction.Y])
             {
                 //マイナスの分だけ最大値から引く
                 nowPos.y = cursorlist[nowPos.x].Length + nowPos.y;
@@ -115,7 +130,7 @@ public class CursorSystem : MonoBehaviour {
         {
             return false;
         }
-        if (loop)
+        if (loop[(int)Direction.X])
         {
             //0~配列数-1をループする計算
             nowPos.x = (nowPos.x + 1) % cursorlist.Count;
@@ -143,7 +158,7 @@ public class CursorSystem : MonoBehaviour {
         //位置がマイナスになった時ループなら下に、そうでないなら0にする
         if (nowPos.x < 0)
         {
-            if (loop)
+            if (loop[(int)Direction.X])
             {
                 //最大値-マイナス値
                 nowPos.x = cursorlist.Count + nowPos.x;
@@ -165,9 +180,9 @@ public class CursorSystem : MonoBehaviour {
             nowPos.y = cursorlist[nowPos.x].Length - 1;
         }
     }
-    public void SetLoop(bool enableloop)
+    public void SetLoop(bool enableloop,Direction direction)
     {
-        this.loop = enableloop;
+        this.loop[(int)direction] = enableloop;
     }
     public void SetEnable(bool enable)
     {
@@ -195,5 +210,43 @@ public class CursorSystem : MonoBehaviour {
     public bool GetEnable()
     {
         return this.enable;
+    }
+    //エラる
+    private void AddCursors(GameObject cursor)
+    {
+        if(cursor == null)
+        {
+            return;
+        }
+        for(int i  = 0;i < cursor.transform.childCount;++i)
+        {
+            if (cursor.transform.GetChild(i).gameObject.activeSelf == true)
+            {
+                AddCursors(cursor.transform.GetChild(i).gameObject);
+            }
+        }
+        var tmp = cursor.GetComponentsInChildren<CursorParam>();
+        if (cursor.activeSelf == true && tmp != null)
+        {
+            cursorlist.Add(tmp);
+        }
+    }
+    public void WarpPosition(Warp warp)
+    {
+        switch (warp)
+        {
+            case Warp.TOP:
+                nowPos.y = 0;
+                break;
+            case Warp.DOWN:
+                nowPos.y = cursorlist[nowPos.x].Length - 1;
+                break;
+            case Warp.LEFT:
+                nowPos.x = 0;
+                break;
+            case Warp.RIGTH:
+                nowPos.x = cursorlist.Count - 1;
+                break;
+        }
     }
 }

@@ -1,17 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class ItemSetSelectManager : CursorSystem
 {
-    [System.Serializable]
-    public class CursorColor
-    {
-        public Color selectImageColor;
-        public Color notSelectcImageColor;
-        public Color selectBackColor;
-        public Color notSelectBackColor;
-    }
     [System.Serializable]
     public class Parameter
     {
@@ -37,7 +29,7 @@ public class ItemSetSelectManager : CursorSystem
     public Parameter parameter;
     SetSelect nowParam;
     SGS.Item item;
-    public CursorColor cursorColor;
+    public SGS.CursorColor cursorColor;
     public GameObject cursor;
     public Vector2 cursorOffset;
 	// Use this for initialization
@@ -45,6 +37,8 @@ public class ItemSetSelectManager : CursorSystem
     {
         cursor.transform.position = parameter.up.transform.position;
         ChangeColor();
+        cursor.SetActive(false);
+        parameter.Reset();
 	}	
 	// Update is called once per frame
 	public override void SystemUpdate(CursorSystemManager manager)
@@ -59,11 +53,11 @@ public class ItemSetSelectManager : CursorSystem
             if(M_System.input.Down(SystemInput.Tag.DECISION))
             {
                 nowParam.SetItemData(item);
-                manager.Next(0);
+                manager.Next((int)ItemManagers.Type.SELECT);
             }
             else if(M_System.input.Down(SystemInput.Tag.CANCEL))
             {
-                manager.Next(0);
+                manager.Next((int)ItemManagers.Type.SELECT);
             }
         }
 	}
@@ -112,13 +106,15 @@ public class ItemSetSelectManager : CursorSystem
     {
         nowParam = parameter.up;
         ChangeColor();
-        cursor.GetComponent<SpriteRenderer>().sprite = item.GetSprite();
+        cursor.GetComponent<Image>().sprite = item.GetSprite();
+        cursor.SetActive(true);
         CursoeMove();
     }
     public override void Exit()
     {
         nowParam = null;
         ChangeColor();
-        cursor.GetComponent<SpriteRenderer>().sprite = null;
+        cursor.GetComponent<Image>().sprite = null;
+        cursor.SetActive(false);
     }
 }

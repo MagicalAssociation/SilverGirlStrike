@@ -15,5 +15,14 @@ public class LoadGame : CursorParam
         Sound.PlaySE("clearSound2");
         StartCoroutine(LoadStart());
     }
-    
+
+    public override void Enter()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Exit()
+    {
+        throw new System.NotImplementedException();
+    }
 }
