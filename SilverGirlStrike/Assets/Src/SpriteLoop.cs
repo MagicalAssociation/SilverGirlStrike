@@ -31,12 +31,12 @@ public class SpriteLoop : MonoBehaviour
         //Start()はInstantiate()の直後に呼ばれるわけではないので、Instantiate()直後にcopyFragを下す
         this.copyFrag = true;
     }
-
-    void Start()
+    private void Awake()
     {
         this.prevCameraPos = this.cameraPos.position;
-
-
+    }
+    void Start()
+    {
         Initialize();
 
         //コピー元のオブジェクトだけがクローンを生成

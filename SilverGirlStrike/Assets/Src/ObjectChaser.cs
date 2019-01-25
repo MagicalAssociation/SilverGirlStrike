@@ -95,7 +95,8 @@ public class ObjectChaser : MonoBehaviour {
     //即座にターゲットの位置に移動
     public void MoveToTarget()
     {
-        this.transform.position = this.targetPosition + this.relativePosition;
+        this.transform.position = this.chaseTarget.position + this.relativePosition;
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.zPos);
+        Debug.Log(this.chaseTarget.position);
     }
 }
