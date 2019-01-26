@@ -111,8 +111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d2f557370760964994279156e2e7b88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageSprite: {fileID: 212500330197630670}
-  backSprite: {fileID: 212353874232110544}
+  itemImage: {fileID: 0}
+  backImage: {fileID: 0}
 --- !u!212 &212353874232110544
 SpriteRenderer:
   m_ObjectHideFlags: 1

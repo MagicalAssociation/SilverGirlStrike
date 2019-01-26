@@ -7,10 +7,12 @@ public class ItemSelectGameManager : CursorSystem
 
     public override void Enter()
     {
+        base.GetNowParam().Enter();
     }
 
     public override void Exit()
     {
+        base.GetNowParam().Exit();
     }
 
     public override void SystemUpdate(CursorSystemManager manager)
@@ -18,13 +20,18 @@ public class ItemSelectGameManager : CursorSystem
 
         if(CursorMove())
         {
-
+            base.GetNowParam().Enter();
         }
         else
         {
-            if (M_System.input.Down(SystemInput.Tag.LSTICK_UP) || M_System.input.Down(SystemInput.Tag.LSTICK_DOWN))
+            if (M_System.input.Down(SystemInput.Tag.LSTICK_UP) || M_System.input.Down(SystemInput.Tag.LSTICK_DOWN) || M_System.input.Down(SystemInput.Tag.CANCEL))
             {
-                manager.Next((int)ItemManagers.Type.SELECT);
+                manager.Next((int)ItemSelectManagers.Type.SELECT);
+            }
+            else if(M_System.input.Down(SystemInput.Tag.DECISION))
+            {
+                GetNowParam().Decision();
+                manager.Next((int)ItemSelectManagers.Type.SELECT);
             }
         }
     }
@@ -32,10 +39,12 @@ public class ItemSelectGameManager : CursorSystem
     {
         if (M_System.input.Down(SystemInput.Tag.LSTICK_LEFT))
         {
+            base.GetNowParam().Exit();
             return base.Left();
         }
         else if(M_System.input.Down(SystemInput.Tag.LSTICK_RIGHT))
         {
+            base.GetNowParam().Exit();
             return base.Right();
         }
         return false;
@@ -43,5 +52,12 @@ public class ItemSelectGameManager : CursorSystem
     // Use this for initialization
     void Start () {
         base.Init();
+        for(int i= 0;i < base.GetList().Count;++i)
+        {
+            for(int j = 0;j <  base.GetLine(i).Length;++j)
+            {
+                base.GetParam(i, j).Exit();
+            }
+        }
 	}
 }

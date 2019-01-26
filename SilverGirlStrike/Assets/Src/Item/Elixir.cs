@@ -7,6 +7,16 @@ namespace Elixir
     public class Item : SGS.Item
     {
         public int recoverValue;
+        public override void Init()
+        {
+            try {
+                this.recoverValue = int.Parse(SGS.Item.Load(this.GetID())[4]);
+            }
+            catch
+            {
+                this.recoverValue = 0;
+            }
+        }
         public override void Use()
         {
             //使用者のHPを回復する
@@ -19,19 +29,11 @@ namespace Elixir
     }
     public class Elixir : SGS.ItemObject
     {
-        Item item;
         private void Start()
         {
-            item = new Item();
+            Item item = new Item();
             item.SetData(SGS.Item.Load(id));
-            try
-            {
-                item.recoverValue = int.Parse(SGS.Item.Load(id)[4]);
-            }
-            catch
-            {
-                item.recoverValue = 0;
-            }
+            item.Init();
             base.Init(item);
         }
         public override void Enter(GameObject hitObject)

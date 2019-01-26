@@ -20,10 +20,82 @@ public class ItemSetSelectManager : CursorSystem
         }
         public void Reset()
         {
+            if (left.GetItem() != null)
+            {
+                left.GetItem().SetNumver(left.GetItem().GetNumver() + 1);
+            }
             left.SetItemData(null);
-            right.SetItemData(null);
-            up.SetItemData(null);
+            if (down.GetItem() != null)
+            {
+                down.GetItem().SetNumver(down.GetItem().GetNumver() + 1);
+            }
             down.SetItemData(null);
+            if (up.GetItem() != null)
+            {
+                up.GetItem().SetNumver(up.GetItem().GetNumver() + 1);
+            }
+            up.SetItemData(null);
+            if (right.GetItem() != null)
+            {
+                right.GetItem().SetNumver(right.GetItem().GetNumver() + 1);
+            }
+            right.SetItemData(null);
+        }
+        public void ItemDataCheck(SGS.Item item)
+        {
+            if (left.GetItem() != null)
+            {
+                if (left.GetItem().GetID() == item.GetID())
+                {
+                    left.GetItem().SetNumver(left.GetItem().GetNumver() + 1);
+                    left.SetItemData(null);
+                }
+            }
+            if (right.GetItem() != null)
+            {
+                if (right.GetItem().GetID() == item.GetID())
+                {
+                    right.GetItem().SetNumver(right.GetItem().GetNumver() + 1);
+                    right.SetItemData(null);
+                }
+            }
+            if (up.GetItem() != null)
+            {
+                if (up.GetItem().GetID() == item.GetID())
+                {
+                    up.GetItem().SetNumver(up.GetItem().GetNumver() + 1);
+                    up.SetItemData(null);
+                }
+            }
+            if (down.GetItem() != null)
+            {
+                if (down.GetItem().GetID() == item.GetID())
+                {
+                    down.GetItem().SetNumver(down.GetItem().GetNumver() + 1);
+                    down.SetItemData(null);
+                }
+            }
+        }
+
+        public SetSelect Search(SetSelect select)
+        {
+            if(select == up)
+            {
+                return up;
+            }
+            else if(select == down)
+            {
+                return down;
+            }
+            else if(select == left)
+            {
+                return left;
+            }
+            else if(select == right)
+            {
+                return right;
+            }
+            return null;
         }
     }
     public Parameter parameter;
@@ -52,12 +124,17 @@ public class ItemSetSelectManager : CursorSystem
         {
             if(M_System.input.Down(SystemInput.Tag.DECISION))
             {
+                parameter.ItemDataCheck(item);
+                if(nowParam.GetItem() != null)
+                {
+                    nowParam.GetItem().SetNumver(nowParam.GetItem().GetNumver() + 1);
+                }
                 nowParam.SetItemData(item);
-                manager.Next((int)ItemManagers.Type.SELECT);
+                manager.Next((int)ItemSelectManagers.Type.SELECT);
             }
             else if(M_System.input.Down(SystemInput.Tag.CANCEL))
             {
-                manager.Next((int)ItemManagers.Type.SELECT);
+                manager.Next((int)ItemSelectManagers.Type.SELECT);
             }
         }
 	}

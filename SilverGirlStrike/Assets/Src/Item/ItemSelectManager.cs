@@ -1,25 +1,40 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //セーブデータの値を持ってきてそこからアイテムの手持ち数をTextでGUIに出すようにする
 
 public class ItemSelectManager : CursorSystem
 {
+    //アイテムの背景画像
     public Sprite back;
+    //アイテムデータを表示するprefab
     public ItemSelect prefab;
+    //アイテム表示の開始位置
     public Transform startPosition;
+    //アイテムの表示サイズ
     public Vector2 size;
+    //アイテム表示の隙間
     public Vector2 clearance;
+    //アイテムを１列にいくつ並べるかの個数
     public int oneRowNumber;
+    //選択アイテムと非選択アイテムの色設定
     public SGS.CursorColor cursorColor;
+    //setManagerにアイテム情報を送るため
     public ItemSetSelectManager nextManager;
+    //アイテムはCanvasの子として登録するので
     public Canvas canvas;
+    //アイテムの説明文出す場所
+    public Text text;
+    //画像データ,ResourceIDとSpriteを登録しておく
     public SGS.Item.ResourceData[] resourceData;
     private List<List<ItemSelect>> itemSelects;
     // Use this for initialization
     void Start()
     {
+        //仮処理、save1のデータを読み込んで登録する
+        M_System.currentData.SetData(GameData.Load(GameData.GetSaveFilePath()[0]));
         //カーソルの1列分をまとめる親GameObjectを生成する
         string[] texts = SGS.Item.Load();
         //１行の量よりも小さい数しか存在しないなら１行の量を変更する
@@ -61,6 +76,7 @@ public class ItemSelectManager : CursorSystem
         itemSelects[GetPos().x][GetPos().y].SetColor(cursorColor.selectImageColor, cursorColor.selectBackColor);
         //ループ設定変更
         base.SetLoop(false, Direction.Y);
+        text.text = itemSelects[GetPos().x][GetPos().y].GetItem().remarks;
     }
 	
     public override void SystemUpdate(CursorSystemManager manager)
@@ -69,16 +85,19 @@ public class ItemSelectManager : CursorSystem
         {
             //色変更処理
             itemSelects[GetPos().x][GetPos().y].SetColor(cursorColor.selectImageColor, cursorColor.selectBackColor);
+            text.text = itemSelects[GetPos().x][GetPos().y].GetItem().remarks;
         }
         else
         {
             //色変更処理
             itemSelects[GetPos().x][GetPos().y].SetColor(cursorColor.selectImageColor, cursorColor.selectBackColor);
             //アイテムデータが存在するところで決定ボタンを押したら、そのアイテムデータを渡す。
-            if (itemSelects[GetPos().x][GetPos().y].GetItem() != null && M_System.input.Down(SystemInput.Tag.DECISION))
+            if (M_System.input.Down(SystemInput.Tag.DECISION) && 
+                (itemSelects[GetPos().x][GetPos().y].GetItem() != null &&
+                itemSelects[GetPos().x][GetPos().y].GetItem().GetNumver() != 0))
             {
                 nextManager.SetItemData(itemSelects[GetPos().x][GetPos().y].GetItem());
-                manager.Next((int)ItemManagers.Type.SET);
+                manager.Next((int)ItemSelectManagers.Type.SET);
             }
             else if (M_System.input.Down(SystemInput.Tag.CANCEL))
             {
@@ -87,7 +106,7 @@ public class ItemSelectManager : CursorSystem
             else if(M_System.input.Down(SystemInput.Tag.LSTICK_DOWN) || M_System.input.Down(SystemInput.Tag.LSTICK_UP))
             {
                 //ゲームセレクトへ移行
-                manager.Next((int)ItemManagers.Type.GAME);
+                manager.Next((int)ItemSelectManagers.Type.GAME);
             }
         }
     }
@@ -126,6 +145,14 @@ public class ItemSelectManager : CursorSystem
     public override void Enter()
     {
         itemSelects[GetPos().x][GetPos().y].SetColor(cursorColor.selectImageColor, cursorColor.selectBackColor);
+        itemSelects[GetPos().x][GetPos().y].TextUpdate();
+        for(int x = 0;x < itemSelects.Count;++x)
+        {
+            for(int y = 0;y < itemSelects[x].Count;++y)
+            {
+                itemSelects[x][y].TextUpdate();
+            }
+        }
     }
     public override void Exit()
     {

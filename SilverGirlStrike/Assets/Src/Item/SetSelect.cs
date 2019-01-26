@@ -5,20 +5,10 @@ using UnityEngine.UI;
 public class SetSelect : CursorParam
 {
     SGS.Item item;
-    //public SpriteRenderer imageSprite;
-    //public SpriteRenderer backSprite;
     public Image itemImage;
     public Image backImage;
-    public enum Type
-    {
-        IMAGE,
-        SPRITE,
-    }
-    public Type type;
-    public M_System.ItemDirection direction;
     public override void Decision()
     {
-        M_System.gameStartItems[(int)direction] = this.item;
     }
     public void SetItemData(SGS.Item item)
     {
@@ -32,6 +22,7 @@ public class SetSelect : CursorParam
         {
             this.itemImage.sprite = item.GetSprite();
             this.itemImage.color = new Color(1, 1, 1, 1);
+            item.SetNumver(item.GetNumver() - 1);
         }
     }
     public void SetColor(Color image,Color back)
@@ -41,6 +32,10 @@ public class SetSelect : CursorParam
             itemImage.color = image;
         }
         backImage.color = back;
+    }
+    public SGS.Item GetItem()
+    {
+        return this.item;
     }
 
     public override void Enter()

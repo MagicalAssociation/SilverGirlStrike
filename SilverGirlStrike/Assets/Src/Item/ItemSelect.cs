@@ -7,6 +7,7 @@ public class ItemSelect : CursorParam {
     //public SpriteRenderer itemImg;
     public Image backImage;
     public Image itemImage;
+    public Text number;
     SGS.Item item;
     int num;
     public SGS.Item GetItem()
@@ -17,13 +18,18 @@ public class ItemSelect : CursorParam {
     {
         item = new SGS.Item();
         item.SetData(SGS.Item.Load(id));
-        M_System.currentData.SetData(new Save.DataParameter());
-        num = M_System.currentData.GetData().GetItemNumber(id);
+        item.SetNumver(M_System.currentData.GetData().GetItemNumber(id));
+        TextUpdate();
     }
     public void SetSize(Vector2 size)
     {
         backImage.rectTransform.sizeDelta = size;
         itemImage.rectTransform.sizeDelta = size;
+    }
+
+    public void TextUpdate()
+    {
+        number.text = item.GetNumver().ToString();
     }
 
     public override void Decision()

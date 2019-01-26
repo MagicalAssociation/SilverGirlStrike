@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class ResetItem : CursorParam {
     public ItemSetSelectManager manager;
     public SGS.CursorColor cursorColor;
+    public Image image;
     public override void Decision()
     {
         manager.parameter.Reset();
@@ -12,12 +13,12 @@ public class ResetItem : CursorParam {
 
     public override void Enter()
     {
-        throw new System.NotImplementedException();
+        image.color = cursorColor.selectImageColor;
     }
 
     public override void Exit()
     {
-        throw new System.NotImplementedException();
+        image.color = cursorColor.notSelectcImageColor;
     }
 
     // Use this for initialization

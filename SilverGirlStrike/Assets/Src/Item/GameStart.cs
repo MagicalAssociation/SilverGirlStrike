@@ -2,28 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 public class GameStart : CursorParam
 {
     public SGS.CursorColor cursorColor;
-    IEnumerator Game()
-    {
-        yield return new WaitForSeconds(0.0f);
-        SceneManager.LoadScene("GameScene");
-    }
+    public Image image;
+    public ItemSetSelectManager manager;
     public override void Decision()
     {
+        //Itemデータを相手に渡す
+        M_System.gameStartItems[(int)M_System.ItemDirection.UP] = manager.parameter.up.GetItem();
+        M_System.gameStartItems[(int)M_System.ItemDirection.DOWN] = manager.parameter.down.GetItem();
+        M_System.gameStartItems[(int)M_System.ItemDirection.LEFT] = manager.parameter.left.GetItem();
+        M_System.gameStartItems[(int)M_System.ItemDirection.RIGHT] = manager.parameter.right.GetItem();
         Sound.PlaySE("clearSound2");
-        StartCoroutine(Game());
+        SceneManager.LoadScene("GameScene");
     }
 
     public override void Enter()
     {
-        throw new System.NotImplementedException();
+        image.color = cursorColor.selectImageColor;
     }
 
     public override void Exit()
     {
-        throw new System.NotImplementedException();
+        image.color = cursorColor.notSelectcImageColor;
     }
 }

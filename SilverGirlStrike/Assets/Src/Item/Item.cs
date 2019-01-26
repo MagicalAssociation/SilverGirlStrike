@@ -69,6 +69,10 @@ namespace SGS
         private int resourceID;
         //実際のリソース情報
         private Sprite sprite;
+        //個数
+        private int num;
+        //無限
+        private bool infinite;
         /**
          * enum LinesItemNumber
          */ 
@@ -83,6 +87,10 @@ namespace SGS
          * brief    使用時の効果を記述
          */ 
         public virtual void Use() { }
+        /**
+         * brief    初期化
+         */
+         public virtual void Init() { }
         public void SetData(int id,string name,string remarks,int resourceid)
         {
             this.id = id;
@@ -166,6 +174,14 @@ namespace SGS
         public Sprite GetSprite()
         {
             return sprite;
+        }
+        public void SetNumver(int n)
+        {
+            this.num = n;
+        }
+        public int GetNumver()
+        {
+            return this.num;
         }
     }
     /**
