@@ -18,7 +18,10 @@ public class PlayerCameraMan : CharacterObject
     private Vector3 lookVector;
     private Vector3 lookVectorGoal;
 
-
+    private void Awake()
+    {
+        this.transform.position = targetPlayer.transform.position;
+    }
     private void Start()
     {
         this.lookVector = Vector3.zero;

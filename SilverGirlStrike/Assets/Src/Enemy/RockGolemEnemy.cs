@@ -583,6 +583,10 @@ namespace RockGolem
 
             public override void Update()
             {
+                if(GetInspectorParam().targetCharacter == null)
+                {
+                    return;
+                }
                 if (GetTime() < pressWaitTime)
                 {
                     this.movePower = (float)GetTime() / pressWaitTime * 5.0f;

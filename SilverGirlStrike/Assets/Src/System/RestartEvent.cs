@@ -9,8 +9,10 @@ using UnityEngine.SceneManagement;
 public class RestartEvent : MonoBehaviour {
     private static bool isExist = false;
 
+    private List<Transform> startPoints;
+
     [SerializeField]
-    private Transform[] startPoint;
+    private Transform[] serializeStartPoint;
     [SerializeField]
     private int startPointIndex;
 
@@ -25,14 +27,22 @@ public class RestartEvent : MonoBehaviour {
     //登録されているシーンの名前（起動時に自動取得）
     private string currentSceneName;
 
-    void Start () {
+    private void Awake()
+    {
         //複数のオブジェクトがある場合は削除して一つになることを保証
         if (isExist)
         {
             Destroy(this.gameObject);
             return;
         }
-
+        this.startPoints = new List<Transform>();
+        //Inspectorの値を配列に追加
+        foreach (var i in this.serializeStartPoint)
+        {
+            AddRestartPoint(i);
+        }
+    }
+    void Start () {
         //初期化
         DontDestroySetting();
         CreatePlayerObject();
@@ -62,7 +72,8 @@ public class RestartEvent : MonoBehaviour {
 
         //z軸の座標は、初期値のまま動かさないので保持しておく
         float zPos = obj.position.z;
-        obj.position = new Vector3(this.startPoint[this.startPointIndex].position.x, this.startPoint[this.startPointIndex].position.y, zPos);
+        Transform point = GetStartPoint(this.startPointIndex);
+        obj.position = new Vector3(point.position.x, point.position.y, zPos);
 
         //登録
         var character = obj.gameObject.GetComponent<CharacterObject>();
@@ -72,6 +83,7 @@ public class RestartEvent : MonoBehaviour {
         //プレイヤーをカメラが追従するように設定
         var chaseObj = this.characterManager.GetCharacterTrans("PlayerCameraMan");
         cameraObj.SetTarget(chaseObj);
+        cameraObj.gameObject.transform.position = character.transform.position + Vector3.up * 30.0f;
     }
 
     private void DontDestroySetting()
@@ -92,4 +104,29 @@ public class RestartEvent : MonoBehaviour {
         //初期化
         CreatePlayerObject();
     }
+
+    //リスタート地点登録
+    public int AddRestartPoint(Transform trans)
+    {
+        this.startPoints.Add(trans);
+        return this.startPoints.Count - 1;
+    }
+
+    //リスタート地点設定
+    public void SetRestartPointIndex(int index)
+    {
+        if(index < 0 || index >= this.startPoints.Count)
+        {
+            //配列外は無視
+            return;
+        }
+
+        this.startPointIndex = index;
+    }
+
+    Transform GetStartPoint(int index)
+    {
+        return this.startPoints[index];
+    }
+
 }
