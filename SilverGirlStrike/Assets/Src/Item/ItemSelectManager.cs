@@ -34,7 +34,7 @@ public class ItemSelectManager : CursorSystem
     void Start()
     {
         //仮処理、save1のデータを読み込んで登録する
-        M_System.currentData.SetData(GameData.Load(GameData.GetSaveFilePath()[0]));
+        CurrentData.GetDataInstance().SetData(GameData.Load(GameData.GetSaveFilePath()[0]));
         //カーソルの1列分をまとめる親GameObjectを生成する
         string[] texts = SGS.Item.Load();
         //１行の量よりも小さい数しか存在しないなら１行の量を変更する

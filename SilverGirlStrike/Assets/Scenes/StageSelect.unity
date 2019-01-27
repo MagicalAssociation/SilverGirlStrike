@@ -896,6 +896,17 @@ MonoBehaviour:
     audio: {fileID: 8300000, guid: fac1e1181dd3fa24fab626be5a6ad7d7, type: 3}
   - key: clearSound2
     audio: {fileID: 8300000, guid: f39e1f8ef76622b408ce35303810f288, type: 3}
+--- !u!114 &1340749473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1340749471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cc5dcf32c5a4d479691d2579404032, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1356142332
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,24 +16,20 @@ public class ItemManager : MonoBehaviour
     SGS.Item[] itemData;
     //使用者
     public CharacterObject master;
-    public enum ItemDirection : int
-    {
-        UP = 0,
-        DOWN = 1,
-        LEFT = 2,
-        RIGHT = 3,
-    }
     // Use this for initialization
     void Start()
     {
         itemData = new SGS.Item[4];
         //アイテムデータをロードする
         //実処理が書いてあるのはItemを継承した先なのでidに応じて生成それをnewしてそこにidやらを渡してやる
-        for(int i = 0;i < itemData.Length;++i)
+        for (int i = 0; i < itemData.Length; ++i)
         {
-            CreateItemData(i, M_System.gameStartItems[i]);
-            itemData[i].master = master;
-            itemData[i].Init();
+            CreateItemData(i, CurrentData.GetItemData(i));
+            if (itemData[i] != null)
+            {
+                itemData[i].master = master;
+                itemData[i].Init();
+            }
         }
     }
 	
@@ -42,39 +38,43 @@ public class ItemManager : MonoBehaviour
     {
         if(M_System.input.Down(SystemInput.Tag.ITEM_U))
         {
-            if (itemData[(int)ItemDirection.UP] != null)
+            Debug.Log("ITEM_U");
+            if (itemData[(int)CurrentData.ItemDirection.UP] != null)
             {
-                itemData[(int)ItemDirection.UP].Use();
+                itemData[(int)CurrentData.ItemDirection.UP].Use();
             }
         }
         else if(M_System.input.Down(SystemInput.Tag.ITEM_D))
         {
-            if (itemData[(int)ItemDirection.DOWN] != null)
+            Debug.Log("ITEM_D");
+            if (itemData[(int)CurrentData.ItemDirection.DOWN] != null)
             {
-                itemData[(int)ItemDirection.DOWN].Use();
+                itemData[(int)CurrentData.ItemDirection.DOWN].Use();
             }
         }
         else if(M_System.input.Down(SystemInput.Tag.ITEM_L))
         {
-            if (itemData[(int)ItemDirection.LEFT] != null)
+            Debug.Log("ITEM_L");
+            if (itemData[(int)CurrentData.ItemDirection.LEFT] != null)
             {
-                itemData[(int)ItemDirection.LEFT].Use();
+                itemData[(int)CurrentData.ItemDirection.LEFT].Use();
             }
         }
         else if(M_System.input.Down(SystemInput.Tag.ITEM_R))
         {
-            if (itemData[(int)ItemDirection.RIGHT] != null)
+            Debug.Log("ITEM_R");
+            if (itemData[(int)CurrentData.ItemDirection.RIGHT] != null)
             {
-                itemData[(int)ItemDirection.RIGHT].Use();
+                itemData[(int)CurrentData.ItemDirection.RIGHT].Use();
             }
         }
 	}
     public void SaveItemData()
     {
-        M_System.gameStartItems[(int)M_System.ItemDirection.UP] = itemData[(int)ItemDirection.UP];
-        M_System.gameStartItems[(int)M_System.ItemDirection.DOWN] = itemData[(int)ItemDirection.DOWN];
-        M_System.gameStartItems[(int)M_System.ItemDirection.LEFT] = itemData[(int)ItemDirection.LEFT];
-        M_System.gameStartItems[(int)M_System.ItemDirection.RIGHT] = itemData[(int)ItemDirection.RIGHT];
+        CurrentData.SetItemData((int)CurrentData.ItemDirection.UP, itemData[(int)CurrentData.ItemDirection.UP]);
+        CurrentData.SetItemData((int)CurrentData.ItemDirection.DOWN, itemData[(int)CurrentData.ItemDirection.DOWN]);
+        CurrentData.SetItemData((int)CurrentData.ItemDirection.LEFT, itemData[(int)CurrentData.ItemDirection.LEFT]);
+        CurrentData.SetItemData((int)CurrentData.ItemDirection.RIGHT, itemData[(int)CurrentData.ItemDirection.RIGHT]);
     }
 
     private void CreateItemData(int num,SGS.Item loaditem)

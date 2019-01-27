@@ -1373,76 +1373,42 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4776114004779224, guid: 2745cf7020eb9224d9cf9c680e7e2e45, type: 2}
+    - target: {fileID: 4488865747490200, guid: b86c9fb378a7abf44a04d5d05dbf37f2, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4776114004779224, guid: 2745cf7020eb9224d9cf9c680e7e2e45, type: 2}
+    - target: {fileID: 4488865747490200, guid: b86c9fb378a7abf44a04d5d05dbf37f2, type: 2}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4776114004779224, guid: 2745cf7020eb9224d9cf9c680e7e2e45, type: 2}
+    - target: {fileID: 4488865747490200, guid: b86c9fb378a7abf44a04d5d05dbf37f2, type: 2}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4776114004779224, guid: 2745cf7020eb9224d9cf9c680e7e2e45, type: 2}
+    - target: {fileID: 4488865747490200, guid: b86c9fb378a7abf44a04d5d05dbf37f2, type: 2}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4776114004779224, guid: 2745cf7020eb9224d9cf9c680e7e2e45, type: 2}
+    - target: {fileID: 4488865747490200, guid: b86c9fb378a7abf44a04d5d05dbf37f2, type: 2}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4776114004779224, guid: 2745cf7020eb9224d9cf9c680e7e2e45, type: 2}
+    - target: {fileID: 4488865747490200, guid: b86c9fb378a7abf44a04d5d05dbf37f2, type: 2}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4776114004779224, guid: 2745cf7020eb9224d9cf9c680e7e2e45, type: 2}
+    - target: {fileID: 4488865747490200, guid: b86c9fb378a7abf44a04d5d05dbf37f2, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4776114004779224, guid: 2745cf7020eb9224d9cf9c680e7e2e45, type: 2}
+    - target: {fileID: 4488865747490200, guid: b86c9fb378a7abf44a04d5d05dbf37f2, type: 2}
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 1623725701919586, guid: 2745cf7020eb9224d9cf9c680e7e2e45, type: 2}
+    - target: {fileID: 1048854456694456, guid: b86c9fb378a7abf44a04d5d05dbf37f2, type: 2}
       propertyPath: m_Name
       value: InputObject
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2745cf7020eb9224d9cf9c680e7e2e45, type: 2}
+  m_SourcePrefab: {fileID: 100100000, guid: b86c9fb378a7abf44a04d5d05dbf37f2, type: 2}
   m_IsPrefabAsset: 0
---- !u!1 &1700501518 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1623725701919586, guid: 2745cf7020eb9224d9cf9c680e7e2e45,
-    type: 2}
-  m_PrefabInternal: {fileID: 1607227326}
---- !u!114 &1700501519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1700501518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa10f15f37382e64ca34e1fcc0fc0131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bgmList:
-  - key: opStageBGM
-    audio: {fileID: 8300000, guid: df8ee9e3a8d26a74dbac2ba844c7a00f, type: 3}
-  - key: bossBattle
-    audio: {fileID: 8300000, guid: 589adac314ab5e4499e6ce4a017c18d0, type: 3}
-  seList:
-  - key: jump
-    audio: {fileID: 8300000, guid: 714675d000489184197a929b2d8ff86b, type: 3}
-  - key: onGround
-    audio: {fileID: 8300000, guid: 3fb86f7aa1dfacf4f89bb6645a68e6cb, type: 3}
-  - key: wireHit
-    audio: {fileID: 8300000, guid: f426cf296d9efa14792106e2e227746d, type: 3}
-  - key: wireShot
-    audio: {fileID: 8300000, guid: b5d610a338db5ef4b871658241d907a0, type: 3}
-  - key: clearSound
-    audio: {fileID: 8300000, guid: fac1e1181dd3fa24fab626be5a6ad7d7, type: 3}
-  - key: clearSound2
-    audio: {fileID: 8300000, guid: f39e1f8ef76622b408ce35303810f288, type: 3}

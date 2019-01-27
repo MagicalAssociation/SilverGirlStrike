@@ -18,7 +18,7 @@ public class ItemSelect : CursorParam {
     {
         item = new SGS.Item();
         item.SetData(SGS.Item.Load(id));
-        item.SetNumver(M_System.currentData.GetData().GetItemNumber(id));
+        item.SetNumver(CurrentData.GetDataInstance().GetData().GetItemNumber(id));
         TextUpdate();
     }
     public void SetSize(Vector2 size)

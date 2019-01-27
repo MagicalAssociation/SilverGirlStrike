@@ -31,6 +31,7 @@ namespace Elixir
             {
                 return;
             }
+            Debug.Log(master.name + ":" + this.remarks + ":" + this.recoverValue.ToString());
             master.GetData().hitPoint.Recover(recoverValue);
         }
     }

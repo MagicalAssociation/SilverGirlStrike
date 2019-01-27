@@ -11,10 +11,10 @@ public class GameStart : CursorParam
     public override void Decision()
     {
         //Itemデータを相手に渡す
-        M_System.gameStartItems[(int)M_System.ItemDirection.UP] = manager.parameter.up.GetItem();
-        M_System.gameStartItems[(int)M_System.ItemDirection.DOWN] = manager.parameter.down.GetItem();
-        M_System.gameStartItems[(int)M_System.ItemDirection.LEFT] = manager.parameter.left.GetItem();
-        M_System.gameStartItems[(int)M_System.ItemDirection.RIGHT] = manager.parameter.right.GetItem();
+        CurrentData.SetItemData((int)CurrentData.ItemDirection.UP, manager.parameter.up.GetItem());
+        CurrentData.SetItemData((int)CurrentData.ItemDirection.DOWN, manager.parameter.down.GetItem());
+        CurrentData.SetItemData((int)CurrentData.ItemDirection.LEFT, manager.parameter.left.GetItem());
+        CurrentData.SetItemData((int)CurrentData.ItemDirection.RIGHT, manager.parameter.right.GetItem());
         Sound.PlaySE("clearSound2");
         SceneManager.LoadScene("GameScene");
     }

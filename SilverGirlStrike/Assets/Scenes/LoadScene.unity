@@ -809,6 +809,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmList: []
   seList: []
+--- !u!114 &1489936344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1489936342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cc5dcf32c5a4d479691d2579404032, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1557829204 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224196835521943676, guid: e9db4aa180efab9419b6699366979cae,

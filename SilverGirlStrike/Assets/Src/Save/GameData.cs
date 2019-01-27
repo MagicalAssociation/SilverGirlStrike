@@ -48,18 +48,7 @@ namespace Save
         public List<ItemData> itemData;
     }
 }
-public class CurrentData
-{
-    Save.DataParameter data;
-    public void SetData(Save.DataParameter parameter)
-    {
-        data = parameter;
-    }
-    public Save.DataParameter GetData()
-    {
-        return this.data;
-    }
-}
+
 public class GameData : MonoBehaviour
 {
     //セーブデータファイル名を保存してるファイルが破損したときに使う用
