@@ -9,10 +9,11 @@ namespace TextEvent
     namespace Action
     {
         /////////////////////////////////////////////////
-        //テストイベント処理
-        public class Action1 : ActionFunction
+        //HPゲージ召喚
+        //args: (HP参照先のキャラ名, Vector2(少数2つのスクリーン空間) position)
+        public class CreateBossHPGauge : ActionFunction
         {
-            public Action1(EventGameData gameData) :
+            public CreateBossHPGauge(EventGameData gameData) :
                 base(gameData)
             {
             }
@@ -22,25 +23,62 @@ namespace TextEvent
 
             public override void Action()
             {
-                //指定位置に特定のオブジェクトを動かす
-                var obj = GameObject.Find(this.objName);
-                if (obj == null)
-                {
-                    return;
-                }
-                obj.transform.position = this.pos;
+                // プレハブを取得
+                GameObject prefab = (GameObject)Resources.Load("prefab/BossGauge");
+                // プレハブからインスタンスを生成
+                var obj = GameObject.Instantiate<GameObject>(prefab, Vector3.zero, Quaternion.identity, GetGameData().canvas.transform);
+                //参照先設定
+                obj.GetComponent<BossGauge>().target = GetGameData().characterManager.GetCharacter(objName);
+                obj.GetComponent<RectTransform>().anchoredPosition = this.pos;
             }
 
             public override void ActionStart(string[] args)
             {
                 this.objName = args[0];
-                this.pos = new Vector3(float.Parse(args[1]), float.Parse(args[2]), float.Parse(args[3]));
+                this.pos = new Vector3(float.Parse(args[1]), float.Parse(args[2]));
             }
 
             public override bool IsEnd()
             {
                 //すぐ終わる
                 return true;
+            }
+        }
+
+        /////////////////////////////////////////////////
+        //ウェイト
+        //args: (フレーム単位のウェイト)
+        public class WaitForFrame : ActionFunction
+        {
+            float waitFrame;
+            int count;
+
+            public WaitForFrame(EventGameData gameData) :
+                base(gameData)
+            {
+            }
+
+
+            public override void Action()
+            {
+                ++count;
+            }
+
+            public override void ActionStart(string[] args)
+            {
+                this.waitFrame = float.Parse(args[0]);
+                this.count = 0;
+            }
+
+            public override bool IsEnd()
+            {
+                //カウントが終わったら終わる
+                if(this.count > this.waitFrame)
+                {
+                    return true;
+                }
+
+                return false;
             }
         }
 
