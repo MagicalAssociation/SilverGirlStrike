@@ -193,6 +193,17 @@ public class CharacterManager : MonoBehaviour
         return this.objectList[characterID].character.GetData();
     }
 
+    //キャラクターへ直接アクセスする
+    public CharacterObject GetCharacter(string characterName)
+    {
+        CharacterManager.CharacterData charaData = null;
+        if (this.objects.TryGetValue(characterName, out charaData))
+        {
+            return charaData.character;
+        }
+        return null;
+    }
+
     //現在の空いているIDを検索、空きがない場合は-1を返す
     int GetUseableID()
     {

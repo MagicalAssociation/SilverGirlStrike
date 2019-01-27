@@ -16,7 +16,8 @@ namespace TextEvent
         public CharacterManager characterManager;
         //イベント判定コリジョンの情報
         public EventCollisionFinder collisionFinder;
-
+        //GUIのキャンバス位置
+        public Canvas canvas;
 
         //現在実行中のイベント、イベント固有の値をゲッツするための苦肉の策
         [System.NonSerialized]

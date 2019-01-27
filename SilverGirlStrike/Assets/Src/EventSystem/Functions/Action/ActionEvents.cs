@@ -9,10 +9,11 @@ namespace TextEvent
     namespace Action
     {
         /////////////////////////////////////////////////
-        //テストイベント処理
-        public class Action1 : ActionFunction
+        //HPゲージ召喚
+        //args: (HP参照先のキャラ名, Vector2(少数2つのスクリーン空間) position)
+        public class CreateBossHPGauge : ActionFunction
         {
-            public Action1(EventGameData gameData) :
+            public CreateBossHPGauge(EventGameData gameData) :
                 base(gameData)
             {
             }
@@ -22,25 +23,90 @@ namespace TextEvent
 
             public override void Action()
             {
-                //指定位置に特定のオブジェクトを動かす
-                var obj = GameObject.Find(this.objName);
-                if (obj == null)
-                {
-                    return;
-                }
-                obj.transform.position = this.pos;
+                // プレハブを取得
+                GameObject prefab = (GameObject)Resources.Load("prefab/BossGauge");
+                // プレハブからインスタンスを生成
+                var obj = GameObject.Instantiate<GameObject>(prefab, Vector3.zero, Quaternion.identity, GetGameData().canvas.transform);
+                //参照先設定
+                obj.GetComponent<BossGauge>().target = GetGameData().characterManager.GetCharacter(objName);
+                obj.GetComponent<RectTransform>().anchoredPosition = this.pos;
             }
 
             public override void ActionStart(string[] args)
             {
                 this.objName = args[0];
-                this.pos = new Vector3(float.Parse(args[1]), float.Parse(args[2]), float.Parse(args[3]));
+                this.pos = new Vector3(float.Parse(args[1]), float.Parse(args[2]));
             }
 
             public override bool IsEnd()
             {
                 //すぐ終わる
                 return true;
+            }
+        }
+        /////////////////////////////////////////////////
+        //リザルト召喚
+        //args: (無し)
+        public class CreateResult : ActionFunction
+        {
+            public CreateResult(EventGameData gameData) :
+                base(gameData)
+            {
+            }
+
+            public override void Action()
+            {
+                // プレハブを取得
+                GameObject prefab = (GameObject)Resources.Load("prefab/Result");
+                // プレハブからインスタンスを生成
+                var obj = GameObject.Instantiate<GameObject>(prefab, GetGameData().canvas.transform);
+            }
+
+            public override void ActionStart(string[] args)
+            {
+            }
+
+            public override bool IsEnd()
+            {
+                //すぐ終わる
+                return true;
+            }
+        }
+
+        /////////////////////////////////////////////////
+        //ウェイト
+        //args: (フレーム単位のウェイト)
+        public class WaitForFrame : ActionFunction
+        {
+            float waitFrame;
+            int count;
+
+            public WaitForFrame(EventGameData gameData) :
+                base(gameData)
+            {
+            }
+
+
+            public override void Action()
+            {
+                ++count;
+            }
+
+            public override void ActionStart(string[] args)
+            {
+                this.waitFrame = float.Parse(args[0]);
+                this.count = 0;
+            }
+
+            public override bool IsEnd()
+            {
+                //カウントが終わったら終わる
+                if(this.count > this.waitFrame)
+                {
+                    return true;
+                }
+
+                return false;
             }
         }
 
@@ -213,11 +279,12 @@ namespace TextEvent
 
         /////////////////////////////////////////////////
         //BGMスタート
-        //args: (string BGMName)
+        //args: (string BGMName, bool isLoop)
         public class BGMPlay : ActionFunction
         {
-            //相対的な位置
+            //BGM再生のデータ
             string bgmName;
+            bool isLoop;
 
             public BGMPlay(EventGameData gameData) :
                 base(gameData)
@@ -227,7 +294,7 @@ namespace TextEvent
 
             public override void Action()
             {
-                Sound.PlayBGM(this.bgmName);
+                Sound.PlayBGM(this.bgmName, this.isLoop);
                 Sound.SetVolumeBGM(Sound.GetBaseVolumeBGM());
             }
 
@@ -235,6 +302,7 @@ namespace TextEvent
             {
                 //BGM名
                 this.bgmName = args[0];
+                this.isLoop = TextEvent.TextParser.ParseBoolean(args[1]);
             }
 
             public override bool IsEnd()
@@ -290,6 +358,10 @@ namespace TextEvent
             public override void Action()
             {
                 M_System.input.SetEnableStop(false);
+
+                //強制入力も解除
+                M_System.input.SetForced(SystemInput.Tag.LSTICK_RIGHT, false);
+                M_System.input.SetForced(SystemInput.Tag.LSTICK_DOWN, false);
             }
 
             public override void ActionStart(string[] args)
@@ -325,14 +397,6 @@ namespace TextEvent
                 M_System.input.SetAxisForced(SystemInput.Tag.LSTICK_DOWN, this.axis.y);
                 M_System.input.SetForced(SystemInput.Tag.LSTICK_RIGHT, true);
                 M_System.input.SetForced(SystemInput.Tag.LSTICK_DOWN, true);
-                ++this.count;
-
-                //終了の後かたずけ
-                if(this.count > this.waitFrame)
-                {
-                    M_System.input.SetForced(SystemInput.Tag.LSTICK_RIGHT, false);
-                    M_System.input.SetForced(SystemInput.Tag.LSTICK_DOWN, false);
-                }
             }
 
             public override void ActionStart(string[] args)
@@ -345,8 +409,8 @@ namespace TextEvent
 
             public override bool IsEnd()
             {
-                //すぐ終わる
-                return this.count > this.waitFrame;
+                //解除しない限りはずっと倒しっぱなし
+                return true;
             }
         }
 

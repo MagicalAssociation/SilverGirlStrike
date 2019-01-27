@@ -740,7 +740,7 @@ namespace RockGolem
         {
             //メンバー
             const int burstStartTime = 120;
-            const int burstTime = 120;
+            const int burstTime = 180;
 
             public DeathState(RockGolemEnemy param) : base(param)
             {
@@ -750,6 +750,7 @@ namespace RockGolem
             {
                 GetParam().myself.GetData().hitPoint.SetDamageShutout(true);
 
+                Sound.PlaySE("slashFlash");
                 Sound.StopBGM();
             }
 
@@ -768,17 +769,22 @@ namespace RockGolem
                 GetParam().myself.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.0f, 0.0f, 1.0f);
 
 
-                if (base.GetTime() % 5 == 0 && base.GetTime() >= burstStartTime && base.GetTime() <= burstStartTime + burstTime)
+                if (base.GetTime() % 7 == 0 && base.GetTime() >= burstStartTime && base.GetTime() <= burstStartTime + burstTime - 10)
                 {
                     Sound.PlaySE("bombSmall");
-                    Vector3 randomMove = new Vector3(Random.Range(0.0f, 2.0f) - 1.0f, Random.Range(0.0f, 2.0f) - 1.0f, 0.0f);
+                    Vector3 randomMove = new Vector3(Random.Range(0.0f, 3.0f) - 1.5f, Random.Range(0.0f, 3.0f) - 1.5f, 0.0f);
                     Effect.Get().CreateEffect("manyBombs", GetParam().myself.transform.position - Vector3.forward + randomMove, Quaternion.identity, Vector3.one * 2);
                 }
 
-                if(base.GetTime() > burstStartTime + burstTime)
+                if(base.GetTime() == burstStartTime + burstTime - 10)
                 {
-                    Sound.PlaySE("slashFlash");
+                    Sound.PlaySE("crash1");
+                }
+                if (base.GetTime() > burstStartTime + burstTime)
+                    {
+                    Sound.PlaySE("bombBig");
                     Effect.Get().CreateEffect("defeat", GetParam().myself.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
+                    Effect.Get().CreateEffect("flash", GetParam().myself.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
                     GetParam().myself.KillMyself();
                 }
             }

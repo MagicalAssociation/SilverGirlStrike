@@ -55,10 +55,10 @@ public class Effect {
     public int CreateEffect(string name, Vector3 pos, Quaternion rot, Vector3 scale)           //検索する名前に一致するgameObjectを生成する
     {
         GameObject eff = Object.Instantiate(this.effectDictionary[name], Vector3.zero, Quaternion.identity);
-        eff.transform.position = pos;
-        eff.transform.rotation = rot;
-        eff.transform.localScale = scale;
-
+        var trans = eff.transform;
+        trans.position = pos;
+        trans.rotation = rot;
+        trans.localScale = new Vector3(trans.localScale.x * scale.x, trans.localScale.y * scale.y, trans.localScale.z * scale.z);
         int id = GetUseableID();
         this.objectList[id] = eff;
         return id;
