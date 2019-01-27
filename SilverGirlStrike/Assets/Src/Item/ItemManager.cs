@@ -6,6 +6,13 @@ using UnityEngine;
 //リトライ時は外部からセーブ関数を呼びM_Systemに情報を渡す。それを再びStartで読み込む
 public class ItemManager : MonoBehaviour
 {
+    public enum ItemTag
+    {
+        Elixir1 = 0,
+        Elixir2 = 1,
+        Elixir3 = 2,
+        Star1 = 3,
+    }
     SGS.Item[] itemData;
     //使用者
     public CharacterObject master;
@@ -20,19 +27,13 @@ public class ItemManager : MonoBehaviour
     void Start()
     {
         itemData = new SGS.Item[4];
-        for(int i = 0;i < itemData.Length;++i)
-        {
-            itemData[i] = new SGS.Item();
-        }
         //アイテムデータをロードする
         //実処理が書いてあるのはItemを継承した先なのでidに応じて生成それをnewしてそこにidやらを渡してやる
-        itemData[(int)ItemDirection.UP] = M_System.gameStartItems[(int)M_System.ItemDirection.UP];
-        itemData[(int)ItemDirection.DOWN] = M_System.gameStartItems[(int)M_System.ItemDirection.DOWN];
-        itemData[(int)ItemDirection.LEFT] = M_System.gameStartItems[(int)M_System.ItemDirection.LEFT];
-        itemData[(int)ItemDirection.RIGHT] = M_System.gameStartItems[(int)M_System.ItemDirection.RIGHT];
         for(int i = 0;i < itemData.Length;++i)
         {
+            CreateItemData(i, M_System.gameStartItems[i]);
             itemData[i].master = master;
+            itemData[i].Init();
         }
     }
 	
@@ -74,5 +75,24 @@ public class ItemManager : MonoBehaviour
         M_System.gameStartItems[(int)M_System.ItemDirection.DOWN] = itemData[(int)ItemDirection.DOWN];
         M_System.gameStartItems[(int)M_System.ItemDirection.LEFT] = itemData[(int)ItemDirection.LEFT];
         M_System.gameStartItems[(int)M_System.ItemDirection.RIGHT] = itemData[(int)ItemDirection.RIGHT];
+    }
+
+    private void CreateItemData(int num,SGS.Item loaditem)
+    {
+        if (loaditem == null) 
+        {
+            return;
+        }
+        switch(loaditem.GetID())
+        {
+            case (int)ItemTag.Elixir1:
+            case (int)ItemTag.Elixir2:
+            case (int)ItemTag.Elixir3:
+                itemData[num] = new Elixir.Item(loaditem);
+                break;
+            case (int)ItemTag.Star1:
+                itemData[num] = new Star.Item(loaditem);
+                break;
+        }
     }
 }

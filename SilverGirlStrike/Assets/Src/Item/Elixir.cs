@@ -17,6 +17,13 @@ namespace Elixir
                 this.recoverValue = 0;
             }
         }
+        public Item()
+        {
+
+        }
+        public Item(SGS.Item item) : base(item)
+        {
+        }
         public override void Use()
         {
             //使用者のHPを回復する

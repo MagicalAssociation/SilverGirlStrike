@@ -83,6 +83,21 @@ namespace SGS
             REMARKS = 2,
             R_ID = 3,
         }
+        public Item()
+        {
+
+        }
+        public Item(Item item)
+        {
+            this.master = item.master;
+            this.id = item.id;
+            this.name = item.name;
+            this.remarks = item.remarks;
+            this.resourceID = item.resourceID;
+            this.sprite = item.sprite;
+            this.num = item.num;
+            this.infinite = item.infinite;
+        }
         /**
          * brief    使用時の効果を記述
          */ 
