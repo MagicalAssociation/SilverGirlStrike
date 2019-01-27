@@ -44,6 +44,34 @@ namespace TextEvent
                 return true;
             }
         }
+        /////////////////////////////////////////////////
+        //リザルト召喚
+        //args: (無し)
+        public class CreateResult : ActionFunction
+        {
+            public CreateResult(EventGameData gameData) :
+                base(gameData)
+            {
+            }
+
+            public override void Action()
+            {
+                // プレハブを取得
+                GameObject prefab = (GameObject)Resources.Load("prefab/Result");
+                // プレハブからインスタンスを生成
+                var obj = GameObject.Instantiate<GameObject>(prefab, GetGameData().canvas.transform);
+            }
+
+            public override void ActionStart(string[] args)
+            {
+            }
+
+            public override bool IsEnd()
+            {
+                //すぐ終わる
+                return true;
+            }
+        }
 
         /////////////////////////////////////////////////
         //ウェイト

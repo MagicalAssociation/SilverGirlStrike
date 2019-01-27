@@ -73,6 +73,7 @@ namespace TextEvent
         {
             this.actionFunctions.Add("waitForFrame", new Action.WaitForFrame(this.gameData));
             this.actionFunctions.Add("createBossHPGauge", new Action.CreateBossHPGauge(this.gameData));
+            this.actionFunctions.Add("createResult", new Action.CreateResult(this.gameData));
             this.actionFunctions.Add("setCameraTargetPosition", new Action.SetCameraTargetPosition(this.gameData));
             this.actionFunctions.Add("setCameraTarget", new Action.SetCameraTargetCharacter(this.gameData));
             this.actionFunctions.Add("setCameraPosition", new Action.SetCameraTargetPosition(this.gameData));
