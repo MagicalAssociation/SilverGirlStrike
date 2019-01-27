@@ -18,6 +18,7 @@ public class BossGauge : MonoBehaviour {
         Start,
         Start2,
         Neutral,
+        End,
     }
 
     BossGauge()
@@ -30,6 +31,7 @@ public class BossGauge : MonoBehaviour {
         this.stateManager.SetParameter((int)State.Start, new OpenGaugeState(this));
         this.stateManager.SetParameter((int)State.Start2, new AppearGaugeScaleState(this));
         this.stateManager.SetParameter((int)State.Neutral, new NeautralState(this));
+        this.stateManager.SetParameter((int)State.End, new EndState(this));
         this.stateManager.ChengeState((int)State.Start);
 
 	}
@@ -37,6 +39,7 @@ public class BossGauge : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         this.stateManager.Update();
+
 	}
 
 
@@ -44,6 +47,8 @@ public class BossGauge : MonoBehaviour {
 
 
     //以下ステートを記述
+
+    //ゲージの幅が広がってゆく
     class OpenGaugeState : StateParameter
     {
         BossGauge bossGauge;
@@ -93,7 +98,7 @@ public class BossGauge : MonoBehaviour {
         }
     }
 
-    //以下ステートを記述
+    //HP目盛りをどんどん増やす演出
     class AppearGaugeScaleState : StateParameter
     {
         BossGauge bossGauge;
@@ -152,7 +157,7 @@ public class BossGauge : MonoBehaviour {
     }
 
 
-    //以下ステートを記述
+    //ゲージを対象に合わせて増減する
     class NeautralState : StateParameter
     {
         BossGauge bossGauge;
@@ -174,12 +179,59 @@ public class BossGauge : MonoBehaviour {
 
         public override bool Transition(ref StateManager manager)
         {
+
+            if (this.bossGauge.target.GetData().hitPoint.GetHP() == 0)
+            {
+                manager.SetNextState((int)State.End);
+                return true;
+            }
             return false;
         }
 
         public override void Update()
         {
             this.bossGauge.gaugeScale.currentValue = this.bossGauge.target.GetData().hitPoint.GetHP();
+        }
+    }
+
+    //画面外へさようならする
+    class EndState : StateParameter
+    {
+        BossGauge bossGauge;
+        Easing easing;
+
+        public EndState(BossGauge bossGauge)
+        {
+            this.bossGauge = bossGauge;
+            this.easing = new Easing();
+            //加速度の変化が大きい感じのイージング関数を選択
+            this.easing.Use(Easing.Type.Quint);
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+            this.easing.Set(0.0f, this.bossGauge.target.GetData().hitPoint.GetMaxHP(), 6.0f);
+            this.bossGauge.gaugeScale.currentValue = this.bossGauge.target.GetData().hitPoint.GetHP();
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            return false;
+        }
+
+        public override void Update()
+        {
+            this.bossGauge.transform.position += Vector3.up * this.easing.In() * 0.5f;
+
+            //イージングが終わったら死ぬ
+            if (!this.easing.IsPlay())
+            {
+                Destroy(this.bossGauge.gameObject);
+            }
         }
     }
 }

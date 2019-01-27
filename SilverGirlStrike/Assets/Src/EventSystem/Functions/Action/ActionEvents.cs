@@ -251,11 +251,12 @@ namespace TextEvent
 
         /////////////////////////////////////////////////
         //BGMスタート
-        //args: (string BGMName)
+        //args: (string BGMName, bool isLoop)
         public class BGMPlay : ActionFunction
         {
-            //相対的な位置
+            //BGM再生のデータ
             string bgmName;
+            bool isLoop;
 
             public BGMPlay(EventGameData gameData) :
                 base(gameData)
@@ -265,7 +266,7 @@ namespace TextEvent
 
             public override void Action()
             {
-                Sound.PlayBGM(this.bgmName);
+                Sound.PlayBGM(this.bgmName, this.isLoop);
                 Sound.SetVolumeBGM(Sound.GetBaseVolumeBGM());
             }
 
@@ -273,6 +274,7 @@ namespace TextEvent
             {
                 //BGM名
                 this.bgmName = args[0];
+                this.isLoop = TextEvent.TextParser.ParseBoolean(args[1]);
             }
 
             public override bool IsEnd()
@@ -328,6 +330,10 @@ namespace TextEvent
             public override void Action()
             {
                 M_System.input.SetEnableStop(false);
+
+                //強制入力も解除
+                M_System.input.SetForced(SystemInput.Tag.LSTICK_RIGHT, false);
+                M_System.input.SetForced(SystemInput.Tag.LSTICK_DOWN, false);
             }
 
             public override void ActionStart(string[] args)
@@ -363,14 +369,6 @@ namespace TextEvent
                 M_System.input.SetAxisForced(SystemInput.Tag.LSTICK_DOWN, this.axis.y);
                 M_System.input.SetForced(SystemInput.Tag.LSTICK_RIGHT, true);
                 M_System.input.SetForced(SystemInput.Tag.LSTICK_DOWN, true);
-                ++this.count;
-
-                //終了の後かたずけ
-                if(this.count > this.waitFrame)
-                {
-                    M_System.input.SetForced(SystemInput.Tag.LSTICK_RIGHT, false);
-                    M_System.input.SetForced(SystemInput.Tag.LSTICK_DOWN, false);
-                }
             }
 
             public override void ActionStart(string[] args)
@@ -383,8 +381,8 @@ namespace TextEvent
 
             public override bool IsEnd()
             {
-                //すぐ終わる
-                return this.count > this.waitFrame;
+                //解除しない限りはずっと倒しっぱなし
+                return true;
             }
         }
 

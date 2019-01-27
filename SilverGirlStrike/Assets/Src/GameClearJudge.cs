@@ -25,7 +25,6 @@ public class GameClearJudge : MonoBehaviour {
         this.clearFrag = false;
         //計測開始
         this.time = 0.0f;
-        Sound.PlayBGM("opStageBGM");
     }
 
     private void Update()

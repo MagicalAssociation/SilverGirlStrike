@@ -161,9 +161,9 @@ public class Sound
 
     /// BGMの再生
     /// ※事前にLoadBgmでロードしておくこと
-    public static bool PlayBGM(string key)
+    public static bool PlayBGM(string key, bool isLoop)
     {
-        return GetInstance().PlayBGMPrivate(key);
+        return GetInstance().PlayBGMPrivate(key, isLoop);
     }
 
     /// BGMの停止
@@ -257,7 +257,7 @@ public class Sound
     }
 
     //BGM再生
-    bool PlayBGMPrivate(string key)
+    bool PlayBGMPrivate(string key, bool isLoop)
     {
         if (poolBgm.ContainsKey(key) == false)
         {
@@ -273,7 +273,7 @@ public class Sound
 
         // 再生
         var source = GetAudioSource(eType.Bgm);
-        source.loop = true;
+        source.loop = isLoop;
         source.clip = _data.clip;
         source.Play();
 

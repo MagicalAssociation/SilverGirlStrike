@@ -15697,12 +15697,13 @@ MonoBehaviour:
     collisionFinder: {fileID: 549682352}
     canvas: {fileID: 1819137964}
   eventPath:
-  - OpStageInit
-  - MiddleBossEvent1
-  - MiddleBossEvent1End
-  - MiddleBossEvent2
-  - MiddleBossEvent2End
-  - BossEvent
+  - OpStageEvent/OpStageInit
+  - OpStageEvent/MiddleBossEvent1
+  - OpStageEvent/MiddleBossEvent1End
+  - OpStageEvent/MiddleBossEvent2
+  - OpStageEvent/MiddleBossEvent2End
+  - OpStageEvent/BossEvent
+  - OpStageEvent/StageClear
 --- !u!4 &369029130
 Transform:
   m_ObjectHideFlags: 0
@@ -16507,6 +16508,8 @@ MonoBehaviour:
     audio: {fileID: 8300000, guid: df8ee9e3a8d26a74dbac2ba844c7a00f, type: 3}
   - key: bossBattle
     audio: {fileID: 8300000, guid: 589adac314ab5e4499e6ce4a017c18d0, type: 3}
+  - key: stageClear
+    audio: {fileID: 8300000, guid: c6dd6602bb2b9eb44bb720f9449aba6f, type: 3}
   seList:
   - key: jump
     audio: {fileID: 8300000, guid: 714675d000489184197a929b2d8ff86b, type: 3}
@@ -26233,6 +26236,8 @@ MonoBehaviour:
     eff: {fileID: 1085857590311880, guid: 117468a9edf54c946a2d080877c518ba, type: 2}
   - key: manyBombs
     eff: {fileID: 1271533898439432, guid: 05b8a997cbefa3f40b561f3c348b3aa8, type: 2}
+  - key: flash
+    eff: {fileID: 1310596307184460, guid: 9a9cb34f6ae585d4c9196e794219cbc4, type: 2}
 --- !u!4 &631128263
 Transform:
   m_ObjectHideFlags: 0
