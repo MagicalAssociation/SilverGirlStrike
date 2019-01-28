@@ -27,11 +27,15 @@ namespace Elixir
         public override void Use()
         {
             //使用者のHPを回復する
-            if(master == null)
+            if(master == null || base.GetNumver() == 0)
             {
                 return;
             }
             master.GetData().hitPoint.Recover(recoverValue);
+            if(base.GetInfinite() == false)
+            {
+                base.SetNumver(base.GetNumver() - 1);
+            }
         }
     }
     public class Elixir : SGS.ItemObject

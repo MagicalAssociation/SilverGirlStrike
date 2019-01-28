@@ -28,11 +28,14 @@ namespace Star
         public override void Use()
         {
             //使用者のHPを回復する
-            if (master == null)
+            if (master == null || base.GetNumver() == 0)
             {
                 return;
             }
-            master.GetData().hitPoint.SetInvincible(invincible);
+            master.GetData().hitPoint.SetInvincible(invincible); if (base.GetInfinite() == false)
+            {
+                base.SetNumver(base.GetNumver() - 1);
+            }
         }
     }
     public class Star : SGS.ItemObject

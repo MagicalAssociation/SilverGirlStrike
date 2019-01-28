@@ -13,6 +13,8 @@ public class ItemManager : MonoBehaviour
         Elixir3 = 2,
         Star1 = 3,
     }
+    //ゲームが始まるときにこの変数にアイテムを１個だけいれておく
+    //保存するときに個数を相手に渡す。
     SGS.Item[] itemData;
     //使用者
     public CharacterObject master;
@@ -38,7 +40,6 @@ public class ItemManager : MonoBehaviour
     {
         if(M_System.input.Down(SystemInput.Tag.ITEM_U))
         {
-            Debug.Log("ITEM_U");
             if (itemData[(int)CurrentData.ItemDirection.UP] != null)
             {
                 itemData[(int)CurrentData.ItemDirection.UP].Use();
@@ -46,7 +47,6 @@ public class ItemManager : MonoBehaviour
         }
         else if(M_System.input.Down(SystemInput.Tag.ITEM_D))
         {
-            Debug.Log("ITEM_D");
             if (itemData[(int)CurrentData.ItemDirection.DOWN] != null)
             {
                 itemData[(int)CurrentData.ItemDirection.DOWN].Use();
@@ -54,7 +54,6 @@ public class ItemManager : MonoBehaviour
         }
         else if(M_System.input.Down(SystemInput.Tag.ITEM_L))
         {
-            Debug.Log("ITEM_L");
             if (itemData[(int)CurrentData.ItemDirection.LEFT] != null)
             {
                 itemData[(int)CurrentData.ItemDirection.LEFT].Use();
@@ -62,7 +61,6 @@ public class ItemManager : MonoBehaviour
         }
         else if(M_System.input.Down(SystemInput.Tag.ITEM_R))
         {
-            Debug.Log("ITEM_R");
             if (itemData[(int)CurrentData.ItemDirection.RIGHT] != null)
             {
                 itemData[(int)CurrentData.ItemDirection.RIGHT].Use();
@@ -71,10 +69,14 @@ public class ItemManager : MonoBehaviour
 	}
     public void SaveItemData()
     {
-        CurrentData.SetItemData((int)CurrentData.ItemDirection.UP, itemData[(int)CurrentData.ItemDirection.UP]);
-        CurrentData.SetItemData((int)CurrentData.ItemDirection.DOWN, itemData[(int)CurrentData.ItemDirection.DOWN]);
-        CurrentData.SetItemData((int)CurrentData.ItemDirection.LEFT, itemData[(int)CurrentData.ItemDirection.LEFT]);
-        CurrentData.SetItemData((int)CurrentData.ItemDirection.RIGHT, itemData[(int)CurrentData.ItemDirection.RIGHT]);
+        for (int i = 0; i < itemData.Length; ++i)
+        {
+            SGS.Item item = CurrentData.GetItemData(i);
+            if (item != null)
+            {
+                item.SetNumver(item.GetNumver() + itemData[i].GetNumver());
+            }
+        }
     }
 
     private void CreateItemData(int num,SGS.Item loaditem)
@@ -94,5 +96,6 @@ public class ItemManager : MonoBehaviour
                 itemData[num] = new Star.Item(loaditem);
                 break;
         }
+        itemData[num].SetNumver(1);
     }
 }

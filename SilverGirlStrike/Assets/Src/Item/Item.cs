@@ -198,6 +198,10 @@ namespace SGS
         {
             return this.num;
         }
+        public bool GetInfinite()
+        {
+            return this.infinite;
+        }
     }
     /**
      * brief    設置するItem
