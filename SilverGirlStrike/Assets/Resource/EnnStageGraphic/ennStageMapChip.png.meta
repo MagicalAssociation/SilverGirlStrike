@@ -1,35 +1,38 @@
 fileFormatVersion: 2
-guid: e070bb3d0fddc4c4f8a0d746607b555a
+guid: c076db67a5f92874d94124112b54e055
 TextureImporter:
   fileIDToRecycleName:
-    21300000: ennStageChip_0
-    21300002: ennStageChip_1
-    21300004: ennStageChip_2
-    21300006: ennStageChip_3
-    21300008: ennStageChip_4
-    21300010: ennStageChip_5
-    21300012: ennStageChip_6
-    21300014: ennStageChip_7
-    21300016: ennStageChip_8
-    21300018: ennStageChip_9
-    21300020: ennStageChip_10
-    21300022: ennStageChip_11
-    21300024: ennStageChip_12
-    21300026: ennStageChip_13
-    21300028: ennStageChip_14
-    21300030: ennStageChip_15
-    21300032: ennStageChip_16
-    21300034: ennStageChip_17
-    21300036: ennStageChip_18
-    21300038: ennStageChip_19
-    21300040: ennStageChip_20
-    21300042: ennStageChip_21
-    21300044: ennStageChip_22
-    21300046: ennStageChip_23
-    21300048: ennStageChip_24
-    21300050: ennStageChip_25
-    21300052: ennStageChip_26
-    21300054: ennStageChip_27
+    21300000: ennStageMapChip_0
+    21300002: ennStageMapChip_1
+    21300004: ennStageMapChip_2
+    21300006: ennStageMapChip_3
+    21300008: ennStageMapChip_4
+    21300010: ennStageMapChip_5
+    21300012: ennStageMapChip_6
+    21300014: ennStageMapChip_7
+    21300016: ennStageMapChip_8
+    21300018: ennStageMapChip_9
+    21300020: ennStageMapChip_10
+    21300022: ennStageMapChip_11
+    21300024: ennStageMapChip_12
+    21300026: ennStageMapChip_13
+    21300028: ennStageMapChip_14
+    21300030: ennStageMapChip_15
+    21300032: ennStageMapChip_16
+    21300034: ennStageMapChip_17
+    21300036: ennStageMapChip_18
+    21300038: ennStageMapChip_19
+    21300040: ennStageMapChip_20
+    21300042: ennStageMapChip_21
+    21300044: ennStageMapChip_22
+    21300046: ennStageMapChip_23
+    21300048: ennStageMapChip_24
+    21300050: ennStageMapChip_25
+    21300052: ennStageMapChip_26
+    21300054: ennStageMapChip_27
+    21300056: ennStageMapChip_28
+    21300058: ennStageMapChip_29
+    21300060: ennStageMapChip_30
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -70,7 +73,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 50
@@ -134,453 +137,113 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ennStageChip_0
+      name: ennStageMapChip_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 3
-        width: 58
-        height: 213
+        x: 0
+        y: 960
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -6, y: -32}
+        - {x: -6, y: 11}
+        - {x: 32, y: 11}
+        - {x: 32, y: -21}
+        - {x: 25, y: -21}
+        - {x: 25, y: -32}
       tessellationDetail: 0
       bones: []
-      spriteID: 2d26bff1c600ffc46aa50aaf06731108
+      spriteID: 1fec5a473c782aa4c9e88665945a4c73
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ennStageChip_1
+      name: ennStageMapChip_1
       rect:
         serializedVersion: 2
-        x: 68
-        y: 2
-        width: 11
-        height: 215
+        x: 64
+        y: 960
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -32, y: -21}
+        - {x: -32, y: 11}
+        - {x: 32, y: 11}
+        - {x: 32, y: -21}
       tessellationDetail: 0
       bones: []
-      spriteID: f749570dd5922864ea32c10365b5034f
+      spriteID: 1aa17371559246646b703c7d340fec03
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ennStageChip_2
-      rect:
-        serializedVersion: 2
-        x: 90
-        y: 160
-        width: 38
-        height: 50
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ac8c7ac985a010f4d884af96c3a99603
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_3
-      rect:
-        serializedVersion: 2
-        x: 144
-        y: 170
-        width: 48
-        height: 40
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: da964a34e00218443b9b6bb3823e3699
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_4
-      rect:
-        serializedVersion: 2
-        x: 208
-        y: 160
-        width: 38
-        height: 50
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 10efcb63bb1fa6b4081556eba3b254bd
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_5
-      rect:
-        serializedVersion: 2
-        x: 257
-        y: 145
-        width: 49
-        height: 59
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9b2d90b477358274d9f2b517b0c03976
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_6
-      rect:
-        serializedVersion: 2
-        x: 321
-        y: 145
-        width: 49
-        height: 59
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ba66b78891d57cd40b0286dfd68b2465
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_7
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 129
-        width: 30
-        height: 88
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 03a0abefe46fa294d9703ee028ba36bc
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_8
-      rect:
-        serializedVersion: 2
-        x: 497
-        y: 3
-        width: 61
-        height: 213
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ce915a0dab52ae245808ded0b5552b7b
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_9
-      rect:
-        serializedVersion: 2
-        x: 90
-        y: 112
-        width: 34
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 53e3d8d3e9c67104ba9bf6b51fabe967
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_10
-      rect:
-        serializedVersion: 2
-        x: 212
-        y: 112
-        width: 34
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 471e65109ccf24b4e825e27cb986b0d9
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_11
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 64
-        width: 128
-        height: 70
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 897a1dc5fd6767340b4d74d523b6bb4a
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_12
-      rect:
-        serializedVersion: 2
-        x: 90
-        y: 42
-        width: 38
-        height: 54
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8c28c598836e09a4c85474102d700317
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_13
-      rect:
-        serializedVersion: 2
-        x: 144
-        y: 42
-        width: 48
-        height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2b338dcdf06bb9b45bf8508fc650ad24
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_14
-      rect:
-        serializedVersion: 2
-        x: 208
-        y: 42
-        width: 38
-        height: 54
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e6774faf5af35f84a89b67277b1b7c34
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_15
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 10
-        width: 48
-        height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c7e014ff0b9a0bb4ba4d7d15dfa5271d
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_16
-      rect:
-        serializedVersion: 2
-        x: 320
-        y: 10
-        width: 48
-        height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8b0be76bca544fe44a546de5a7115473
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_17
-      rect:
-        serializedVersion: 2
-        x: 387
-        y: 6
-        width: 13
-        height: 40
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6add6f480df8d3c42ae5c5ae5f5fb5a6
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_18
-      rect:
-        serializedVersion: 2
-        x: 416
-        y: 6
-        width: 48
-        height: 40
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 04b3ad253bbfa224f99927a7a3ed2324
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_19
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 6
-        width: 13
-        height: 40
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2587b43e228970945bef840a3ffcb476
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_20
-      rect:
-        serializedVersion: 2
-        x: 99
-        y: 7
-        width: 13
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1c994527467ade941a5c66952a1d57fa
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ennStageChip_21
+      name: ennStageMapChip_2
       rect:
         serializedVersion: 2
         x: 128
-        y: 7
-        width: 48
-        height: 18
+        y: 960
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -25, y: -32}
+        - {x: -25, y: -22}
+        - {x: -32, y: -22}
+        - {x: -32, y: 11}
+        - {x: 6, y: 11}
+        - {x: 6, y: -32}
       tessellationDetail: 0
       bones: []
-      spriteID: 550d299cb2d96774d8f011f781e370ed
+      spriteID: 648a0e665e7b04a46b6fa161e4944be0
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ennStageChip_22
+      name: ennStageMapChip_3
       rect:
         serializedVersion: 2
         x: 192
-        y: 7
-        width: 13
-        height: 18
+        y: 960
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -32, y: -32}
+        - {x: -32, y: 15}
+        - {x: 32, y: 15}
+        - {x: 32, y: -32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f43cd860503521640bae0b05412beb36
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 960
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -588,19 +251,91 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f7d4356a57a3baa44841560f3d5aa57c
+      spriteID: 2a34e252a2b05c645aaff73c78a941a7
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ennStageChip_23
+      name: ennStageMapChip_5
       rect:
         serializedVersion: 2
-        x: 416
-        y: 128
-        width: 80
-        height: 89
+        x: 0
+        y: 896
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -6, y: -32}
+        - {x: -6, y: 32}
+        - {x: 25, y: 32}
+        - {x: 25, y: -32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1eff72dbd10f7f645bd596b42b8ed80c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_6
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 896
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -25, y: -32}
+        - {x: -25, y: 32}
+        - {x: 6, y: 32}
+        - {x: 6, y: -32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: d80a5b52fc3d9ac42baeb1743c7ec1f1
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_7
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 896
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -32, y: -32}
+        - {x: -32, y: 32}
+        - {x: 32, y: 32}
+        - {x: 32, y: -32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5abb1e89bf3902f45bf8d5eb9e422a30
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_8
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 896
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -608,19 +343,119 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b8b19a4794a2b6a4ea7667a73008b488
+      spriteID: c632e10882900d440a2af7d11deac775
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ennStageChip_24
+      name: ennStageMapChip_9
       rect:
         serializedVersion: 2
-        x: 416
-        y: 141
-        width: 80
-        height: 9
+        x: 0
+        y: 832
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -6, y: -21}
+        - {x: -6, y: 32}
+        - {x: 25, y: 32}
+        - {x: 25, y: 11}
+        - {x: 32, y: 11}
+        - {x: 32, y: -21}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50e463ff048e4e3449273268f2b10920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_10
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 832
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -32, y: -22}
+        - {x: -32, y: 11}
+        - {x: 32, y: 11}
+        - {x: 32, y: -22}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a77321d0f4d3f841978dff0cdeb0b63
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_11
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 832
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -32, y: -22}
+        - {x: -32, y: 11}
+        - {x: -25, y: 11}
+        - {x: -25, y: 32}
+        - {x: 6, y: 32}
+        - {x: 6, y: -22}
+      tessellationDetail: 0
+      bones: []
+      spriteID: dac00fe5216f7764882a753fc896f8db
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_12
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 832
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -32, y: -22}
+        - {x: -32, y: 11}
+        - {x: 29, y: 11}
+        - {x: 29, y: -22}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 039e0b9f26bd050409c5903c98bf7d9d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_13
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 832
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -628,19 +463,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 03e6db505171ce540b9e63512224641c
+      spriteID: 2b6ccb468f63e474d9330e21ad97e46f
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ennStageChip_25
+      name: ennStageMapChip_14
       rect:
         serializedVersion: 2
-        x: 403
-        y: 58
-        width: 13
-        height: 47
+        x: 320
+        y: 832
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -648,19 +483,211 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 112f07a71bcb4b84eb98a2acae566e34
+      spriteID: aa1d390e4e247ee43b55d819a06482d8
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ennStageChip_26
+      name: ennStageMapChip_15
       rect:
         serializedVersion: 2
-        x: 432
-        y: 58
-        width: 13
-        height: 47
+        x: 0
+        y: 768
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -32, y: -22}
+        - {x: -32, y: 11}
+        - {x: 32, y: 11}
+        - {x: 32, y: -22}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9348b697b283884e816b95155fe87c1
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_16
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 768
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -32, y: -22}
+        - {x: -32, y: 11}
+        - {x: 32, y: 11}
+        - {x: 32, y: -22}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56526240e12a23c4cab52a7403412a4e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_17
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 768
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -29, y: -22}
+        - {x: -29, y: 11}
+        - {x: 32, y: 11}
+        - {x: 32, y: -22}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 364a68e7192ab204bbf2c1015943ec83
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_18
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 768
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -29, y: -9}
+        - {x: -29, y: 2}
+        - {x: 32, y: 2}
+        - {x: 32, y: -9}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 460941ecb346f06438e04b09776494b7
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_19
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 768
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -32, y: -9}
+        - {x: -32, y: 2}
+        - {x: 32, y: 2}
+        - {x: 32, y: -9}
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7cdc6cb6b7bef7488d53f7955405f1d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_20
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 768
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -32, y: -9}
+        - {x: -32, y: 2}
+        - {x: 29, y: 2}
+        - {x: 29, y: -9}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08876d2267c66434da2c751a9411fced
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_21
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 768
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -32, y: -22}
+        - {x: -32, y: 11}
+        - {x: 29, y: 11}
+        - {x: 29, y: -22}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e12d66673767bb4aa1b99f7b66f5c0e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_22
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 768
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -29, y: -22}
+        - {x: -29, y: 11}
+        - {x: 32, y: 11}
+        - {x: 32, y: -22}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5df3cf584177b334a9537a19430d53bf
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_23
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 704
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -668,27 +695,147 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: af7289cee07a5ed4aa03885664c5c6d7
+      spriteID: 8fcfe887b4ee1da4f833b2939a202676
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ennStageChip_27
+      name: ennStageMapChip_24
       rect:
         serializedVersion: 2
-        x: 432
-        y: 12
-        width: 16
-        height: 16
+        x: 64
+        y: 704
+        width: 64
+        height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 23c92229793da6441b31bf5c6569aa37
+      spriteID: 1eada6a98cb512340904029889e4c0ca
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_25
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 704
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a59c4386c6f820c459e674bee67496fc
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_26
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 704
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2edb8e3c8126dad4089ac941dc6cc487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_27
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 704
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4e0dc29301f7914bb35d07ea3a58a5d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_28
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 704
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb366539e651dbe45a2021426895db7a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_29
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 704
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8aece626ec6c23d4b91c3fedd3f03d30
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ennStageMapChip_30
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 704
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd6190af33118074099fe08dc761e51d
       vertices: []
       indices: 
       edges: []
@@ -696,7 +843,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: d44ea2d99833d4c41b6780b36ba4db08
+    spriteID: 2e2b9937827151b4baf31dd5a05b5c2e
     vertices: []
     indices: 
     edges: []
