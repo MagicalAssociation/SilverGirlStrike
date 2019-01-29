@@ -10,7 +10,7 @@ namespace Elixir
         public override void Init()
         {
             try {
-                this.recoverValue = int.Parse(SGS.Item.Load(this.GetID())[4]);
+                this.recoverValue = int.Parse(SGS.Item.Load(this.GetID())[(int)Item.Type.TYPE_NUM]);
             }
             catch
             {
@@ -27,15 +27,12 @@ namespace Elixir
         public override void Use()
         {
             //使用者のHPを回復する
-            if(master == null || base.GetNumver() == 0)
+            if (master == null || base.GetNumver() == 0)
             {
                 return;
             }
             master.GetData().hitPoint.Recover(recoverValue);
-            if(base.GetInfinite() == false)
-            {
-                base.SetNumver(base.GetNumver() - 1);
-            }
+            base.SetNumver(base.GetNumver() - 1);
         }
     }
     public class Elixir : SGS.ItemObject

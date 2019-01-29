@@ -82,6 +82,8 @@ namespace SGS
             NAME = 1,
             REMARKS = 2,
             R_ID = 3,
+            INFINITE = 4,
+            TYPE_NUM = 5,
         }
         public Item()
         {
@@ -115,10 +117,11 @@ namespace SGS
         }
         public void SetData(string[] data)
         {
-            this.id = int.Parse(data[0]);
-            this.name = data[1];
-            this.remarks = data[2];
-            this.resourceID = int.Parse(data[3]);
+            this.id = int.Parse(data[(int)Type.ID]);
+            this.name = data[(int)Type.NAME];
+            this.remarks = data[(int)Type.REMARKS];
+            this.resourceID = int.Parse(data[(int)Type.R_ID]);
+            this.infinite = int.Parse(data[(int)Type.INFINITE]) != 0 ? true : false;
         }
         public static string[] Load(int id)
         {
@@ -128,7 +131,7 @@ namespace SGS
                 for (int i = 0; i < textMassage.Length; ++i)
                 {
                     string[] text = textMassage[i].Split(' ');
-                    if (int.Parse(text[0]) == id)
+                    if (int.Parse(text[(int)Type.ID]) == id)
                     {
                         return text;
                     }
@@ -140,11 +143,12 @@ namespace SGS
         {
             string path = Application.dataPath + @"\Resources\ItemData.txt";
             string textasset = "";
-            string[] error = new string[4];
-            error[0] = "-1";
-            error[1] = "Error";
-            error[2] = "Failed to read data";
-            error[3] = "-1";
+            string[] error = new string[5];
+            error[(int)Type.ID] = "-1";
+            error[(int)Type.NAME] = "Error";
+            error[(int)Type.REMARKS] = "Failed to read data";
+            error[(int)Type.R_ID] = "-1";
+            error[(int)Type.INFINITE] = "-1";
             try
             {
                 textasset = File.ReadAllText(path, System.Text.Encoding.Unicode);
@@ -158,17 +162,17 @@ namespace SGS
         public static int GetID(string line)
         {
             string[] text = line.Split(' ');
-            return int.Parse(text[0]);
+            return int.Parse(text[(int)Type.ID]);
         }
         public static string GetName(string line)
         {
             string[] text = line.Split(' ');
-            return text[1];
+            return text[(int)Type.NAME];
         }
         public static int GetResourceID(string line)
         {
             string[] text = line.Split(' ');
-            return int.Parse(text[3]);
+            return int.Parse(text[(int)Type.R_ID]);
         }
         public void DebugLog()
         {

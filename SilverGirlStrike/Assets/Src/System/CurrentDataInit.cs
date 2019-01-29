@@ -61,6 +61,10 @@ public class CurrentData
     public class Data
     {
         Save.DataParameter data;
+        public Data()
+        {
+            data = new Save.DataParameter();
+        }
         public void SetData(Save.DataParameter parameter)
         {
             data = parameter;

@@ -195,14 +195,17 @@ public class CursorSystem : MonoBehaviour {
         }
         this.enable = enable;
     }
+    //CursorSystemManagerで扱う場合Systemの開始時に動く
     public virtual void Enter()
     {
 
     }
+    //CursorSystemManagerで扱う場合Systemの終了時に動く
     public virtual void Exit()
     {
 
     }
+    //CursorSystemManagerで扱う場合の更新処理
     public virtual void SystemUpdate(CursorSystemManager manager)
     {
 

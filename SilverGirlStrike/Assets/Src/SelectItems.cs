@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SelectItems : MonoBehaviour
+public class SelectItems : CursorSystem
 {
     //必要なリスト2つ-------------------------------------------------
     //移動する項目の情報を格納する
@@ -99,6 +99,14 @@ public class SelectItems : MonoBehaviour
         this.ChangeColor();
         this.ChangeText();
     }
+
+    //public override void SystemUpdate(CursorSystemManager manager)
+    //{
+    //    this.SetEndpos();
+    //    this.Move();
+    //    this.ChangeColor();
+    //    this.ChangeText();
+    //}
 
 
     //-------------------------------------------------------------------------------------------------------
@@ -206,6 +214,7 @@ public class SelectItems : MonoBehaviour
 
     //-----------------------------------------------------------------------------
     //シーン遷移について(未実装)
+    //Kaneko 追記：決定時にItemSelectのゲーム開始Selectにkeyの値を渡すs
     //-----------------------------------------------------------------------------
     void SetNextScene()
     {
@@ -264,7 +273,8 @@ public class SelectItems : MonoBehaviour
                 this.stageNameText.text = itemlist[i].key;
                 this.locationText.text = itemlist[i].location;
                 //クリアタイムのデータを取ってこられるように追加予定
-                //this.clearTimeText=
+                //CurrentData.CreateData();
+                //this.clearTimeText.text = CurrentData.GetDataInstance().GetData().stageClearTime[i].ToString();
             }
         }
     }

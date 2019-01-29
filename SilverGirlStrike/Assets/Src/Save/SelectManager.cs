@@ -22,7 +22,7 @@ public class SelectManager : MonoBehaviour
             ++count;
         }
     }
-    public FlashingBackGround flashing;
+    //public FlashingBackGround flashing;
     Select[] child;
     // Use this for initialization
     void Start ()
@@ -53,6 +53,6 @@ public class SelectManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        flashing.Update();	
+        //flashing.Update();	
 	}
 }

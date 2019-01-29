@@ -18,7 +18,7 @@ namespace Star
         {
             try
             {
-                invincible = int.Parse(SGS.Item.Load(this.GetID())[4]);
+                invincible = int.Parse(SGS.Item.Load(this.GetID())[(int)Item.Type.TYPE_NUM]);
             }
             catch
             {
@@ -32,10 +32,8 @@ namespace Star
             {
                 return;
             }
-            master.GetData().hitPoint.SetInvincible(invincible); if (base.GetInfinite() == false)
-            {
-                base.SetNumver(base.GetNumver() - 1);
-            }
+            master.GetData().hitPoint.SetInvincible(invincible);
+            base.SetNumver(base.GetNumver() - 1);
         }
     }
     public class Star : SGS.ItemObject

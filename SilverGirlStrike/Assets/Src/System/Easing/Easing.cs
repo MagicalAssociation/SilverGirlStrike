@@ -7,6 +7,7 @@ using UnityEngine;
 *
 *各詳細はEasing表を確認
 */
+[System.Serializable]
 public class Easing
 {
     public abstract class EasingBase
@@ -14,6 +15,13 @@ public class Easing
         public abstract float In(float t, float b, float c, float d);
         public abstract float Out(float t, float b, float c, float d);
         public abstract float InOut(float t, float b, float c, float d);
+    }
+    [System.Serializable]
+    public class Parameter
+    {
+        public float time;
+        public Easing.Type type;
+        public Easing.MoveType move;
     }
     //! TimeCount
     float cnt;
@@ -27,6 +35,8 @@ public class Easing
     float duration;
     //! 使用するEasing
     EasingBase use;
+    //! Easing設定用
+    public Parameter parameter;
     /**
 	*@brief	イージング用カウンタ
 	*@param[in]	float duration 設定タイム
@@ -154,6 +164,19 @@ public class Easing
     public float Move(MoveType move)
     {
         switch(move)
+        {
+            case Easing.MoveType.In:
+                return this.In();
+            case Easing.MoveType.Out:
+                return this.Out();
+            case Easing.MoveType.InOut:
+                return this.InOut();
+        }
+        return this.InOut();
+    }
+    public float Move()
+    {
+        switch (parameter.move)
         {
             case Easing.MoveType.In:
                 return this.In();

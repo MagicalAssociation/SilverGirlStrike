@@ -23,6 +23,23 @@ public class SaveCursorSystem : CursorSystem {
         saveGame = loadSelects.GetComponentsInChildren<SaveGame>();
         SetColor();
     }
+    //public override void SystemUpdate(CursorSystemManager manager)
+    //{
+    //    if (CursorMoveInput())
+    //    {
+    //        //色変更処理
+    //        SetColor();
+    //    }
+    //    else
+    //    {
+    //        //決定ボタンで決定処理を行う
+    //        if (M_System.input.Down(SystemInput.Tag.DECISION))
+    //        {
+    //            base.GetNowParam().Decision();
+    //            selectManager.GameDataUpdate();
+    //        }
+    //    }
+    //}
     private void Update()
     {
         if (CursorMoveInput())
