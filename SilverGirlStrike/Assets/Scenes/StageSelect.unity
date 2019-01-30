@@ -1642,12 +1642,18 @@ MonoBehaviour:
   - type: 0
     manager: {fileID: 1674812492}
     moveObject:
-    - {fileID: 1032003705}
-    - {fileID: 876284401}
+    - obj: {fileID: 1032003705}
+      offset: {x: 20, y: 0}
+      type: 0
+    - obj: {fileID: 876284401}
+      offset: {x: 960, y: 0}
+      type: 1
   - type: 1
     manager: {fileID: 1356488353}
     moveObject:
-    - {fileID: 1122395740}
+    - obj: {fileID: 1122395740}
+      offset: {x: 960, y: 0}
+      type: 1
   easing:
     parameter:
       time: 20
