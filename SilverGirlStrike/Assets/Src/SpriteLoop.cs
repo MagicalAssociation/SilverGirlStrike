@@ -19,6 +19,8 @@ public class SpriteLoop : MonoBehaviour
     float pixelPerUnit;
     public int spritePos;
 
+    float movedDistance;
+
     //コピーされたものはこの変数がtrueになる
     public bool copyFrag;
 
@@ -42,21 +44,26 @@ public class SpriteLoop : MonoBehaviour
         //コピー元のオブジェクトだけがクローンを生成
         if (this.copyFrag)
         {
-            Transform[] transforms = new Transform[this.spriteCount - 1];
+            Transform[] transforms = new Transform[this.spriteCount];
 
-            for(int i = 1; i < this.spriteCount; ++i)
+            for(int i = 0; i < this.spriteCount; ++i)
             {
                 var a = Instantiate<GameObject>(this.gameObject).GetComponent<SpriteLoop>();
                 a.copyFrag = false;
                 float moveDistance = this.spriteSize.x / this.pixelPerUnit * i;
+                a.movedDistance = moveDistance;
                 a.transform.position = this.transform.position;
                 a.transform.position += new Vector3(moveDistance, 0.0f, 0.0f);
-                transforms[i - 1] = a.transform;
+                transforms[i] = a.transform;
             }
             for(int i = 0; i < transforms.Length; ++i)
             {
                 transforms[i].parent = this.transform;
             }
+
+            //コピー元は非表示（座標が動かない）
+            this.enabled = false;
+            this.GetComponent<SpriteRenderer>().enabled = false;
         }
     }
 
@@ -72,19 +79,21 @@ public class SpriteLoop : MonoBehaviour
             this.transform.position += moveVector * speed;
             this.prevCameraPos = this.cameraPos.position;
         }
-
-        //Debug.Log(this.prevCameraPos);
-
-
-        //カメラからの相対位置に変換し、Unityの長さ単位に変換
-        var spritex = ((transform.position - this.cameraPos.position) * this.pixelPerUnit + this.spriteSize / 2).x;
-        //左端に達した時
-        if (spritex < this.screenRect.x - moveDistance)
         {
-            FixL();
+            Vector3 moveVector = this.cameraPos.position - this.prevCameraPos;
+            this.transform.position += moveVector * speed;
+            this.prevCameraPos = this.cameraPos.position;
+
+            this.movedDistance -= moveVector.x * (1.0f - speed);
+        }
+
+        //左端に達した時
+        if (this.movedDistance < 0.0f)
+        {
+           FixL();
         }
         //右端に達した時
-        if (spritex > (this.screenRect.x + this.screenRect.width * this.spriteCount - moveDistance))
+        if (this.movedDistance > this.spriteSize.x / this.pixelPerUnit * this.spriteCount)
         {
             FixR();
         }
@@ -95,12 +104,14 @@ public class SpriteLoop : MonoBehaviour
         //スプライトのサイズ分だけ移動
         float moveDistance = this.spriteSize.x / this.pixelPerUnit;
         this.transform.position += new Vector3(moveDistance, 0.0f, 0.0f) * this.spriteCount;
+        this.movedDistance += moveDistance * this.spriteCount;
     }
     void FixR()
     {
         //スプライトのサイズ分だけ移動
         float moveDistance = this.spriteSize.x / this.pixelPerUnit;
         this.transform.position -= new Vector3(moveDistance, 0.0f, 0.0f) * this.spriteCount;
+        this.movedDistance -= moveDistance * this.spriteCount;
     }
 
 
