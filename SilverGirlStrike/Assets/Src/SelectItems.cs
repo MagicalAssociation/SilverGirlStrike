@@ -199,13 +199,13 @@ public class SelectItems : CursorSystem
 
             if (diff > time)     //時間切れなら
             {
-                itemlist[i].gameobject.transform.position = poslist[itemlist[i].stopnum].pos;
+                itemlist[i].gameobject.transform.localPosition = poslist[itemlist[i].stopnum].pos;
                 this.canmove = true;
             }
 
             var rate = diff / time;
 
-            itemlist[i].gameobject.transform.position = Vector3.Lerp(itemlist[i].startposition, itemlist[i].endposition, rate);
+            itemlist[i].gameobject.transform.localPosition = Vector3.Lerp(itemlist[i].startposition, itemlist[i].endposition, rate);
         }
     }
     //-----------------------------------------------------------------------------

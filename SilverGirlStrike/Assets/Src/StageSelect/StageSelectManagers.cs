@@ -16,17 +16,28 @@ public class StageSelectManagers : MonoBehaviour {
     private Type now;
     private Type pre;
     [System.Serializable]
+    public class MoveObject
+    {
+        public enum Type
+        {
+            SPRITE,IMAGE
+        }
+        public GameObject obj;
+        public Vector2 offset;
+        public Type type;
+    }
+    [System.Serializable]
     public class Parameter
     {
         public Type type;
         public GameObject manager;
-        public GameObject[] moveObject;
+        public MoveObject[] moveObject;
         private Vector2[] origin;
         public void SetPosition(Vector2 position)
         {
             for(int i = 0;i < moveObject.Length;++i)
             {
-                moveObject[i].transform.position = new Vector3(position.x, moveObject[i].transform.position.y);
+                moveObject[i].obj.transform.position = new Vector3(position.x, moveObject[i].obj.transform.position.y);
             }
         }
         public void SetOrigin()
@@ -34,7 +45,7 @@ public class StageSelectManagers : MonoBehaviour {
             origin = new Vector2[moveObject.Length];
             for(int i = 0;i < origin.Length;++i)
             {
-                origin[i] = new Vector2(moveObject[i].transform.position.x, moveObject[i].transform.position.y);
+                origin[i] = new Vector2(moveObject[i].obj.transform.position.x, moveObject[i].obj.transform.position.y);
             }
         }
         public void MovePosition(Vector2 vector)
@@ -42,8 +53,8 @@ public class StageSelectManagers : MonoBehaviour {
             for(int i = 0;i < moveObject.Length;++i)
             {
                 //Vector2 now = moveObject[i].transform.position;
-                moveObject[i].transform.position = new Vector3(origin[i].x + vector.x, moveObject[i].transform.position.y);
-                Debug.Log(moveObject[i].name + moveObject[i].transform.position);
+                moveObject[i].obj.transform.position = new Vector3(origin[i].x + vector.x, moveObject[i].obj.transform.position.y);
+                Debug.Log(moveObject[i].obj.name + moveObject[i].obj.transform.position);
             }
         }
     }
@@ -91,13 +102,13 @@ public class StageSelectManagers : MonoBehaviour {
             {
                 next = Type.TYPE_NUM - 1;
             }
-            GetParameter(next).SetPosition(new Vector2(960, 0));
+            GetParameter(next).SetPosition(new Vector2(20, 0));
             GetParameter(next).manager.SetActive(true);
             GetParameter(next).SetOrigin();
             GetParameter(now).SetOrigin();
             M_System.input.SetEnableStop(true);
             easing.ResetTime();
-            easing.Set(0, -960, easing.parameter.time, easing.parameter.type);
+            easing.Set(0, -20, easing.parameter.time, easing.parameter.type);
         }
         else if(M_System.input.Down(SystemInput.Tag.LSTICK_RIGHT))
         {
