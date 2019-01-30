@@ -21,19 +21,28 @@ public class StageSelectManagers : MonoBehaviour {
         public Type type;
         public GameObject manager;
         public GameObject[] moveObject;
+        private Vector2[] origin;
         public void SetPosition(Vector2 position)
         {
             for(int i = 0;i < moveObject.Length;++i)
             {
-                moveObject[i].transform.position = new Vector3(position.x, position.y);
+                moveObject[i].transform.position = new Vector3(position.x, moveObject[i].transform.position.y);
+            }
+        }
+        public void SetOrigin()
+        {
+            origin = new Vector2[moveObject.Length];
+            for(int i = 0;i < origin.Length;++i)
+            {
+                origin[i] = new Vector2(moveObject[i].transform.position.x, moveObject[i].transform.position.y);
             }
         }
         public void MovePosition(Vector2 vector)
         {
             for(int i = 0;i < moveObject.Length;++i)
             {
-                Vector2 now = moveObject[i].transform.position;
-                moveObject[i].transform.position = new Vector3(now.x + vector.x, now.y + vector.y);
+                //Vector2 now = moveObject[i].transform.position;
+                moveObject[i].transform.position = new Vector3(origin[i].x + vector.x, moveObject[i].transform.position.y);
                 Debug.Log(moveObject[i].name + moveObject[i].transform.position);
             }
         }
@@ -64,7 +73,6 @@ public class StageSelectManagers : MonoBehaviour {
         if (easing.IsPlay())
         {
             float tmp = easing.Move(easing.parameter.move);
-            Debug.Log(tmp);
             GetParameter(now).MovePosition(new Vector2(tmp, 0));
             GetParameter(next).MovePosition(new Vector2(tmp, 0));
             if(!easing.IsPlay())
@@ -83,25 +91,29 @@ public class StageSelectManagers : MonoBehaviour {
             {
                 next = Type.TYPE_NUM - 1;
             }
-            GetParameter(next).SetPosition(new Vector2(-960, 0));
+            GetParameter(next).SetPosition(new Vector2(960, 0));
             GetParameter(next).manager.SetActive(true);
+            GetParameter(next).SetOrigin();
+            GetParameter(now).SetOrigin();
             M_System.input.SetEnableStop(true);
             easing.ResetTime();
-            easing.Set(0, 960, easing.parameter.time, easing.parameter.type);
+            easing.Set(0, -960, easing.parameter.time, easing.parameter.type);
         }
         else if(M_System.input.Down(SystemInput.Tag.LSTICK_RIGHT))
         {
             //+
-            next = now + 1;
-            if(next >= Type.TYPE_NUM)
-            {
-                next = 0;
-            }
-            GetParameter(next).SetPosition(new Vector2(960, 0));
-            GetParameter(next).manager.SetActive(true);
-            M_System.input.SetEnableStop(true);
-            easing.ResetTime();
-            easing.Set(960, -960, easing.parameter.time, easing.parameter.type);
+            //next = now + 1;
+            //if(next >= Type.TYPE_NUM)
+            //{
+            //    next = 0;
+            //}
+            //GetParameter(next).SetPosition(new Vector2(-960, 0));
+            //GetParameter(next).manager.SetActive(true);
+            //GetParameter(next).SetOrigin();
+            //GetParameter(now).SetOrigin();
+            //M_System.input.SetEnableStop(true);
+            //easing.ResetTime();
+            //easing.Set(0, 960, easing.parameter.time, easing.parameter.type);
         }
     }
     private Parameter GetParameter(Type type)

@@ -1650,7 +1650,7 @@ MonoBehaviour:
     - {fileID: 1122395740}
   easing:
     parameter:
-      time: 200
+      time: 20
       type: 0
       move: 0
 --- !u!4 &1010980186
