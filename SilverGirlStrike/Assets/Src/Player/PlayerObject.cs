@@ -653,7 +653,7 @@ namespace Fuchan
 
 
             //現在地から目標のアンカーへ向かうベクトル
-            this.targetDirection = new Vector2(GetParam().anchorTarget.transform.localPosition.x - GetParam().myself.transform.localPosition.x, GetParam().anchorTarget.transform.localPosition.y - GetParam().myself.transform.localPosition.y);
+            this.targetDirection = new Vector2(GetParam().anchorTarget.transform.position.x - GetParam().myself.transform.position.x, GetParam().anchorTarget.transform.position.y - GetParam().myself.transform.position.y);
             this.targetDirection.Normalize();
             this.GetParam().currentDashSpead = 0.0f;
 
