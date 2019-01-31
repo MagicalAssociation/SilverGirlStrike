@@ -10,17 +10,12 @@ public class LoadGameStart : CursorParam
     private void Start()
     {
     }
-    IEnumerator GameStart()
-    {
-        yield return new WaitForSeconds(0.0f);
-        SceneManager.LoadScene("kariItemSelectScene");
-    }
     public override void Decision()
     {
         if (GetComponent<Select>().GetData() != null)
         {
             CurrentData.GetDataInstance().SetData(GetComponent<Select>().GetData());
-            StartCoroutine(GameStart());
+            SceneManager.LoadScene("StageSelect");
         }
     }
 

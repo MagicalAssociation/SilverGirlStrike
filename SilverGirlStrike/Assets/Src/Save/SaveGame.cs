@@ -12,22 +12,10 @@ public class SaveGame : CursorParam {
     }
     public override void Decision()
     {
-        if (GetComponent<Select>().GetData() != null)
-        {
-            //仮処理
-            //save2にお金200にして保存する
-            for (int i = 0; i < 2; ++i)
-            {
-                Save.DataParameter data = new Save.DataParameter();
-                data.filePath = GameData.GetSaveFilePath()[i];
-                data.gold = 200 * i;
-                data.itemData.Add(new Save.DataParameter.ItemData(0, 1));
-                data.itemData.Add(new Save.DataParameter.ItemData(1, 3));
-                data.itemData.Add(new Save.DataParameter.ItemData(3, 10));
-                GameData.Save(data);
-            }
-        }
+        CurrentData.GetDataInstance().GetData().filePath = GameData.GetSaveFilePath()[GetComponent<Select>().GetStageNumver()];
+        GameData.Save(CurrentData.GetDataInstance().GetData());
     }
+
 
     public override void Enter()
     {

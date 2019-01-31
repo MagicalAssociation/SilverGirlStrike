@@ -47,6 +47,7 @@ public class SelectManager : MonoBehaviour
             }
             child[i].TextChange(text);
             child[i].SetData(data);
+            child[i].SetStageNumber(i);
         }
     }
 
