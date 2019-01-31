@@ -8,6 +8,7 @@ public class GameStart : CursorParam
     public SGS.CursorColor cursorColor;
     public Image image;
     public ItemSetSelectManager manager;
+    private string scenename;
     public override void Decision()
     {
         //Itemデータを相手に渡す
@@ -15,10 +16,13 @@ public class GameStart : CursorParam
         CurrentData.SetItemData((int)CurrentData.ItemDirection.DOWN, manager.parameter.down.GetItem());
         CurrentData.SetItemData((int)CurrentData.ItemDirection.LEFT, manager.parameter.left.GetItem());
         CurrentData.SetItemData((int)CurrentData.ItemDirection.RIGHT, manager.parameter.right.GetItem());
-        Sound.PlaySE("clearSound2");
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene(scenename);
     }
 
+    public void SetSceneName(string sceneName)
+    {
+        this.scenename = sceneName;
+    }
     public override void Enter()
     {
         image.color = cursorColor.selectImageColor;

@@ -5,137 +5,214 @@ using UnityEngine;
 //ここでセーブとステージセレクトとアイテムセレクトの入力管理を行う
 
 public class StageSelectManagers : MonoBehaviour {
-    public enum Type
+    public enum CanvasTag : int
     {
         STAGE = 0,
         SAVE = 1,
-        TYPE_NUM = 2,
-    }
-    public Type begin;
-    private Type next;
-    private Type now;
-    private Type pre;
-    [System.Serializable]
-    public class MoveObject
-    {
-        public enum Type
-        {
-            SPRITE,IMAGE
-        }
-        public GameObject obj;
-        public Vector2 offset;
-        public Type type;
+        ITEM = 2,
     }
     [System.Serializable]
-    public class Parameter
+    public class Target
     {
-        public Type type;
-        public GameObject manager;
-        public MoveObject[] moveObject;
-        private Vector2[] origin;
-        public void SetPosition(Vector2 position)
+        public GameObject canvas;
+        //入力処理を呼ぶGameObjectをいれる
+        //こいつを非アクティブでUpdateを呼ばないようにする
+        public GameObject system;
+        public CanvasTag tag;
+        public Vector2 GetPosition()
         {
-            for(int i = 0;i < moveObject.Length;++i)
-            {
-                moveObject[i].obj.transform.position = new Vector3(position.x, moveObject[i].obj.transform.position.y);
-            }
-        }
-        public void SetOrigin()
-        {
-            origin = new Vector2[moveObject.Length];
-            for(int i = 0;i < origin.Length;++i)
-            {
-                origin[i] = new Vector2(moveObject[i].obj.transform.position.x, moveObject[i].obj.transform.position.y);
-            }
-        }
-        public void MovePosition(Vector2 vector)
-        {
-            for(int i = 0;i < moveObject.Length;++i)
-            {
-                //Vector2 now = moveObject[i].transform.position;
-                moveObject[i].obj.transform.position = new Vector3(origin[i].x + vector.x, moveObject[i].obj.transform.position.y);
-                Debug.Log(moveObject[i].obj.name + moveObject[i].obj.transform.position);
-            }
+            return this.canvas.transform.position;
         }
     }
-    public Vector2 size;
-    public Parameter[] parameters;
-    public Easing easing;
-    // Use this for initialization
-    void Start()
+    [System.Serializable]
+    public class Targets
     {
-        for (int i = 0; i < parameters.Length; ++i)
+        public Target[] target;
+    }
+    public class TagHistory
+    {
+        public TagHistory(CanvasTag init)
         {
-            if (begin == parameters[i].type)
-            {
-                parameters[i].manager.SetActive(true);
-            }
-            else
-            {
-                parameters[i].manager.SetActive(false);
-            }
+            pre = init;
+            now = init;
+            next = init;
         }
-        now = begin;
+        public CanvasTag pre;
+        public CanvasTag now;
+        public CanvasTag next;
     }
 
-    // Update is called once per frame
-    void Update()
+    public GameObject mainCamera;
+    public Easing[] easings = new Easing[2];
+    public Targets[] targets;
+    public CanvasTag startTag;
+    private TagHistory history;
+
+    private Vector2Int nowNumver;
+    private void Start()
     {
-        if (easing.IsPlay())
+        for(int y = 0;y < targets.Length;++y)
         {
-            float tmp = easing.Move(easing.parameter.move);
-            GetParameter(now).MovePosition(new Vector2(tmp, 0));
-            GetParameter(next).MovePosition(new Vector2(tmp, 0));
-            if(!easing.IsPlay())
+            for (int x = 0; x < targets[y].target.Length; ++x)
             {
-                pre = now;
-                now = next;
-                GetParameter(pre).manager.SetActive(false);
-                M_System.input.SetEnableStop(false);
+                if (startTag == targets[y].target[x].tag)
+                {
+                    targets[y].target[x].system.SetActive(true);
+                    nowNumver = new Vector2Int(x, y);
+                    history = new TagHistory(startTag);
+                }
+                else
+                {
+                    targets[y].target[x].system.SetActive(false);
+                }
             }
-        }
-        else if (M_System.input.Down(SystemInput.Tag.LSTICK_LEFT))
-        {
-            //-
-            next = now - 1;
-            if(next < 0)
-            {
-                next = Type.TYPE_NUM - 1;
-            }
-            GetParameter(next).SetPosition(new Vector2(20, 0));
-            GetParameter(next).manager.SetActive(true);
-            GetParameter(next).SetOrigin();
-            GetParameter(now).SetOrigin();
-            M_System.input.SetEnableStop(true);
-            easing.ResetTime();
-            easing.Set(0, -20, easing.parameter.time, easing.parameter.type);
-        }
-        else if(M_System.input.Down(SystemInput.Tag.LSTICK_RIGHT))
-        {
-            //+
-            //next = now + 1;
-            //if(next >= Type.TYPE_NUM)
-            //{
-            //    next = 0;
-            //}
-            //GetParameter(next).SetPosition(new Vector2(-960, 0));
-            //GetParameter(next).manager.SetActive(true);
-            //GetParameter(next).SetOrigin();
-            //GetParameter(now).SetOrigin();
-            //M_System.input.SetEnableStop(true);
-            //easing.ResetTime();
-            //easing.Set(0, 960, easing.parameter.time, easing.parameter.type);
         }
     }
-    private Parameter GetParameter(Type type)
+    private void Update()
     {
-        for(int i = 0;i < parameters.Length;++i)
+        Debug.Log(nowNumver);
+        //Debug.Log(easings[0].IsPlay() || easings[1].IsPlay());
+        //どちらかが移動中なら移動処理をする
+        if(easings[0].IsPlay() || easings[1].IsPlay())
         {
-            if(parameters[i].type == type)
+            //移動処理
+            ObjectMove();
+            //終了時に入力を再開する
+            if(!easings[0].IsPlay() && !easings[1].IsPlay())
             {
-                return parameters[i];
+                M_System.input.SetEnableStop(false);
+                history.pre = history.now;
+                Get(history.pre).system.SetActive(false);
+                history.now = history.next;
+            }
+        }
+        //右移動
+        //入力を禁止する
+        else if(M_System.input.Down(SystemInput.Tag.LSTICK_RIGHT))
+        {
+            if(Right())
+            {
+                InputMove();
+            }
+        }
+        //左移動
+        //入力を禁止する
+        else if(M_System.input.Down(SystemInput.Tag.LSTICK_LEFT))
+        {
+            if(Left())
+            {
+                InputMove();
+            }
+        }
+    }
+    private void InputMove()
+    {
+        //入力を禁止します。
+        M_System.input.SetEnableStop(true);
+        history.next = GetTag(nowNumver);
+        //次のCanvasの位置でEasingを登録する
+        easings[0].ResetTime();
+        easings[1].ResetTime();
+        easings[0].Set(mainCamera.transform.position.x, Get(history.next).GetPosition().x - mainCamera.transform.position.x, easings[0].parameter.time, easings[0].parameter.type);
+        easings[1].Set(mainCamera.transform.position.y, Get(history.next).GetPosition().y - mainCamera.transform.position.y, easings[1].parameter.time, easings[1].parameter.type);
+        Debug.Log(Get(history.next).GetPosition().x - mainCamera.transform.position.x);
+        Get(history.next).system.SetActive(true);
+    }
+    private void ObjectMove()
+    {
+        mainCamera.transform.position = new Vector3(easings[0].Move(), easings[1].Move(), -10);
+    }
+    private Target Get(CanvasTag tag)
+    {
+        for(int y = 0;y < targets.Length;++y)
+        {
+            for (int x = 0; x < targets[y].target.Length; ++x)
+            {
+                if (targets[y].target[x].tag == tag)
+                {
+                    return targets[y].target[x];
+                }
             }
         }
         return null;
+    }
+    private Vector2Int GetNumber(CanvasTag tag)
+    {
+        for (int y = 0; y < targets.Length; ++y)
+        {
+            for (int x = 0; x < targets[y].target.Length; ++x)
+            {
+                if (targets[y].target[x].tag == tag)
+                {
+                    return new Vector2Int(x, y);
+                }
+            }
+        }
+        return new Vector2Int();
+    }
+    private CanvasTag GetTag(Vector2Int pos)
+    {
+        return targets[pos.y].target[pos.x].tag;
+    }
+    private bool Up()
+    {
+        --nowNumver.y;
+        if (0 < nowNumver.y)
+        {
+            nowNumver.y = 0;
+            return false;
+        }
+        BeyondArrayCheck();
+        return true;
+    }
+    private bool Down()
+    {
+        ++nowNumver.y;
+        if (targets.Length >= nowNumver.y)
+        {
+            nowNumver.y = targets.Length - 1;
+            return false;
+        }
+        BeyondArrayCheck();
+        return true;
+    }
+    private bool Left()
+    {
+        --nowNumver.x;
+        if (0 > nowNumver.x)
+        {
+            nowNumver.x = 0;
+            return false;
+        }
+        return true;
+    }
+    private bool Right()
+    {
+        ++nowNumver.x;
+        if (targets[nowNumver.y].target.Length <= nowNumver.x)
+        {
+            nowNumver.x = targets[nowNumver.y].target.Length - 1;
+            return false;
+        }
+        return true;
+    }
+    private void BeyondArrayCheck()
+    {
+        //横に移動したときに配列数よりも大きい値になっていた場合に配列数-1に補正をかける処理
+        if (targets[nowNumver.y].target.Length <= nowNumver.x)
+        {
+            nowNumver.x = targets[nowNumver.y].target.Length - 1;
+        }
+    }
+    public bool ChangeTag(CanvasTag tag)
+    {
+        //移動中は判定を無視する
+        if(easings[0].IsPlay() || easings[1].IsPlay())
+        {
+            return false;
+        }
+        nowNumver = GetNumber(tag);
+        InputMove();
+        return true;
     }
 }

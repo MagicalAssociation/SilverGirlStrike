@@ -22,6 +22,24 @@ public class Easing
         public float time;
         public Easing.Type type;
         public Easing.MoveType move;
+        public Parameter()
+        {
+            time = 1.0f;
+            type = Type.Linear;
+            move = MoveType.InOut;
+        }
+        public Parameter(float time,Type type,MoveType move)
+        {
+            this.time = time;
+            this.type = type;
+            this.move = move;
+        }
+        public Parameter(Parameter p)
+        {
+            this.time = p.time;
+            this.type = p.type;
+            this.move = p.move;
+        }
     }
     //! TimeCount
     float cnt;
@@ -78,6 +96,39 @@ public class Easing
     */
     public Easing() {
         this.ResetTime();
+        this.back = new Back();
+        this.bounce = new Bounce();
+        this.cubic = new Cubic();
+        this.linear = new Linear();
+        this.quad = new Quad();
+        this.quart = new Quart();
+        this.quint = new Quint();
+        //DefaultEasing
+        this.use = new Linear();
+        this.parameter = new Parameter();
+    }
+    public Easing(Easing easing)
+    {
+        this.ResetTime();
+        this.start = easing.start;
+        this.end = easing.end;
+        this.duration = easing.duration;
+        this.use = easing.use;
+        this.parameter = new Parameter(easing.parameter);
+        this.back = new Back();
+        this.bounce = new Bounce();
+        this.cubic = new Cubic();
+        this.linear = new Linear();
+        this.quad = new Quad();
+        this.quart = new Quart();
+        this.quint = new Quint();
+        //DefaultEasing
+        this.use = new Linear();
+    }
+    public Easing(Easing.Parameter param)
+    {
+        this.ResetTime();
+        this.parameter = new Parameter(param);
         this.back = new Back();
         this.bounce = new Bounce();
         this.cubic = new Cubic();

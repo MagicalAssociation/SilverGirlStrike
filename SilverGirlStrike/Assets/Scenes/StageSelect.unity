@@ -1636,29 +1636,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 699b723af2a42ac4f90f6090e87cda00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  begin: 1
-  size: {x: 960, y: 540}
-  parameters:
-  - type: 0
-    manager: {fileID: 1674812492}
-    moveObject:
-    - obj: {fileID: 1032003705}
-      offset: {x: 20, y: 0}
+  mainCamera: {fileID: 1481324811}
+  easings:
+  - parameter:
+      time: 2
       type: 0
-    - obj: {fileID: 876284401}
-      offset: {x: 960, y: 0}
-      type: 1
-  - type: 1
-    manager: {fileID: 1356488353}
-    moveObject:
-    - obj: {fileID: 1122395740}
-      offset: {x: 960, y: 0}
-      type: 1
-  easing:
-    parameter:
-      time: 20
+      move: 2
+  - parameter:
+      time: 5
       type: 0
-      move: 0
+      move: 2
+  targets:
+  - target:
+    - canvas: {fileID: 1537966365}
+      system: {fileID: 2009005301}
+      tag: 2
+  - target:
+    - canvas: {fileID: 1689325008}
+      system: {fileID: 1299515662}
+      tag: 0
+    - canvas: {fileID: 1714504734}
+      system: {fileID: 741085648}
+      tag: 1
+  startTag: 0
 --- !u!4 &1010980186
 Transform:
   m_ObjectHideFlags: 0
@@ -1756,8 +1756,8 @@ MonoBehaviour:
   back: {fileID: 21300000, guid: 034e7bf977b01f442b5a6411e2727a04, type: 3}
   prefab: {fileID: 114953428745331192, guid: be9c2d4c913e504418fa937eebf14ef7, type: 2}
   startPosition: {fileID: 26336824}
-  size: {x: 32, y: 32}
-  clearance: {x: 10, y: 10}
+  size: {x: 1, y: 1}
+  clearance: {x: 1, y: 1}
   oneRowNumber: 10
   cursorColor:
     selectImageColor: {r: 1, g: 1, b: 1, a: 1}
@@ -2325,6 +2325,8 @@ MonoBehaviour:
   stageNameText: {fileID: 1371700550}
   locationText: {fileID: 220576614}
   clearTimeText: {fileID: 1767305173}
+  selectManagers: {fileID: 1010980185}
+  startSelect: {fileID: 33217106}
 --- !u!4 &1299515664
 Transform:
   m_ObjectHideFlags: 0
@@ -2425,7 +2427,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1349844939
 Transform:
   m_ObjectHideFlags: 0
@@ -3085,8 +3087,8 @@ Canvas:
   m_GameObject: {fileID: 1537966365}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 2
+  m_Camera: {fileID: 1481324813}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -3095,7 +3097,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &1537966367
 MonoBehaviour:
@@ -3457,7 +3459,7 @@ MonoBehaviour:
     selectBackColor: {r: 1, g: 1, b: 1, a: 1}
     notSelectBackColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
   cursor: {fileID: 1629776779}
-  cursorOffset: {x: -10, y: 10}
+  cursorOffset: {x: -0.5, y: 0.5}
 --- !u!4 &1683278465
 Transform:
   m_ObjectHideFlags: 0
@@ -3540,17 +3542,17 @@ Canvas:
   m_GameObject: {fileID: 1689325008}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 2
+  m_Camera: {fileID: 1481324813}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!224 &1689325012
 RectTransform:
@@ -3559,8 +3561,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1689325008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalScale: {x: 0.019962963, y: 0.019962963, z: 0.019962963}
   m_Children:
   - {fileID: 876284402}
   m_Father: {fileID: 1674812493}
@@ -3569,8 +3571,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_SizeDelta: {x: 960, y: 540}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1690075681
 GameObject:
   m_ObjectHideFlags: 0
@@ -3711,8 +3713,8 @@ Canvas:
   m_GameObject: {fileID: 1714504734}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 2
+  m_Camera: {fileID: 1481324813}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -3721,7 +3723,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!224 &1714504738
 RectTransform:
@@ -3730,9 +3732,9 @@ RectTransform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1714504734}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalScale: {x: 0.019962963, y: 0.019962963, z: 0.019962963}
   m_Children:
   - {fileID: 1122395742}
   m_Father: {fileID: 1356488354}
@@ -3740,9 +3742,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 50, y: 0}
+  m_SizeDelta: {x: 960, y: 540}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1767305171
 GameObject:
   m_ObjectHideFlags: 0
@@ -4172,9 +4174,9 @@ RectTransform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1537966365}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalScale: {x: 0.019962963, y: 0.019962963, z: 0.019962963}
   m_Children:
   - {fileID: 2009005302}
   m_Father: {fileID: 1349844939}
@@ -4182,6 +4184,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 50}
+  m_SizeDelta: {x: 960, y: 540}
+  m_Pivot: {x: 0.5, y: 0.5}

@@ -46,6 +46,10 @@ public class SelectItems : CursorSystem
     public Text locationText;
     public Text clearTimeText;
 
+    //データ渡すための相手のSystemと親System
+    public StageSelectManagers selectManagers;
+    public GameStart startSelect;
+
     // Use this for initialization
     void Start()
     {
@@ -98,6 +102,11 @@ public class SelectItems : CursorSystem
         this.Move();
         this.ChangeColor();
         this.ChangeText();
+        //仮追記：決定処理
+        if(M_System.input.Down(SystemInput.Tag.DECISION))
+        {
+            SetNextScene();
+        }
     }
 
     //public override void SystemUpdate(CursorSystemManager manager)
@@ -199,13 +208,13 @@ public class SelectItems : CursorSystem
 
             if (diff > time)     //時間切れなら
             {
-                itemlist[i].gameobject.transform.localPosition = poslist[itemlist[i].stopnum].pos;
+                itemlist[i].gameobject.transform.position = poslist[itemlist[i].stopnum].pos;
                 this.canmove = true;
             }
 
             var rate = diff / time;
 
-            itemlist[i].gameobject.transform.localPosition = Vector3.Lerp(itemlist[i].startposition, itemlist[i].endposition, rate);
+            itemlist[i].gameobject.transform.position = Vector3.Lerp(itemlist[i].startposition, itemlist[i].endposition, rate);
         }
     }
     //-----------------------------------------------------------------------------
@@ -227,19 +236,25 @@ public class SelectItems : CursorSystem
                     case ("stage"):
                         //sceneを移動する処理を実装(未実装)
                         //SceneManager.LoadScene("GameScene");
+                        startSelect.SetSceneName("GameScene");
                         break;
                     case ("stage1"):
                         //sceneを移動する処理を実装(未実装)
+                        startSelect.SetSceneName("GameScene");
                         break;
                     case ("stage2"):
                         //sceneを移動する処理を実装(未実装)
+                        startSelect.SetSceneName("GameScene");
                         break;
                     case ("stage3"):
                         //sceneを移動する処理を実装(未実装)
+                        startSelect.SetSceneName("GameScene");
                         break;
 
                         //順次追加
                 }
+                //選択権をアイテムselectへ移行
+                selectManagers.ChangeTag(StageSelectManagers.CanvasTag.ITEM);
             }
         }
     }
