@@ -53,6 +53,8 @@ TextureImporter:
     21300096: enn_48
     21300098: enn_49
     21300100: enn_50
+    21300102: enn_51
+    21300104: enn_52
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -1172,6 +1174,46 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: f4e201c786223d547b41edfede690033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enn_51
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41c33e1e2a9a9c345ae211154c68a359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enn_52
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fed1345d33a3dfa43a7e4c8c8853bb04
       vertices: []
       indices: 
       edges: []
