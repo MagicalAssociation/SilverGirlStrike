@@ -24,10 +24,6 @@ public class FallFireShooter : CharacterObject {
     [SerializeField]
     Collider2D sensor;
 
-    //感知コリジョン
-    [SerializeField]
-    CharacterManager characterManager;
-
     int count;
     //当たった相手
     Collider2D[] hitResult;
@@ -62,8 +58,8 @@ public class FallFireShooter : CharacterObject {
         //チャージ開始
         if(this.count == this.attackIntervalCount)
         {
+            Effect.Get().CreateEffect("fireFallCharge", this.transform.position - Vector3.forward, Quaternion.AngleAxis(180.0f, Vector3.forward), Vector3.one);
             Sound.PlaySE("charge1");
-
         }
 
         //一定間隔に達した
@@ -71,7 +67,7 @@ public class FallFireShooter : CharacterObject {
         {
             this.count = 0;
             var obj = Instantiate<CharacterObject>(this.bulletObject, new Vector3(this.transform.position.x, this.target.transform.position.y + this.upDistance, this.target.position.z), Quaternion.identity);
-            this.characterManager.AddCharacter(obj);
+            FindManager().AddCharacter(obj);
             Sound.PlaySE("impact1");
             Sound.PlaySE("shot2");
         }
@@ -84,7 +80,7 @@ public class FallFireShooter : CharacterObject {
         contactFilter2D.SetLayerMask((int)M_System.LayerName.PLAYER);
         contactFilter2D.useTriggers = true;
         int resultLength = Physics2D.OverlapCollider(this.sensor, contactFilter2D, this.hitResult);
-        return this.hitResult.Length > 0;
+        return resultLength > 0;
     }
 
 

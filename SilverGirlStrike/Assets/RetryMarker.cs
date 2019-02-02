@@ -29,14 +29,25 @@ public class RetryMarker : MonoBehaviour {
     //Enterはたまに貫通するのでとりあえずStayでやってる
     private void OnTriggerStay2D(Collider2D other)
     {
+        if (other.tag != "Player")
+        {
+            return;
+        }
+
         if (this.activeFrag)
         {
             return;
         }
+
         //最初の一回だけ処理
         this.activeFrag = true;
         markerAnim.Play("RetryMarkerGet");
         restartEvent.SetRestartPointIndex(this.arrayIndex);
+
+
+        CharacterObject obj = other.gameObject.GetComponent<CharacterObject>();
+        //全回復
+        obj.GetData().hitPoint.Recover(obj.GetData().hitPoint.GetMaxHP());
 
         Sound.PlaySE("machineSwitch");
         Sound.PlaySE("power1");
