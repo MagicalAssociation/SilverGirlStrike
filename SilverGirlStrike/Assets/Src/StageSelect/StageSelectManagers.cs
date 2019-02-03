@@ -70,7 +70,6 @@ public class StageSelectManagers : MonoBehaviour {
     }
     private void Update()
     {
-        Debug.Log(nowNumver);
         //Debug.Log(easings[0].IsPlay() || easings[1].IsPlay());
         //どちらかが移動中なら移動処理をする
         if(easings[0].IsPlay() || easings[1].IsPlay())
@@ -115,7 +114,6 @@ public class StageSelectManagers : MonoBehaviour {
         easings[1].ResetTime();
         easings[0].Set(mainCamera.transform.position.x, Get(history.next).GetPosition().x - mainCamera.transform.position.x, easings[0].parameter.time, easings[0].parameter.type);
         easings[1].Set(mainCamera.transform.position.y, Get(history.next).GetPosition().y - mainCamera.transform.position.y, easings[1].parameter.time, easings[1].parameter.type);
-        Debug.Log(Get(history.next).GetPosition().x - mainCamera.transform.position.x);
         Get(history.next).system.SetActive(true);
     }
     private void ObjectMove()

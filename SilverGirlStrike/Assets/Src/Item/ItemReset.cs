@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemSelectGameManager : CursorSystem
+public class ItemReset : CursorSystem
 {
     public ItemSelectManager itemSelect;
     public override void Enter()
@@ -18,7 +18,7 @@ public class ItemSelectGameManager : CursorSystem
     public override void SystemUpdate(CursorSystemManager manager)
     {
 
-        if(CursorMove())
+        if (CursorMove())
         {
             base.GetNowParam().Enter();
         }
@@ -28,17 +28,17 @@ public class ItemSelectGameManager : CursorSystem
             {
                 manager.Next((int)ItemSelectManagers.Type.SELECT);
             }
-            else if(M_System.input.Down(SystemInput.Tag.LSTICK_RIGHT))
+            else if(M_System.input.Down(SystemInput.Tag.LSTICK_UP))
             {
-                itemSelect.WarpPosition(Warp.LEFT);
+                itemSelect.WarpPosition(Warp.BUTTOM);
                 manager.Next((int)ItemSelectManagers.Type.SELECT);
             }
-            else if(M_System.input.Down(SystemInput.Tag.LSTICK_LEFT))
+            else if(M_System.input.Down(SystemInput.Tag.LSTICK_DOWN))
             {
-                itemSelect.WarpPosition(Warp.RIGTH);
+                itemSelect.WarpPosition(Warp.TOP);
                 manager.Next((int)ItemSelectManagers.Type.SELECT);
             }
-            else if(M_System.input.Down(SystemInput.Tag.DECISION))
+            else if (M_System.input.Down(SystemInput.Tag.DECISION))
             {
                 GetNowParam().Decision();
                 manager.Next((int)ItemSelectManagers.Type.SELECT);
@@ -47,12 +47,12 @@ public class ItemSelectGameManager : CursorSystem
     }
     private bool CursorMove()
     {
-        if (M_System.input.Down(SystemInput.Tag.LSTICK_UP))
+        if (M_System.input.Down(SystemInput.Tag.LSTICK_LEFT))
         {
             base.GetNowParam().Exit();
             return base.Left();
         }
-        else if(M_System.input.Down(SystemInput.Tag.LSTICK_DOWN))
+        else if (M_System.input.Down(SystemInput.Tag.LSTICK_RIGHT))
         {
             base.GetNowParam().Exit();
             return base.Right();
@@ -60,14 +60,15 @@ public class ItemSelectGameManager : CursorSystem
         return false;
     }
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         base.Init();
-        for(int i= 0;i < base.GetList().Count;++i)
+        for (int i = 0; i < base.GetList().Count; ++i)
         {
-            for(int j = 0;j <  base.GetLine(i).Length;++j)
+            for (int j = 0; j < base.GetLine(i).Length; ++j)
             {
                 base.GetParam(i, j).Exit();
             }
         }
-	}
+    }
 }

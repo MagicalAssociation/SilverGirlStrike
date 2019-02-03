@@ -26,7 +26,7 @@ public class CursorSystem : MonoBehaviour {
     public enum Warp : int
     {
         TOP,
-        DOWN,
+        BUTTOM,
         LEFT,
         RIGTH,
     }
@@ -139,7 +139,7 @@ public class CursorSystem : MonoBehaviour {
         {
             //最大値以上で最大値-1の代入
             ++nowPos.x;
-            if (cursorlist.Count >= nowPos.x)
+            if (cursorlist.Count <= nowPos.x)
             {
                 nowPos.x = cursorlist.Count - 1;
                 return false;
@@ -241,7 +241,7 @@ public class CursorSystem : MonoBehaviour {
             case Warp.TOP:
                 nowPos.y = 0;
                 break;
-            case Warp.DOWN:
+            case Warp.BUTTOM:
                 nowPos.y = cursorlist[nowPos.x].Length - 1;
                 break;
             case Warp.LEFT:

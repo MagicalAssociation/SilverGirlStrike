@@ -23,6 +23,8 @@ public class ItemSelectManager : CursorSystem
     public SGS.CursorColor cursorColor;
     //setManagerにアイテム情報を送るため
     public ItemSetSelectManager nextManager;
+    //ステージセレクトに戻すための親Manager
+    public StageSelectManagers stageSelect;
     //アイテムはCanvasの子として登録するので
     public Canvas canvas;
     //アイテムの説明文出す場所
@@ -49,15 +51,16 @@ public class ItemSelectManager : CursorSystem
             cursors[i] = new GameObject();
             //ImageなのでCanvasの子に登録してあげないと画面に映らない
             cursors[i].transform.parent = canvas.transform;
+            cursors[i].transform.localScale = new Vector3(1, 1, 1);
             itemSelects.Add(new List<ItemSelect>());
         }
         //生成と登録
         for(int i = 0;i < texts.Length;++i)
         {
             ItemSelect itemSelect = Object.Instantiate(prefab, new Vector3(
-                startPosition.position.x + (GetPosition(i, SGS.Item.GetResourceID(texts[i])).x + GetClearance(i, SGS.Item.GetResourceID(texts[i])).x), 
+                startPosition.position.x + (GetPosition(i, SGS.Item.GetResourceID(texts[i])).x + GetClearance(i, SGS.Item.GetResourceID(texts[i])).x),
                 startPosition.position.y - (GetPosition(i, SGS.Item.GetResourceID(texts[i])).y + GetClearance(i, SGS.Item.GetResourceID(texts[i])).y)),
-                Quaternion.identity) as ItemSelect;
+                Quaternion.identity, cursors[i % oneRowNumber].transform) as ItemSelect;
             itemSelect.SetSize(size);
             itemSelect.ItemDataLoad(SGS.Item.GetID(texts[i]));
             itemSelect.backImage.sprite = back;
@@ -65,8 +68,6 @@ public class ItemSelectManager : CursorSystem
             itemSelect.GetItem().SetSprite(itemSelect.itemImage.sprite);
             itemSelect.itemImage.color = cursorColor.notSelectcImageColor;
             itemSelect.backImage.color = cursorColor.notSelectBackColor;
-            //itemSelectの親にカーソルの親を指定する
-            itemSelect.transform.parent = cursors[i % oneRowNumber].transform;
             //リストに登録(Colorをあとでも変更可能にするため)
             itemSelects[i % oneRowNumber].Add(itemSelect);
         }
@@ -76,6 +77,7 @@ public class ItemSelectManager : CursorSystem
         itemSelects[GetPos().x][GetPos().y].SetColor(cursorColor.selectImageColor, cursorColor.selectBackColor);
         //ループ設定変更
         base.SetLoop(false, Direction.Y);
+        base.SetLoop(false, Direction.X);
         text.text = itemSelects[GetPos().x][GetPos().y].GetItem().remarks;
     }
 	
@@ -102,10 +104,15 @@ public class ItemSelectManager : CursorSystem
             else if (M_System.input.Down(SystemInput.Tag.CANCEL))
             {
                 //ステージセレクト画面に戻る
+                stageSelect.ChangeTag(StageSelectManagers.CanvasTag.STAGE);
             }
             else if(M_System.input.Down(SystemInput.Tag.LSTICK_DOWN) || M_System.input.Down(SystemInput.Tag.LSTICK_UP))
             {
                 //ゲームセレクトへ移行
+                manager.Next((int)ItemSelectManagers.Type.RESET);
+            }
+            else if (M_System.input.Down(SystemInput.Tag.LSTICK_LEFT) || M_System.input.Down(SystemInput.Tag.LSTICK_RIGHT))
+            {
                 manager.Next((int)ItemSelectManagers.Type.GAME);
             }
         }
@@ -136,11 +143,11 @@ public class ItemSelectManager : CursorSystem
     }
     private Vector2 GetClearance(int num,int id)
     {
-        return new Vector2((num % oneRowNumber) * (clearance.x/* / SGS.Item.ResourceData.GetSprite(resourceData, id).pixelsPerUnit*/), (num / oneRowNumber) * (clearance.y/* / SGS.Item.ResourceData.GetSprite(resourceData, id).pixelsPerUnit*/));
+        return new Vector2((num % oneRowNumber) * (clearance.x / SGS.Item.ResourceData.GetSprite(resourceData, id).pixelsPerUnit), (num / oneRowNumber) * (clearance.y / SGS.Item.ResourceData.GetSprite(resourceData, id).pixelsPerUnit));
     }
     private Vector2 GetPosition(int num,int id)
     {
-        return new Vector2((num % oneRowNumber) * (size.x/* / SGS.Item.ResourceData.GetSprite(resourceData, id).pixelsPerUnit*/), (num / oneRowNumber) * (size.y/* / SGS.Item.ResourceData.GetSprite(resourceData, id).pixelsPerUnit*/));
+        return new Vector2((num % oneRowNumber) * (size.x / SGS.Item.ResourceData.GetSprite(resourceData, id).pixelsPerUnit), (num / oneRowNumber) * (size.y / SGS.Item.ResourceData.GetSprite(resourceData, id).pixelsPerUnit));
     }
     public override void Enter()
     {

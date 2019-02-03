@@ -8,7 +8,8 @@ public class ItemManagers : CursorSystemManager
     {
         SELECT = 0,
         SET = 1,
-        GAME = 2,
+        RESET = 2,
+        GAME = 3,
     }
     public Type type;
     // Use this for initialization
