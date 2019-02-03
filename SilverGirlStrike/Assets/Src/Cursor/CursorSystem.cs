@@ -26,7 +26,7 @@ public class CursorSystem : MonoBehaviour {
     public enum Warp : int
     {
         TOP,
-        BUTTOM,
+        BOTTOM,
         LEFT,
         RIGTH,
     }
@@ -241,7 +241,7 @@ public class CursorSystem : MonoBehaviour {
             case Warp.TOP:
                 nowPos.y = 0;
                 break;
-            case Warp.BUTTOM:
+            case Warp.BOTTOM:
                 nowPos.y = cursorlist[nowPos.x].Length - 1;
                 break;
             case Warp.LEFT:

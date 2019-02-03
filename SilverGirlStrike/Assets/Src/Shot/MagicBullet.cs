@@ -20,6 +20,7 @@ namespace Bullet
         public int life;
         public GameObject target;
         public BaseBullet attackObject;
+        public Vector3 offset;
     }
 
     [System.Serializable]
@@ -42,6 +43,14 @@ namespace Bullet
                 {
                     bulletData[i].target = targetSearch.Search();
                 }
+            }
+        }
+        //弾を打つ角度に指定値をプラスする(全て同じ)
+        public void AdditionAngle(float angle)
+        {
+            for(int i = 0;i < bulletData.Length;++i)
+            {
+                bulletData[i].angle += angle;
             }
         }
     }
@@ -157,7 +166,7 @@ namespace Bullet
          */
          public static void Create(CharacterObject characterObject,BulletData bulletData,Vector3 position)
         {
-            MagicBullet bullet = Object.Instantiate(bulletData.attackObject, position, Quaternion.identity) as Bullet.MagicBullet;
+            MagicBullet bullet = Object.Instantiate(bulletData.attackObject, position + bulletData.offset, Quaternion.identity) as Bullet.MagicBullet;
             bullet.SetAttackData(new AttackData(characterObject));
             bullet.GetAttackData().power = bulletData.power;
             bullet.lifeCnt = bulletData.life;

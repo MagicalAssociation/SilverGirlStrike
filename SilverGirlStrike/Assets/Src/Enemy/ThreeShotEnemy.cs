@@ -17,10 +17,16 @@ namespace ThreeShot
         {
             WAIT,
             ORBIT,
-            ATTACK1,
-            ATTACK2,
-            ATTACK3,
+            ATTACK_TOP,
+            ATTACK_CENTER,
+            ATTACK_BOTTOM,
             DEATH
+        }
+        public enum AttackPosition : int
+        {
+            TOP = 0,
+            CENTER = 1,
+            BOTTOM = 2,
         }
         //プレイヤーが起動範囲内にいるかを検索するためのサーチ
         public TargetSearch targetSearch;
@@ -53,6 +59,7 @@ namespace ThreeShot
             //初期化
             attackNumber = 0;
             this.SetAttackSuquence();
+            this.bulletParameter.AdditionAngle(this.transform.localEulerAngles.z);
             //取得
             this.animator = GetComponent<Animator>();
             this.GetData().hitPoint.SetMaxHP(parameter.maxHP);
@@ -61,10 +68,11 @@ namespace ThreeShot
             //!-ステートデータを登録＆初期値の設定-!//
             base.AddState((int)State.ORBIT, new OrbitState(this));
             base.AddState((int)State.WAIT, new WaitState(this));
-            base.AddState((int)State.ATTACK1, new Attack1(this));
-            base.AddState((int)State.ATTACK2, new Attack2(this));
-            base.AddState((int)State.ATTACK3, new Attack3(this));
-            base.ChangeState((int)State.ORBIT);
+            base.AddState((int)State.ATTACK_TOP, new AttackTop(this));
+            base.AddState((int)State.ATTACK_CENTER, new AttackCenter(this));
+            base.AddState((int)State.ATTACK_BOTTOM, new AttackBottom(this));
+            base.AddState((int)State.DEATH, new DeathState(this));
+            base.ChangeState((int)State.WAIT);
         }
         public override void ApplyDamage()
         {
@@ -75,16 +83,13 @@ namespace ThreeShot
                 base.ChangeState((int)State.DEATH);
             }
         }
-
         public override bool Damage(AttackData attackData)
         {
             return this.GetData().hitPoint.Damage(attackData.power, attackData.chain);
         }
-
         public override void MoveCharacter()
         {
         }
-
         public override void UpdateCharacter()
         {
             if(GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
@@ -92,21 +97,22 @@ namespace ThreeShot
                 this.parameter.narrowAttackers[0].StartAttack();
             }
             this.UpdateState();
+            Debug.Log(this.transform.eulerAngles);
         }
         private void SetAttackSuquence()
         {
             attackSequence = new State[3];
             if (this.parameter.flip)
             {
-                attackSequence[0] = State.ATTACK3;
-                attackSequence[1] = State.ATTACK2;
-                attackSequence[2] = State.ATTACK1;
+                attackSequence[0] = State.ATTACK_BOTTOM;
+                attackSequence[1] = State.ATTACK_CENTER;
+                attackSequence[2] = State.ATTACK_TOP;
             }
             else
             {
-                attackSequence[0] = State.ATTACK1;
-                attackSequence[1] = State.ATTACK2;
-                attackSequence[2] = State.ATTACK3;
+                attackSequence[0] = State.ATTACK_TOP;
+                attackSequence[1] = State.ATTACK_CENTER;
+                attackSequence[2] = State.ATTACK_BOTTOM;
             }
         }
         //アニメーターの取得
@@ -118,6 +124,20 @@ namespace ThreeShot
         public State[] GetAttackSequence()
         {
             return this.attackSequence;
+        }
+        public bool NextAttackNumber()
+        {
+            this.attackNumber++;
+            if (attackSequence.Length <= attackNumber)
+            {
+                this.attackNumber = 0;
+                return false;
+            }
+            return true;
+        }
+        public int GetAttackNumber()
+        {
+            return this.attackNumber;
         }
     }
     //元ステート
@@ -149,7 +169,8 @@ namespace ThreeShot
         {
             if(GetTime() > enemy.parameter.attackInterval)
             {
-                manager.SetNextState((int)enemy.GetAttackSequence()[0]);
+                manager.SetNextState((int)enemy.GetAttackSequence()[enemy.GetAttackNumber()]);
+                return true;
             }
             return false;
         }
@@ -159,9 +180,9 @@ namespace ThreeShot
         }
     }
     //攻撃1ステート
-    public class Attack1 : BaseState
+    public class AttackTop : BaseState
     {
-        public Attack1(ThreeShotEnemy enemy)
+        public AttackTop(ThreeShotEnemy enemy)
             :base(enemy)
         {
 
@@ -176,17 +197,39 @@ namespace ThreeShot
 
         public override bool Transition(ref StateManager manager)
         {
+            if (this.GetTime() == 0)
+            {
+                return false;
+            }
+            //次の攻撃または待機へ移行
+            if (GetTime() % (this.enemy.bulletParameter.interval * 1) == 0)
+            {
+                if(enemy.NextAttackNumber())
+                {
+                    manager.SetNextState((int)enemy.GetAttackSequence()[enemy.GetAttackNumber()]);
+                }
+                else
+                {
+                    manager.SetNextState((int)ThreeShotEnemy.State.WAIT);
+                }
+                return true;
+            }
             return false;
         }
 
         public override void Update()
         {
+            if(GetTime() % this.enemy.bulletParameter.interval == 0)
+            {
+                //攻撃生成
+                Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[(int)ThreeShotEnemy.AttackPosition.TOP], this.enemy.transform.position);
+            }
         }
     }
     //攻撃2ステート
-    public class Attack2 : BaseState
+    public class AttackCenter : BaseState
     {
-        public Attack2(ThreeShotEnemy enemy)
+        public AttackCenter(ThreeShotEnemy enemy)
             : base(enemy)
         {
 
@@ -201,17 +244,39 @@ namespace ThreeShot
 
         public override bool Transition(ref StateManager manager)
         {
+            if (this.GetTime() == 0)
+            {
+                return false;
+            }
+            //次の攻撃または待機へ移行
+            if (GetTime() % (this.enemy.bulletParameter.interval * 1) == 0)
+            {
+                if (enemy.NextAttackNumber())
+                {
+                    manager.SetNextState((int)enemy.GetAttackSequence()[enemy.GetAttackNumber()]);
+                }
+                else
+                {
+                    manager.SetNextState((int)ThreeShotEnemy.State.WAIT);
+                }
+                return true;
+            }
             return false;
         }
 
         public override void Update()
         {
+            if (GetTime() % this.enemy.bulletParameter.interval == 0)
+            {
+                //攻撃生成
+                Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[(int)ThreeShotEnemy.AttackPosition.CENTER], this.enemy.transform.position);
+            }
         }
     }
     //攻撃１ステート
-    public class Attack3 : BaseState
+    public class AttackBottom : BaseState
     {
-        public Attack3(ThreeShotEnemy enemy)
+        public AttackBottom(ThreeShotEnemy enemy)
             : base(enemy)
         {
 
@@ -226,11 +291,33 @@ namespace ThreeShot
 
         public override bool Transition(ref StateManager manager)
         {
+            if (this.GetTime() == 0)
+            {
+                return false;
+            }
+            //次の攻撃または待機へ移行
+            if (GetTime() % (this.enemy.bulletParameter.interval * 1) == 0)
+            {
+                if (enemy.NextAttackNumber())
+                {
+                    manager.SetNextState((int)enemy.GetAttackSequence()[enemy.GetAttackNumber()]);
+                }
+                else
+                {
+                    manager.SetNextState((int)ThreeShotEnemy.State.WAIT);
+                }
+                return true;
+            }
             return false;
         }
 
         public override void Update()
         {
+            if (GetTime() % this.enemy.bulletParameter.interval == 0)
+            {
+                //攻撃生成
+                Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[(int)ThreeShotEnemy.AttackPosition.BOTTOM], this.enemy.transform.position);
+            }
         }
     }
     //起動待ち
@@ -262,6 +349,31 @@ namespace ThreeShot
 
         public override void Update()
         {
+        }
+    }
+    //死亡モーション
+    public class DeathState : BaseState
+    {
+        public DeathState(ThreeShotEnemy enemy) : base(enemy)
+        {
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            return false;
+        }
+
+        public override void Update()
+        {
+            this.enemy.KillMyself();
         }
     }
 }

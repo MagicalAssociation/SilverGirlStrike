@@ -30,7 +30,7 @@ public class ItemReset : CursorSystem
             }
             else if(M_System.input.Down(SystemInput.Tag.LSTICK_UP))
             {
-                itemSelect.WarpPosition(Warp.BUTTOM);
+                itemSelect.WarpPosition(Warp.BOTTOM);
                 manager.Next((int)ItemSelectManagers.Type.SELECT);
             }
             else if(M_System.input.Down(SystemInput.Tag.LSTICK_DOWN))
