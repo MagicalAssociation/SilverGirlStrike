@@ -84,6 +84,7 @@ public class FallFireShooter : CharacterObject {
             this.count = 0;
             var obj = Instantiate<CharacterObject>(this.bulletObject, new Vector3(this.transform.position.x, this.target.transform.position.y + this.upDistance, this.target.position.z), Quaternion.identity);
             FindManager().AddCharacter(obj);
+            obj.gameObject.SetActive(true);
             Sound.PlaySE("impact1");
             Sound.PlaySE("shot2");
         }
