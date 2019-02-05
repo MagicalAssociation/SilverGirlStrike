@@ -27,6 +27,15 @@ public class RestartEvent : MonoBehaviour {
     //登録されているシーンの名前（起動時に自動取得）
     private string currentSceneName;
 
+    RestartEvent()
+    {
+        if (isExist)
+        {
+            return;
+        }
+        this.startPoints = new List<Transform>();
+    }
+
     private void Awake()
     {
         //複数のオブジェクトがある場合は削除して一つになることを保証
@@ -35,7 +44,6 @@ public class RestartEvent : MonoBehaviour {
             Destroy(this.gameObject);
             return;
         }
-        this.startPoints = new List<Transform>();
         //Inspectorの値を配列に追加
         foreach (var i in this.serializeStartPoint)
         {
@@ -46,6 +54,7 @@ public class RestartEvent : MonoBehaviour {
         //初期化
         DontDestroySetting();
         CreatePlayerObject();
+
     }
 
     // イベントハンドラー（イベント発生時に動かしたい処理）
@@ -83,7 +92,7 @@ public class RestartEvent : MonoBehaviour {
         //プレイヤーをカメラが追従するように設定
         var chaseObj = this.characterManager.GetCharacterTrans("PlayerCameraMan");
         cameraObj.SetTarget(chaseObj);
-        cameraObj.gameObject.transform.position = character.transform.position + Vector3.up * 30.0f;
+        cameraObj.SetPosition(character.transform.position + Vector3.up * 30.0f);
     }
 
     private void DontDestroySetting()
