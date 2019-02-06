@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4930204924542814}
   - component: {fileID: 212528568419121002}
   - component: {fileID: 114860475549795048}
+  - component: {fileID: 114902023715294856}
   m_Layer: 0
   m_Name: magicAttack1
   m_TagString: Untagged
@@ -54,6 +55,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goalScale: 2
   movePower: 0.3
+--- !u!114 &114902023715294856
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1085857590311880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdac9bb20788d5445942cceae7e1e9d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deleteCnt: 2
 --- !u!212 &212528568419121002
 SpriteRenderer:
   m_ObjectHideFlags: 1

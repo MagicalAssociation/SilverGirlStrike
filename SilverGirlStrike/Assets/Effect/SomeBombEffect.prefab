@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4334504949346342}
   - component: {fileID: 212846470618610968}
   - component: {fileID: 95035089784680710}
+  - component: {fileID: 114584013880809754}
   m_Layer: 0
   m_Name: SomeBombEffect
   m_TagString: Untagged
@@ -59,6 +60,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114584013880809754
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1271533898439432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdac9bb20788d5445942cceae7e1e9d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deleteCnt: 2
 --- !u!212 &212846470618610968
 SpriteRenderer:
   m_ObjectHideFlags: 1

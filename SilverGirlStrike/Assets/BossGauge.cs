@@ -59,7 +59,7 @@ public class BossGauge : MonoBehaviour {
             this.bossGauge = bossGauge;
             this.easing = new Easing();
             //加速度の変化が大きい感じのイージング関数を選択
-            this.easing.Use(Easing.Type.Quint);
+            this.easing.Use(Easing.Type.Linear);
         }
 
         public override void Enter(ref StateManager manager)
