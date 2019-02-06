@@ -13,6 +13,11 @@ public class FallFireShooter : CharacterObject {
     [SerializeField]
     int chargeCount;
 
+    //初回の起動時のみ有効な発射タイミング
+    [SerializeField]
+    int firstIntervalCount;
+
+
     [SerializeField]
     CharacterObject bulletObject;
 
@@ -24,7 +29,10 @@ public class FallFireShooter : CharacterObject {
     [SerializeField]
     Collider2D sensor;
 
+    //クラスのカウンター
     int count;
+    int firstCount;
+
     //当たった相手
     Collider2D[] hitResult;
     Transform target;
@@ -49,9 +57,17 @@ public class FallFireShooter : CharacterObject {
         if (!CheckOverlapPlayer())
         {
             //範囲内に入ってない場合は処理しない
-            this.count = 0;
+            this.count = this.attackIntervalCount - 1;
+            this.firstCount = 0;
             return;
         }
+
+        ++this.firstCount;
+        if(this.firstCount < this.firstIntervalCount)
+        {
+            return;
+        }
+
         this.target = this.hitResult[0].transform;
         ++this.count;
 
@@ -68,6 +84,7 @@ public class FallFireShooter : CharacterObject {
             this.count = 0;
             var obj = Instantiate<CharacterObject>(this.bulletObject, new Vector3(this.transform.position.x, this.target.transform.position.y + this.upDistance, this.target.position.z), Quaternion.identity);
             FindManager().AddCharacter(obj);
+            obj.gameObject.SetActive(true);
             Sound.PlaySE("impact1");
             Sound.PlaySE("shot2");
         }
@@ -87,6 +104,7 @@ public class FallFireShooter : CharacterObject {
     // Use this for initialization
     void Start () {
         this.count = 0;
+        this.firstCount = 0;
         this.hitResult = new Collider2D[10];
 	}
 	

@@ -19,6 +19,10 @@ public class RetryMarker : MonoBehaviour {
     private void Start()
     {
         this.arrayIndex = this.restartEvent.AddRestartPoint(this.transform);
+        if (this.activeFrag)
+        {
+            markerAnim.Play("RetryMarkerGet");
+        }
     }
 
     // Update is called once per frame

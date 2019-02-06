@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
+using UnityEngine.SceneManagement;
 
 //編集履歴
 // 2018/10/15 板倉
@@ -127,5 +128,4 @@ public class SpriteLoop : MonoBehaviour
         this.screenRect.width = this.viewCamera.refResolutionX;
         this.screenRect.height = this.viewCamera.refResolutionY;
     }
-
 }

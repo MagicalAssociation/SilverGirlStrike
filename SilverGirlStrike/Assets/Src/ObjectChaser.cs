@@ -21,10 +21,15 @@ public class ObjectChaser : MonoBehaviour {
     public float chasePower;
     public Vector3 relativePosition;
     Vector3 targetPosition;
+    //瞬間移動フラグ
+    bool isMove;
+    Vector3 movePos;
 
 
     // Use this for initialization
     void Awake () {
+        this.isMove = false;
+
         this.zPos = this.transform.position.z;
         if(this.chaseTarget == null)
         {
@@ -51,8 +56,20 @@ public class ObjectChaser : MonoBehaviour {
 
         this.transform.position += ((this.targetPosition + this.relativePosition) - this.transform.position) * this.chasePower * (Time.deltaTime * 60.0f);
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.zPos);
-	}
 
+        if (this.isMove)
+        {
+            this.transform.position = this.movePos;
+            this.isMove = false;
+        }
+    }
+
+
+    public void SetPosition(Vector3 pos)
+    {
+        this.movePos = pos;
+        this.isMove = true;
+    }
 
     //追従の速度を設定
     public void SetChasePowerRatio(float power)
