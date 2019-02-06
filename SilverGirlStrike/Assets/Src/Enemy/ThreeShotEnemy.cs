@@ -17,9 +17,9 @@ namespace ThreeShot
         {
             WAIT,
             ORBIT,
-            ATTACK_TOP,
-            ATTACK_CENTER,
-            ATTACK_BOTTOM,
+            ATTACK_SHOT,
+            ATTACK_BEGIN,
+            ATTACK_END,
             DEATH
         }
         public enum AttackPosition : int
@@ -27,6 +27,18 @@ namespace ThreeShot
             TOP = 0,
             CENTER = 1,
             BOTTOM = 2,
+        }
+        public class AnimationName
+        {
+            public string beginName;
+            public string shotName;
+            public string endName;
+            public AnimationName(string begin,string shot,string end)
+            {
+                beginName = begin;
+                shotName = shot;
+                endName = end;
+            }
         }
         //プレイヤーが起動範囲内にいるかを検索するためのサーチ
         public TargetSearch targetSearch;
@@ -37,6 +49,10 @@ namespace ThreeShot
             public bool flip;
             //攻撃間隔
             public int attackInterval;
+            //攻撃退場間隔
+            public int exitInterval;
+            //退場アニメーション時間
+            public float endAnimTime;
             //HP
             public int maxHP;
             //無敵時間
@@ -51,7 +67,8 @@ namespace ThreeShot
         //アニメーション
         Animator animator;
         //攻撃の順番
-        private State[] attackSequence;
+        private AttackPosition[] attackSequence;
+        public Dictionary<AttackPosition, AnimationName> animationName;
         //攻撃準
         private int attackNumber;
         void Start()
@@ -65,14 +82,19 @@ namespace ThreeShot
             this.GetData().hitPoint.SetMaxHP(parameter.maxHP);
             this.GetData().hitPoint.Recover(parameter.maxHP);
             this.GetData().hitPoint.SetInvincible(this.parameter.damageInvincible);
+            //アニメーションの登録
+            animationName = new Dictionary<AttackPosition, AnimationName>();
+            animationName[AttackPosition.TOP] = new AnimationName("topBegin", "topShot", "topEnd");
+            animationName[AttackPosition.CENTER] = new AnimationName("centerBegin", "centerShot", "centerEnd");
+            animationName[AttackPosition.BOTTOM] = new AnimationName("bottomBegin", "bottomShot", "bottomEnd");
             //!-ステートデータを登録＆初期値の設定-!//
             base.AddState((int)State.ORBIT, new OrbitState(this));
             base.AddState((int)State.WAIT, new WaitState(this));
-            base.AddState((int)State.ATTACK_TOP, new AttackTop(this));
-            base.AddState((int)State.ATTACK_CENTER, new AttackCenter(this));
-            base.AddState((int)State.ATTACK_BOTTOM, new AttackBottom(this));
+            base.AddState((int)State.ATTACK_BEGIN, new AttackBegin(this));
+            base.AddState((int)State.ATTACK_SHOT, new AttackShot(this));
+            base.AddState((int)State.ATTACK_END, new AttackEnd(this));
             base.AddState((int)State.DEATH, new DeathState(this));
-            base.ChangeState((int)State.WAIT);
+            base.ChangeState((int)State.ATTACK_BEGIN);
         }
         public override void ApplyDamage()
         {
@@ -97,22 +119,21 @@ namespace ThreeShot
                 this.parameter.narrowAttackers[0].StartAttack();
             }
             this.UpdateState();
-            Debug.Log(this.transform.eulerAngles);
         }
         private void SetAttackSuquence()
         {
-            attackSequence = new State[3];
+            attackSequence = new AttackPosition[3];
             if (this.parameter.flip)
             {
-                attackSequence[0] = State.ATTACK_BOTTOM;
-                attackSequence[1] = State.ATTACK_CENTER;
-                attackSequence[2] = State.ATTACK_TOP;
+                attackSequence[0] = AttackPosition.BOTTOM;
+                attackSequence[1] = AttackPosition.CENTER;
+                attackSequence[2] = AttackPosition.TOP;
             }
             else
             {
-                attackSequence[0] = State.ATTACK_TOP;
-                attackSequence[1] = State.ATTACK_CENTER;
-                attackSequence[2] = State.ATTACK_BOTTOM;
+                attackSequence[0] = AttackPosition.TOP;
+                attackSequence[1] = AttackPosition.CENTER;
+                attackSequence[2] = AttackPosition.BOTTOM;
             }
         }
         //アニメーターの取得
@@ -121,7 +142,7 @@ namespace ThreeShot
             return this.animator;
         }
         //攻撃順の取得
-        public State[] GetAttackSequence()
+        public AttackPosition[] GetAttackSequence()
         {
             return this.attackSequence;
         }
@@ -169,7 +190,7 @@ namespace ThreeShot
         {
             if(GetTime() > enemy.parameter.attackInterval)
             {
-                manager.SetNextState((int)enemy.GetAttackSequence()[enemy.GetAttackNumber()]);
+                manager.SetNextState((int)ThreeShotEnemy.State.ATTACK_BEGIN);
                 return true;
             }
             return false;
@@ -179,16 +200,19 @@ namespace ThreeShot
         {
         }
     }
-    //攻撃1ステート
-    public class AttackTop : BaseState
+    //攻撃開始
+    public class AttackBegin : BaseState
     {
-        public AttackTop(ThreeShotEnemy enemy)
-            :base(enemy)
+        ThreeShotEnemy.AttackPosition now;
+        public AttackBegin(ThreeShotEnemy enemy) : base(enemy)
         {
 
         }
+
         public override void Enter(ref StateManager manager)
         {
+            now = enemy.GetAttackSequence()[enemy.GetAttackNumber()];
+            enemy.GetAnimator().Play(enemy.animationName[now].beginName);
         }
 
         public override void Exit(ref StateManager manager)
@@ -197,21 +221,9 @@ namespace ThreeShot
 
         public override bool Transition(ref StateManager manager)
         {
-            if (this.GetTime() == 0)
+            if (GetTime() > enemy.parameter.attackInterval)
             {
-                return false;
-            }
-            //次の攻撃または待機へ移行
-            if (GetTime() % (this.enemy.bulletParameter.interval * 1) == 0)
-            {
-                if(enemy.NextAttackNumber())
-                {
-                    manager.SetNextState((int)enemy.GetAttackSequence()[enemy.GetAttackNumber()]);
-                }
-                else
-                {
-                    manager.SetNextState((int)ThreeShotEnemy.State.WAIT);
-                }
+                manager.SetNextState((int)ThreeShotEnemy.State.ATTACK_SHOT);
                 return true;
             }
             return false;
@@ -219,105 +231,79 @@ namespace ThreeShot
 
         public override void Update()
         {
-            if(GetTime() % this.enemy.bulletParameter.interval == 0)
+        }
+    }
+    //攻撃
+    public class AttackShot : BaseState
+    {
+        ThreeShotEnemy.AttackPosition now;
+        public AttackShot(ThreeShotEnemy enemy) : base(enemy)
+        {
+        }
+
+        public override void Enter(ref StateManager manager)
+        {
+            now = enemy.GetAttackSequence()[enemy.GetAttackNumber()];
+            enemy.GetAnimator().Play(enemy.animationName[now].shotName);
+        }
+
+        public override void Exit(ref StateManager manager)
+        {
+        }
+
+        public override bool Transition(ref StateManager manager)
+        {
+            //次の攻撃または待機へ移行
+            if (GetTime() > enemy.parameter.exitInterval)
+            {
+                manager.SetNextState((int)ThreeShotEnemy.State.ATTACK_END);
+                return true;
+            }
+            return false;
+        }
+
+        public override void Update()
+        {
+            if (GetTime() == 1)
             {
                 //攻撃生成
-                Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[(int)ThreeShotEnemy.AttackPosition.TOP], this.enemy.transform.position);
+                Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[(int)now], this.enemy.transform.position);
             }
         }
     }
-    //攻撃2ステート
-    public class AttackCenter : BaseState
+    //攻撃終了
+    public class AttackEnd : BaseState
     {
-        public AttackCenter(ThreeShotEnemy enemy)
-            : base(enemy)
+        ThreeShotEnemy.AttackPosition now;
+        float time;
+        float nowTime;
+        public AttackEnd(ThreeShotEnemy enemy) : base(enemy)
         {
-
+            time = enemy.parameter.endAnimTime;
         }
+
         public override void Enter(ref StateManager manager)
         {
+            now = enemy.GetAttackSequence()[enemy.GetAttackNumber()];
+            enemy.GetAnimator().Play(enemy.animationName[now].endName);
+            nowTime = 0.0f;
         }
-
         public override void Exit(ref StateManager manager)
         {
         }
-
         public override bool Transition(ref StateManager manager)
         {
-            if (this.GetTime() == 0)
+            if (time < nowTime)
             {
-                return false;
-            }
-            //次の攻撃または待機へ移行
-            if (GetTime() % (this.enemy.bulletParameter.interval * 1) == 0)
-            {
-                if (enemy.NextAttackNumber())
-                {
-                    manager.SetNextState((int)enemy.GetAttackSequence()[enemy.GetAttackNumber()]);
-                }
-                else
-                {
-                    manager.SetNextState((int)ThreeShotEnemy.State.WAIT);
-                }
+                enemy.NextAttackNumber();
+                manager.SetNextState((int)ThreeShotEnemy.State.ATTACK_BEGIN);
                 return true;
             }
             return false;
         }
-
         public override void Update()
         {
-            if (GetTime() % this.enemy.bulletParameter.interval == 0)
-            {
-                //攻撃生成
-                Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[(int)ThreeShotEnemy.AttackPosition.CENTER], this.enemy.transform.position);
-            }
-        }
-    }
-    //攻撃１ステート
-    public class AttackBottom : BaseState
-    {
-        public AttackBottom(ThreeShotEnemy enemy)
-            : base(enemy)
-        {
-
-        }
-        public override void Enter(ref StateManager manager)
-        {
-        }
-
-        public override void Exit(ref StateManager manager)
-        {
-        }
-
-        public override bool Transition(ref StateManager manager)
-        {
-            if (this.GetTime() == 0)
-            {
-                return false;
-            }
-            //次の攻撃または待機へ移行
-            if (GetTime() % (this.enemy.bulletParameter.interval * 1) == 0)
-            {
-                if (enemy.NextAttackNumber())
-                {
-                    manager.SetNextState((int)enemy.GetAttackSequence()[enemy.GetAttackNumber()]);
-                }
-                else
-                {
-                    manager.SetNextState((int)ThreeShotEnemy.State.WAIT);
-                }
-                return true;
-            }
-            return false;
-        }
-
-        public override void Update()
-        {
-            if (GetTime() % this.enemy.bulletParameter.interval == 0)
-            {
-                //攻撃生成
-                Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[(int)ThreeShotEnemy.AttackPosition.BOTTOM], this.enemy.transform.position);
-            }
+            nowTime += Time.deltaTime;
         }
     }
     //起動待ち

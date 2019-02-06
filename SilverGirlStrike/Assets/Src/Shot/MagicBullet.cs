@@ -21,6 +21,7 @@ namespace Bullet
         public GameObject target;
         public BaseBullet attackObject;
         public Vector3 offset;
+        public GameObject offsetObject;
     }
 
     [System.Serializable]
@@ -166,7 +167,16 @@ namespace Bullet
          */
          public static void Create(CharacterObject characterObject,BulletData bulletData,Vector3 position)
         {
-            MagicBullet bullet = Object.Instantiate(bulletData.attackObject, position + bulletData.offset, Quaternion.identity) as Bullet.MagicBullet;
+            Vector3 pos = new Vector3();
+            if(bulletData.offsetObject == null)
+            {
+                pos = bulletData.offset + position;
+            }
+            else
+            {
+                pos = bulletData.offsetObject.transform.position;
+            }
+            MagicBullet bullet = Object.Instantiate(bulletData.attackObject, pos, Quaternion.identity) as Bullet.MagicBullet;
             bullet.SetAttackData(new AttackData(characterObject));
             bullet.GetAttackData().power = bulletData.power;
             bullet.lifeCnt = bulletData.life;
