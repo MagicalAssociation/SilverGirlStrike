@@ -301,7 +301,7 @@ MonoBehaviour:
       attackObject: {fileID: 114516956546061212, guid: 84b6877f89ca83c4a8c14d729b9e5e5c,
         type: 2}
       offset: {x: 0, y: 0.7, z: 0}
-      offsetObject: {fileID: 0}
+      offsetObject: {fileID: 1019175564015682}
     - angle: 180
       power: 1
       speed: 1
@@ -310,7 +310,7 @@ MonoBehaviour:
       attackObject: {fileID: 114516956546061212, guid: 84b6877f89ca83c4a8c14d729b9e5e5c,
         type: 2}
       offset: {x: -0.5, y: 0, z: 0}
-      offsetObject: {fileID: 0}
+      offsetObject: {fileID: 1024658891292384}
     - angle: 225
       power: 1
       speed: 1
@@ -319,7 +319,7 @@ MonoBehaviour:
       attackObject: {fileID: 114516956546061212, guid: 84b6877f89ca83c4a8c14d729b9e5e5c,
         type: 2}
       offset: {x: 0, y: -0.7, z: 0}
-      offsetObject: {fileID: 0}
+      offsetObject: {fileID: 1701167951745644}
   parameter:
     flip: 0
     attackInterval: 20

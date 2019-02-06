@@ -1,17 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
-//変更履歴
-//2018/11/30 板倉：削除処理をIDを用いたものに変更、そのために登録時のIDを取得している
-//2018/12/04 板倉：基底クラスのCharacterData data とフィールド名が被っていることでエラーが出ていたので名前を変えておいた（動いてはいたが何かあるとメンドイので）
-
 namespace Bullet
 {
     //MagicBullet(直線に飛ばす)--------------------------------------------------------------------------------------------------
-    public class MagicBullet : BaseBullet
+    public class ChargeBullet : BaseBullet
     {
+        public int chargeTime;
+        public float jumpPower;
         public enum State
         {
             NORMAL,
@@ -24,11 +20,9 @@ namespace Bullet
         {
             mover = GetComponent<CharacterMover>();
             this.myselfID = base.FindManager().AddCharacter(this);
-            base.AddState((int)State.NORMAL, new Magic.NormalState(this));
+            base.AddState((int)State.NORMAL, new Charge.NormalState(this));
             base.ChangeState((int)State.NORMAL);
         }
-
-
 
         public override void UpdateCharacter()
         {
@@ -58,45 +52,43 @@ namespace Bullet
         {
             base.KillMyself();
         }
-
-        /**
-         * brief    攻撃生成
-         */
-        // public static void Create(CharacterObject characterObject,BulletData bulletData,Vector3 position)
-        //{
-        //    Vector3 pos = new Vector3();
-        //    if(bulletData.offsetObject == null)
-        //    {
-        //        pos = bulletData.offset + position;
-        //    }
-        //    else
-        //    {
-        //        pos = bulletData.offsetObject.transform.position;
-        //    }
-        //    MagicBullet bullet = Object.Instantiate(bulletData.attackObject, pos, Quaternion.identity) as Bullet.MagicBullet;
-        //    bullet.SetAttackData(new AttackData(characterObject));
-        //    bullet.GetAttackData().power = bulletData.power;
-        //    bullet.lifeCnt = bulletData.life;
-        //    bullet.moveSpeed = bulletData.speed * 10.0f;
-        //    if (bulletData.target != null)
-        //    {
-        //        bullet.SetShotTarget(bulletData.target);
-        //    }
-        //    else
-        //    {
-        //        bullet.SetShotAngle(bulletData.angle);
-        //    }
-        //}
+        public static void Create(CharacterObject characterObject, BulletData bulletData, Vector3 position,int chargeTime,float jumpPower)
+        {
+            Vector3 pos = new Vector3();
+            if (bulletData.offsetObject == null)
+            {
+                pos = bulletData.offset + position;
+            }
+            else
+            {
+                pos = bulletData.offsetObject.transform.position;
+            }
+            ChargeBullet bullet = Object.Instantiate(bulletData.attackObject, pos, Quaternion.identity) as Bullet.ChargeBullet;
+            bullet.SetAttackData(new AttackData(characterObject));
+            bullet.GetAttackData().power = bulletData.power;
+            bullet.lifeCnt = bulletData.life;
+            bullet.moveSpeed = bulletData.speed * 10.0f;
+            if (bulletData.target != null)
+            {
+                bullet.SetShotTarget(bulletData.target);
+            }
+            else
+            {
+                bullet.SetShotAngle(bulletData.angle);
+            }
+            bullet.chargeTime = chargeTime;
+            bullet.jumpPower = jumpPower;
+        }
     }
-    namespace Magic
+    namespace Charge
     {
         /**
          * brief    元State
          */
         public abstract class BaseState : StateParameter
         {
-            public MagicBullet bullet;
-            public BaseState(MagicBullet bullet)
+            public ChargeBullet bullet;
+            public BaseState(ChargeBullet bullet)
             {
                 this.bullet = bullet;
             }
@@ -106,7 +98,7 @@ namespace Bullet
          */
         public class NormalState : BaseState
         {
-            public NormalState(MagicBullet bullet)
+            public NormalState(ChargeBullet bullet)
                 : base(bullet)
             {
             }
