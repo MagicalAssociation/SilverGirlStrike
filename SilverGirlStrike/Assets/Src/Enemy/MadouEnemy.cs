@@ -79,6 +79,7 @@ namespace MadouEnemy
             this.GetData().hitPoint.Recover(this.parameter.maxHP);
             this.GetData().hitPoint.SetInvincible(this.parameter.damageInvincible);
             this.parameter.autoScaleChange.Init(this.gameObject);
+            animator.Play("wait");
 
             //!-ステートデータを登録＆初期値の設定-!//
             base.AddState((int)State.WAIT, new WaitState(this));
@@ -252,6 +253,7 @@ namespace MadouEnemy
         public override void Enter(ref StateManager manager)
         {
             this.deltaTime = 0.0f;
+            enemy.GetAnimator().Play("attackBegin");
         }
 
         public override void Exit(ref StateManager manager)
@@ -282,6 +284,7 @@ namespace MadouEnemy
 
         public override void Enter(ref StateManager manager)
         {
+            enemy.GetAnimator().Play("attack");
         }
 
         public override void Exit(ref StateManager manager)
@@ -328,10 +331,12 @@ namespace MadouEnemy
         public override void Enter(ref StateManager manager)
         {
             this.deltaTime = 0.0f;
+            enemy.GetAnimator().Play("attackEnd");
         }
 
         public override void Exit(ref StateManager manager)
         {
+            enemy.GetAnimator().Play("wait");
         }
 
         public override bool Transition(ref StateManager manager)
@@ -366,7 +371,7 @@ namespace MadouEnemy
 
         public override void Enter(ref StateManager manager)
         {
-            this.enemy.GetAnimator().Play("Death");
+            this.enemy.GetAnimator().Play("death");
             this.enemy.GetCharacterMover().Jump(6.0f);
             if (this.enemy.transform.localScale.x == 1)
             {
