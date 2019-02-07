@@ -136,7 +136,6 @@ namespace Enemy01
                 this.parameter.narrowAttacker[0].StartAttack();
             }
             this.UpdateState();
-
         }
         public override bool Damage(AttackData data)
         {

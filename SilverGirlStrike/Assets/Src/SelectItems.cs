@@ -127,7 +127,7 @@ public class SelectItems : CursorSystem
         //if (Input.GetKey(KeyCode.DownArrow))          //デバッグ用(方向キーで動く)
         if (M_System.input.Down(SystemInput.Tag.LSTICK_DOWN))
         {
-            if (this.canmove)
+            //if (this.canmove)
             {
                 for (int i = 0; i < itemlist.Length; ++i)
                 {
@@ -163,7 +163,7 @@ public class SelectItems : CursorSystem
         //if (Input.GetKey(KeyCode.UpArrow))        //デバッグ用(方向キーで動く)
         if (M_System.input.Down(SystemInput.Tag.LSTICK_UP))
         {
-            if (this.canmove)
+            //if (this.canmove)
             {
                 for (int i = 0; i < itemlist.Length; ++i)
                 {

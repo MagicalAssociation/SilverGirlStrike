@@ -41,6 +41,12 @@ namespace MadouEnemy
             public int chargeBulletTime;
             //攻撃のジャンプ力
             public float bulletJumpPower;
+            //攻撃弾の重力値
+            public float bulletGravity;
+            //攻撃開始アニメーションタイム
+            public float attackBeginAnimTime;
+            //攻撃終了アニメーションタイム
+            public float attackEndAnimTime;
             //足元オブジェクト
             public Foot foot;
             //向き自動変更
@@ -52,12 +58,18 @@ namespace MadouEnemy
         public Parameter parameter;
         //生成攻撃データ
         public Bullet.BulletParameter bulletParameter;
+        //プレイヤーの検索
+        public TargetSearch targetSearch;
         //アニメーションデータ
         private Animator animator;
         //移動システム
         private CharacterMover mover;
+        //移動力
+        private Vector2 movePower;
         void Start()
         {
+            //生成
+            movePower = new Vector2();
             //取得
             animator = GetComponent<Animator>();
             mover = GetComponent<CharacterMover>();
@@ -80,16 +92,49 @@ namespace MadouEnemy
         }
         public override void ApplyDamage()
         {
+            //HPなくなったら死亡へ
+            if (this.GetData().hitPoint.GetHP() <= 0 && base.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
+            {
+                base.ChangeState((int)State.DEATH);
+            }
+            else
+            {
+                this.GetData().hitPoint.DamageUpdate();
+            }
         }
         public override bool Damage(AttackData attackData)
         {
-            return false;
+            return this.GetData().hitPoint.Damage(attackData.power, attackData.chain); ;
         }
         public override void MoveCharacter()
         {
+            if (this.GetData().stateManager.GetNowStateNum() != (int)State.ORBIT)
+            {
+                mover.UpdateVelocity(this.movePower.x, this.movePower.y, this.parameter.enableGravity ? this.parameter.gravity : 0.0f, parameter.foot.CheckHit());
+                this.movePower = Vector2.zero;
+            }
+            this.parameter.autoScaleChange.DirectionUpdate();
         }
         public override void UpdateCharacter()
         {
+            //判定垂れ流し
+            if (this.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
+            {
+                this.parameter.narrowAttackers[0].StartAttack();
+            }
+            this.UpdateState();
+        }
+        public void SetMovePower(Vector2 move)
+        {
+            this.movePower = move;
+        }
+        public Animator GetAnimator()
+        {
+            return this.animator;
+        }
+        public CharacterMover GetCharacterMover()
+        {
+            return this.mover;
         }
     }
     //元ステート-----------------------------------------------------------------------------------------------------
@@ -110,22 +155,31 @@ namespace MadouEnemy
 
         public override void Enter(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
         }
 
         public override void Exit(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
         }
 
         public override bool Transition(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
+            if (!enemy.parameter.foot.CheckHit() && this.enemy.parameter.enableGravity)
+            {
+                manager.SetNextState((int)MadouEnemy.State.FALL);
+                return true;
+            }
+            //一定count経過したら攻撃モーションへ移行
+            //攻撃データの弾数が０の場合移行をしない
+            if (base.enemy.bulletParameter.bulletNum != 0 && base.GetTime() > base.enemy.parameter.attackInterval)
+            {
+                manager.SetNextState((int)MadouEnemy.State.ATTACK_BEGIN);
+                return true;
+            }
+            return false;
         }
 
         public override void Update()
         {
-            throw new System.NotImplementedException();
         }
     }
     //落下ステー-----------------------------------------------------------------------------------------------------
@@ -137,22 +191,24 @@ namespace MadouEnemy
 
         public override void Enter(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
         }
 
         public override void Exit(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
         }
 
         public override bool Transition(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
+            if (enemy.parameter.foot.CheckHit())
+            {
+                manager.SetNextState((int)MadouEnemy.State.WAIT);
+                return true;
+            }
+            return false;
         }
 
         public override void Update()
         {
-            throw new System.NotImplementedException();
         }
     }
     //起動待ちステート-----------------------------------------------------------------------------------------------------
@@ -164,49 +220,57 @@ namespace MadouEnemy
 
         public override void Enter(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
         }
 
         public override void Exit(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
         }
 
         public override bool Transition(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
+            if(enemy.targetSearch.Search() != null && enemy.targetSearch.Search().tag == "Player")
+            {
+                enemy.bulletParameter.Search();
+                manager.SetNextState((int)MadouEnemy.State.WAIT);
+                return true;
+            }
+            return false;
         }
 
         public override void Update()
         {
-            throw new System.NotImplementedException();
         }
     }
     //攻撃開始ステート-----------------------------------------------------------------------------------------------------
     public class AttackBegin : BaseState
     {
+        float deltaTime;
         public AttackBegin(MadouEnemy enemy) : base(enemy)
         {
         }
 
         public override void Enter(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
+            this.deltaTime = 0.0f;
         }
 
         public override void Exit(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
         }
 
         public override bool Transition(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
+            if(deltaTime >= enemy.parameter.attackBeginAnimTime)
+            {
+                manager.SetNextState((int)MadouEnemy.State.ATTACK);
+                return true;
+            }
+            return false;
         }
 
         public override void Update()
         {
-            throw new System.NotImplementedException();
+            deltaTime += Time.deltaTime;
         }
     }
     //攻撃ステート-----------------------------------------------------------------------------------------------------
@@ -218,53 +282,79 @@ namespace MadouEnemy
 
         public override void Enter(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
         }
 
         public override void Exit(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
         }
 
         public override bool Transition(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
+            if (this.GetTime() == 0)
+            {
+                return false;
+            }
+            if (GetTime() % (this.enemy.bulletParameter.interval * this.enemy.bulletParameter.bulletNum) == 0)
+            {
+                manager.SetNextState((int)MadouEnemy.State.ATTACK_END);
+                return true;
+            }
+            return false;
         }
 
         public override void Update()
         {
-
+            if (GetTime() % this.enemy.bulletParameter.interval == 0)
+            {
+                CreateBullet();
+            }
         }
         private void CreateBullet()
         {
-            Bullet.ChargeBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[0], this.enemy.transform.position, this.enemy.parameter.chargeBulletTime, this.enemy.parameter.bulletJumpPower);
+            for (int i = 0; i < this.enemy.bulletParameter.bulletData.Length; ++i)
+            {
+                Bullet.ChargeBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[i], this.enemy.transform.position, this.enemy.parameter.chargeBulletTime, this.enemy.parameter.bulletJumpPower,enemy.parameter.bulletGravity);
+            }
         }
     }
     //攻撃終了ステート-----------------------------------------------------------------------------------------------------
     public class AttackEnd : BaseState
     {
+        float deltaTime;
         public AttackEnd(MadouEnemy enemy) : base(enemy)
         {
         }
 
         public override void Enter(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
+            this.deltaTime = 0.0f;
         }
 
         public override void Exit(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
         }
 
         public override bool Transition(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
+            if (deltaTime >= enemy.parameter.attackEndAnimTime)
+            {
+                //待機か軌道待ちへ移動
+                if (enemy.targetSearch.Search() == null || enemy.targetSearch.Search().tag != "Player")
+                {
+                    manager.SetNextState((int)MadouEnemy.State.ORBIT);
+                }
+                else
+                {
+                    manager.SetNextState((int)MadouEnemy.State.WAIT);
+                }
+                return true;
+            }
+            return false;
         }
 
         public override void Update()
         {
-            throw new System.NotImplementedException();
+            deltaTime += Time.deltaTime;
         }
     }
     //死亡ステート-----------------------------------------------------------------------------------------------------
@@ -276,22 +366,49 @@ namespace MadouEnemy
 
         public override void Enter(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
+            this.enemy.GetAnimator().Play("Death");
+            this.enemy.GetCharacterMover().Jump(6.0f);
+            if (this.enemy.transform.localScale.x == 1)
+            {
+                this.enemy.transform.Rotate(new Vector3(0, 0, -30));
+            }
+            else if (this.enemy.transform.localScale.x == -1)
+            {
+                this.enemy.transform.Rotate(new Vector3(0, 0, 30));
+            }
+            var magicteam = this.enemy.GetComponent<MagicTeam>();
+            if (magicteam != null)
+            {
+                magicteam.NotActive();
+            }
+            Sound.PlaySE("slashFlash");
+            Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
+            this.enemy.GetData().hitPoint.SetDamageShutout(true);
         }
 
         public override void Exit(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
         }
 
         public override bool Transition(ref StateManager manager)
         {
-            throw new System.NotImplementedException();
+            return false;
         }
 
         public override void Update()
         {
-            throw new System.NotImplementedException();
+            if (this.enemy.transform.localScale.x == 1)
+            {
+                this.enemy.SetMovePower(new Vector2(3, 0));
+            }
+            else if (this.enemy.transform.localScale.x == -1)
+            {
+                this.enemy.SetMovePower(new Vector2(-3, 0));
+            }
+            if (base.GetTime() >= 30)
+            {
+                base.enemy.KillMyself();
+            }
         }
     }
 }

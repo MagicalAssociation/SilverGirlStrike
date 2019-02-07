@@ -33,7 +33,7 @@ namespace ThreeShot
             public string beginName;
             public string shotName;
             public string endName;
-            public AnimationName(string begin,string shot,string end)
+            public AnimationName(string begin, string shot, string end)
             {
                 beginName = begin;
                 shotName = shot;
@@ -94,15 +94,18 @@ namespace ThreeShot
             base.AddState((int)State.ATTACK_SHOT, new AttackShot(this));
             base.AddState((int)State.ATTACK_END, new AttackEnd(this));
             base.AddState((int)State.DEATH, new DeathState(this));
-            base.ChangeState((int)State.ATTACK_BEGIN);
+            base.ChangeState((int)State.ORBIT);
         }
         public override void ApplyDamage()
         {
             //HPなくなったら死亡へ
-            this.GetData().hitPoint.DamageUpdate();
             if (this.GetData().hitPoint.GetHP() <= 0 && base.GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
                 base.ChangeState((int)State.DEATH);
+            }
+            else
+            {
+                this.GetData().hitPoint.DamageUpdate();
             }
         }
         public override bool Damage(AttackData attackData)
@@ -114,7 +117,7 @@ namespace ThreeShot
         }
         public override void UpdateCharacter()
         {
-            if(GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
+            if (GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
                 this.parameter.narrowAttackers[0].StartAttack();
             }
@@ -159,6 +162,10 @@ namespace ThreeShot
         public int GetAttackNumber()
         {
             return this.attackNumber;
+        }
+        public void ResetAttackNumber()
+        {
+            this.attackNumber = 0;
         }
     }
     //元ステート
@@ -299,6 +306,10 @@ namespace ThreeShot
                 manager.SetNextState((int)ThreeShotEnemy.State.ATTACK_BEGIN);
                 return true;
             }
+            if (base.enemy.targetSearch.Search() == null || enemy.targetSearch.Search().tag != "Player")
+            {
+                manager.SetNextState((int)ThreeShotEnemy.State.ORBIT);
+            }
             return false;
         }
         public override void Update()
@@ -325,9 +336,10 @@ namespace ThreeShot
 
         public override bool Transition(ref StateManager manager)
         {
-            if(base.enemy.targetSearch.Search() != null)
+            if(base.enemy.targetSearch.Search() != null && enemy.targetSearch.Search().tag == "Player")
             {
-                manager.SetNextState((int)ThreeShotEnemy.State.WAIT);
+                manager.SetNextState((int)ThreeShotEnemy.State.ATTACK_BEGIN);
+                enemy.ResetAttackNumber();
                 return true;
             }
             return false;

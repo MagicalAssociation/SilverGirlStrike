@@ -314,7 +314,7 @@ public class SystemInput
         this.inputData[(int)Tag.LSTICK_RIGHT] = new InputData("RStickX",true);
         //-1
         this.inputData[(int)Tag.LSTICK_LEFT] = new InputData("RStickX", true,true);
-        this.axis_Power = 1.0f;
+        this.axis_Power = 0.3f;
     }
     /**
      * brief    更新処理
