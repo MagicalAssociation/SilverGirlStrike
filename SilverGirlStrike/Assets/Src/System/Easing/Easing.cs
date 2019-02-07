@@ -68,6 +68,7 @@ public class Easing
         }
         if (cnt >= duration)
         {
+            cnt = duration;
             this.toplay = false;
         }
         return cnt;

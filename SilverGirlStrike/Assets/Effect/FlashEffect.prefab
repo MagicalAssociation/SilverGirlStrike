@@ -71,7 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdac9bb20788d5445942cceae7e1e9d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deleteCnt: 2
+  deleteCnt: 6
 --- !u!212 &212386085565430482
 SpriteRenderer:
   m_ObjectHideFlags: 1

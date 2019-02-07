@@ -20,7 +20,7 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.033333335
+        time: 0.06666667
         value: 1
         inSlope: 0
         outSlope: 0
@@ -48,7 +48,7 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.033333335
+        time: 0.06666667
         value: 1
         inSlope: 0
         outSlope: 0
@@ -76,7 +76,7 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.033333335
+        time: 0.06666667
         value: 1
         inSlope: 0
         outSlope: 0
@@ -104,7 +104,7 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.033333335
+        time: 0.06666667
         value: 1
         inSlope: 0
         outSlope: 0
@@ -141,7 +141,7 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300066, guid: c444ae100f670de4e8ba4b6449b8a5e2, type: 3}
-    - time: 0.033333335
+    - time: 0.06666667
       value: {fileID: 21300068, guid: c444ae100f670de4e8ba4b6449b8a5e2, type: 3}
     - time: 0.1
       value: {fileID: 21300070, guid: c444ae100f670de4e8ba4b6449b8a5e2, type: 3}
@@ -289,7 +289,7 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.033333335
+        time: 0.06666667
         value: 1
         inSlope: 0
         outSlope: 0
@@ -317,7 +317,7 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.033333335
+        time: 0.06666667
         value: 1
         inSlope: 0
         outSlope: 0
@@ -345,7 +345,7 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.033333335
+        time: 0.06666667
         value: 1
         inSlope: 0
         outSlope: 0
@@ -373,7 +373,7 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.033333335
+        time: 0.06666667
         value: 1
         inSlope: 0
         outSlope: 0

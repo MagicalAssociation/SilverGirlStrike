@@ -28,10 +28,17 @@ public class FallFireShooter : CharacterObject {
     //感知コリジョン
     [SerializeField]
     Collider2D sensor;
+    //最大発射可能回数、終わったらDestroyされる
+    [SerializeField]
+    int maxShotCount;
+
 
     //クラスのカウンター
     int count;
     int firstCount;
+
+
+    int shotCount;
 
     //当たった相手
     Collider2D[] hitResult;
@@ -59,9 +66,9 @@ public class FallFireShooter : CharacterObject {
             //範囲内に入ってない場合は処理しない
             this.count = this.attackIntervalCount - 1;
             this.firstCount = 0;
+            this.shotCount = 0;
             return;
         }
-
         ++this.firstCount;
         if(this.firstCount < this.firstIntervalCount)
         {
@@ -74,6 +81,14 @@ public class FallFireShooter : CharacterObject {
         //チャージ開始
         if(this.count == this.attackIntervalCount)
         {
+            //発射回数を超過したら消滅
+            ++this.shotCount;
+            if (this.shotCount > this.maxShotCount)
+            {
+                KillMyself();
+                return;
+            }
+
             Effect.Get().CreateEffect("fireFallCharge", this.transform.position - Vector3.forward, Quaternion.AngleAxis(180.0f, Vector3.forward), Vector3.one);
             Sound.PlaySE("charge1");
         }
@@ -81,12 +96,16 @@ public class FallFireShooter : CharacterObject {
         //一定間隔に達した
         if (this.count > this.attackIntervalCount + this.chargeCount)
         {
+
+
             this.count = 0;
             var obj = Instantiate<CharacterObject>(this.bulletObject, new Vector3(this.transform.position.x, this.target.transform.position.y + this.upDistance, this.target.position.z), Quaternion.identity);
             FindManager().AddCharacter(obj);
             obj.gameObject.SetActive(true);
             Sound.PlaySE("impact1");
             Sound.PlaySE("shot2");
+
+
         }
     }
 
@@ -103,9 +122,10 @@ public class FallFireShooter : CharacterObject {
 
     // Use this for initialization
     void Start () {
-        this.count = 0;
+        this.count = this.attackIntervalCount - 1;
         this.firstCount = 0;
         this.hitResult = new Collider2D[10];
+        this.shotCount = 0;
 	}
 	
 	// Update is called once per frame

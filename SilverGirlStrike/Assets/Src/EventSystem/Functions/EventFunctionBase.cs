@@ -95,6 +95,7 @@ namespace TextEvent
             this.actionFunctions.Add("startInput", new Action.StartInput(this.gameData));
 
             this.actionFunctions.Add("inputLeftStick", new Action.InputLeftStick(this.gameData));
+            this.actionFunctions.Add("changeCharacterState", new Action.ChangeCharacterState(this.gameData));
         }
 
     }
