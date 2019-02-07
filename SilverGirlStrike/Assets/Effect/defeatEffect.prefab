@@ -19,6 +19,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4453394988651228}
+  - component: {fileID: 114454160776768562}
   m_Layer: 0
   m_Name: defeatEffect
   m_TagString: Untagged
@@ -195,6 +196,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114454160776768562
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1038883958590194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdac9bb20788d5445942cceae7e1e9d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deleteCnt: 2
 --- !u!212 &212007872724295344
 SpriteRenderer:
   m_ObjectHideFlags: 1

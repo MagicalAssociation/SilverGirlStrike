@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4877081492908030}
   - component: {fileID: 212941228232599988}
   - component: {fileID: 95563898047030678}
+  - component: {fileID: 114229796884810728}
   m_Layer: 0
   m_Name: SmallBombEffect
   m_TagString: Untagged
@@ -59,6 +60,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114229796884810728
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1142184294199486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdac9bb20788d5445942cceae7e1e9d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deleteCnt: 2
 --- !u!212 &212941228232599988
 SpriteRenderer:
   m_ObjectHideFlags: 1
