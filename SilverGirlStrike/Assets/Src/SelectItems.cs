@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SelectItems : CursorSystem
 {
@@ -11,6 +12,7 @@ public class SelectItems : CursorSystem
     public struct Items
     {
         public string key;              //名前を設定(Scene遷移時に使用)
+        public string sceneName;        //説明の必要・・・・ありますかね？
         public string location;         //ステージの場所を格納
         public int num;                 //番号を設定(上から順に0~)
         public GameObject gameobject;   //場所を移動させるゲームオブジェクト指定
@@ -105,6 +107,7 @@ public class SelectItems : CursorSystem
         //仮追記：決定処理
         if(M_System.input.Down(SystemInput.Tag.DECISION))
         {
+            Sound.PlaySE("systemDesision");
             SetNextScene();
         }
     }
@@ -125,8 +128,10 @@ public class SelectItems : CursorSystem
     {
         //下が押されたら
         //if (Input.GetKey(KeyCode.DownArrow))          //デバッグ用(方向キーで動く)
-        if (M_System.input.Down(SystemInput.Tag.LSTICK_DOWN))
+        if (M_System.input.Down(SystemInput.Tag.LSTICK_UP))
         {
+            Sound.PlaySE("systemMove");
+
             //if (this.canmove)
             {
                 for (int i = 0; i < itemlist.Length; ++i)
@@ -161,8 +166,9 @@ public class SelectItems : CursorSystem
 
         //上が押されたら
         //if (Input.GetKey(KeyCode.UpArrow))        //デバッグ用(方向キーで動く)
-        if (M_System.input.Down(SystemInput.Tag.LSTICK_UP))
+        if (M_System.input.Down(SystemInput.Tag.LSTICK_DOWN))
         {
+            Sound.PlaySE("systemMove");
             //if (this.canmove)
             {
                 for (int i = 0; i < itemlist.Length; ++i)
@@ -231,30 +237,35 @@ public class SelectItems : CursorSystem
         {
             if (itemlist[i].stopnum == center)           //中央で止まっていたら
             {
-                switch (itemlist[i].key)
-                {
-                    case ("stage"):
-                        //sceneを移動する処理を実装(未実装)
-                        //SceneManager.LoadScene("GameScene");
-                        startSelect.SetSceneName("GameScene");
-                        break;
-                    case ("stage1"):
-                        //sceneを移動する処理を実装(未実装)
-                        startSelect.SetSceneName("GameScene");
-                        break;
-                    case ("stage2"):
-                        //sceneを移動する処理を実装(未実装)
-                        startSelect.SetSceneName("GameScene");
-                        break;
-                    case ("stage3"):
-                        //sceneを移動する処理を実装(未実装)
-                        startSelect.SetSceneName("GameScene");
-                        break;
+                SceneManager.LoadScene(itemlist[i].sceneName);
+                //switch (itemlist[i].key)
+                //{
+                //    case ("stage1"):
+                //        //sceneを移動する処理を実装(未実装)
+                //        SceneManager.LoadScene("GameScene");
+                //        startSelect.SetSceneName("GameScene");
+                //        break;
+                //    case ("stage2"):
+                //        //sceneを移動する処理を実装(未実装)
+                //        SceneManager.LoadScene("GameScene");
+                //        startSelect.SetSceneName("GameScene");
+                //        break;
+                //    case ("stage3"):
+                //        //sceneを移動する処理を実装(未実装)
+                //        SceneManager.LoadScene("GameScene");
+                //        startSelect.SetSceneName("GameScene");
+                //        break;
+                //    case ("stage4"):
+                //        //sceneを移動する処理を実装(未実装)
+                //        SceneManager.LoadScene("GameScene");
+                //        startSelect.SetSceneName("GameScene");
+                //        break;
 
-                        //順次追加
-                }
+                //        //順次追加
+                //}
+
                 //選択権をアイテムselectへ移行
-                selectManagers.ChangeTag(StageSelectManagers.CanvasTag.ITEM);
+                //selectManagers.ChangeTag(StageSelectManagers.CanvasTag.ITEM);
             }
         }
     }

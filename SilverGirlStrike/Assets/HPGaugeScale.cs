@@ -23,7 +23,6 @@ public class HPGaugeScale : MonoBehaviour {
             obj.transform.localPosition = Vector3.right * i * this.distance;
             this.scales.Add(obj);
         }
-
 	}
 	
 	// Update is called once per frame
