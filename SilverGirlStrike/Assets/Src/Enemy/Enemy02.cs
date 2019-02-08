@@ -341,7 +341,7 @@ namespace Enemy02
                 this.enemy.transform.Rotate(new Vector3(0, 0, 30));
             }
             Sound.PlaySE("slashFlash");
-            Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
+            Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward * 2.0f, Quaternion.identity, Vector3.one);
             this.enemy.GetData().hitPoint.SetDamageShutout(true);
         }
 

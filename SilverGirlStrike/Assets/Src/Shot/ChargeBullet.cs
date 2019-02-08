@@ -52,7 +52,7 @@ namespace Bullet
             {
                 //float gra = (distance / 10.0f) + (jumpPower / 4.0f);
                 //this.mover.UpdateVelocity(move.x * this.moveSpeed, move.y * this.moveSpeed, gra / gravity, true);
-                this.mover.UpdateVelocity(move.x * this.moveSpeed, move.y * this.moveSpeed, gravity, true);
+                this.mover.UpdateVelocity(move.x * this.moveSpeed, move.y * this.moveSpeed, isCharge ?  0.0f : gravity, true);
                 //弾の向き
                 this.transform.rotation = Quaternion.FromToRotation(new Vector2(1.0f, 0.0f), move);
             }
@@ -60,6 +60,10 @@ namespace Bullet
         public CharacterMover GetCharacterMover()
         {
             return this.mover;
+        }
+        public Animator GetAnimator()
+        {
+            return this.animator;
         }
         /**
          * brief    自分を消す命令をManagerに行う処理
@@ -84,17 +88,17 @@ namespace Bullet
             bullet.GetAttackData().power = bulletData.power;
             bullet.lifeCnt = bulletData.life;
             bullet.moveSpeed = bulletData.speed * 10.0f;
-            if (bulletData.target != null)
-            {
-                bullet.SetShotTarget(bulletData.target);
-                //Test処理
-                bullet.distance = bulletData.target.transform.position.x - pos.x;
-                if(bullet.distance < 0.0f)
-                {
-                    bullet.distance *= -1.0f;
-                }
-            }
-            else
+            //if (bulletData.target != null)
+            //{
+            //    bullet.SetShotTarget(bulletData.target);
+            //    //Test処理
+            //    bullet.distance = bulletData.target.transform.position.x - pos.x;
+            //    if(bullet.distance < 0.0f)
+            //    {
+            //        bullet.distance *= -1.0f;
+            //    }
+            //}
+            //else
             {
                 bullet.SetShotAngle(bulletData.angle);
             }
@@ -130,6 +134,7 @@ namespace Bullet
             {
                 bullet.isCharge = false;
                 bullet.GetCharacterMover().Jump(bullet.jumpPower);
+                bullet.GetAnimator().Play("normal");
             }
 
             public override void Exit(ref StateManager manager)
@@ -178,6 +183,7 @@ namespace Bullet
             public override void Enter(ref StateManager manager)
             {
                 bullet.isCharge = true;
+                bullet.GetAnimator().Play("charge");
             }
 
             public override void Exit(ref StateManager manager)
@@ -196,6 +202,11 @@ namespace Bullet
 
             public override void Update()
             {
+                //チャージ時間の半分で弾を大きくする
+                if(GetTime() == bullet.chargeTime / 2)
+                {
+                    bullet.GetAnimator().Play("normal");
+                }
                 base.bullet.attacker.StartAttack();
                 //自分がプレイヤーと当たっていた時、プレイヤーにダメージを与え自分は消滅する
                 base.bullet.attacker.AttackJudge((int)M_System.LayerName.PLAYER);

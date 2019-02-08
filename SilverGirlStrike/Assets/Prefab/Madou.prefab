@@ -345,7 +345,7 @@ MonoBehaviour:
     damageInvincible: 10
     gravity: 0.8
     enableGravity: 1
-    chargeBulletTime: 5
+    chargeBulletTime: 10
     bulletJumpPower: 13
     bulletGravity: 0.5
     attackBeginAnimTime: 0.433
@@ -353,7 +353,7 @@ MonoBehaviour:
     foot: {fileID: 114405193014110204}
     autoScaleChange:
       targetSearch:
-        enable: 1
+        enable: 0
         targetLayer: 256
         searchRange: {fileID: 61241042839078780}
     narrowAttackers:
@@ -366,7 +366,7 @@ MonoBehaviour:
       targetLayer: 256
       searchRange: {fileID: 61241042839078780}
     bulletData:
-    - angle: 0
+    - angle: 180
       power: 1
       speed: 0.8
       life: 100000

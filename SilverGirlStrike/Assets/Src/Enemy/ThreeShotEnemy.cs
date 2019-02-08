@@ -274,6 +274,7 @@ namespace ThreeShot
             if (GetTime() == 1)
             {
                 //攻撃生成
+                Sound.PlaySE("shot1");
                 Bullet.MagicBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[(int)now], this.enemy.transform.position);
             }
         }
@@ -358,6 +359,7 @@ namespace ThreeShot
 
         public override void Enter(ref StateManager manager)
         {
+            Effect.Get().CreateEffect("manyBombs", this.enemy.transform.position - Vector3.forward * 2.0f, Quaternion.identity, Vector3.one);
         }
 
         public override void Exit(ref StateManager manager)
