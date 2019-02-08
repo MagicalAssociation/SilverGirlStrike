@@ -30,6 +30,8 @@ namespace TextEvent
                 //参照先設定
                 obj.GetComponent<BossGauge>().target = GetGameData().characterManager.GetCharacter(objName);
                 obj.GetComponent<RectTransform>().anchoredPosition = this.pos;
+
+                Debug.Log(GetGameData().characterManager.GetCharacterData(objName).hitPoint.GetMaxHP());
             }
 
             public override void ActionStart(string[] args)

@@ -135,8 +135,8 @@ namespace Bullet
                     return;
                 }
                 //地面に当たったら消す
-                bool hit = base.bullet.attacker.AttackJudge((int)M_System.LayerName.GROUND);
-                if (hit)
+                base.bullet.attacker.AttackJudge((int)M_System.LayerName.GROUND);
+                if (base.bullet.attacker.IsHit())
                 {
                     base.bullet.Delete();
                     return;

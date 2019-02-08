@@ -63,8 +63,8 @@ public class RestartEvent : MonoBehaviour {
         //自分のシーンを再読み込みした場合は削除しない
         if (currentSceneName != nextScene.name)
         {
-            Debug.Log(currentSceneName);
-            Debug.Log(nextScene.name);
+            SceneManager.activeSceneChanged -= ActiveSceneChanged;
+            SceneManager.sceneLoaded -= Init;
             Destroy(this.gameObject);
         }
     }

@@ -297,7 +297,7 @@ namespace MadouEnemy
             {
                 return false;
             }
-            if (GetTime() % ((this.enemy.bulletParameter.interval + this.enemy.parameter.chargeBulletTime) * this.enemy.bulletParameter.bulletNum) == 0)
+            if (GetTime() % (this.enemy.bulletParameter.interval * this.enemy.bulletParameter.bulletNum) == 0)
             {
                 manager.SetNextState((int)MadouEnemy.State.ATTACK_END);
                 return true;
@@ -307,8 +307,7 @@ namespace MadouEnemy
 
         public override void Update()
         {
-            //初期フレームで１つ生成するために-1
-            if ((GetTime() - 1) % (this.enemy.bulletParameter.interval + this.enemy.parameter.chargeBulletTime) == 0)
+            if (GetTime() % this.enemy.bulletParameter.interval == 0)
             {
                 CreateBullet();
             }
@@ -388,7 +387,7 @@ namespace MadouEnemy
                 magicteam.NotActive();
             }
             Sound.PlaySE("slashFlash");
-            Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward * 2.0f, Quaternion.identity, Vector3.one);
+            Effect.Get().CreateEffect("defeat", this.enemy.transform.position - Vector3.forward, Quaternion.identity, Vector3.one);
             this.enemy.GetData().hitPoint.SetDamageShutout(true);
         }
 

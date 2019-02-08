@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/kariItemSelectScene.unity
     guid: c034fda2a6ccda344982de93e95d4dfe
+  - enabled: 1
+    path: Assets/Scenes/StageSelect.unity
+    guid: cfe928e79c416074184d44cccbd339eb
+  - enabled: 1
+    path: Assets/Scenes/EnnStage.unity
+    guid: 0645618e6b9161840a3da91d916b901d
   m_configObjects: {}

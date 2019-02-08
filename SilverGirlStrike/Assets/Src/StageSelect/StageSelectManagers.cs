@@ -49,6 +49,7 @@ public class StageSelectManagers : MonoBehaviour {
     private TagHistory history;
 
     private Vector2Int nowNumver;
+
     private void Start()
     {
         for(int y = 0;y < targets.Length;++y)
@@ -67,6 +68,9 @@ public class StageSelectManagers : MonoBehaviour {
                 }
             }
         }
+
+        //とりあえずここでBGM再生
+        Sound.PlayBGM("stageSelect", true);
     }
     private void Update()
     {

@@ -33,11 +33,11 @@ public class BossGauge : MonoBehaviour {
         this.stateManager.SetParameter((int)State.Neutral, new NeautralState(this));
         this.stateManager.SetParameter((int)State.End, new EndState(this));
         this.stateManager.ChengeState((int)State.Start);
+        this.gaugeScale.max = this.target.GetData().hitPoint.GetMaxHP();
+    }
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
         this.stateManager.Update();
 
 	}
@@ -115,7 +115,6 @@ public class BossGauge : MonoBehaviour {
         public override void Enter(ref StateManager manager)
         {
             this.wait = 2;
-            this.bossGauge.gaugeScale.max = this.bossGauge.target.GetData().hitPoint.GetMaxHP();
         }
 
         public override void Exit(ref StateManager manager)

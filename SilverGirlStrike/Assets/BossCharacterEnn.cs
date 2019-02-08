@@ -139,7 +139,6 @@ public class BossCharacterEnn : CharacterObject {
         GetData().hitPoint.Recover(this.inspectorParam.hitPoint);
         GetData().hitPoint.SetInvincible(this.inspectorParam.invincibleCount);
 
-
         //ステートの初期化を行う
         AddState((int)State.Neutral, new NeutralState(this));
         AddState((int)State.Encounter, new EncounterState(this));

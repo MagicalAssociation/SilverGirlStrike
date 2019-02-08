@@ -6,6 +6,7 @@ TextureImporter:
     21300002: StageIcon_1
     21300004: StageIcon_2
     21300006: StageIcon_3
+    21300008: StageIcon_4
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -96,7 +97,7 @@ TextureImporter:
         width: 331
         height: 106
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -116,7 +117,7 @@ TextureImporter:
         width: 331
         height: 106
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -136,7 +137,7 @@ TextureImporter:
         width: 331
         height: 106
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -156,13 +157,33 @@ TextureImporter:
         width: 331
         height: 106
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 03c078a6e273e95428d57be022128b78
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StageIcon_4
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 432
+        width: 331
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3619ab55c9e8530489d50d360b6ecd5e
       vertices: []
       indices: 
       edges: []
