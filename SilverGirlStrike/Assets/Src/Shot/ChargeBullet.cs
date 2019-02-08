@@ -135,6 +135,9 @@ namespace Bullet
                 bullet.isCharge = false;
                 bullet.GetCharacterMover().Jump(bullet.jumpPower);
                 bullet.GetAnimator().Play("normal");
+
+                Sound.PlaySE("press1");
+
             }
 
             public override void Exit(ref StateManager manager)

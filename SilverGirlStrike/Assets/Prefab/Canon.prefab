@@ -361,7 +361,7 @@ MonoBehaviour:
     attackInterval: 20
     exitInterval: 30
     endAnimTime: 0.117
-    maxHP: 5
+    maxHP: 2
     damageInvincible: 5
     narrowAttackers:
     - {fileID: 114121947134964868}

@@ -26,7 +26,7 @@ namespace Save
         {
             gold = 0;
             stageClearFlag = new int[6];
-            stageClearTime = new float[6];
+            stageClearTime = new int[6];
             filePath = "";
             itemData = new List<ItemData>();
         }
@@ -43,7 +43,7 @@ namespace Save
         }
         public int gold;
         public int[] stageClearFlag;
-        public float[] stageClearTime;
+        public int[] stageClearTime;
         public string filePath;
         public List<ItemData> itemData;
     }
@@ -106,7 +106,7 @@ public class GameData : MonoBehaviour
                     break;
                 case "stage":
                     gameData.stageClearFlag[int.Parse(text[1]) - 1] = int.Parse(text[2]);
-                    gameData.stageClearTime[int.Parse(text[1]) - 1] = float.Parse(text[3]);
+                    gameData.stageClearTime[int.Parse(text[1]) - 1] = int.Parse(text[3]);
                     break;
                 case "item":
                     gameData.itemData.Add(new Save.DataParameter.ItemData(int.Parse(text[1]), int.Parse(text[2])));

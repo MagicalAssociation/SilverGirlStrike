@@ -44,6 +44,7 @@ public class SaveCursorSystem : CursorSystem {
     {
         if (CursorMoveInput())
         {
+            Sound.PlaySE("systemMove");
             //色変更処理
             SetColor();
         }
@@ -52,6 +53,7 @@ public class SaveCursorSystem : CursorSystem {
             //決定ボタンで決定処理を行う
             if (M_System.input.Down(SystemInput.Tag.DECISION))
             {
+                Sound.PlaySE("systemDesision");
                 base.GetNowParam().Decision();
                 selectManager.GameDataUpdate();
             }

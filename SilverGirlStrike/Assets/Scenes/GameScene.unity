@@ -78739,6 +78739,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1863613210}
   - component: {fileID: 1863613211}
+  - component: {fileID: 1863613212}
   m_Layer: 0
   m_Name: RestartEvent
   m_TagString: Untagged
@@ -78780,6 +78781,18 @@ MonoBehaviour:
   playerObj: {fileID: 114445538107119984, guid: 774225a328eb7754988280c801161af9,
     type: 2}
   cameraObjName: Main Camera
+--- !u!114 &1863613212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1863613209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 142d6c601af350b42ba7d636876aec37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageResultTargetName: Player
 --- !u!1 &1863639546
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,12 +7,11 @@ public class LoadGame : CursorParam
 {
     IEnumerator LoadStart()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.0f);
         SceneManager.LoadScene("LoadScene");
     }
     public override void Decision()
     {
-        Sound.PlaySE("clearSound2");
         StartCoroutine(LoadStart());
     }
 

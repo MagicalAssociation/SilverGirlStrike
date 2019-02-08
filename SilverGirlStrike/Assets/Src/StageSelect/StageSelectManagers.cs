@@ -67,6 +67,8 @@ public class StageSelectManagers : MonoBehaviour {
                 }
             }
         }
+
+        Sound.PlayBGM("stageSelect", true);
     }
     private void Update()
     {

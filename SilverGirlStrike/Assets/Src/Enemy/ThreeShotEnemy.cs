@@ -310,6 +310,7 @@ namespace ThreeShot
             if (base.enemy.targetSearch.Search() == null || enemy.targetSearch.Search().tag != "Player")
             {
                 manager.SetNextState((int)ThreeShotEnemy.State.ORBIT);
+                return true;
             }
             return false;
         }
@@ -359,7 +360,11 @@ namespace ThreeShot
 
         public override void Enter(ref StateManager manager)
         {
-            Effect.Get().CreateEffect("manyBombs", this.enemy.transform.position - Vector3.forward * 2.0f, Quaternion.identity, Vector3.one);
+            if (base.GetTime() % 3 == 0)
+            {
+                Sound.PlaySE("bombSmall");
+            }
+            Effect.Get().CreateEffect("manyBombs", this.enemy.transform.position - Vector3.forward * 2.0f, Quaternion.identity, Vector3.one * 2.0f);
         }
 
         public override void Exit(ref StateManager manager)
@@ -373,7 +378,10 @@ namespace ThreeShot
 
         public override void Update()
         {
-            this.enemy.KillMyself();
+            if (GetTime() > 10)
+            {
+                this.enemy.KillMyself();
+            }
         }
     }
 }

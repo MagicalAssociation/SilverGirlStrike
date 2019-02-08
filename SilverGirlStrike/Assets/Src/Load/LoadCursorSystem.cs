@@ -25,6 +25,7 @@ public class LoadCursorSystem : CursorSystem {
     {
         if(CursorMoveInput())
         {
+            Sound.PlaySE("systemMove");
             //色変更処理
             SetColor();
         }
@@ -33,10 +34,12 @@ public class LoadCursorSystem : CursorSystem {
             //決定ボタンで決定処理を行う
             if (M_System.input.Down(SystemInput.Tag.DECISION))
             {
+                Sound.PlaySE("systemDesision");
                 base.GetNowParam().Decision();
             }
             else if (M_System.input.Down(SystemInput.Tag.CANCEL))
             {
+                Sound.PlaySE("systemCancel");
                 StartCoroutine(Cancel());
             }
         }

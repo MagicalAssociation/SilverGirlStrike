@@ -7,12 +7,11 @@ public class NewGame : CursorParam
 {
     IEnumerator GameStart()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.0f);
         SceneManager.LoadScene("GameScene");
     }
     public override void Decision()
     {
-        Sound.PlaySE("clearSound2");
         StartCoroutine(GameStart());
     }
 

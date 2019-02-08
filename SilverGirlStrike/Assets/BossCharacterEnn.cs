@@ -139,7 +139,6 @@ public class BossCharacterEnn : CharacterObject {
         GetData().hitPoint.Recover(this.inspectorParam.hitPoint);
         GetData().hitPoint.SetInvincible(this.inspectorParam.invincibleCount);
 
-
         //ステートの初期化を行う
         AddState((int)State.Neutral, new NeutralState(this));
         AddState((int)State.Encounter, new EncounterState(this));
@@ -484,7 +483,7 @@ public class BossCharacterEnn : CharacterObject {
             base.characterData.inspectorParam.animator.Play("knuckleIdle");
             Sound.PlaySE("eco1");
 
-            this.exitWait = 20;
+            this.exitWait = 40;
             base.characterData.param.comboFlag = false;
 
             if (Random.Range(0, 100) < 50)

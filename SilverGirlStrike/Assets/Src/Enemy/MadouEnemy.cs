@@ -317,6 +317,7 @@ namespace MadouEnemy
         {
             for (int i = 0; i < this.enemy.bulletParameter.bulletData.Length; ++i)
             {
+                Sound.PlaySE("power1");
                 Bullet.ChargeBullet.Create(this.enemy, this.enemy.bulletParameter.bulletData[i], this.enemy.transform.position, this.enemy.parameter.chargeBulletTime, this.enemy.parameter.bulletJumpPower,enemy.parameter.bulletGravity);
             }
         }

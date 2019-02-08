@@ -35,6 +35,7 @@ public class TitleCursorSystem : CursorSystem
             //決定ボタンで決定処理を行う
             if (M_System.input.Down(SystemInput.Tag.DECISION) && base.GetEnable())
             {
+                Sound.PlaySE("systemDesision");
                 base.GetNowParam().Decision();
             }
             else
@@ -42,6 +43,7 @@ public class TitleCursorSystem : CursorSystem
                 //カーソルの移動入力の検知
                 if(CursorMoveInput())
                 {
+                    Sound.PlaySE("systemMove");
                     //Easingの登録をする
                     SetMoveCursorEasing();
                 }

@@ -39,8 +39,17 @@ public class SelectManager : MonoBehaviour
             string text;
             if (data != null)
             {
-                text = GameData.GetSaveFilePath()[i] + "\ngold " + data.gold;
+                int stageClearNumber = 0;
+                for (int j = 0; j < data.stageClearFlag.Length; ++j)
+                {
+                    if (data.stageClearFlag[j] > 0)
+                    {
+                        ++stageClearNumber;
+                    }
+                }
+                text = GameData.GetSaveFilePath()[i] + "\n Number " + stageClearNumber.ToString();
             }
+        
             else
             {
                 text = "NO DATA";

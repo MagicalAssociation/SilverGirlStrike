@@ -61,6 +61,7 @@ public class CurrentData
     public class Data
     {
         Save.DataParameter data;
+        public string stageName;
         public Data()
         {
             data = new Save.DataParameter();
