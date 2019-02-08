@@ -111,6 +111,11 @@ public class CharacterMover : MonoBehaviour
                     this.fallVelocity = 0.0f;
                 }
             }
+
+            if(fallVelocity < -35.0f)
+            {
+                this.fallVelocity = -35.0f;
+            }
         }
 
         //ボックスコリジョンから四角形の頂点を取得、レイの発生に使う

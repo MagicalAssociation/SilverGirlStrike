@@ -414,5 +414,37 @@ namespace TextEvent
             }
         }
 
+
+        /////////////////////////////////////////////////
+        //キャラのステート強制書き換え
+        //args: (string characterName, int stateID)
+        public class ChangeCharacterState : ActionFunction
+        {
+            string characterName;
+            int stateID;
+
+            public ChangeCharacterState(EventGameData gameData) :
+                base(gameData)
+            {
+
+            }
+
+            public override void Action()
+            {
+                GetGameData().characterManager.GetCharacter(this.characterName).ChangeState(this.stateID);
+            }
+
+            public override void ActionStart(string[] args)
+            {
+                this.characterName = args[0];
+                this.stateID = int.Parse(args[1]);
+            }
+
+            public override bool IsEnd()
+            {
+                //すぐ終わる
+                return true;
+            }
+        }
     }
 }
