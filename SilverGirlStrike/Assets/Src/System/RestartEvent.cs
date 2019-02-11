@@ -15,6 +15,8 @@ public class RestartEvent : MonoBehaviour {
     private Transform[] serializeStartPoint;
     [SerializeField]
     private int startPointIndex;
+    [SerializeField]
+    private GameResultData resultData;
 
     //配置するプレイヤーキャラ
     [SerializeField]
@@ -66,6 +68,9 @@ public class RestartEvent : MonoBehaviour {
             Debug.Log(currentSceneName);
             Debug.Log(nextScene.name);
             Destroy(this.gameObject);
+            isExist = false;
+            SceneManager.activeSceneChanged -= ActiveSceneChanged;
+            SceneManager.sceneLoaded -= Init;
         }
     }
 
@@ -92,7 +97,7 @@ public class RestartEvent : MonoBehaviour {
         //プレイヤーをカメラが追従するように設定
         var chaseObj = this.characterManager.GetCharacterTrans("PlayerCameraMan");
         cameraObj.SetTarget(chaseObj);
-        cameraObj.SetPosition(character.transform.position + Vector3.up * 30.0f);
+        cameraObj.SetPosition(character.transform.position + Vector3.up * 1.0f);
     }
 
     private void DontDestroySetting()
@@ -110,6 +115,7 @@ public class RestartEvent : MonoBehaviour {
 
     private void Init(Scene scene, LoadSceneMode mode)
     {
+        this.resultData.Init();
         //初期化
         CreatePlayerObject();
     }

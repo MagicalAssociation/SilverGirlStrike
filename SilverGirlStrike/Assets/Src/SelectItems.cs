@@ -52,6 +52,9 @@ public class SelectItems : CursorSystem
     public StageSelectManagers selectManagers;
     public GameStart startSelect;
 
+    //フェードアウト用
+    public FadeScreen fadeScreen;
+
     // Use this for initialization
     void Start()
     {
@@ -237,8 +240,7 @@ public class SelectItems : CursorSystem
         {
             if (itemlist[i].stopnum == center)           //中央で止まっていたら
             {
-                SceneManager.LoadScene(itemlist[i].sceneName);
-                CurrentData.GetDataInstance().stageName = itemlist[i].sceneName;
+                StartCoroutine(SceneChange(itemlist[i].sceneName));
                 //switch (itemlist[i].key)
                 //{
                 //    case ("stage1"):
@@ -373,4 +375,24 @@ public class SelectItems : CursorSystem
         }
     }
     //--------------------------------------------------------------------
+
+
+
+    IEnumerator SceneChange(string sceneName)
+    {
+        //入力禁止
+        M_System.input.SetEnableStop(true);
+
+        this.fadeScreen.FadeOut();
+        for(int i = 0; i < this.fadeScreen.fadeFrameTime; ++i)
+        {
+            yield return null;
+        }
+
+        //入力再開
+        M_System.input.SetEnableStop(false);
+
+        SceneManager.LoadScene(sceneName);
+        CurrentData.GetDataInstance().stageName = sceneName;
+    }
 }

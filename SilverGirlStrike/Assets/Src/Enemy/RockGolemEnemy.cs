@@ -144,7 +144,7 @@ namespace RockGolem
 
             UpdateState();
             //判定垂れ流し
-            if (GetData().stateManager.GetNowStateNum() != (int)State.START)
+            if (GetData().stateManager.GetNowStateNum() != (int)State.START && GetData().stateManager.GetNowStateNum() != (int)State.DEATH)
             {
                 this.inspectorParam.attackCollisions[0].StartAttack();
             }

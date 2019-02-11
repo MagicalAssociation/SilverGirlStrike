@@ -27,7 +27,8 @@ public class SelectManager : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        child = GetComponentsInChildren<Select>();
+        child = GetComponentsInChildren<Select>(true);
+
         this.GameDataUpdate();
 	}
 	
@@ -36,7 +37,7 @@ public class SelectManager : MonoBehaviour
         for (int i = 0; i < child.Length; ++i)
         {
             Save.DataParameter data = GameData.Load(GameData.GetSaveFilePath()[i]);
-            string text;
+            string text = "";
             if (data != null)
             {
                 int stageClearNumber = 0;
@@ -47,13 +48,14 @@ public class SelectManager : MonoBehaviour
                         ++stageClearNumber;
                     }
                 }
-                text = GameData.GetSaveFilePath()[i] + "\n Number " + stageClearNumber.ToString();
+                text = "clearCount " + stageClearNumber.ToString();
             }
-        
+
             else
             {
                 text = "NO DATA";
             }
+            child[i].SetCaption(GameData.GetSaveFilePath()[i]);
             child[i].TextChange(text);
             child[i].SetData(data);
             child[i].SetStageNumber(i);

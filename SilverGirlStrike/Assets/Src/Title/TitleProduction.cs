@@ -22,7 +22,7 @@ namespace Title
                 move = new Easing();
                 
                 move.Use(type);
-                move.Set(logoObject.rectTransform.localPosition.y + startPosition.y, -startPosition.y,moveTime);
+                move.Set(logoObject.rectTransform.localPosition.y + startPosition.y, 0.0f, moveTime);
                 logoObject.rectTransform.localPosition += new Vector3(0.0f, startPosition.y);
             }
             public void Move()

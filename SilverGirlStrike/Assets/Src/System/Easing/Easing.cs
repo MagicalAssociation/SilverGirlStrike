@@ -203,15 +203,15 @@ public class Easing
     }
     public float In()
     {
-        return this.use.In(this.Time(duration), start, end, duration);
+        return this.use.In(this.Time(duration), start, end - start, duration);
     }
     public float Out()
     {
-        return this.use.Out(this.Time(duration), start, end, duration);
+        return this.use.Out(this.Time(duration), start, end - start, duration);
     }
     public float InOut()
     {
-        return this.use.InOut(this.Time(duration), start, end, duration);
+        return this.use.InOut(this.Time(duration), start, end - start, duration);
     }
     public float Move(MoveType move)
     {

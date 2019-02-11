@@ -72,8 +72,8 @@ public class TitleCursorSystem : CursorSystem
     {
         //Easingを登録
         this.cursorMove[0].ResetTime();
-        this.cursorMove[0].Set(cursorObject.transform.position.x, base.GetNowParam().transform.position.x - cursorObject.transform.position.x, parameter.moveTime);
+        this.cursorMove[0].Set(cursorObject.transform.position.x, base.GetNowParam().transform.position.x, parameter.moveTime);
         this.cursorMove[1].ResetTime();
-        this.cursorMove[1].Set(cursorObject.transform.position.y, base.GetNowParam().transform.position.y - cursorObject.transform.position.y, parameter.moveTime);
+        this.cursorMove[1].Set(cursorObject.transform.position.y, base.GetNowParam().transform.position.y, parameter.moveTime);
     }
 }

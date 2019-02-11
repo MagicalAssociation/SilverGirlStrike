@@ -119,8 +119,9 @@ public class GameData : MonoBehaviour
     static public string[] GetSaveFilePath()
     {
         string path = Application.dataPath + @"\Resources\savename.txt";
-        string textasset = File.ReadAllText(path,System.Text.Encoding.Unicode);
+
+        TextAsset text = Resources.Load("savename", typeof(TextAsset)) as TextAsset;
         //1列ごとに分ける
-       return textasset.Split('\n');
+        return text.text.Split('\n');
     }
 }

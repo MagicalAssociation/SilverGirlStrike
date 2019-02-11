@@ -239,8 +239,8 @@ namespace Enemy02
             //次自分が向かうMovesのデータを取得
             this.moveData = base.enemy.moves[base.enemy.GetNowNum()];
             //Easingを登録
-            move_x.Set(this.enemy.transform.position.x, this.moveData.targets.transform.position.x - this.enemy.transform.position.x);
-            move_y.Set(this.enemy.transform.position.y, this.moveData.targets.transform.position.y - this.enemy.transform.position.y);
+            move_x.Set(this.enemy.transform.position.x, this.moveData.targets.transform.position.x);
+            move_y.Set(this.enemy.transform.position.y, this.moveData.targets.transform.position.y);
             this.enemy.parameter.animation.Play("Normal");
 
         }
@@ -272,8 +272,8 @@ namespace Enemy02
         public override void Update()
         {
             //移動値を登録
-            base.enemy.SetPos(new Vector2(this.move_x.linear.None(this.move_x.Time(this.moveData.moveTime), this.move_x.GetStartValue(), this.move_x.GetEndValue(), this.moveData.moveTime),
-                this.move_y.linear.None(this.move_y.Time(this.moveData.moveTime), this.move_y.GetStartValue(), this.move_y.GetEndValue(), this.moveData.moveTime)));
+            base.enemy.SetPos(new Vector2(this.move_x.linear.None(this.move_x.Time(this.moveData.moveTime), this.move_x.GetStartValue(), this.move_x.GetEndValue() - this.move_x.GetStartValue(), this.moveData.moveTime),
+                this.move_y.linear.None(this.move_y.Time(this.moveData.moveTime), this.move_y.GetStartValue(), this.move_y.GetEndValue() - this.move_y.GetStartValue(), this.moveData.moveTime)));
         }
     }
     /**

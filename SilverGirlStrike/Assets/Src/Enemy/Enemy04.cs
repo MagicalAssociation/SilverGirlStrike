@@ -172,7 +172,7 @@ namespace Enemy04
             base.AddState((int)State.DEATH, new DeathState(this));
             base.ChangeState((int)State.ORBIT);
             this.easing.ResetTime();
-            this.easing.Set(move.speed, 0 - move.speed, 5, new Easing.Linear());
+            this.easing.Set(move.speed, 0, 5, new Easing.Linear());
         }
 
         public override void UpdateCharacter()
@@ -392,7 +392,7 @@ namespace Enemy04
             if (base.enemy.GetStopCount() == 0)
             {
                 this.easing_Speed.ResetTime();
-                this.easing_Speed.Set(this.enemy.move.speed, 0 - this.enemy.move.speed, 5);
+                this.easing_Speed.Set(this.enemy.move.speed, 0, 5);
             }
             Debug.Log(base.enemy.GetStopCount());
             Debug.Log(attackFlag);
@@ -466,7 +466,7 @@ namespace Enemy04
         public override void Enter(ref StateManager manager)
         {
             this.enemy.parameter.animation.Play("Idle");
-            move_y.Set(this.enemy.transform.position.y, this.enemy.GetFootPosition().y - this.enemy.transform.position.y);
+            move_y.Set(this.enemy.transform.position.y, this.enemy.GetFootPosition().y);
             this.enemy.SetPrePos(this.enemy.transform.position);
         }
 
@@ -488,7 +488,7 @@ namespace Enemy04
         public override void Update()
         {
             base.enemy.SetPos(new Vector2(this.enemy.transform.position.x,
-                this.move_y.quint.InOut(this.move_y.Time(10), this.move_y.GetStartValue(), this.move_y.GetEndValue(), 10)));
+                this.move_y.quint.InOut(this.move_y.Time(10), this.move_y.GetStartValue(), this.move_y.GetEndValue() - this.move_y.GetStartValue(), 10)));
         }
     }
     /**
@@ -505,7 +505,7 @@ namespace Enemy04
         public override void Enter(ref StateManager manager)
         {
             this.enemy.parameter.animation.Play("Idle");
-            move_y.Set(this.enemy.GetFootPosition().y, this.enemy.GetPrePos().y - this.enemy.GetFootPosition().y);
+            move_y.Set(this.enemy.GetFootPosition().y, this.enemy.GetPrePos().y);
         }
 
         public override void Exit(ref StateManager manager)
@@ -526,7 +526,7 @@ namespace Enemy04
         public override void Update()
         {
             base.enemy.SetPos(new Vector2(this.enemy.transform.position.x,
-                this.move_y.quint.InOut(this.move_y.Time(10), this.move_y.GetStartValue(), this.move_y.GetEndValue(), 10)));
+                this.move_y.quint.InOut(this.move_y.Time(10), this.move_y.GetStartValue(), this.move_y.GetEndValue() - this.move_y.GetStartValue(), 10)));
         }
     }
     /**

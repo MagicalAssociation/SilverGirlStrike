@@ -11,6 +11,9 @@ using UnityEngine;
  */
 public class M_System : MonoBehaviour
 {
+    int screenFrag;
+
+
     static bool frag = false;
 
     static M_System myself;
@@ -38,13 +41,18 @@ public class M_System : MonoBehaviour
      */
     private void Awake()
     {
+        this.screenFrag = 0;
+
         //初期化は一回だけ、複数回オブジェクトが置かれるのを防ぐ
         if (frag)
         {
             Destroy(this.gameObject);
+            return;
         }
 
         M_System.frag = true;
+
+        Screen.SetResolution(960, 540, false);
 
         //シーン移行でも消さない
         DontDestroyOnLoad(this);
@@ -67,6 +75,33 @@ public class M_System : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
+        }
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            SwitchScreen();
+        }
+    }
+
+    //F1を推すたびにスクリーン設定が入れ替わる
+    void SwitchScreen()
+    {
+        ++this.screenFrag;
+        if(this.screenFrag > 2)
+        {
+            this.screenFrag = 0;
+        }
+
+        switch (this.screenFrag)
+        {
+            case 0:
+                Screen.SetResolution(960, 540, false);
+                break;
+            case 1:
+                Screen.SetResolution(960, 540, true);
+                break;
+            case 2:
+                Screen.SetResolution(1920, 1080, true);
+                break;
         }
     }
 }

@@ -5,15 +5,21 @@ using UnityEngine.UI;
 public class Select : MonoBehaviour
 {
     Save.DataParameter dataParameter;
-    Text text;
+    public Text text;
+    public Text clearCountText;
     private int stageNumver;
+
     private void Awake()
     {
-        text = GetComponentInChildren<Text>();
     }
-    public void TextChange(string text)
+    public void SetCaption(string text)
     {
         this.text.text = text;
+    }
+
+    public void TextChange(string text)
+    {
+        this.clearCountText.text = text;
     }
     public void SetData(Save.DataParameter data)
     {

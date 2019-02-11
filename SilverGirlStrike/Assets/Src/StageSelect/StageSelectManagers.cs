@@ -114,8 +114,8 @@ public class StageSelectManagers : MonoBehaviour {
         //次のCanvasの位置でEasingを登録する
         easings[0].ResetTime();
         easings[1].ResetTime();
-        easings[0].Set(mainCamera.transform.position.x, Get(history.next).GetPosition().x - mainCamera.transform.position.x, easings[0].parameter.time, easings[0].parameter.type);
-        easings[1].Set(mainCamera.transform.position.y, Get(history.next).GetPosition().y - mainCamera.transform.position.y, easings[1].parameter.time, easings[1].parameter.type);
+        easings[0].Set(mainCamera.transform.position.x, Get(history.next).GetPosition().x, easings[0].parameter.time, easings[0].parameter.type);
+        easings[1].Set(mainCamera.transform.position.y, Get(history.next).GetPosition().y, easings[1].parameter.time, easings[1].parameter.type);
         Get(history.next).system.SetActive(true);
     }
     private void ObjectMove()
